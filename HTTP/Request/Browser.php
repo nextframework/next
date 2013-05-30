@@ -1,0 +1,1765 @@
+<?php
+
+namespace Next\HTTP\Request;
+
+use Next\Components\Object;    # Object Class
+
+/**
+ * HTTP Request Browser Information Class
+ *
+ * @author        Bruno Augusto
+ *
+ * @copyright     Copyright (c) 2010 Next Studios
+ * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ */
+class Browser extends Object {
+
+    /**
+     * IP Address Regular Expression
+     *
+     * @var string
+     */
+    const IP_REGEX = '/\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/';
+
+    /**
+     * Unknown Browser/Platform
+     *
+     * @var string
+     */
+    const UNKNOWN  = 'unknown';
+
+    /**
+     * Opera
+     *
+     * @var string
+     */
+    const OPERA                 = 'Opera';
+
+    /**
+     * Opera Mini
+     *
+     * @var string
+     */
+    const OPERA_MINI            = 'Opera Mini';
+
+    /**
+     * WebTV
+     *
+     * @var string
+     */
+    const WEBTV                 = 'WebTV';
+
+    /**
+     * Internet Explorer
+     *
+     * @var string
+     */
+    const IE                    = 'Internet Explorer';
+
+    /**
+     * Pocket Internet Explorer
+     *
+     * @var string
+     */
+    const POCKET_IE             = 'Pocket Internet Explorer';
+
+    /**
+     * Konqueror
+     *
+     * @var string
+     */
+    const KONQUEROR             = 'Konqueror';
+
+    /**
+     * iCab
+     *
+     * @var string
+     */
+    const ICAB                  = 'iCab';
+
+    /**
+     * OmniWeb
+     *
+     * @var string
+     */
+    const OMNIWEB               = 'OmniWeb';
+
+    /**
+     * Firebird
+     *
+     * @var string
+     */
+    const FIREBIRD              = 'Firebird';
+
+    /**
+     * Firefox
+     *
+     * @var string
+     */
+    const FIREFOX               = 'Firefox';
+
+    /**
+     * Iceweasel
+     *
+     * @var string
+     */
+    const ICEWEASEL             = 'Iceweasel';
+
+    /**
+     * Shiretoko
+     *
+     * @var string
+     */
+    const SHIRETOKO             = 'Shiretoko';
+
+    /**
+     * Mozilla
+     *
+     * @var string
+     */
+    const MOZILLA               = 'Mozilla';
+
+    /**
+     * Amaya
+     *
+     * @var string
+     */
+    const AMAYA                 = 'Amaya';
+
+    /**
+     * Lynx
+     *
+     * @var string
+     */
+    const LYNX                  = 'Lynx';
+
+    /**
+     * Safari
+     *
+     * @var string
+     */
+    const SAFARI                = 'Safari';
+
+    /**
+     * iPhone
+     *
+     * @var string
+     */
+    const IPHONE                = 'iPhone';
+
+    /**
+     * iPod
+     *
+     * @var string
+     */
+    const IPOD                  = 'iPod';
+
+    /**
+     * iPad
+     *
+     * @var string
+     */
+    const IPAD                  = 'iPad';
+
+    /**
+     * Chrome
+     *
+     * @var string
+     */
+    const CHROME                = 'Chrome';
+
+    /**
+     * Android
+     *
+     * @var string
+     */
+    const ANDROID               = 'Android';
+
+    /**
+     * GoogleBot
+     *
+     * @var string
+     */
+    const GOOGLEBOT             = 'GoogleBot';
+
+    /**
+     * Yahoo! Slurp
+     *
+     * @var string
+     */
+    const SLURP                 = 'Yahoo! Slurp';
+
+    /**
+     * W3C Validator
+     *
+     * @var string
+     */
+    const W3CVALIDATOR          = 'W3C Validator';
+
+    /**
+     * BlackBerry
+     *
+     * @var string
+     */
+    const BLACKBERRY            = 'BlackBerry';
+
+    /**
+     * IceCat
+     *
+     * @var string
+     */
+    const ICECAT                = 'IceCat';
+
+    /**
+     * Nokia S60 OSS Browser
+     *
+     * @var string
+     */
+    const NOKIA_S60             = 'Nokia S60 OSS Browser';
+
+    /**
+     * Nokia Browser
+     *
+     * @var string
+     */
+    const NOKIA                 = 'Nokia Browser';
+
+    /**
+     * MSN Browser
+     *
+     * @var string
+     */
+    const MSN                   = 'MSN Browser';
+
+    /**
+     * MSN Bot
+     *
+     * @var string
+     */
+    const MSNBOT                = 'MSN Bot';
+
+    /**
+     * Netscape Navigator
+     *
+     * @var string
+     */
+    const NETSCAPE_NAVIGATOR    = 'Netscape Navigator';
+
+    /**
+     * Galeon
+     *
+     * @var string
+     */
+    const GALEON                = 'Galeon';
+
+    /**
+     * NetPositive
+     *
+     * @var string
+     */
+    const NETPOSITIVE           = 'NetPositive';
+
+    /**
+     * Phoenix
+     *
+     * @var string
+     */
+    const PHOENIX               = 'Phoenix';
+
+    // Platforms
+
+    /**
+     * Windows
+     *
+     * @var string
+     */
+    const WINDOWS               = 'Windows';
+
+    /**
+     * Windows CE
+     *
+     * @var string
+     */
+    const WINDOWS_CE            = 'Windows CE';
+
+    /**
+     * Apple
+     *
+     * @var string
+     */
+    const APPLE                 = 'Apple';
+
+    /**
+     * Linux
+     *
+     * @var string
+     */
+    const LINUX                 = 'Linux';
+
+    /**
+     * OS/2
+     *
+     * @var string
+     */
+    const OS2                   = 'OS/2';
+
+    /**
+     * BeOS
+     *
+     * @var string
+     */
+    const BEOS                  = 'BeOS';
+
+    /**
+     * FreeBSD
+     *
+     * @var string
+     */
+    const FREEBSD               = 'FreeBSD';
+
+    /**
+     * OpenBSD
+     *
+     * @var string
+     */
+    const OPENBSD               = 'OpenBSD';
+
+    /**
+     * NetBSD
+     *
+     * @var string
+     */
+    const NETBSD                = 'NetBSD';
+
+    /**
+     * SunOS
+     *
+     * @var string
+     */
+    const SUNOS                 = 'SunOS';
+
+    /**
+     * OpenSolaris
+     *
+     * @var string
+     */
+    const OPENSOLARIS           = 'OpenSolaris';
+
+    /**
+     * Browser Information Constructor
+     */
+    public function __construct() {
+
+        $this  ->  reset();
+    }
+
+    // Accessors
+
+    /**
+     * Get ALL Detected Information
+     *
+     * @return Next\HTTP\Request\Browser
+     *   Bowser Object (Information are stored in a stdClass)
+     */
+    public function getInfo() {
+
+        // We'll detect information just when requested
+
+        $this  -> detectIP();
+
+        $this  -> detectPlatform();
+
+        $this  -> detectBrowser();
+
+        return $this;
+    }
+
+    /**
+     * Get detected IP Address
+     *
+     * @return string
+     *   User IP Address
+     */
+    public function getIP() {
+
+        // Detecting IP if not detected yet
+
+        if( is_null( $this -> IP ) ) {
+
+            $this -> detectIP();
+        }
+
+        return $this -> IP;
+    }
+
+    /**
+     * Get detected Platform
+     *
+     * @return string
+     *   User Platform, Operating System or Mobile Device Name
+     */
+    public function getPlatform() {
+
+        // Detecting Platform if not detected yet
+
+        if( is_null( $this -> platform ) ) {
+
+            $this -> detectPlatform();
+        }
+
+        return $this -> platform;
+    }
+
+    /**
+     * Get detected Browser
+     *
+     * @param boolean|optional $includeVersion
+     *   If TRUE, detected Browser Version will be returned too and, in that case,
+     *   as an array of Information
+     *
+     * @return array|string
+     *
+     *   <p>
+     *       If argument is set to TRUE both browser name and browser
+     *       version will be returned.
+     *   </p>
+     *
+     *   <p>Otherwise only browser name will</p>
+     */
+    public function getBrowser( $includeVersion = FALSE ) {
+
+        // Detecting Browser if not detected yet
+
+        if( is_null( $this -> browser ) || is_null( $this -> version ) ) {
+
+            $this -> detectBrowser();
+        }
+
+        return ( $includeVersion ? array( $this -> browser, $this -> version ) : $this -> browser );
+    }
+
+    // Auxiliary Methods
+
+    /**
+     * Resets all detected Information
+     */
+    private function reset() {
+
+        $this  -> agent = ( isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : NULL );
+
+        // Basic Information
+
+        $this  -> browser   = self::UNKNOWN;
+        $this  -> version   = self::UNKNOWN;
+        $this  -> platform  = self::UNKNOWN;
+
+        // Features
+
+        $this  -> isMobile  = FALSE;
+        $this  -> isRobot   = FALSE;
+        $this  -> IP        = NULL;
+    }
+
+    /**
+     * Detects User's IP
+     */
+    private function detectIP() {
+
+        $headers = array(
+
+            'CLIENT_IP', 'FORWARDED', 'FORWARDED_FOR', 'FORWARDED_FOR_IP', 'HTTP_CLIENT_IP',
+            'HTTP_FORWARDED', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED_FOR_IP', 'HTTP_PC_REMOTE_ADDR',
+            'HTTP_PROXY_CONNECTION', 'HTTP_VIA', 'HTTP_X_FORWARDED', 'HTTP_X_FORWARDED_FOR',
+            'HTTP_X_FORWARDED_FOR_IP', 'HTTP_X_IMFORWARDS', 'HTTP_XROXY_CONNECTION', 'VIA',
+            'X_FORWARDED', 'X_FORWARDED_FOR', 'REMOTE_ADDR'
+        );
+
+        foreach( $headers as $header ) {
+
+            $value = getenv( $header );
+
+            if( $value !== FALSE ) {
+
+                $value = trim( $value );
+
+                if( preg_match( self::IP_REGEX, $value ) ) {
+
+                    $this -> IP =& $value;
+
+                } else if( strpos( ',', $value ) !== FALSE ) {
+
+                    $parts = explode( ',', $value );
+
+                    $occurrence = trim( array_shift( $parts ) );
+
+                    $portOffset = strpos( $occurrence, ':' );
+
+                    if( $portOffset !== FALSE && (int) $portOffset != 0 ) {
+
+                        $occurrence = substr( $occurrence, 0, (int) $portOffset );
+                    }
+
+                    if( preg_match( self::IP_REGEX, $occurrence ) != 0 ) {
+
+                        $this -> IP =& $occurrence;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Detects Platform
+     */
+    private function detectPlatform() {
+
+        $platforms = array(
+
+            'windows'        => self::WINDOWS,       'iPad'           => self::IPAD,
+            'iPod'           => self::IPOD,          'iPhone'         => self::IPHONE,
+            'mac'            => self::APPLE,         'android'        => self::ANDROID,
+            'linux'          => self::LINUX,         'Nokia'          => self::NOKIA,
+            'BlackBerry'     => self::BLACKBERRY,    'FreeBSD'        => self::FREEBSD,
+            'OpenBSD'        => self::OPENBSD,       'OpenSolaris'    => self::OPENSOLARIS,
+            'SunOS'          => self::SUNOS,         'OS\/2'          => self::OS2,
+            'BeOS'           => self::BEOS,          'win'            => self::WINDOWS
+        );
+
+        foreach( $platforms as $search => $platform ) {
+
+            if( stripos( $this -> agent, $search ) !== FALSE ) {
+
+                $this -> platform =& $platform;
+
+                break;
+            }
+        }
+    }
+
+    /**
+     * Detects Browser
+     */
+    private function detectBrowser() {
+
+        /**
+         * @internal
+         * Opera must be checked before FireFox due to the odd
+         * user agents used in some old versions of Opera
+         *
+         * WebTV is strapped onto Internet Explorer so we must
+         * check for WebTV before IE
+         *
+         * Galeon is based on Firefox and needs to be
+         * tested before Firefox
+         *
+         * OmniWeb is based on Safari, so it needs to be checked
+         * before Safari
+         *
+         * Netscape 9+ is based on Firefox, so it needs to be checked
+         * before FireFox
+         */
+        $methodsIterator = new \ArrayIterator(
+
+            array(
+
+                'WebTv', 'InternetExplorer', 'Opera', 'Galeon',
+                'NetscapeNavigator', 'Firefox', 'Chrome', 'OmniWeb',
+
+
+                // Mobile Devices
+
+                'Android', 'iPad', 'iPod', 'iPhone', 'BlackBerry', 'Nokia',
+
+                // Common Crawler Bots
+
+                'GoogleBot', 'MSNBot', 'Slurp',
+
+                // WebKit base check (post mobile and others)
+
+                'Safari',
+
+                // Not-so-common Browsers
+
+                'NetPositive', 'Firebird', 'Konqueror', 'Icab', 'Phoenix',
+                'Amaya', 'Lynx', 'Shiretoko', 'IceCat', 'W3CValidator', 'IceWeasel',
+
+                // Mozilla is such an open standard that you must check it last
+
+                'Mozilla'
+            )
+        );
+
+        while( $methodsIterator -> valid() ) {
+
+            $result = (bool) call_user_func( array( $this, $methodsIterator -> current() ) );
+
+            if( $result !== FALSE ) {
+                break;
+            }
+
+            $methodsIterator -> next();
+        }
+    }
+
+    // Browser Detection Methods
+
+        // Common Browsers
+
+    /**
+     * WebTV
+     *
+     * @see http://www.webtv.net/pc
+     *
+     * @return boolean
+     *   TRUE if is WebTV Browser and FALSE otherwise
+     */
+    private function WebTv() {
+
+        $occurrence = stristr( $this -> agent, 'webtv' );
+
+        if( $occurrence !== FALSE ) {
+
+            $occurrence = explode( '/', $occurrence );
+
+            if( isset( $occurrence[ 1 ] ) ) {
+
+                $this -> browser = self::WEBTV;
+
+                // Version
+
+                $version = explode( ' ', $occurrence[ 1 ] );
+
+                $this -> version =& $version[ 0 ];
+            }
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * Internet Explorer, Pocket Internet Explorer and the odd MSN Explorer
+     *
+     * @see http://www.microsoft.com/ie
+     *   http://en.wikipedia.org/wiki/Internet_Explorer_Mobile
+     *   http://explorer.msn.com
+     *
+     * @return boolean
+     *   TRUE if is Internet Explorer Browser and FALSE otherwise
+     */
+    private function InternetExplorer() {
+
+        // Test for v1 - v1.5 IE
+
+        if( stripos( $this -> agent, 'microsoft internet explorer' ) !== FALSE ) {
+
+            $this -> browser = self::IE;
+
+            // Version
+
+            $occurrence = strstr( $this -> agent, '/' );
+
+            if( in_array( $occurrence, array( 308, 425, 426, 474, '0b1', '0B1' ) ) ) {
+
+                $this -> version = '1.5';
+
+            } else {
+
+                $this -> version = '1.0';
+            }
+
+            return TRUE;
+        }
+
+        // Test for versions > 1.5
+
+        else if( stripos( $this -> agent, 'msie' ) !== FALSE && stripos( $this -> agent, 'opera' ) === FALSE ) {
+
+            // Check for the odd MSN Explorer
+
+            if( stripos( $this -> agent, 'msnb' ) !== FALSE ) {
+
+                $this -> browser = self::MSN;
+
+                // Version
+
+                $occurrence = explode( ' ', stristr( str_replace( ';', '; ', $this -> agent ), 'MSN' ) );
+
+                if( isset( $occurrence[ 1 ] ) ) {
+                    $this -> version = str_replace( array( '(', ')', ';'), '', $occurrence[ 1 ] );
+                }
+
+            } else {
+
+                $occurrence = explode( ' ', stristr( str_replace( ';', '; ', $this -> agent ), 'msie' ) );
+
+                $this -> browser = self::IE;
+
+                // Version
+
+                if( isset( $occurrence[ 1 ] ) ) {
+                    $this -> version = str_replace( array( '(', ')', ';' ), '', $occurrence[ 1 ] );
+                }
+            }
+
+            return TRUE;
+        }
+
+        // Test for Pocket IE
+
+        else if( stripos( $this -> agent, 'mspie' ) !== FALSE || stripos( $this -> agent, 'pocket' ) !== FALSE ) {
+
+            $occurrence = explode( ' ', stristr( $this -> agent, 'mspie' ) );
+
+            $this -> browser = self::POCKET_IE;
+
+            // Browser Platform
+
+            $this -> platform = self::WINDOWS_CE;
+
+            // Feature: Mobile
+
+            $this -> isMobile = TRUE;
+
+            // Version... Better repeat one condition than all the "sets" before
+
+            if( stripos( $this -> agent, 'mspie' ) !== FALSE ) {
+
+                if( isset( $occurrence[ 1 ] ) ) {
+
+                    $this -> version = $occurrence[ 1 ];
+                }
+
+            } else {
+
+                $version = explode( '/', $this -> agent );
+
+                if( isset( $version[ 1 ] ) ) {
+                    $this -> version( $version[ 1 ] );
+                }
+            }
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * Opera and Opera Mini
+     *
+     * @see http://www.opera.com
+     *   http://www.opera.com/mini
+     *
+     * @return boolean
+     *   TRUE if is Opera Browser and FALSE otherwise
+     */
+    private function Opera() {
+
+        $opera     = stristr( $this -> agent, 'opera' );
+
+        $operaMini = stristr( $this -> agent, 'opera mini' );
+
+        // Test for Opera Mini
+
+        if( $operaMini !== FALSE ) {
+
+            $this -> browser  = self::OPERA_MINI;
+
+            // Feature: Mobile
+
+            $this -> isMobile = TRUE;
+
+            // Version
+
+            if( strpos( $operaMini, '/' ) !== FALSE ) {
+
+                $version = explode( '/', $operaMini );
+
+                if( isset( $version[ 1 ] ) ) {
+
+                    $version = explode( ' ', $version[ 1 ] );
+
+                    $this -> version = $version[ 0 ];
+                }
+
+            } else {
+
+                $version = explode( ' ', $operaMini );
+
+                if( isset( $version[ 1 ] ) ) {
+
+                    $this -> version = $version[ 1 ];
+                }
+            }
+
+            return TRUE;
+        }
+
+        // Test for Normal Opera
+
+        else if( $opera !== FALSE ) {
+
+            $this -> browser = self::OPERA;
+
+            if( preg_match( '/Version\/(10.*)$/', $opera, $matches ) != 0 ) {
+
+                $this -> version = $matches[ 1 ];
+            }
+
+            else if( strpos( $opera, '/' ) !== FALSE ) {
+
+                $version = explode( '/', str_replace( '(', ' ', $opera ) );
+
+                if( isset( $version[ 1 ] ) ) {
+
+                    $version = explode( ' ', $version[ 1 ] );
+
+                    $this -> version = $version[ 0 ];
+                }
+            }
+
+            else {
+
+                $version = explode( ' ', $opera );
+
+                if( isset( $version[ 1 ] ) ) {
+
+                    $this -> version = $version[ 1 ];
+                }
+            }
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * Galeon
+     *
+     * @see http://galeon.sourceforge.net
+     *
+     * @return boolean
+     *   TRUE if is Galeon Browser and FALSE otherwise
+     */
+    private function Galeon() {
+
+        $occurrence = stristr( $this -> agent, 'galeon' );
+
+        if( $occurrence !== FALSE ) {
+
+            $occurrence = explode( ' ', $occurrence );
+
+            $this -> browser = self::GALEON;
+
+            $version = explode( '/', $occurrence[ 0 ] );
+
+            if( isset( $version[ 1 ] ) ) {
+
+                $this -> version =& $version[ 1 ];
+            }
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * Netscape Navigator
+     *
+     * @see http://browser.netscape.com
+     *
+     * @return boolean
+     *   TRUE if is etscape Navigator Browser and FALSE otherwise
+     */
+    private function NetscapeNavigator() {
+
+        if( stripos( $this -> agent, 'Firefox' ) !== FALSE ) {
+
+            if( preg_match( '/Navigator\/([^ ]*)/i', $this -> agent, $matches ) != 0 ) {
+
+                $this -> browser = self::NETSCAPE_NAVIGATOR;
+
+                $this -> version =& $matches[ 1 ];
+
+                return TRUE;
+            }
+
+        } else {
+
+            if( preg_match( '/Netscape6?\/([^ ]*)/i', $this -> agent, $matches ) ) {
+
+                $this -> browser = self::NETSCAPE_NAVIGATOR;
+
+                $this -> version =& $matches[ 1 ];
+
+                return TRUE;
+            }
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * Firefox
+     *
+     * @see http://www.mozilla.com/en-US/firefox/firefox.html
+     *
+     * @return boolean
+     *   TRUE if is Firefox Browser and FALSE otherwise
+     */
+    private function Firefox() {
+
+        if( stripos( $this -> agent, 'safari' ) === FALSE ) {
+
+            $this -> browser = self::FIREFOX;
+
+            // Version
+
+            if( preg_match( '/Firefox[\/ \(]([^ ;\)]+)/i', $this -> agent, $matches ) ) {
+
+                $this -> version =& $matches[ 1 ];
+            }
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * Google Chrome
+     *
+     * @see http://www.google.com/chrome
+     *
+     * @return boolean
+     *   TRUE if is Chrome Browser and FALSE otherwise
+     */
+    private function Chrome() {
+
+        $occurrence = stristr( $this -> agent, 'Chrome' );
+
+        if( $occurrence !== FALSE ) {
+
+            $occurrence = explode( '/', $occurrence );
+
+            $this -> browser = self::CHROME;
+
+            // Version
+
+            if( isset( $occurrence[ 1 ] ) ) {
+
+                $version = explode(' ', $occurrence[ 1 ] );
+
+                $this -> version = $version[ 0 ];
+            }
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * OmniWeb
+     *
+     * @see http://www.omnigroup.com/applications/omniweb
+     *
+     * @return boolean
+     *   TRUE if is OmniWeb Browser and FALSE otherwise
+     */
+    private function OmniWeb() {
+
+        $occurrence = stristr( $this -> agent, 'omniweb' );
+
+        if( $occurrence !== FALSE ) {
+
+            $this -> browser = self::OMNIWEB;
+
+            // Version
+
+            $version = explode( '/', $occurrence );
+
+            if( isset( $version[ 1 ] ) ) {
+
+                $version = explode( ' ', $version[ 1 ] );
+            }
+
+            $this -> version = $version[ 0 ];
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    // Mobile Devices
+
+    /**
+     * Android
+     *
+     * @see http://www.android.com
+     *
+     * @return boolean
+     *   TRUE if is under an Android Device and FALSE otherwise
+     */
+    private function Android() {
+
+        $occurrence = stristr( $this -> agent, 'Android' );
+
+        if( $occurrence !== FALSE ) {
+
+            $this -> browser = self::ANDROID;
+
+            //Feature: Mobile
+
+            $this -> isMobile = TRUE;
+
+            // Version
+
+            $version = explode( ' ', $occurrence );
+
+            if( isset( $version[ 1 ] ) ) {
+
+                $version = explode( ' ', $version[ 1 ] );
+
+                $this -> version = $version[ 0 ];
+            }
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * iPad
+     *
+     * @see http://www.apple.com
+     *
+     * @return boolean
+     *   TRUE if is under iPad Browser and FALSE otherwise
+     */
+    private function iPad() {
+
+        if( stripos( $this -> agent, 'iPad' ) !== FALSE ) {
+
+            $this -> browser = self::IPAD;
+
+            // Feature: Mobile
+
+            $this -> isMobile = TRUE;
+
+            // Version
+
+            $version = explode( '/', stristr( $this -> agent, 'Version' ) );
+
+            if( isset( $version[ 1 ] ) ) {
+
+                $version = explode( ' ', $version[ 1 ] );
+
+                $this -> version =& $version[ 0 ];
+            }
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * iPod
+     *
+     * @see http://www.apple.com
+     *
+     * @return boolean
+     *   TRUE if is under iPod Device and FALSE otherwise
+     */
+    private function iPod() {
+
+        if( stripos( $this -> agent, 'iPod' ) !== FALSE ) {
+
+            $this -> browser = self::IPAD;
+
+            // Feature: Mobile
+
+            $this -> isMobile = TRUE;
+
+            // Version
+
+            $version = explode( '/', stristr( $this -> agent, 'Version' ) );
+
+            if( isset( $version[ 1 ] ) ) {
+
+                $version = explode( ' ', $version[ 1 ] );
+
+                $this -> version =& $version[ 0 ];
+            }
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * iPhone
+     *
+     * @see http://www.apple.com
+     *
+     * @return boolean
+     *   TRUE if is under iPhone Device and FALSE otherwise
+     */
+    private function iPhone() {
+
+        if( stripos( $this -> agent, 'iPhone' ) !== FALSE ) {
+
+            $this -> browser = self::IPHONE;
+
+            // Feature: Mobile
+
+            $this-> isMobile = TRUE;
+
+            // Version
+
+            $version = explode( '/', stristr( $this -> agent, 'Version' ) );
+
+            if( isset( $version[ 1 ] ) ) {
+
+                $version = explode( ' ', $version[ 1 ] );
+
+                $this -> version =& $version[ 0 ];
+            }
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * Blackberry
+     *
+     * @see http://www.blackberry.com
+     *
+     * @return boolean
+     *   TRUE if is under Blackberry Device and FALSE otherwise
+     */
+    private function BlackBerry() {
+
+        $occurrence = stristr( $this -> agent, 'blackberry' );
+
+        if( $occurrence !== FALSE ) {
+
+            $this -> browser = self::BLACKBERRY;
+
+            // Feature: Mobile
+
+            $this -> isMobile = TRUE;
+
+            //Version
+
+            $version = explode( '/', $occurrence );
+
+            if( isset( $version[ 1 ] ) ) {
+
+                $version = explode( ' ', $version[ 1 ] );
+
+                $this -> version =& $version[ 0 ];
+            }
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * Nokia S60 and others Nokia-based WAP browsers
+     *
+     * @see http://en.wikipedia.org/wiki/Web_for_S60
+     *
+     * @return boolean
+     *   TRUE if is Nokia Device and FALSE otherwise
+     */
+    private function Nokia() {
+
+        if( preg_match( '/Nokia([^\/]+)\/([^ SP]+)/i', $this -> agent, $matches ) ) {
+
+            // Version
+
+            $this -> version =& $matches[ 2 ];
+
+            // Feature: Mobile
+
+            $this -> isMobile = TRUE;
+
+            // Browser Name
+
+            if( stripos( $this -> agent, 'Series60' ) !== FALSE || strpos( $this -> agent, 'S60' ) !== FALSE ) {
+
+                $this -> browser = self::NOKIA_S60;
+
+            } else {
+
+                $this -> browser = self::NOKIA;
+            }
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    // Common Crawler Bots
+
+    /**
+     * Googlebot
+     *
+     * @see http://en.wikipedia.org/wiki/Googlebot
+     *
+     * @return boolean
+     *   TRUE if is the Google Crawler Bot and FALSE otherwise
+     */
+    private function GoogleBot() {
+
+        $occurrence = stristr( $this -> agent, 'googlebot' );
+
+        if( $occurrence !== FALSE ) {
+
+            $this -> browser = self::GOOGLEBOT;
+
+            // Feature: Robot
+
+            $this -> isRobot = TRUE;
+
+            // Version
+
+            $version = explode( '/', $occurrence );
+
+            if( isset( $version[ 1 ] ) ) {
+
+                $version = explode( ' ', $version[ 1 ] );
+
+                $this -> version = str_replace( ';', '', $version[ 0 ] );
+            }
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * MSNBot
+     *
+     * @see http://search.msn.com/msnbot.htm
+     *   http://en.wikipedia.org/wiki/Msnbot (used for Bing too)
+     *
+     * @return boolean
+     *   TRUE if is the MSN Crawler Bot and FALSE otherwise
+     */
+    private function MSNBot() {
+
+        $occurrence = stristr( $this -> agent, 'msnbot' );
+
+        if( $occurrence !== FALSE ) {
+
+            $this -> browser = self::MSNBOT;
+
+            // Feature: Robot
+
+            $this -> isRobot = TRUE;
+
+            // Version
+
+            $version = explode( '/', $occurrence );
+
+            if( isset( $version[ 1 ] ) ) {
+
+                $version = explode( ' ', $version[ 1 ] );
+
+                $this -> version = str_replace( ';', '', $version[ 0 ] );
+            }
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * Yahoo! Slurp
+     *
+     * @see http://en.wikipedia.org/wiki/Yahoo!_Slurp
+     *
+     * @return boolean
+     *   TRUE if is the Yahoo! Slurp Crawler Bot and FALSE otherwise
+     */
+    private function Slurp() {
+
+        $occurrence = stristr( $this -> agent, 'Slurp' );
+
+        if( $occurrence !== FALSE ) {
+
+            $this -> browser = self::SLURP;
+
+            // Feature: Robot
+
+            $this -> isRobot = TRUE;
+
+            // Version
+
+            $version = explode( '/', $occurrence );
+
+            if( isset( $version[ 1 ] ) ) {
+
+                $version = explode( ' ', $version[ 1 ] );
+
+                $this -> version =& $version[ 0 ];
+            }
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    // WebKit base check (post mobile and others)
+
+    /**
+     * Safari
+     *
+     * @see http://www.apple.com
+     *
+     * @return boolean
+     *   TRUE if is Safari Browser and FALSE otherwise
+     */
+    private function Safari() {
+
+        if( stripos( $this -> agent, 'Safari' ) !== FALSE &&
+            stripos( $this -> agent, 'iPhone' ) === FALSE && stripos( $this -> agent, 'iPod' ) === FALSE ) {
+
+            $this -> browser = self::SAFARI;
+
+            // Version
+
+            $version = explode( '/', stristr( $this -> agent, 'Version' ) );
+
+            if( isset( $version[ 1 ] ) ) {
+
+                $version = explode( ' ', $version[ 1 ] );
+
+                $this -> version =& $version[ 0 ];
+            }
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    // Not-so-common Browsers
+
+    /**
+     * NetPositive
+     *
+     * @see http://en.wikipedia.org/wiki/NetPositive
+     *
+     * @return boolean
+     *   TRUE if is Net Positive Browser and FALSE otherwise
+     */
+    private function NetPositive() {
+
+        $occurrence = stristr( $this -> agent, 'NetPositive' );
+
+        if( $occurrence !== FALSE ) {
+
+            $this -> browser = self::NETPOSITIVE;
+
+            // Version
+
+            $version = explode( '/', $occurrence );
+
+            if( isset( $version[ 1 ] ) ) {
+
+                $version = explode(' ',$version[ 1 ] );
+
+                $this -> version = str_replace( array( '(', ')', ';' ), '', $version[ 0 ] );
+            }
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * Firebird
+     *
+     * @see http://www.ibphoenix.com
+     *
+     * @return boolean
+     *   TRUE if is Firebird Browser and FALSE otherwise
+     */
+    private function Firebird() {
+
+        $occurrence = stristr( $this -> agent, 'Firebird' );
+
+        if( $occurrence !== false ) {
+
+            $this -> browser = self::FIREBIRD;
+
+            $version = explode( '/', $occurrence );
+
+            if( isset( $version[ 1 ] ) ) {
+
+                $this -> version =& $version[ 1 ];
+            }
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * Konqueror
+     *
+     * @see http://www.konqueror.org
+     *
+     * @return boolean
+     *   TRUE if is Konqueror Browser and FALSE otherwise
+     */
+    private function Konqueror() {
+
+        $occurrence = stristr( $this -> agent, 'Konqueror' );
+
+        if( $occurrence !== FALSE ) {
+
+            $this -> browser = self::KONQUEROR;
+
+            $version = explode( ' ', $occurrence );
+
+            $version = explode( '/', $version[ 0] );
+
+            if( isset( $version[ 1 ] ) ) {
+
+                $this -> version =& $version[ 1 ];
+            }
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * iCab
+     *
+     * @see http://www.icab.de
+     *
+     * @return boolean
+     *   TRUE if is iCab Browser and FALSE otherwise
+     */
+    private function Icab() {
+
+        $occurrence = stristr( str_replace( '/', ' ', $this -> agent ), 'icab' );
+
+        if( $occurrence !== FALSE ) {
+
+            $this -> browser = self::ICAB;
+
+            // Version
+
+            $version = explode( ' ', $occurrence );
+
+            if( isset( $version[ 1 ] ) ) {
+
+                $this -> version =& $version[ 1 ];
+            }
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * Phoenix
+     *
+     * @see http://en.wikipedia.org/wiki/History_of_Mozilla_Firefox
+     *
+     * @return boolean
+     *   TRUE if is Phoenix Browser and FALSE otherwise
+     */
+    private function Phoenix() {
+
+        $occurrence = stristr( $this -> agent, 'Phoenix' );
+
+        if( $occurrence !== FALSE ) {
+
+            $this -> browser = self::PHOENIX;
+
+            // Version
+
+            $version = explode( '/', $occurrence );
+
+            if( isset( $version[ 1 ] ) ) {
+
+                $this -> version =& $version[ 1 ];
+            }
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * Amaya
+     *
+     * @see http://www.w3.org/Amaya
+     *
+     * @return boolean
+     *   TRUE if is Amaya Browser and FALSE otherwise
+     */
+    private function Amaya() {
+
+        $occurrence = stristr( $this -> agent, 'Amaya' );
+
+        if( $occurrence !== FALSE ) {
+
+            $this -> browser = self::AMAYA;
+
+            // Version
+
+            $version = explode( '/', $occurrence );
+
+            if( isset( $version[ 1 ] ) ) {
+
+                $version = explode( ' ', $version[ 1 ] );
+
+                $this -> version =& $version[ 0 ];
+            }
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * Lynx
+     *
+     * @see http://en.wikipedia.org/wiki/Lynx
+     *
+     * @return boolean
+     *   TRUE if is Lynx Browser and FALSE otherwise
+     */
+    private function Lynx() {
+
+        $occurrence = stristr( $this -> agent, 'Lynx' );
+
+        if( $occurrence !== FALSE ) {
+
+            $this -> browser = self::LYNX;
+
+            // Version
+
+            $version = explode( '/', $occurrence );
+
+            if( isset( $version[ 1 ] ) ) {
+
+                $version = explode( ' ', $version[ 1 ] );
+            }
+
+            $this -> version =& $version[ 0 ];
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * Shiretoko
+     *
+     * @see http://wiki.mozilla.org/Projects/shiretoko
+     *
+     * @return boolean
+     *   TRUE if is Shiretoko Browser and FALSE otherwise
+     */
+    private function Shiretoko() {
+
+        if( stripos( $this -> agent, 'Mozilla' ) !== FALSE &&
+            preg_match( '/Shiretoko\/([^ ]*)/i', $this -> agent, $matches ) ) {
+
+            $this-> browser = self::SHIRETOKO;
+
+            // Version
+
+            $this -> version =& $matches[ 1 ];
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * IceCat
+     *
+     * @see http://en.wikipedia.org/wiki/GNU_IceCat
+     *
+     * @return boolean
+     *   TRUE if is Ice Cat Browser and FALSE otherwise
+     */
+    private function IceCat() {
+
+        if( stripos( $this -> agent, 'Mozilla' ) !== FALSE &&
+            preg_match( '/IceCat\/([^ ]*)/i', $this -> agent, $matches ) ) {
+
+            $this -> browser = self::ICECAT;
+
+            // Version
+
+            $this -> version =& $matches[ 1 ];
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * W3CValidator
+     *
+     * @see http://validator.w3.org
+     *
+     * @return boolean
+     *   TRUE if is W3CValidator Access and FALSE otherwise
+     */
+    private function W3CValidator() {
+
+        $checkLink = stristr( $this -> agent, 'W3C-checklink' );
+
+        if( $checkLink !== FALSE ) {
+
+            $this -> browser = self::W3CVALIDATOR;
+
+            $version = explode( '/', $checkLink );
+
+            if( isset(  $version[ 1 ] ) ) {
+
+                $version = explode( ' ', $version[ 1 ] );
+
+                $this -> version =& $version[ 0 ];
+            }
+
+            return TRUE;
+        }
+        else if( stripos( $this -> agent, 'W3C_Validator' ) !== FALSE ) {
+
+            $this -> browser = self::W3CVALIDATOR;
+
+            // Some of the Validator versions do not delineate w/ a slash - add it back in
+
+            $agent = str_replace( 'W3C_Validator ', 'W3C_Validator/', $this -> agent );
+
+            // Version
+
+            $version = explode( '/', stristr( $agent, 'W3C_Validator' ) );
+
+            if( isset( $version[ 1 ] ) ) {
+
+                $version = explode( ' ', $version[ 1 ] );
+
+                $this -> version =& $version[ 0 ];
+            }
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * IceWeasel
+     *
+     * @see http://www.geticeweasel.org
+     *
+     * @return boolean
+     *   TRUE if is IceWheasel Browser and FALSE otherwise
+     */
+    private function IceWeasel() {
+
+        $occurrence = stristr( $this -> agent, 'Iceweasel' );
+
+        if( $occurrence !== FALSE ) {
+
+            $this -> browser = self::ICEWEASEL;
+
+            // Version
+
+            $version = explode( '/', $occurrence );
+
+            if( isset( $version[ 1 ] ) ) {
+
+                $version = explode( ' ', $version[ 1 ] );
+
+                $this -> version =& $version[ 0 ];
+            }
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * Mozilla
+     *
+     * @see http://www.mozilla.com/en-US
+     *
+     * @return boolean
+     *   TRUE if is generic Mozilla Browser and FALSE otherwise
+     */
+    private function Mozilla() {
+
+        if( stripos( $this -> agent, 'mozilla' ) !== FALSE && stripos( $this -> agent, 'netscape' ) === FALSE ) {
+
+            $this -> browser = self::MOZILLA;
+
+            // Version
+
+            if( preg_match( '/rv:[0-9].[0-9][a-b]?/i', $this -> agent ) ) {
+
+                $version = explode( ' ', stristr( $this -> agent, 'rv:' ) );
+
+                $this -> version = str_replace( 'rv:', '' , $version[ 0 ] );
+
+                return TRUE;
+            }
+            elseif( preg_match( '/rv:[0-9]\.[0-9]/i', $this -> agent ) ) {
+
+                $version = explode( '', stristr( $this -> agent, 'rv:' ) );
+
+                $this -> version = str_replace( 'rv:', '', $version[ 0 ] );
+
+                return TRUE;
+            }
+            elseif( preg_match( '/mozilla\/([^ ]*)/i', $this -> agent, $matches ) ) {
+
+                $this -> version =& $matches[ 1 ];
+
+                return TRUE;
+            }
+        }
+
+        return FALSE;
+    }
+}

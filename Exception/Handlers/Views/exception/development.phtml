@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>Next Diagnostics</title>
+
+<style type="text/css" media="screen">
+
+<!--
+
+* {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    list-style-type: none;
+}
+
+a:link, a:active, a:visited {
+    color: #0000FF;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+body {
+    background-color: #141414;
+    color: #2C2C2C;
+    font: 12px Verdana;
+    text-align: center;
+}
+
+#exception {
+    background-color: #FAFAFA;
+    border: 3px solid #CCCCCC;
+    margin: 5% 5% 0 5%;
+    padding: 15px;
+    text-align: left;
+}
+
+#footer {
+    color: #FFF;
+}
+
+p {
+    line-height: 35px;
+}
+
+p.trace {
+    margin-right: 2%;
+}
+
+.details {
+    display: none;
+    margin: 0 0 0 2%;
+}
+
+p.label {
+    display: inline-block;
+    font-weight: bold;
+    padding-right: 10px;
+    text-align: right;
+    width: 80px;
+}
+
+.details a.args {
+    color: #2C2C2C;
+}
+
+.details a.args:hover {
+    color: #2C2C2C;
+}
+
+.details pre {
+    border: 1px solid #000;
+    display: none;
+    font-size: 10px;
+    margin: 1% 0 2% 0;
+    padding:  10px;
+    overflow: auto;
+}
+
+-->
+
+</style>
+
+</head>
+
+<body>
+
+<div id="exception">
+
+    <p><strong><?php echo basename( get_class( $this -> e ) ); ?></strong> thrown an Exception</p>
+
+    <p>
+        <strong>Message:</strong> <?php echo utf8_encode( $this -> e -> getMessage() ); ?>
+    </p>
+
+    <p>
+        <strong>Code:</strong>
+
+        <a href="http://framework.unit.com/manual/exceptions/<?php printf( '0x%08X', $this -> e -> getCode() ); ?>">
+            <?php printf( '0x%08X', $this -> e -> getCode() ); ?>
+        </a>
+    </p>
+
+    <p>
+        <strong>File:</strong> <?php echo $this -> e -> getFile(); ?> at
+        <strong>Line:</strong> <?php echo $this -> e -> getLine(); ?>
+    </p>
+
+    <p class="trace">
+        <strong>Call Trace</strong>
+    </p>
+
+    <?php
+
+        foreach( $this -> e -> getTrace() as $index => $trace ) {
+
+            print '<div>';
+
+            $id = md5( $index . $trace['function'] );
+
+                if( array_key_exists( 'class', $trace ) ) {
+
+                    printf(
+
+                        "<p>
+                             <a href='#%s' id='TraceID_%s' class='traceItem'
+                                 title='Click for Details'>%s::%s()
+                             </a>
+                        </p>",
+
+                        $id, $id,
+
+                        ( basename( $trace['class'] ) == 'Exception' ?
+                            $trace['class'] : basename( $trace['class'] ) ),
+
+                        $trace['function']
+                    );
+
+                } else {
+
+                    printf(
+
+                        "<p>
+                             <a href='#%s' id='TraceID_%s' class='traceItem'
+                                 title='Click for Details'>%s()
+                             </a>
+                        </p>",
+
+                        $id, $id, $trace['function']
+                    );
+                }
+
+                printf( "<div id='DetailsID_%s' class='details'>", $id );
+
+                if( isset( $trace['file'] ) ) {
+                    printf( "<p class='label'>File:</p>%s<br />", $trace['file'] );
+                }
+
+                if( isset( $trace['class'] ) && isset( $trace['function'] ) ) {
+
+                    printf( "<p class='label'>NameSpace:</p>%s<br />", dirname( $trace['class'] ) );
+
+                    printf( "<p class='label'>Class:</p>%s<br />", basename( $trace['class'] ) );
+                }
+
+                if( isset( $trace['line'] ) ) {
+                    printf( "<p class='label'>Line:</p>%s<br />", $trace['line'] );
+                }
+
+                if( isset( $trace['args'] ) && count( $trace['args'] ) > 0 ) {
+
+                    printf( "<p class='label'><strong>Arguments:</strong></p><a href='#%s' id='Arguments_%s' class='args' title='Click to see Arguments'>(Click to Open)</a>", $id, $id );
+
+                    print "<pre>"; print_r( $trace['args'] ); print "</pre>";
+                }
+
+                print "</div></div>";
+        }
+    ?>
+
+</div>
+
+<div id="footer">
+    <?php
+
+    // xDebug
+
+    if( function_exists( 'xdebug_time_index' ) ) {
+        echo '<br /><br />Runtime: ' . xdebug_time_index();
+    }
+
+    ?>
+</div>
+
+<script type="text/javascript">
+<!--
+window.onload=function(){var traceItems=getElementsByClassName('traceItem');for(i in traceItems){traceItems[i].onclick=function(){var DetailsID=document.getElementById('DetailsID_'+this.id.replace('TraceID_',''));if(DetailsID.style.display==''||DetailsID.style.display=='none'){DetailsID.style.display='block';}else{DetailsID.style.display='none';}};}
+var traceArgs=getElementsByClassName('args');for(i in traceArgs){traceArgs[i].onclick=function(){var Args=document.getElementById(this.id);if(Args.nextSibling.style.display==''||Args.nextSibling.style.display=='none'){Args.innerHTML='(Click to Close)';Args.nextSibling.style.display='block';}else{Args.innerHTML='(Click to Open)';Args.nextSibling.style.display='none';}};}};var getElementsByClassName=function(className,tag,elm){if(document.getElementsByClassName){getElementsByClassName=function(className,tag,elm){elm=elm||document;var elements=elm.getElementsByClassName(className),nodeName=(tag)?new RegExp("\\b"+tag+"\\b","i"):null,returnElements=[],current;for(var i=0,il=elements.length;i<il;i+=1){current=elements[i];if(!nodeName||nodeName.test(current.nodeName)){returnElements.push(current);}}
+return returnElements;};}
+else if(document.evaluate){getElementsByClassName=function(className,tag,elm){tag=tag||"*";elm=elm||document;var classes=className.split(" "),classesToCheck="",xhtmlNamespace="http://www.w3.org/1999/xhtml",namespaceResolver=(document.documentElement.namespaceURI===xhtmlNamespace)?xhtmlNamespace:null,returnElements=[],elements,node;for(var j=0,jl=classes.length;j<jl;j+=1){classesToCheck+="[contains(concat(' ', @class, ' '), ' "+classes[j]+" ')]";}
+try{elements=document.evaluate(".//"+tag+classesToCheck,elm,namespaceResolver,0,null);}
+catch(e){elements=document.evaluate(".//"+tag+classesToCheck,elm,null,0,null);}
+while((node=elements.iterateNext())){returnElements.push(node);}
+return returnElements;};}
+else{getElementsByClassName=function(className,tag,elm){tag=tag||"*";elm=elm||document;var classes=className.split(" "),classesToCheck=[],elements=(tag==="*"&&elm.all)?elm.all:elm.getElementsByTagName(tag),current,returnElements=[],match;for(var k=0,kl=classes.length;k<kl;k+=1){classesToCheck.push(new RegExp("(^|\\s)"+classes[k]+"(\\s|$)"));}
+for(var l=0,ll=elements.length;l<ll;l+=1){current=elements[l];match=false;for(var m=0,ml=classesToCheck.length;m<ml;m+=1){match=classesToCheck[m].test(current.className);if(!match){break;}}
+if(match){returnElements.push(current);}}
+return returnElements;};}
+return getElementsByClassName(className,tag,elm);};
+//-->
+</script>
+</body>
+</html>
