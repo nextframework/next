@@ -182,8 +182,8 @@ abstract class AbstractController extends Object implements Controller {
      *
      * <p>
      *     Allows to set a Template Variable directly from Controller
-     *     context, instead of using Next\View::assign() or
-     *     Next\View::__set()
+     *     context, instead of using Next\View\View::assign() or
+     *     Next\View\View::__set() (if implemented)
      * </p>
      *
      * <p>This method is slightly different of others.</p>

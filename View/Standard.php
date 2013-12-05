@@ -1,6 +1,6 @@
 <?php
 
-namespace Next;
+namespace Next\View;
 
 use Next\View\ViewException;         # View Exception Class
 use Next\Application\Application;    # Application Interface
@@ -9,14 +9,14 @@ use Next\View\CompositeQueue;        # Composite View Queue
 use Next\File\Tools;                 # File Tools
 
 /**
- * View Engine Class
+ * Standard View Engine Class
  *
  * @author        Bruno Augusto
  *
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class View extends Object implements View\View {
+class Standard extends Object implements View {
 
     /**
      * Default Priority
@@ -247,7 +247,7 @@ class View extends Object implements View\View {
      * @throws Next\View\ViewException
      *   Composite View has an invalid priority
      */
-    public function addView( View\View $view, $priority = 0 ) {
+    public function addView( View $view, $priority = 0 ) {
 
         $this -> _queue -> add( $view );
 
@@ -615,7 +615,7 @@ class View extends Object implements View\View {
          * @internal
          * The Template Rendering will not happen if:
          *
-         * - It shouldn't, which means Next\View::disableRender() was called
+         * - It shouldn't, which means Next\View\View::disableRender() was called
          *
          * - Any kind of output was already sent, like a debugging purposes
          *   var_dump() or even a ControllerException which was caught

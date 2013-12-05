@@ -3,7 +3,7 @@
 namespace Next\Components\Debug\Handlers;
 
 use Next\Application\AbstractApplication;    # Abstract Application Class
-use Next\View;                               # View Engine
+use Next\View\Standard as View;              # View Engine
 
 /**
  * Errors and Exception Handlers Application Class

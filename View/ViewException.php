@@ -173,7 +173,7 @@ class ViewException extends \Next\Components\Debug\Exception {
 
             self::INVALID_PRIORITY,
 
-            array( (string) $partialView, $priority, \Next\View::PRIORITY )
+            array( (string) $partialView, $priority, View::PRIORITY )
         );
     }
 
