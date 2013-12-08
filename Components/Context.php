@@ -50,9 +50,9 @@ class Context implements Contextualizable {
 
         if( ! is_null( $methods ) ) {
 
-        	$this -> callables[ $caller ][] = array( &$callee, $methods );
+            $this -> callables[ $caller ][] = array( &$callee, $methods );
 
-        	return $this;
+            return $this;
         }
 
         // Grant access to (almost) them all
@@ -128,40 +128,40 @@ class Context implements Contextualizable {
 
         if( array_key_exists( $caller, $this -> callables ) ) {
 
-    		$offset = ArrayUtils::search(
+            $offset = ArrayUtils::search(
 
-    		    $this -> callables[ $caller ], $method
-    		);
+                $this -> callables[ $caller ], $method
+            );
 
-    		if( $offset != -1 ) {
+            if( $offset != -1 ) {
 
-    			try {
+                try {
 
-    				$reflector = new \ReflectionMethod(
+                    $reflector = new \ReflectionMethod(
 
-    				    $this -> callables[ $caller ][ $offset ][ 0 ], $method
-    				);
+                        $this -> callables[ $caller ][ $offset ][ 0 ], $method
+                    );
 
-    				return $reflector -> invokeArgs(
+                    return $reflector -> invokeArgs(
 
-    				    $this -> callables[ $caller ][ $offset ][ 0 ], $args
-    				);
+                        $this -> callables[ $caller ][ $offset ][ 0 ], $args
+                    );
 
-    			} catch( \ReflectionException $e ) {
+                } catch( \ReflectionException $e ) {
 
-    				return FALSE;
-    			}
-    		}
+                    return FALSE;
+                }
+            }
         }
 
         // Unknown Method
 
         throw \Next\Components\Debug\Exception::wrongUse(
 
-        	'Method <strong>%s</strong> could not be matched against any
+            'Method <strong>%s</strong> could not be matched against any
             methods in extended Context',
 
-        	array( $method )
+            array( $method )
         );
     }
 

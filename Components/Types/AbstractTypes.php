@@ -32,28 +32,28 @@ abstract class AbstractTypes extends Object implements Type {
      */
     public function __construct( $value = NULL ) {
 
-    	parent::__construct();
+        parent::__construct();
 
-    	// If a value was defined...
+        // If a value was defined...
 
-    	if( ! is_null( $value ) ) {
+        if( ! is_null( $value ) ) {
 
-        	// ... let's cCheck its acceptance before set
+            // ... let's cCheck its acceptance before set
 
-        	if( $this -> accept( $value ) === FALSE ) {
+            if( $this -> accept( $value ) === FALSE ) {
 
-        	    throw new \InvalidArgumentException(
+                throw new \InvalidArgumentException(
 
-        	        'Argument is not a ' . $this
-        	    );
-        	}
-    	}
+                    'Argument is not a ' . $this
+                );
+            }
+        }
 
-    	// Prototyping (even without value)...
+        // Prototyping (even without value)...
 
-    	$this -> prototype( $value );
+        $this -> prototype( $value );
 
-    	$this -> value =& $value;
+        $this -> value =& $value;
     }
 
     // Accessors
@@ -78,7 +78,7 @@ abstract class AbstractTypes extends Object implements Type {
      *   Object value
      */
     public function get() {
-    	return $this -> value;
+        return $this -> value;
     }
 
     // Abstract Methods Definition

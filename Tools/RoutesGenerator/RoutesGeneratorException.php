@@ -20,36 +20,78 @@ class RoutesGeneratorException extends \Next\Components\Debug\Exception {
     protected $range = array( 0x00000792, 0x000007C4 );
 
     /**
+     * No Routes Found
+     *
+     * @var integer
+     */
+    const NO_ROUTES       =    0x00000792;
+
+    /**
      * Invalid Route Structure
      *
      * @var integer
      */
-    const INVALID_ROUTE       =    0x00000792;
+    const INVALID_ROUTE       =    0x00000793;
 
     /**
      * Mal-formed Route
      *
      * @var integer
      */
-    const MALFORMED_ROUTE     =    0x00000793;
+    const MALFORMED_ROUTE     =    0x00000794;
 
     /**
      * Duplicated Route
      *
      * @var integer
      */
-    const DUPLICATED_ROUTE    =    0x00000794;
+    const DUPLICATED_ROUTE    =    0x00000795;
+
+    /**
+     * Invalid Route Arguments Structure
+     *
+     * @var integer
+     */
+    const INVALID_ARGS        =    0x00000796;
 
     /**
      * Recording Failure
      *
      * @var integer
      */
-    const RECORD_FAILURE      =    0x00000795;
+    const RECORD_FAILURE      =    0x00000797;
 
     // Exception Messages
 
     /**
+     * No Routes found
+     *
+     * This is not entirely unnecessary because also enforces the use of final keyword
+     * to distinguish Action Methods from Common Methods
+     *
+     * @param array $args
+     *   Variable list of arguments to build final message
+     *
+     * @return Next\Tools\RoutesGenerator\RoutesGeneratorException
+     *   Exception for an Action Methods without Routes
+     */
+    public static function noRoutes( array $args ) {
+
+        return new self(
+
+            '<h1>No Routes Found</h1><br />
+
+            An Action Method must have at least one Route defined<br /><br />
+            Class: %s<br /><br />
+            Method: %s',
+
+            self::NO_ROUTES,
+
+            $args
+        );
+    }
+
+   /**
      * Defined Route URI is invalid because lacks the minimum
      * required components
      *
@@ -123,6 +165,32 @@ class RoutesGeneratorException extends \Next\Components\Debug\Exception {
             <strong>Method:</strong> %s',
 
             self::DUPLICATED_ROUTE,
+
+            $args
+        );
+    }
+
+    /**
+     * Defined Route Arguments is invalid because lacks the minimum
+     * required components
+     *
+     * @param array $args
+     *   Variable list of arguments to build final message
+     *
+     * @return Next\Tools\RoutesGenerator\RoutesGeneratorException
+     *   Exception for conceptual invalid Route Arguments structure
+     */
+    public static function malformedArguments( array $args ) {
+
+        return new self(
+
+            '<h1>Invalid Route Arguments</h1><br />
+
+            Routes Arguments must be composed of at least two components: Argument Name and Type<br /><br />
+            Class: %s<br /><br />
+            Method: %s',
+
+            self::INVALID_ARGS,
 
             $args
         );

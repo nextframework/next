@@ -103,15 +103,15 @@ class ArrayUtils {
      */
     public static function map( $param ) {
 
-    	if( is_object( $param ) ) {
-    		$param = get_object_vars( $param );
-    	}
+        if( is_object( $param ) ) {
+            $param = get_object_vars( $param );
+        }
 
-    	if( is_array( $param ) ) {
-    		return array_map( __METHOD__, $param );
-    	}
+        if( is_array( $param ) ) {
+            return array_map( __METHOD__, $param );
+        }
 
-    	return $param;
+        return $param;
     }
 
     /**
@@ -173,17 +173,17 @@ class ArrayUtils {
 
         foreach( $a as $offset => $value ) {
 
-        	array_splice(
+            array_splice(
 
-        	    $b, $offset, count( $b ),
+                $b, $offset, count( $b ),
 
-        	    array_merge(
+                array_merge(
 
-        	        array( $value ),
+                    array( $value ),
 
-        	        array_slice( $b, $offset )
-        	    )
-        	);
+                    array_slice( $b, $offset )
+                )
+            );
         }
     }
 

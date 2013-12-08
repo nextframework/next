@@ -265,12 +265,12 @@ class Request extends Object {
 
             if( array_key_exists( 'protocol', $match ) ) {
 
-            	$this -> protocol -> name = strtolower( $match['protocol'] );
+                $this -> protocol -> name = strtolower( $match['protocol'] );
             }
 
             if( array_key_exists( 'version', $match ) ) {
 
-            	$this -> protocol -> version = $match['version'];
+                $this -> protocol -> version = $match['version'];
             }
 
             // URI Basepath

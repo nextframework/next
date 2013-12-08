@@ -145,17 +145,15 @@ class Standard extends AbstractRouter {
              * Validating Required Params
              * Only Parameters with a [List|of|Possible|Values] will be validated
              */
-            $token = self::LIST_OPEN_TOKEN;
-
             $this -> validate(
 
                 array_filter(
 
                     $requiredParams,
 
-                    function( $item ) use( $token ) {
+                    function( $current ) {
 
-                        return ( strpos( $item, $token ) !== FALSE );
+                        return ( ! empty( $current['acceptable'] ) );
                     }
                 ),
 
@@ -272,8 +270,6 @@ class Standard extends AbstractRouter {
      */
     protected function lookup( array $params, $URI, array $queryData = array() ) {
 
-        $token = self::LIST_OPEN_TOKEN;
-
         /**
          * Merging manually defined GET query so they can
          * be considered as validatable arguments too
@@ -282,35 +278,21 @@ class Standard extends AbstractRouter {
             $params = array_merge( $params, array_keys( $queryData ) );
         }
 
-        array_walk( $params,
+        array_walk(
 
-            function( $param ) use( $URI, $token ) {
+            $params,
 
-                /**
-                 * @internal
-                 * Removing possible [List|of|Possible|Values]
-                 * because here we're just checking the existence of Parameter in Requested URI
-                 */
-                if( strpos( $param, $token ) !== FALSE ) {
-                    $param = substr_replace( $param, '', strpos( $param, $token ) );
-                }
+            function( $current ) use( $URI ) {
 
-                /**
-                 * @internal
-                 * Removing any non alpha characters, mainly, but not strictly,
-                 * our "special" token: $ (required parameters) and : (optional parameters)
-                 */
-                $param = preg_replace( '/\W/', '', $param );
+                preg_match( sprintf( '/\/%s\/.+\/?/', $current['name'] ), $URI, $matches );
 
-                preg_match( sprintf( '/\/%s\/.+\/?/', $param ), $URI, $matches );
+                // Required argument is not present in URL and neither in GET superglobal?
 
-                // Not present in URL and neither in GET superglobal?
-
-                if( count( $matches ) == 0 && ! isset( $_GET[ $param ] ) ) {
+                if( count( $matches ) == 0 && ! isset( $_GET[ $current['name'] ] ) ) {
 
                     // Fine! Let's also send a 400 Response Header (Bad Request)
 
-                    throw RouterException::missingParameter( $param );
+                    throw RouterException::missingParameter( $current['name'] );
                 }
             }
         );
@@ -331,60 +313,40 @@ class Standard extends AbstractRouter {
      */
     protected function validate( array $params, $URI ) {
 
-        // If we don't have params [due empty array_filter() ], we have nothing to work
+        // Do we have something to work with?
 
         if( count( $params ) == 0 ) {
             return;
         }
 
-        $tokens = array(
-
-            self::VALID_VALUES_REGEXP,
-            self::LIST_OPEN_TOKEN,
-            self::SEPARATOR_TOKEN,
-            self::DEFAULT_VALUE_REGEXP
-        );
+        $token = self::SEPARATOR_TOKEN;
 
         array_walk(
 
             $params,
 
-            function( $param ) use( $tokens, $URI ) {
+            function( $current ) use( $URI, $token ) {
 
-                // Finding the [List|of|Possible|Values]
+                $valid = explode( $token, $current['acceptable'] );
 
-                preg_match( sprintf( '/%s/', $tokens[ 0 ] ), $param, $valid );
+                // Finding argument value
 
-                // Cleaning Parameter Declaration...
+                preg_match(
 
-                $param = preg_replace(
-
-                    '/\W/', '',
-
-                    substr_replace( $param, '', strpos( $param, $tokens[ 1 ] ) )
+                    sprintf( '/\/%s\/([^\/]+)\/?/', $current['name'] ), $URI, $value
                 );
 
-                if( ! empty( $param ) && isset( $valid[ 1 ] ) ) {
+                // If Parameter is not in the list...
 
-                    // ... to get its Value
+                if( ! in_array( $value[ 1 ], $valid ) ) {
 
-                    preg_match(
+                    // ... and there is no Default Value defined for it
 
-                        sprintf( '/\/%s\/([^\/]+)\/?/', $param ), $URI, $value
-                    );
+                    if( ! empty( $current['default'] ) ) {
 
-                    // If Parameter is not in the list...
+                        // Teh, he, he ^^
 
-                    if( ! in_array( $value[ 1 ], explode( $tokens[ 2 ], $valid[ 1 ] ) ) ) {
-
-                        // ... and there is no Default Value defined for it
-
-                        if( preg_match( sprintf( '/%s/', $tokens[ 3 ] ), $valid[ 1 ] ) == 0 ) {
-
-                            // Teh, he, he ^^
-
-                            throw RouterException::invalidParameter( $param );
-                        }
+                        throw RouterException::invalidParameter( $current );
                     }
                 }
             }
@@ -405,7 +367,7 @@ class Standard extends AbstractRouter {
      */
     protected function process( array $params, $URI ) {
 
-        // If we don't have params to parse, we will not parse >.<
+        // Do we have something to work with?
 
         if( count( $params ) == 0 ) {
             return array();
@@ -413,71 +375,13 @@ class Standard extends AbstractRouter {
 
         $pairs = array();
 
-        $processed = array();
-
         foreach( $params as $param ) {
 
-            /**
-             * @internal
-             * If current Parameter (in iteration) is present in URL,
-             * let's get its value.
-             *
-             * We don't need to care if the parameter MUST be present,
-             * because all the missing Required Parameters were already
-             * validated in Next\Controller\Router\Standard::lookup()
-             *
-             * We'll save in a temp property the clean Parameter name
-             */
-            $temp = $param;
-
-            if( strpos( $temp, self::LIST_OPEN_TOKEN ) !== FALSE ) {
-
-                $temp = substr_replace(
-
-                    $temp, '', strpos( $temp, self::LIST_OPEN_TOKEN )
-                );
-            }
-
-            // Removing all Tokens
-
-            $temp = preg_replace( '/\W/', '', $temp );
+            $temp = $param['name'];
 
             // Listing Parameters Values
 
             preg_match( sprintf( '/\/%s\/([^\/]+)\/?/', $temp ), $URI, $value );
-
-            /**
-             * @internal
-             * Fixing preg_match()'s laziness
-             *
-             * When param's value is the name of param too, the preg_match() above
-             * will match the value as a param too.
-             *
-             * Let's consider a Search System with options passed through URL (GET)
-             *
-             * This Search System has three route params:
-             *
-             * - order   => to order the results;
-             * - sort    => to define how the ordenation will be done (asc/desc);
-             * - name    => to filter the results by a specific name (or names)
-             *
-             * The database structure has only two fields: "id" and "name"
-             *
-             * We want to sort, downwardly, by name. So we would access the
-             * Search Results' Page as domain.com/order/name/sort/desc
-             *
-             * Due preg_match()'s laziness we would have a wrongly matched route param
-             * called "name" with "sort" as value, because the field we want to order (name)
-             * is one of defined Route's Params too
-             */
-            if( isset( $value[ 1 ] ) ) {
-
-                // This is required because preg_match_all() give us an array
-
-                $test = ( is_array( $value[ 1 ] ) ? current( $value[ 1 ] ) : $value[ 1 ] );
-
-                if( in_array( $test, $processed ) ) continue;
-            }
 
             // Finding Parameter Value(s)
 
@@ -503,12 +407,8 @@ class Standard extends AbstractRouter {
                  * by Next\Controller\Router\Standard::lookup(), we'll use the
                  * Default value, if defined in Route, or NULL, if not
                  */
-                $pairs[ $temp ] = $this -> getDefaultValue( $param );
+                $pairs[ $temp ] = ( ! empty( $param['default'] ) ? $param['default'] : NULL );
             }
-
-            // Complement to big explanation above :P
-
-            $processed[] = $temp;
         }
 
         return $pairs;
@@ -519,8 +419,8 @@ class Standard extends AbstractRouter {
     /**
      * Find Parameter Value
      *
-     * @param string $param
-     *   Parameter Name
+     * @param array $param
+     *   Parameter Data
      *
      * @param string $value
      *   Parameter Value
@@ -536,103 +436,44 @@ class Standard extends AbstractRouter {
      */
     private function findParameterValue( $param, $value ) {
 
-        $return = array();
+        // Validating parameter value with a predefined REGEXP
 
-        // If we have a List to check against it
+        if( ! empty( $param['regex'] ) ) {
 
-        if( strpos( $param, self::LIST_OPEN_TOKEN ) !== FALSE ) {
+            // If argument value matches defined REGEX is automatically accepted "as is"
 
-            // ... we'll list the valid values...
-
-            preg_match(
-
-                sprintf( '/%s/', self::VALID_VALUES_REGEXP ), $param, $valid
-            );
-
-            // ... and if we have a List...
-
-            if( isset( $valid[ 1 ] ) ) {
-
-                // ... we'll check against it
-
-                return $this -> compareWithList( $value, $valid[ 1 ] );
-            }
-
-        } else {
-
-            // If we don't have a List, let's accept the value "as is"
-
-            return $value;
-        }
-    }
-
-    /**
-     * Compare given value in a [List|of|Possible|Values]
-     *
-     * @param string $value
-     *   Value to compare
-     *
-     * @param string $list
-     *   List to compare given value
-     *
-     * @return string|NULL
-     *
-     *   - If given parameter lacks the Separator Token OR
-     *     if it IS present in a List of Possible Values, it will be returned "as is"
-     *
-     *   - Otherwise we'll try to find the proper Default Value.
-     *     If we succeed, this value will be returned. Otherwise NULL will
-     */
-    private function compareWithList( $value, $list ) {
-
-        // Mal-formed List?
-
-        if( strpos( $list, self::SEPARATOR_TOKEN ) === FALSE ) {
-
-            // Let's use what we received
-
-            return $value;
-
-        } else {
-
-            // Parameter is in the List?
-
-                // Removing Default Value Definition of given list in order to split correctly
-
-            $l = preg_replace(
-
-                sprintf( '/%s/', self::DEFAULT_VALUE_REGEXP ), '', $list
-            );
-
-            if( ArrayUtils::in( $value, explode( self::SEPARATOR_TOKEN, $l ) ) ) {
+            if( preg_match( sprintf( '/%s/', $param['regex'] ), $value ) != 0 ) {
                 return $value;
             }
 
-            // No? Let's try to find the Default Value
+        } else {
 
-            return $this -> getDefaultValue( $list );
+            // Comparing value against a List, if any
+
+            if( ! empty( $param['acceptable'] ) ) {
+
+                $list = explode( self::SEPARATOR_TOKEN, $param['acceptable'] );
+
+                // If given value is in the list, let's accept it
+
+                if( in_array( $value, $list ) ) {
+
+                    return $value;
+
+                } else {
+
+                    // Otherwise let's try to find a default value for it
+
+                    return ( ! empty( $param['default'] ) ? $param['default'] : NULL );
+                }
+
+            } else {
+
+                // We don't have a List, so let's return input value "as is"
+
+                return $value;
+            }
         }
-    }
-
-    /**
-     * Get Default Parameter Value
-     *
-     * @param string $list
-     *   Get Default Value from a list of possible values
-     *
-     * @return string|NULL
-     *
-     *   We'll try to find the proper Default Value.
-     *   If we succeed, this value will be returned. Otherwise NULL will
-     */
-    private function getDefaultValue( $list ) {
-
-        preg_match(
-
-            sprintf( '/%s/', self::DEFAULT_VALUE_REGEXP ), $list, $default
-        );
-
-        return ( count( $default ) > 0 ? $default[ 1 ] : NULL );
     }
 
     // Auxiliary Methods

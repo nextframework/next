@@ -23,11 +23,11 @@ abstract class AbstractRoutesGenerator extends Object implements RoutesGenerator
     protected $applications;
 
     /**
-     * Found Routes
+     * Routes Results
      *
-     * @var array $routes
+     * @var array $results
      */
-    protected $routes = array();
+    protected $results = array();
 
     /**
      * Time Elapsed

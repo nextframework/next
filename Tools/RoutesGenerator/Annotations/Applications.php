@@ -59,16 +59,20 @@ class Applications implements Annotations {
 
         $data = new \ArrayIterator;
 
-        $domains = $this -> matchDomainAnnotations( $this -> application );
+        /*$domains = $this -> matchDomainAnnotations( $this -> application );
 
         if( count( $domains ) > 0 ) {
 
             $data -> offsetSet( 'Domains', $domains );
-        }
+        }*/
 
-        $data -> offsetSet( 'Path', $this -> matchPathAnnotation( $this -> application ) );
+        // Finding Path Modifier
 
-        // Listing Controllers Methods and reducing (or amplifying) the list to its Action Methods
+        $path = $this -> matchPathAnnotation( $this -> application );
+
+        $data -> offsetSet( 'path', ( count( $path ) > 0 ? $path : NULL ) );
+
+        // Listing Controllers Methods
 
         $actions = $this -> application -> getControllers() -> getIterator();
 
@@ -76,7 +80,7 @@ class Applications implements Annotations {
 
             $actions,
 
-            function( \Iterator $iterator ) {
+            function( \Iterator $iterator ) use( &$data ) {
 
                 $action = new Actions(
 
@@ -85,9 +89,9 @@ class Applications implements Annotations {
                     )
                 );
 
-                $iterator -> offsetSet(
+                $data -> offsetSet(
 
-                    $iterator -> key(),
+                    $action -> current() -> class,
 
                     $action -> getAnnotations()
                 );
@@ -97,11 +101,6 @@ class Applications implements Annotations {
 
             array( $actions )
         );
-
-        if( $actions -> count() > 0 ) {
-
-            $data -> offsetSet( 'Routes', $actions -> getArrayCopy() );
-        }
 
         return $data;
     }

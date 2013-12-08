@@ -12,7 +12,7 @@ namespace Next\Components\Types;
  */
 final class String extends AbstractTypes {
 
-	// Abstract Methods Implementation
+    // Abstract Methods Implementation
 
     /**
      * Check whether or not given value is acceptable by datatype class
@@ -42,21 +42,21 @@ final class String extends AbstractTypes {
         }
 
         $this -> implement( 'compare',        'strcmp',         $s )
-        	  -> implement( 'caseCompare',    'strcasecmp',     $s )
-        	  -> implement( 'explode',        'explode',        array( 1 => $s ) )
-        	  -> implement( 'find',           'strstr',         $s )
-        	  -> implement( 'lowerFirst',     'lcfirst',        $s )
-        	  -> implement( 'pad',            'str_pad',        $s )
-        	  -> implement( 'repeat',         'str_repeat',     $s )
-        	  -> implement( 'replace',        'str_replace',    array( 2 => $s ) )
-        	  -> implement( 'reverseFind',    'strrpos',        $s )
-        	  -> implement( 'shuffle',        'str_shuffle',    $s )
-        	  -> implement( 'striptags',      'strip_tags',     $s )
-        	  -> implement( 'substr',         'substr',         $s )
-        	  -> implement( 'toLower',        'strtolower',     $s )
-        	  -> implement( 'toUpper',        'strtoupper',     $s )
-        	  -> implement( 'trim',           'trim',           $s )
-        	  -> implement( 'upperFirst',     'ucfirst',        $s )
-        	  -> implement( 'upperWords',     'ucwords',        $s );
+              -> implement( 'caseCompare',    'strcasecmp',     $s )
+              -> implement( 'explode',        'explode',        array( 1 => $s ) )
+              -> implement( 'find',           'strstr',         $s )
+              -> implement( 'lowerFirst',     'lcfirst',        $s )
+              -> implement( 'pad',            'str_pad',        $s )
+              -> implement( 'repeat',         'str_repeat',     $s )
+              -> implement( 'replace',        'str_replace',    array( 2 => $s ) )
+              -> implement( 'reverseFind',    'strrpos',        $s )
+              -> implement( 'shuffle',        'str_shuffle',    $s )
+              -> implement( 'striptags',      'strip_tags',     $s )
+              -> implement( 'substr',         'substr',         $s )
+              -> implement( 'toLower',        'strtolower',     $s )
+              -> implement( 'toUpper',        'strtoupper',     $s )
+              -> implement( 'trim',           'trim',           $s )
+              -> implement( 'upperFirst',     'ucfirst',        $s )
+              -> implement( 'upperWords',     'ucwords',        $s );
     }
 }

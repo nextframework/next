@@ -12,7 +12,7 @@ namespace Next\Components\Types;
  */
 class Number extends AbstractTypes {
 
-	// Abstract Methods Implementation
+    // Abstract Methods Implementation
 
     /**
      * Check whether or not given value is acceptable by datatype class
@@ -50,9 +50,9 @@ class Number extends AbstractTypes {
         if( ! is_null( $n ) ) {
 
             $this -> implement( 'ceil',       'ceil',             $n )
-            	  -> implement( 'floor',      'floor',            $n )
-            	  -> implement( 'format',     'number_format',    $n )
-            	  -> implement( 'round',      'round',            $n );
+                  -> implement( 'floor',      'floor',            $n )
+                  -> implement( 'format',     'number_format',    $n )
+                  -> implement( 'round',      'round',            $n );
 
             $this -> implement(
 

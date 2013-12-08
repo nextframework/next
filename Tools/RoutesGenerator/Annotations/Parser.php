@@ -16,11 +16,11 @@ use Next\Components\Utils\ArrayUtils;                             # Array Utils 
 class Parser {
 
     /**
-     * Locale Parameter
+     * Locale Parameter Data
      *
      * @var string
      */
-    const LOCALE_PARAM           = ':lang';
+    const LOCALE_PARAM           = 'lang';
 
     /**
      * Delimiter Capture
@@ -30,59 +30,35 @@ class Parser {
     const DELIM_CAPTURE_TOKEN    = '(.*?)';
 
     /**
-     * Optional Arguments
-     *
-     * @var string
-     */
-    const OPTIONAL_PARAMS_TOKEN  = ':';
-
-    /**
-     * Required Arguments
-     *
-     * @var string
-     */
-    const REQUIRED_PARAMS_TOKEN  = '$';
-
-    /**
-     * Default Values Separator
-     *
-     * @var string
-     */
-    const DEFAULT_VALUE_TOKEN    = '|';
-
-    /**
      * Parsed Data
      *
-     * @var array $results
+     * @staticvar array $results
      */
-    private $results;
+    private static $results;
 
     /**
      * Annotations Parser Constructor
      *
-     * Iterates through a list of Controllers to parse the Routes
-     * found inside their Methods
+     * Parses found Routes
      *
-     * @param array $controllers
-     *   Application Controlers
+     * @param string|array $routes
+     *   Route(s) to be parsed
+     *
+     * @param array $args
+     *  Routes Argument(s)
+     *
+     * @param string $controller
+     *   Controller to whom belongs the Route(s)
+     *
+     * @param string $method
+     *   Method to whom belongs the Route(s)
      *
      * @param string $basepath
      *   Routes Basepath, prepended to every route
      */
-    public function __construct( array $controllers, $basepath = '' ) {
+    public function __construct( array $routes, array $args, $controller, $method, $basepath = '' ) {
 
-        foreach( $controllers as $controller ) {
-
-            $c = key( $controller );
-
-            foreach( $controller as $methods ) {
-
-                foreach( $methods as $method => $routes ) {
-
-                    $this -> parseRoutes( $routes, $c, $method, $basepath );
-                }
-            }
-        }
+        $this -> parseRoutes( $routes, $args, $controller, $method, $basepath );
     }
 
     // Accessors
@@ -93,7 +69,7 @@ class Parser {
      * @return array Routes Data
      */
     public function getResults() {
-        return $this -> results;
+        return self::$results;
     }
 
     // Auxiliary Methods
@@ -103,6 +79,9 @@ class Parser {
      *
      * @param string|array $routes
      *   Route(s) to be parsed
+     *
+     * @param array $args
+     *  Routes Argument(s)
      *
      * @param string $controller
      *   Controller to whom belongs the Route(s)
@@ -121,26 +100,19 @@ class Parser {
      *   There is another Route with exactly the same definition, including
      *   the Request Method
      */
-    private function parseRoutes( $routes, $controller, $method, $basepath ) {
+    private function parseRoutes( $routes, array $args, $controller, $method, $basepath ) {
 
-        if( is_array( $routes ) ) {
-
-            foreach( $routes as $route ) {
-
-                $this -> parseRoutes( $route, $controller, $method, $basepath );
-            }
-
-        } else {
+        foreach( $routes as $route ) {
 
             // Listing Route Components
 
-            $components = explode( ',', $routes );
+            $components = explode( ',', $route );
 
             if( count( $components ) < 2 ) {
 
                 throw RoutesGeneratorException::invalidRouteStructure(
 
-                    array( $routes, basename( $controller ), $method )
+                    array( $route, basename( $controller ), $method )
                 );
             }
 
@@ -151,15 +123,6 @@ class Parser {
             // ... and URI Route
 
             $URI = trim( array_shift( $components ) );
-
-            // If we still have some components, all them will be treated as Route Params
-
-            $params = array();
-
-            if( count( $components ) > 0 ) {
-
-                $params = array_map( 'trim', $components );
-            }
 
             // Parsing, fixing and complementing them
 
@@ -195,7 +158,7 @@ class Parser {
 
                 // Let's ensure single slash Routes have no params
 
-                if( ! empty( $params ) ) {
+                if( count( $args ) != 0 ) {
 
                     throw RoutesGeneratorException::malformedRoute(
 
@@ -206,16 +169,20 @@ class Parser {
 
             // Adding an Always Optional Parameter for Localization
 
-            $params[] = self::LOCALE_PARAM;
+            $args[] = array(
+                'name'      => self::LOCALE_PARAM,
+                'type'      => 'optional',
+                'default'   => 'en'
+            );
 
             // Let's parse Required and Optional Params
 
-            $required = $this -> parseParams( $params, self::REQUIRED_PARAMS_TOKEN );
-            $optional = $this -> parseParams( $params, self::OPTIONAL_PARAMS_TOKEN );
+            $required = $this -> parseParams( $args, 'required' );
+            $optional = $this -> parseParams( $args, 'optional' );
 
             // Searching for Duplicates
 
-            $offset = ArrayUtils::search( $this -> results, $URI, 'route' );
+            $offset = ArrayUtils::search( self::$results, $URI, 'route' );
 
             // We found one...
 
@@ -223,7 +190,7 @@ class Parser {
 
                 // ... let's compare with the Request Method
 
-                if( $this -> results[ $offset ]['requestMethod'] == $requestMethod ) {
+                if( self::$results['requestMethod'] == $requestMethod ) {
 
                     // Yeah! We have a Duplicate
 
@@ -236,7 +203,7 @@ class Parser {
 
             // Preparing Parsed Route to be recorded
 
-            $this -> results[] = array(
+            self::$results = array(
 
                 'requestMethod'    => $requestMethod,
                 'route'            => $URI,
@@ -246,9 +213,6 @@ class Parser {
                                           'required' => $required,
                                           'optional' => $optional
                                       ),
-
-                'class'            => $controller,
-                'method'           => $method
             );
         }
     }
@@ -272,8 +236,7 @@ class Parser {
             $params,
 
             function( $param ) use( $token ) {
-
-                return substr( $param, 0, 1 ) == $token;
+                return ( $param['type'] == $token );
             }
         );
     }

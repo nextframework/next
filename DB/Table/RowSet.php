@@ -21,7 +21,7 @@ class RowSet extends AbstractDataGateway implements \Iterator {
      * @return Next\DB\Table\RowSet
      */
     public function find( $condition ) {
-    	return $this;
+        return $this;
     }
 
     // DataGateway Interface Methods

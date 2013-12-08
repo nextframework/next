@@ -37,13 +37,12 @@ class Annotations extends AbstractRoutesGenerator {
      * @param string $dbPath
      *   SQLite Database Filepath
      */
-    public function __construct( Applications $applications, $dbPath/*, Driver $driver*/ ) {
+    public function __construct( Applications $applications, $dbPath ) {
 
         parent::__construct( $applications );
 
         // Routes Database Table Mapper
 
-        //$this -> manager = new Manager( $driver, new Annotations\Table );
         $this -> manager = new Manager(
 
             new \Next\DB\Driver\PDO\Adapter\SQLite(
@@ -67,29 +66,45 @@ class Annotations extends AbstractRoutesGenerator {
      */
     public function find() {
 
+        $results = array();
+
         foreach( $this -> applications as $applications ) {
 
             $annotations = new Annotations\Applications( $applications );
-
-            // Parse Routes
-
             $annotations = $annotations -> getAnnotations();
 
-            if( $annotations -> offsetExists( 'Routes' ) ) {
+            $path = $annotations -> offsetGet( 'path');
+            $annotations -> offsetUnset( 'path');   // Not elegant, but ...
 
-                // Listing routes found...
+            $foundAnnotations = array();
 
-                $results = new Annotations\Parser(
+            foreach( $annotations as $classname => $annotations ) {
 
-                    $annotations -> offsetGet( 'Routes' ),
+                foreach( $annotations as $method => $data ) {
 
-                    $annotations -> offsetGet( 'Path' )
-                );
+                    if( count( $data ['routes'] ) == 0 ) {
+                        throw RoutesGeneratorException::noRoutes( array( $classname, $method ) );
+                    }
 
-                // ... and building the final structure
+                    // Parsing Routes...
 
-                $this -> routes[ get_class( $applications ) ] = $results -> getResults();
+                    $foundAnnotations = new Annotations\Parser(
+
+                        $data['routes'], $data['args'], $classname, $method, $path
+                    );
+
+                    // ... and building final structure
+
+                    $results[ $classname ][ $method ] = $foundAnnotations -> getResults();
+                }
             }
+
+            // Sorting Routes by Length (read Annotations::sort() for further details)...
+
+            $this -> results[ $applications -> getClass() -> getName() ] = array_map(
+
+                array( $this, 'sort' ), $results
+            );
         }
 
         return $this;
@@ -105,54 +120,53 @@ class Annotations extends AbstractRoutesGenerator {
 
         set_time_limit( 0 );
 
-        // Sorting Routes by Length...
-
-        $this -> routes = array_map( array( $this, 'sort' ), $this -> routes );
-
         $records = 0;
 
-        foreach( $this -> routes as $application => $routes ) {
+        foreach( $this -> results as $application => $controllersData ) {
 
-            foreach( $routes as $route ) {
+            foreach( $controllersData as $controller => $actionsData ) {
 
-                // Setting Model Values
+                foreach( $actionsData as $action => $data ) {
 
-                $this -> manager -> setSource(
+                    // Cleaning Information of Previous Iteration
 
-                    array(
+                    $this -> manager -> reset();
 
-                        'requestMethod'    => $route['requestMethod'],
-                        'application'      => $application,
-                        'class'            => $route['class'],
-                        'method'           => $route['method'],
-                        'URI'              => $route['route'],
-                        'requiredParams'   => serialize( $route['params']['required'] ),
-                        'optionalParams'   => serialize( $route['params']['optional'] )
-                    )
-                );
+                    // Adding new
 
-                // Cleaning Information of Previous Iteration
+                    $this -> manager -> setSource(
 
-                $this -> manager -> reset();
+                        array(
 
-                // Trying to insert
-
-                try {
-
-                    $this -> manager -> insert();
-
-                    // Increment Counter
-
-                    $records += 1;
-
-                } catch( StatementException $e ) {
-
-                    // Re-throw as RoutesDatabaseException
-
-                    throw RoutesGeneratorException::recordingFailure(
-
-                        array( $route['route'], $route['class'], $route['method'], $e -> getMessage() )
+                            'requestMethod'    => $data['requestMethod'],
+                            'application'      => $application,
+                            'class'            => $controller,
+                            'method'           => $action,
+                            'URI'              => $data['route'],
+                            'requiredParams'   => serialize( $data['params']['required'] ),
+                            'optionalParams'   => serialize( $data['params']['optional'] )
+                        )
                     );
+
+                    // Inserting...
+
+                    try {
+
+                        $this -> manager -> insert();
+
+                        // Increment Counter
+
+                        $records += 1;
+
+                    } catch( StatementException $e ) {
+
+                        // Re-throw as RoutesDatabaseException
+
+                        throw RoutesGeneratorException::recordingFailure(
+
+                            array( $data['route'], $controller, $action, $e -> getMessage() )
+                        );
+                    }
                 }
             }
         }
@@ -217,7 +231,7 @@ class Annotations extends AbstractRoutesGenerator {
      */
     private function sort( array $routes ) {
 
-        usort(
+        uasort(
 
             $routes,
 

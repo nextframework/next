@@ -2,6 +2,8 @@
 
 namespace Next\Tools\RoutesGenerator\Annotations;
 
+use Next\Tools\RoutesGenerator\RoutesGeneratorException;
+
 /**
  * Routes Generator: Actions Annotations Analyzer
  *
@@ -25,6 +27,13 @@ class Actions extends \FilterIterator implements Annotations {
      * @var string
      */
     const ROUTE_PREFIX    =    '!Route';
+
+    /**
+     * Arguments Token
+     *
+     * @var string
+     */
+    const ARGS_PREFIX    =    '!Argument';
 
     /**
      * Controller Actions Annotations Constructor
@@ -55,11 +64,53 @@ class Actions extends \FilterIterator implements Annotations {
 
         foreach( $this as $current ) {
 
-            $routes = $this -> matchRouteAnnotations( $current );
+            // Preparing Arguments Structure right now
 
-            $routes = ( count( $routes ) > 1 ? $routes : array_shift( $routes ) );
+            $args = $this -> findActionAnnotations( $current, self::ARGS_PREFIX );
 
-            $data[ $current -> class ][ $current -> name ] = $routes;
+            foreach( $args as $index => $arg ) {
+
+                $temp = explode( ',', $arg );
+
+                // Basic Integrity Check
+
+                if( count( $temp )  < 2 ) {
+
+                    throw RoutesGeneratorException::malformedArguments(
+
+                        array( $current -> class, $current -> name )
+                    );
+                }
+
+                $args[ $index ] = array_combine(
+
+                    array( 'name', 'type', 'acceptable', 'default', 'regex' ),
+
+                    array_map(
+
+                        function( $current ) {
+
+                            $current = trim( $current );
+
+                            return ( $current === 'null' ? NULL : $current );
+                        },
+
+                        $temp
+
+                    ) + array_fill( 0, 5, NULL )
+                );
+            }
+
+            // Saving Data
+
+            $data[ $current -> name ] = array(
+
+                'routes'    =>  $this -> findActionAnnotations(
+                                    $current, self::ROUTE_PREFIX
+                                ),
+
+                'args'      =>  $args
+            );
         }
 
         return $data;
@@ -105,25 +156,28 @@ class Actions extends \FilterIterator implements Annotations {
     // Auxiliary Methods
 
     /**
-     * Match Route Annotations
-     *
-     * Routes Annotations start with !Route
+     * Find Actions Annotations
      *
      * @param ReflectionMethod $action
      *   Action to get Routes Annotations from
      *
+     * @param string $annotationPrefix
+     *  Annotation prefix used to distinguish an API doc-comment from an Action Annotation
+     *
      * @return array
      *   Found Annotations
      */
-    private function matchRouteAnnotations( \ReflectionMethod $action ) {
+    private function findActionAnnotations( \ReflectionMethod $action, $annotationPrefix ) {
 
-        $routes = preg_grep(
+        $annotation = preg_grep(
 
-            sprintf( '/%s/', self::ROUTE_PREFIX ),
+            sprintf( '/%s/', $annotationPrefix ),
 
             preg_split('/[\n\r]+/', $action -> getDocComment() )
         );
 
-        return preg_replace( sprintf( '/.*?%s\s*/', self::ROUTE_PREFIX ), '', $routes );
+        return preg_replace(
+            sprintf( '/.*?%s\s*/', $annotationPrefix ), '', $annotation
+        );
     }
 }

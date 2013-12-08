@@ -49,7 +49,7 @@ class TableException extends \Next\Components\Debug\Exception {
      *   Exception for statement preparing failure
      */
     public static function prepare( DriverException $e ) {
-    	return new self( $e -> getMessage(), self::PREPARE );
+        return new self( $e -> getMessage(), self::PREPARE );
     }
 
     /**
@@ -63,6 +63,6 @@ class TableException extends \Next\Components\Debug\Exception {
      *   Exception for statement execution failure
      */
     public static function execute( StatementException $e ) {
-    	return new self( $e -> getMessage(), self::EXECUTE );
+        return new self( $e -> getMessage(), self::EXECUTE );
     }
 }

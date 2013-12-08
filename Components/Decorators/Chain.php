@@ -9,7 +9,7 @@ class Chain extends Set {
 
     // Method Override
 
-	/**
+    /**
      * Check Object acceptance
      *
      * @param Next\Components\Object $object

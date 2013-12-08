@@ -40,28 +40,28 @@ class Invoker {
      */
     function __construct ( Object $caller, Object $callee ) {
 
-    	$this -> caller =& $caller;
+        $this -> caller =& $caller;
 
-    	$this -> callee =& $callee;
+        $this -> callee =& $callee;
     }
 
     /**
      * Get Caller Object
      *
-	 * @return Next\Components\Object
-	 *   Caller Object
-	 */
-	public function getCaller() {
-		return $this -> caller;
-	}
+     * @return Next\Components\Object
+     *   Caller Object
+     */
+    public function getCaller() {
+        return $this -> caller;
+    }
 
-	/**
-	 * Get Callee Object
+    /**
+     * Get Callee Object
      *
-	 * @return Next\Components\Object
-	 *   Callee Object
-	 */
-	public function getCallee() {
-		return $this -> callee;
-	}
+     * @return Next\Components\Object
+     *   Callee Object
+     */
+    public function getCallee() {
+        return $this -> callee;
+    }
 }

@@ -40,85 +40,85 @@ abstract class Prototype implements Prototypical  {
      * @return Next\Components\Prototype
      *   Prototype Instance (Fluent Interface)
      */
-	public function implement( $name, $callable, $args = array() ) {
+    public function implement( $name, $callable, $args = array() ) {
 
-	    self::$prototypes[ (string) $name ] = array( $callable, (array) $args );
+        self::$prototypes[ (string) $name ] = array( $callable, (array) $args );
 
-	    return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Invoke a prototyped resource from a caller context
-	 *
-	 * @param Next\Components\Object $caller
-	 *   Caller Object
-	 *
-	 * @param string $method
-	 *   Callable resource name
-	 *
-	 * @param array $args
-	 *   Calling Arguments
-	 *
-	 * @return Next\Components\Object
-	 *   Caller Object updated
-	 *
-	 * @throws Next\Components\Debug\Exception
-	 *   Called resource is not known as a prototype nor as a extended method
-	 */
-	public function call( Object $caller, $method, array $args = array() ) {
+    /**
+     * Invoke a prototyped resource from a caller context
+     *
+     * @param Next\Components\Object $caller
+     *   Caller Object
+     *
+     * @param string $method
+     *   Callable resource name
+     *
+     * @param array $args
+     *   Calling Arguments
+     *
+     * @return Next\Components\Object
+     *   Caller Object updated
+     *
+     * @throws Next\Components\Debug\Exception
+     *   Called resource is not known as a prototype nor as a extended method
+     */
+    public function call( Object $caller, $method, array $args = array() ) {
 
-	    if( isset( self::$prototypes[ $method ] ) ) {
+        if( isset( self::$prototypes[ $method ] ) ) {
 
-	    	// Merging always optional arguments with called arguments
+            // Merging always optional arguments with called arguments
 
-	        if( count( $args ) > 0 ) {
+            if( count( $args ) > 0 ) {
 
-	            ArrayUtils::insert( self::$prototypes[ $method ][ 1 ], $args );
+                ArrayUtils::insert( self::$prototypes[ $method ][ 1 ], $args );
 
-	        } else {
+            } else {
 
-	            // Nothing to Merge? OK!
+                // Nothing to Merge? OK!
 
-	            $args =& self::$prototypes[ $method ][ 1 ];
-	        }
+                $args =& self::$prototypes[ $method ][ 1 ];
+            }
 
-	        $result = call_user_func_array(
+            $result = call_user_func_array(
 
-	            self::$prototypes[ $method ][ 0 ], $args
-    	    );
+                self::$prototypes[ $method ][ 0 ], $args
+            );
 
-	        /**
-	         * @internal
-	         *
-	         * If operation results in an Object, let's return it
-	         *
-	         * This ensures operations of one type can return a different type
-	         */
-	        if( $result instanceof Object ) {
-	            return $result;
-	        }
+            /**
+             * @internal
+             *
+             * If operation results in an Object, let's return it
+             *
+             * This ensures operations of one type can return a different type
+             */
+            if( $result instanceof Object ) {
+                return $result;
+            }
 
-	        // Otherwise let's update caller Object
+            // Otherwise let's update caller Object
 
-	        return $caller -> set( $result );
-	    }
+            return $caller -> set( $result );
+        }
 
-	    throw \Next\Components\Debug\Exception::wrongUse(
+        throw \Next\Components\Debug\Exception::wrongUse(
 
-	    	'Method <strong>%s</strong> could not be matched against any
+            'Method <strong>%s</strong> could not be matched against any
             methods in extended Context or prototyped functions',
 
-	    	array( $method )
-	    );
-	}
+            array( $method )
+        );
+    }
 
-	/**
+    /**
      * Get Prototyped Resources
      *
      *  @return array
      *    All prototyped resources
      */
     public function getPrototypes() {
-		return self::$prototypes;
-	}
+        return self::$prototypes;
+    }
 }

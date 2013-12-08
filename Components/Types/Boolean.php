@@ -12,7 +12,7 @@ namespace Next\Components\Types;
  */
 final class Boolean extends AbstractTypes {
 
-	// Abstract Methods Implementation
+    // Abstract Methods Implementation
 
     /**
      * Check whether or not given value is acceptable by datatype class
