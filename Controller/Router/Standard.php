@@ -33,27 +33,6 @@ class Standard extends AbstractRouter {
     const SEPARATOR_TOKEN       = '|';
 
     /**
-     * List of Arguments beginning Token
-     *
-     * @var string
-     */
-    const LIST_OPEN_TOKEN       = '[';
-
-    /**
-     * RegExp for Default Value
-     *
-     * @var string
-     */
-    const DEFAULT_VALUE_REGEXP  = '<(.*?)>';
-
-    /**
-     * RegExp for Valid Values
-     *
-     * @var string
-     */
-    const VALID_VALUES_REGEXP   = '\[(.*?)\]';
-
-    /**
      * SQLite Connection Resource
      *
      * @var mixed $dbh
@@ -143,7 +122,8 @@ class Standard extends AbstractRouter {
             /**
              * @internal
              * Validating Required Params
-             * Only Parameters with a [List|of|Possible|Values] will be validated
+             * Only Parameters with a List|of|Acceptable|Values or with a defined REGEX
+             * will be validated
              */
             $this -> validate(
 
@@ -153,7 +133,7 @@ class Standard extends AbstractRouter {
 
                     function( $current ) {
 
-                        return ( ! empty( $current['acceptable'] ) );
+                        return ( ! empty( $current['acceptable'] ) || ! empty( $current['regex'] ) );
                     }
                 ),
 
@@ -327,8 +307,6 @@ class Standard extends AbstractRouter {
 
             function( $current ) use( $URI, $token ) {
 
-                $valid = explode( $token, $current['acceptable'] );
-
                 // Finding argument value
 
                 preg_match(
@@ -336,17 +314,35 @@ class Standard extends AbstractRouter {
                     sprintf( '/\/%s\/([^\/]+)\/?/', $current['name'] ), $URI, $value
                 );
 
-                // If Parameter is not in the list...
+                // Validating parameter value with a predefined REGEXP
 
-                if( ! in_array( $value[ 1 ], $valid ) ) {
+                if( ! empty( $current['regex'] ) ) {
 
-                    // ... and there is no Default Value defined for it
-
-                    if( ! empty( $current['default'] ) ) {
-
-                        // Teh, he, he ^^
-
+                    /**
+                     * If argument value does not match defined REGEX it is
+                     * automatically blocked regardless if a list given value is
+                     * valid against it (even if this may sound ridiculous)
+                     */
+                    if( preg_match( sprintf( '/%s/', $current['regex'] ), $value[ 1 ] ) == 0 ) {
                         throw RouterException::invalidParameter( $current );
+                    }
+
+                } else {
+
+                    $valid = explode( $token, $current['acceptable'] );
+
+                    // If Parameter is not in the list...
+
+                    if( ! in_array( $value[ 1 ], $valid ) ) {
+
+                        // ... and there is no Default Value defined for it
+
+                        if( ! empty( $current['default'] ) ) {
+
+                            // Teh, he, he ^^
+
+                            throw RouterException::invalidParameter( $current );
+                        }
                     }
                 }
             }

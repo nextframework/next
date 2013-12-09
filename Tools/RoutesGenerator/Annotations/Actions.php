@@ -70,7 +70,7 @@ class Actions extends \FilterIterator implements Annotations {
 
             foreach( $args as $index => $arg ) {
 
-                $temp = explode( ',', $arg );
+                $temp = explode( ',', $arg, 5 );
 
                 // Basic Integrity Check
 
