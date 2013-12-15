@@ -78,5 +78,37 @@ class DB implements Adapter {
      */
     public function count() {
         return count( $this -> em -> fetchAll() );
+
+        /**
+         * Because Object Bridge still restricted to methods invocation
+         * Next\DB\Query\Builder needs to use static properties and because of
+         * this the proposal below is not possible because it's overwriting
+         * original Query string
+         */
+        /*if( ! is_null( $this -> count ) ) {
+            return $this -> count;
+        }
+
+        $em = clone $this -> em;
+
+        $conditions     = $this -> em -> getPart( Query::SQL_WHERE );
+        $replacements   = $this -> em -> getReplacements( Query::SQL_WHERE );
+
+        $select = new Manager( $this -> em -> getDriver(), $this -> em -> getTable() );
+
+        $select -> select( new \Next\DB\Query\Expression( 'COUNT(1) as `count`' ) )
+                -> from( array( $this -> em -> getTable() -> getTable() ) );
+
+        // Replicating WHERE Clauses
+
+        foreach( $conditions as $condition ) {
+            $select -> where( key( $condition ) );
+        }
+
+        $select -> setReplacements( $replacements );
+
+        $this -> count = (int) $select -> fetch() -> current() -> count;
+
+        return $this -> count;*/
     }
 }

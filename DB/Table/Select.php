@@ -2,6 +2,10 @@
 
 namespace Next\DB\Table;
 
+use Next\Components\Object;             # Object Class
+use Next\Components\Invoker;            # Invoker Class
+
+use Next\DB\Query\Query;                # Query Interface
 use Next\DB\Query\Renderer\Renderer;    # Query Renderer
 use Next\DB\Query\Expression;           # Expression Class
 use Next\DB\Query\Builder;              # Query Builder Class
@@ -14,7 +18,7 @@ use Next\DB\Query\Builder;              # Query Builder Class
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class Select extends Builder {
+class Select extends Object {
 
     /**
      * Columns to be include in SELECT Statement
@@ -41,9 +45,21 @@ class Select extends Builder {
      * @param string|array|optional $columns
      *   Columns to be included in SELECT Statement
      */
-    public function __construct( Renderer $renderer, $columns = parent::SQL_WILDCARD ) {
+    public function __construct( Renderer $renderer, $columns = Query::SQL_WILDCARD ) {
 
-        parent::__construct( $renderer );
+        parent::__construct();
+
+        // Extend Object Context to QueryBuilder Class
+
+        $this -> extend( new Invoker( $this, new Builder( $renderer ) ) );
+
+        /**
+         * Initializing Structure
+         *
+         * @see Next\DB\Table\Select::reset()
+         */
+        $this -> columns   = NULL;
+        $this -> tables    = NULL;
 
         // Starting SELECT Statement
 
@@ -61,11 +77,11 @@ class Select extends Builder {
      */
     public function select( $columns = array() ) {
 
-        $renderer =& $this -> renderer;
+        $renderer = $this -> getRenderer();
 
-        if( count( $columns ) == 0 || $columns == parent::SQL_WILDCARD ) {
+        if( count( $columns ) == 0 || $columns == Query::SQL_WILDCARD ) {
 
-            $this -> columns = parent::SQL_WILDCARD;
+            $this -> columns = Query::SQL_WILDCARD;
 
             return $this;
         }
@@ -99,9 +115,9 @@ class Select extends Builder {
              *
              * array( '*' )
              */
-            if( in_array( parent::SQL_WILDCARD, $columns ) ) {
+            if( in_array( Query::SQL_WILDCARD, $columns ) ) {
 
-                $this -> columns = parent::SQL_WILDCARD;
+                $this -> columns = Query::SQL_WILDCARD;
 
                 return $this;
             }
@@ -144,6 +160,8 @@ class Select extends Builder {
      */
     public function from( array $tables = array() ) {
 
+        $renderer = $this -> getRenderer();
+
         // Building SQL Statement
 
         if( count( $tables ) != 0 ) {
@@ -161,7 +179,7 @@ class Select extends Builder {
              */
             foreach( $tables as $alias => $table ) {
 
-                $this -> tables .= $this -> renderer -> from( $alias, $table );
+                $this -> tables .= $renderer -> from( $alias, $table );
             }
         }
 
@@ -170,7 +188,7 @@ class Select extends Builder {
          * Assembling Query
          * From this point all SQL is a Clause
          */
-        $this -> createQuery( $this -> renderer -> select( $this -> columns, $this -> tables ) );
+        $this -> createQuery( $renderer -> select( $this -> columns, $this -> tables ) );
 
         return $this;
     }
@@ -183,7 +201,7 @@ class Select extends Builder {
      */
     public function distinct() {
 
-        parent::$parts[ parent::SQL_DISTINCT ] = TRUE;
+        Query::$parts[ Query::SQL_DISTINCT ] = TRUE;
 
         return $this;
     }
@@ -227,7 +245,7 @@ class Select extends Builder {
 
         // Adding Clause to SQL Parts Property
 
-        parent::$parts[ self::SQL_HAVING ][] = array(
+        Query::$parts[ self::SQL_HAVING ][] = array(
 
             $condition => ( $isMatchingHaving ? self::SQL_AND : self::SQL_OR )
         );
@@ -264,7 +282,7 @@ class Select extends Builder {
 
         if( ! self::$parts[ self::SQL_GROUP_BY ] ) {
 
-            parent::$parts[ self::SQL_GROUP_BY ] = TRUE;
+            Query::$parts[ self::SQL_GROUP_BY ] = TRUE;
 
             // Registering Placeholder Replacement Value
 
@@ -277,26 +295,16 @@ class Select extends Builder {
         return $this;
     }
 
-    // Method Overwriting
-
     /**
      * Reset Select Data
      *
-     * By overriding this method present in parent class allow the properties of
-     * this class to be reset too
+     * Instead of resetting everything, returns a new instance of Select Object
+     * Not very elegant but allow Select class to not be child of Builder anymore,
+     * while Object's object bridging still restricted to method invoking
      *
      * @return Next\DB\Table\Select
-     *
-     * @see Next\DB\Query::Builder::reset()
      */
     public function reset() {
-
-        parent::reset();
-
-        $this -> columns   = NULL;
-
-        $this -> tables    = NULL;
-
-        return $this;
+        return new Select;
     }
 }

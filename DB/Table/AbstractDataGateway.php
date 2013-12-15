@@ -78,6 +78,24 @@ abstract class AbstractDataGateway extends Object implements DataGateway {
         return $this -> manager -> delete();
     }
 
+    // Countable Interface Method Implementation
+
+    /**
+     * Count elements of Data Source
+     *
+     * @return integer
+     *   Number of elements in RowSet
+     */
+    public function count() {
+
+        if( $this -> source instanceof \Countable ) {
+
+            return $this -> source -> count();
+        }
+
+        return count( $this -> source );
+    }
+
     // Auxiliary Methods
 
     /**

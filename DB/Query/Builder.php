@@ -182,7 +182,7 @@ class Builder extends Object implements Query {
 
                 ArrayUtils::equalize( $field, $type );
 
-                // ... and combine to make recursion easily
+                // ... and combine to make recursion easier
 
                 $field = array_combine( $field, $type );
             }
@@ -247,12 +247,6 @@ class Builder extends Object implements Query {
      */
     public function limit( $limit = 1, $offset = 0 ) {
 
-        if( array_key_exists( self::SQL_LIMIT, self::$parts ) &&
-                self::$parts[ self::SQL_LIMIT ] !== FALSE ) {
-
-            return NULL;
-        }
-
         $limit  = (int) $limit;
         $offset = (int) $offset;
 
@@ -285,7 +279,7 @@ class Builder extends Object implements Query {
             self::SQL_WHERE         => array(),
             self::SQL_GROUP_BY      => FALSE,
             self::SQL_ORDER_BY      => FALSE,
-            self::SQL_LIMIT         => FALSE,
+            self::SQL_LIMIT         => array( 0, 10 ),
             self::SQL_HAVING        => array(),
             self::SQL_UNION         => NULL
         );
@@ -436,6 +430,15 @@ class Builder extends Object implements Query {
         );
 
         return $r;
+    }
+
+    /**
+     * Get Renderer Object
+     *
+     * @return Next\DB\Query\Renderer\Renderer
+     */
+    public function getRenderer() {
+        return $this -> renderer;
     }
 
     /**

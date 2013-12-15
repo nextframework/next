@@ -30,6 +30,11 @@ class Paginator implements \Countable, \IteratorAggregate {
      */
     private $style;
 
+    /**
+     * Total of Records
+     *
+     * @var integer $count
+     */
     private $count;
 
     // Defaults
@@ -103,12 +108,12 @@ class Paginator implements \Countable, \IteratorAggregate {
         $data -> current = $this -> currentPage;
         $data -> last    = count( $this );
 
-        if( ( $this -> currentPage - 1 ) > 0 ) {
+        if( $this -> currentPage != $data -> range -> min ) {
 
             $data -> previous = ( $this -> currentPage - 1 );
         }
 
-        if( ( $this -> currentPage + 1 ) <= $count ) {
+        if( $this -> currentPage != $data -> range -> max ) {
 
             $data -> next = ( $this -> currentPage + 1 );
         }

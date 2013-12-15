@@ -12,18 +12,6 @@ namespace Next\DB\Table;
  */
 class RowSet extends AbstractDataGateway implements \Iterator {
 
-    /**
-     * Find a ResultSet from initial ResultSet
-     *
-     * @param string $condition
-     *   Filtering Condition
-     *
-     * @return Next\DB\Table\RowSet
-     */
-    public function find( $condition ) {
-        return $this;
-    }
-
     // DataGateway Interface Methods
 
     /**
@@ -82,24 +70,6 @@ class RowSet extends AbstractDataGateway implements \Iterator {
         );
 
         return $this -> source;
-    }
-
-    // Countable Interface Method Implementation
-
-    /**
-     * Count elements of Data Source
-     *
-     * @return integer
-     *   Number of elements in RowSet
-     */
-    public function count() {
-
-        if( $this -> source instanceof \Countable ) {
-
-            return $this -> source -> count();
-        }
-
-        return count( $this -> source );
     }
 
     // Iterator Interface Methods Implementation
