@@ -279,7 +279,7 @@ class Builder extends Object implements Query {
             self::SQL_WHERE         => array(),
             self::SQL_GROUP_BY      => FALSE,
             self::SQL_ORDER_BY      => FALSE,
-            self::SQL_LIMIT         => array( 0, 10 ),
+            self::SQL_LIMIT         => NULL,
             self::SQL_HAVING        => array(),
             self::SQL_UNION         => NULL
         );
@@ -516,8 +516,11 @@ class Builder extends Object implements Query {
 
         if( array_key_exists( self::SQL_LIMIT, self::$parts ) ) {
 
-            if( self::$parts[ self::SQL_LIMIT ] ) {
-                $clauses .= $this -> renderer -> limit( self::$parts[ self::SQL_LIMIT ] );
+            if( self::$parts[ self::SQL_LIMIT ] !== NULL ) {
+
+                if( self::$parts[ self::SQL_LIMIT ] ) {
+                    $clauses .= $this -> renderer -> limit( self::$parts[ self::SQL_LIMIT ] );
+                }
             }
         }
 

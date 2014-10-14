@@ -284,7 +284,7 @@ class Request extends Object {
 
             // Default Request Headers. Internal Requests only.
 
-            if( defined( 'TURBO_MODE' ) && TURBO_MODE === FALSE ) $this -> addDefaultHeaders();
+            if( defined( 'TURBO_MODE' ) && ! TURBO_MODE === TRUE ) $this -> addDefaultHeaders();
         }
     }
 

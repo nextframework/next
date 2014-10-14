@@ -29,7 +29,6 @@ class ExceptionController extends AbstractController {
      * Exception Handler Development Action
      */
     final public function development() {
-
         $this -> trigger( 'exception/development' );
     }
 
@@ -37,7 +36,6 @@ class ExceptionController extends AbstractController {
      * Exception Handler Production Action
      */
     final public function production() {
-
         $this -> trigger( 'exception/production' );
     }
 
@@ -61,7 +59,7 @@ class ExceptionController extends AbstractController {
 
             restore_exception_handler();
 
-            throw new \Next\Components\Debug( $e -> getMessage() );
+            throw new \Next\Components\Debug\Exception( $e -> getMessage() );
         }
     }
 }

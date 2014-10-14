@@ -33,7 +33,16 @@ class Tools {
      *   Cleaned and fixed path
      */
     public static function cleanAndInvertPath( $path ) {
-        return str_replace( '\\', '/', trim( $path, '/\\' ) );
+
+        // Clean boundary spaces
+
+        $path = trim( $path );
+
+        // Remove trailing slash
+
+        $path = rtrim( $path, '/\\' );
+
+        return str_replace( '\\', '/', $path );
     }
 
     /**

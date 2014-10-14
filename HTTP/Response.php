@@ -853,13 +853,15 @@ class Response extends Object {
 
             echo $this -> body;
 
-            if( ob_get_length() ) { ob_end_flush(); }
-
             // Should we end the Execution Flow?
 
             if( $this -> shouldAbort ) {
                 exit;
             }
+
+            // If we shouldn't, let's flush the buffer
+
+            if( ob_get_length() ) { ob_end_flush(); }
         }
     }
 

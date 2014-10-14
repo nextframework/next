@@ -478,7 +478,7 @@ class Standard extends Object implements View {
             throw ViewException::invalidSpec();
          }
 
-         $this -> _fileSpec = implode( '/', $pairs );
+         $this -> _fileSpec = $spec;
 
          return $this;
     }
@@ -557,7 +557,7 @@ class Standard extends Object implements View {
 
             // Creating a new Template Variable
 
-            $this -> _tplVars[ $tplVar ] =& $value;
+            $this -> _tplVars[ $tplVar ] = $value;
         }
 
         return $this;
@@ -621,7 +621,7 @@ class Standard extends Object implements View {
          *   var_dump() or even a ControllerException which was caught
          */
         if( ! $this -> _shouldRender || ob_get_length() != 0 ) {
-            return NULL;
+            return $response;
         }
 
         if( $search == FALSE && empty( $name ) ) {
@@ -980,17 +980,20 @@ class Standard extends Object implements View {
          * @internal
          * Finding Default SubPath
          *
-         * Default SubPath is built by removing:
+         * Default SubPath is built by removing from Controllers Name:
          *
          * - Application Directory,
          * - 'Controller' Keyword
          * - Controller ClassName
-         *
-         * from Controllers Name
          */
+
+        // Using substr() and strpos() instead of basename() due differences produced between Windows and Linux
+
+        $controllerBasename = substr( $controller, (int) strrpos( $controller, '\\' ) + 1 );
+
         $subpath = str_replace(
 
-                       array( $application, self::CONTROLLERS_KEYWORD, basename( $controller ) ),
+                       array( $application, self::CONTROLLERS_KEYWORD, $controllerBasename ),
 
                        '', $controller
                    );
@@ -1003,7 +1006,7 @@ class Standard extends Object implements View {
 
         // Cleaning Controller Class to find its "Real Name"
 
-        $controller = str_replace( 'Controller', '', basename( $controller ) );
+        $controller = str_replace( 'Controller', '', $controllerBasename );
 
         // Cleaning known Action suffixes
 

@@ -5,7 +5,7 @@ namespace Next\Controller\Dispatcher;
 use Next\Controller\ControllerException;    # Controller Exception Class
 use Next\View\ViewException;                # View Exception Class
 use Next\Application\Application;           # Application Interface
-use Next\Components\Exception\Handlers;     # Exceptions Handlers
+use Next\Components\Debug\Handlers;     # Exceptions Handlers
 
 /**
  * Standard Controller Dispatcher Class

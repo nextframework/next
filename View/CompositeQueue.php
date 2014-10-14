@@ -4,6 +4,7 @@ namespace Next\View;
 
 use Next\Components\Object;            # Object Class
 use Next\Components\Iterator\Lists;    # Lists Collection Class
+
 /**
  * Composite View Class
  *
@@ -41,7 +42,7 @@ class CompositeQueue extends Lists {
          *
          * Partial Views must implement View Interface
          */
-        if( ! $object instanceof View ) {
+        if( ! $object instanceof CompositeView ) {
 
             throw ViewException::invalidPartial( $object );
         }

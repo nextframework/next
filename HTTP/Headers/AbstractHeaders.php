@@ -219,7 +219,19 @@ abstract class AbstractHeaders extends Object {
 
             $header = strtolower( str_replace( 'HTTP_', '', $header ) );
 
-            $header = ucfirst( preg_replace( '/(-|_)(\w)/e', "strtoupper( '\\2' )", $header ) );
+            $header = ucfirst(
+
+                preg_replace_callback(
+
+                    '/(-|_)(\w)/',
+
+                    function( $matches ) {
+                        return strtoupper( $matches[1]);
+                    },
+
+                    $header
+                )
+            );
 
             // Checking if its a known Header Field
 
