@@ -34,7 +34,7 @@ class Parser {
      *
      * @staticvar array $results
      */
-    private static $results;
+    private $results;
 
     /**
      * Annotations Parser Constructor
@@ -69,7 +69,7 @@ class Parser {
      * @return array Routes Data
      */
     public function getResults() {
-        return self::$results;
+        return $this -> results;
     }
 
     // Auxiliary Methods
@@ -167,22 +167,22 @@ class Parser {
                 }
             }
 
-            // Adding an Always Optional Parameter for Localization
-
-            $args[] = array(
-                'name'      => self::LOCALE_PARAM,
-                'type'      => 'optional',
-                'default'   => 'en'
-            );
-
             // Let's parse Required and Optional Params
 
             $required = $this -> parseParams( $args, 'required' );
             $optional = $this -> parseParams( $args, 'optional' );
 
+            // Adding an always optional parameter reserved for Localization
+
+            $optional[] = array(
+                    'name'      => self::LOCALE_PARAM,
+                    'type'      => 'optional',
+                    'default'   => 'en'
+            );
+
             // Searching for Duplicates
 
-            $offset = ArrayUtils::search( self::$results, $URI, 'route' );
+            $offset = ArrayUtils::search( $this -> results, $URI, 'route' );
 
             // We found one...
 
@@ -190,7 +190,7 @@ class Parser {
 
                 // ... let's compare with the Request Method
 
-                if( self::$results['requestMethod'] == $requestMethod ) {
+                if( $this -> results[ $offset ]['requestMethod'] == $requestMethod ) {
 
                     // Yeah! We have a Duplicate
 
@@ -203,7 +203,7 @@ class Parser {
 
             // Preparing Parsed Route to be recorded
 
-            self::$results = array(
+            $this -> results[] = array(
 
                 'requestMethod'    => $requestMethod,
                 'route'            => $URI,

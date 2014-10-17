@@ -95,16 +95,9 @@ class Annotations extends AbstractRoutesGenerator {
 
                     // ... and building final structure
 
-                    $results[ $classname ][ $method ] = $foundAnnotations -> getResults();
+                    $this -> results[ $applications -> getClass() -> getName() ][ $classname ][ $method ] = $this -> sort( $foundAnnotations -> getResults() );
                 }
             }
-
-            // Sorting Routes by Length (read Annotations::sort() for further details)...
-
-            $this -> results[ $applications -> getClass() -> getName() ] = array_map(
-
-                array( $this, 'sort' ), $results
-            );
         }
 
         return $this;
@@ -128,44 +121,47 @@ class Annotations extends AbstractRoutesGenerator {
 
                 foreach( $actionsData as $action => $data ) {
 
-                    // Cleaning Information of Previous Iteration
+                    foreach( $data as $d ) {
 
-                    $this -> manager -> reset();
+                        // Cleaning Information of Previous Iteration
 
-                    // Adding new
+                        $this -> manager -> reset();
 
-                    $this -> manager -> setSource(
+                        // Adding new
 
-                        array(
+                        $this -> manager -> setSource(
 
-                            'requestMethod'    => $data['requestMethod'],
-                            'application'      => $application,
-                            'class'            => $controller,
-                            'method'           => $action,
-                            'URI'              => $data['route'],
-                            'requiredParams'   => serialize( $data['params']['required'] ),
-                            'optionalParams'   => serialize( $data['params']['optional'] )
-                        )
-                    );
+                            array(
 
-                    // Inserting...
-
-                    try {
-
-                        $this -> manager -> insert();
-
-                        // Increment Counter
-
-                        $records += 1;
-
-                    } catch( StatementException $e ) {
-
-                        // Re-throw as RoutesDatabaseException
-
-                        throw RoutesGeneratorException::recordingFailure(
-
-                            array( $data['route'], $controller, $action, $e -> getMessage() )
+                                'requestMethod'    => $d['requestMethod'],
+                                'application'      => $application,
+                                'class'            => $controller,
+                                'method'           => $action,
+                                'URI'              => $d['route'],
+                                'requiredParams'   => serialize( $d['params']['required'] ),
+                                'optionalParams'   => serialize( $d['params']['optional'] )
+                            )
                         );
+
+                        // Inserting...
+
+                        try {
+
+                            $this -> manager -> insert();
+
+                            // Increment Counter
+
+                            $records += 1;
+
+                        } catch( StatementException $e ) {
+
+                            // Re-throw as RoutesDatabaseException
+
+                            throw RoutesGeneratorException::recordingFailure(
+
+                                array( $d['route'], $controller, $action, $e -> getMessage() )
+                            );
+                        }
                     }
                 }
             }

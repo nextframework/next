@@ -79,7 +79,7 @@ class Standard extends AbstractRouter {
                                                  `requiredParams`, `optionalParams`
                                             FROM `routes`
                                                 WHERE `application` = ? AND
-                                                    ( `requestMethod` = ? AND ? REGEXP `URI` )' );
+                                                    ( `requestMethod` = ? AND ? REGEXP `URI` ) AND INSTR( `URI`, ? )' );
 
         $stmt -> execute(
 
@@ -89,15 +89,15 @@ class Standard extends AbstractRouter {
 
                 $request -> getRequestMethod(),
 
-                $URI
+                $URI, $URI
             )
         );
 
-        $data = $stmt -> fetch();
+        $resultset = $stmt -> fetch();
 
         // Match found, let's prepare everything for a successful Dispatch
 
-        if( $data !== FALSE ) {
+        if( $resultset !== FALSE ) {
 
             /**
              * @internal
