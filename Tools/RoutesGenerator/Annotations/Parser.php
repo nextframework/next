@@ -2,8 +2,8 @@
 
 namespace Next\Tools\RoutesGenerator\Annotations;
 
-use Next\Tools\RoutesGenerator\RoutesGeneratorException;          # Router Generator Exception Class
-use Next\Components\Utils\ArrayUtils;                             # Array Utils Class
+use Next\Tools\RoutesGenerator\RoutesGeneratorException;    # Router Generator Exception Class
+use Next\Components\Utils\ArrayUtils;                                         # Array Utils Class
 
 /**
  * Annotation Routes Generator: Annotations Parser

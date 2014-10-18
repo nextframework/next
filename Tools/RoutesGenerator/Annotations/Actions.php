@@ -62,13 +62,13 @@ class Actions extends \FilterIterator implements Annotations {
 
         $data = array();
 
+        $labels = array( 'name', 'type', 'acceptable', 'default', 'regex' );
+
         foreach( $this as $current ) {
 
             // Preparing Arguments Structure right now
 
             $args = array();
-
-            $labels = array( 'name', 'type', 'acceptable', 'default', 'regex' );
 
             foreach( $this -> findActionAnnotations( $current, self::ARGS_PREFIX ) as $index => $arg ) {
 
@@ -88,17 +88,28 @@ class Actions extends \FilterIterator implements Annotations {
 
                 \Next\Components\Utils\ArrayUtils::equalize( $temp, $labels );
 
-                $args[] = array_combine( $labels, $temp );
+                // Cleaning and preparing argument data structure
+
+                $temp = array_map(
+
+                    function( $current ) {
+
+                        $current = trim( $current );
+
+                        return( empty( $current ) || $current === 'null' ? NULL : $current );
+                    },
+
+                    $temp
+                );
+
+                $args[] = array_combine( $labels, $temp) ;
             }
 
             // Saving Data
 
             $data[ $current -> name ] = array(
 
-                'routes'    =>  $this -> findActionAnnotations(
-                                    $current, self::ROUTE_PREFIX
-                                ),
-
+                'routes'    =>  $this -> findActionAnnotations( $current, self::ROUTE_PREFIX ),
                 'args'      =>  $args
             );
         }

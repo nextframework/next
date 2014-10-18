@@ -138,7 +138,7 @@ abstract class AbstractCollection extends Object
      *   TRUE if given Object is already present in Collection and FALSE otherwise
      */
     public function contains( Object $object ) {
-        return in_array( $object -> getHash(), $this -> references -> getArrayCopy() );
+        return in_array( $object -> getHash(), (array) $this -> references );
     }
 
     // Accessors
