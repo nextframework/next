@@ -40,21 +40,21 @@ abstract class AbstractApplication extends Object implements Application {
      *
      * @var Next\Controller\Router\Router $router
      */
-    private $router;
+    protected $router;
 
     /**
      * Request Object
      *
      * @var Next\HTTP\Request $request
      */
-    private $request;
+    protected $request;
 
     /**
      * Response Object
      *
      * @var Next\HTTP\Response $response
      */
-    private $response;
+    protected $response;
 
     /**
      * Application Constructor

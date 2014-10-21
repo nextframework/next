@@ -555,6 +555,13 @@ class Standard extends Object implements View {
                 throw ViewException::forbiddenVariable( $tplVar );
             }
 
+            // Mapping array of values into stdClass Object
+
+            if( is_array( $value ) ) {
+
+                $value = Object::map( $value );
+            }
+
             // Creating a new Template Variable
 
             $this -> _tplVars[ $tplVar ] = $value;

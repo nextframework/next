@@ -23,20 +23,37 @@ class TableException extends \Next\Components\Debug\Exception {
     protected $range = array( 0x00000396, 0x000003C8 );
 
     /**
+     * Nothing to Update
+     *
+     * @var integer
+     */
+    const NOTHING_TO_UPDATE = 0x00000396;
+
+    /**
      * Statement Preparing
      *
      * @var integer
      */
-    const PREPARE = 0x00000396;
+    const PREPARE = 0x00000397;
 
     /**
      * Statement Executing
      *
      * @var integer
      */
-    const EXECUTE = 0x00000397;
+    const EXECUTE = 0x00000398;
 
     // Exception Messages
+
+    /**
+     * Unable to prepare statement
+     *
+     * @return Next\DB\Table\TableException
+     *   Exception when there is nothing to update
+     */
+    public static function nothingToUpdate() {
+        return new self( 'Nothing to update', self::NOTHING_TO_UPDATE );
+    }
 
     /**
      * Unable to prepare statement

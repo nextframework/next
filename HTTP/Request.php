@@ -390,7 +390,14 @@ class Request extends Object {
 
         } else {
 
-            return sprintf( '%s://%s/%s', strtolower( self::SCHEME_HTTP ), $_SERVER['HTTP_HOST'], $this -> basepath );
+            return sprintf(
+
+                '%s://%s/%s',
+
+                strtolower( self::SCHEME_HTTP ), $_SERVER['HTTP_HOST'],
+
+                ( ! $this -> isCli() ? $this -> basepath : NULL )
+            );
         }
     }
 
@@ -519,7 +526,7 @@ class Request extends Object {
      *   TRUE if is under Command Line (CLI) and FALSE otherwise
      */
     public function isCli() {
-        return PHP_SAPI == 'cli';
+        return ( PHP_SAPI == 'cli' || PHP_SAPI == 'cli-server' );
     }
 
     /**

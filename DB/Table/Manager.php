@@ -222,11 +222,7 @@ class Manager extends Object {
         // Checking Integrity
 
         if( count( $this -> source ) == 0 ) {
-
-            throw TableException::logic(
-
-                'Wrong use of Table::update(). No fields to update!'
-            );
+            throw TableException::nothingToUpdate();
         }
 
         // Building SQL UPDATE Statement
