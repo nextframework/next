@@ -59,7 +59,7 @@ class Row extends AbstractDataGateway {
         $this -> manager -> reset();
 
         $this -> manager -> setSource( $updatedData )
-                         -> update();
+                                      -> update();
 
         foreach( $conditions as $field => $condition ) {
 
@@ -71,26 +71,11 @@ class Row extends AbstractDataGateway {
         return $this -> manager;
     }
 
-    // Countable Interface Method Implementation
-
-    /**
-     * Count the number of Rows
-     *
-     * @return integer
-     *   1 (one) if there is data in the Row and zero otherwise
-     *
-     * @link
-     *   http://php.net/manual/en/countable.count.php Countable::count()
-     */
-    public function count() {
-        return ( $this -> storage -> count() == 0 ? 0 : 1 );
-    }
-
     /**
      * @internal
      * Overloading
      *
-     * Make bridges for ArrayObject's ArrayAccess Methods Implementations
+     * Bridges ArrayObject's ArrayAccess Methods Implementations
      */
 
     /**

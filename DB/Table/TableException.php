@@ -27,26 +27,43 @@ class TableException extends \Next\Components\Debug\Exception {
      *
      * @var integer
      */
-    const NOTHING_TO_UPDATE = 0x00000396;
+    const NOTHING_TO_INSERT = 0x00000396;
+
+    /**
+     * Nothing to Update
+     *
+     * @var integer
+     */
+    const NOTHING_TO_UPDATE = 0x00000397;
 
     /**
      * Statement Preparing
      *
      * @var integer
      */
-    const PREPARE = 0x00000397;
+    const PREPARE = 0x00000398;
 
     /**
      * Statement Executing
      *
      * @var integer
      */
-    const EXECUTE = 0x00000398;
+    const EXECUTE = 0x00000399;
 
     // Exception Messages
 
     /**
-     * Unable to prepare statement
+     * Unable to insert new record
+     *
+     * @return Next\DB\Table\TableException
+     *   Exception when there is nothing to insert
+     */
+    public static function nothingToInsert() {
+        return new self( 'Nothing to insert', self::NOTHING_TO_INSERT );
+    }
+
+   /**
+     * Unable to update an existent record
      *
      * @return Next\DB\Table\TableException
      *   Exception when there is nothing to update

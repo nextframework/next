@@ -180,11 +180,7 @@ class Manager extends Object {
         // Checking Integrity
 
         if( count( $this -> source ) == 0 ) {
-
-            throw TableException::logic(
-
-                'Wrong use of Table::insert(). No fields to insert!'
-            );
+            throw TableException::nothingToInsert();
         }
 
         // Building SQL INSERT Statement
