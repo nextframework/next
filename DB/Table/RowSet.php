@@ -12,6 +12,13 @@ namespace Next\DB\Table;
  */
 class RowSet extends AbstractDataGateway implements \Iterator {
 
+    /**
+     * Iterator Offset
+     *
+     * @var integer
+     */
+    private $offset = 0;
+
     // DataGateway Interface Methods
 
     /**
@@ -24,10 +31,7 @@ class RowSet extends AbstractDataGateway implements \Iterator {
 
         $count = 0;
 
-        foreach( $this -> source as $records ) {
-
-            $count += $records -> update() -> rowCount();
-        }
+        foreach( $this -> source as $records ) $count += $records -> update() -> rowCount();
 
         return $count;
     }
@@ -37,39 +41,17 @@ class RowSet extends AbstractDataGateway implements \Iterator {
     /**
      * Set Data Source from different sources
      *
-     * @param ArrayIterator $source
+     * @param mixed|array $source
      *   Source Data
      *
-     * @return ArrayIterator
-     *   Input ArrayIterator with its values modified to be instance of
-     *   Next\DB\Table\Row
+     * @return array
+     *   Input array with its values mapped as an instance of Next\DB\Table\Row
      */
     protected function setSource( $source ) {
 
-        parent::setSource( $source );
-
-        $manager =& $this -> manager;
-
-        iterator_apply(
-
-            $this -> source,
-
-            function( \Iterator $iterator ) use( $manager ) {
-
-                $iterator -> offsetSet(
-
-                    $iterator -> key(),
-
-                    new Row( $manager, $iterator -> current() )
-                );
-
-                return TRUE;
-            },
-
-            array( $this -> source )
-        );
-
-        return $this -> source;
+        foreach( $source as $offset => $data ) {
+            if( $data !== FALSE ) $this -> source[ $offset ] = new Row( $this -> manager, $data );
+        }
     }
 
     // Iterator Interface Methods Implementation
@@ -81,7 +63,7 @@ class RowSet extends AbstractDataGateway implements \Iterator {
      *   Current element value
      */
     public function current() {
-        return $this -> source -> current();
+        return $this -> source[ $this -> offset ];
     }
 
     /**
@@ -91,21 +73,21 @@ class RowSet extends AbstractDataGateway implements \Iterator {
      *   Current element key
      */
     public function key() {
-        return $this -> source -> key();
+        return $this -> offset;
     }
 
     /**
      * Move forward to next element
      */
     public function next() {
-        $this -> source -> next();
+        ++$this -> offset;
     }
 
     /**
      * Rewind the Iterator to the first element
      */
     public function rewind() {
-        $this -> source -> rewind();
+        $this -> offset = 0;
     }
 
     /**
@@ -115,6 +97,61 @@ class RowSet extends AbstractDataGateway implements \Iterator {
      *   TRUE if current position is valid and FALSE otherwise
      */
     public function valid() {
-        return $this -> source -> valid();
+        return array_key_exists( $this -> offset, $this -> source );
+    }
+
+    /**
+     * @internal
+     * Overloading
+     *
+     * Allow direct Row manipulation when there is only one Row in the RowSet
+     */
+
+    /**
+     * Return the value at the specified offset
+     *
+     * @param mixed $offset
+     *   Offset to retrieve value from
+     *
+     * @return mixed
+     *   The value at the specified offset, if exists and FALSE id doesn't
+     *
+     * @link http://php.net/manual/en/arrayobject.offsetget.php
+     *   ArrayObject::offsetGet()
+     *
+     * @throws Next\DB\Table\DataGatewayException
+     *   Thrown if trying to access a Row when the RowSet has more than just one Row
+     */
+    public function __get( $offset ) {
+
+        if( count( $this ) > 1 ) {
+            throw DataGatewayException::accessViolation();
+        }
+
+        return $this -> source[ 0 ] -> {$offset};
+    }
+
+    /**
+     * Set a new value at specified offset
+     *
+     * @param mixed $offset
+     *   Offset to set
+     *
+     * @param mixed $value
+     *   New value
+     *
+     * @link http://php.net/manual/en/arrayobject.offsetset.php
+     *   ArrayObject::offsetSet()
+     *
+     * @throws Next\DB\Table\DataGatewayException
+     *   Thrown if trying to access a Row when the RowSet has more than just one Row
+     */
+    public function __set( $offset, $value ) {
+
+        if( count( $this ) > 1 ) {
+            throw DataGatewayException::accessViolation();
+        }
+
+        $this -> source[ 0 ] -> {$offset} = $value;
     }
 }

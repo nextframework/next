@@ -2,11 +2,12 @@
 
 namespace Next\View;
 
-use Next\View\ViewException;         # View Exception Class
-use Next\Application\Application;    # Application Interface
-use Next\Components\Object;          # Object Class
-use Next\View\CompositeQueue;        # Composite View Queue
-use Next\File\Tools;                 # File Tools
+use Next\View\ViewException;                           # View Exception Class
+use Next\DB\Table\DataGatewayException;     # Data Gateway Exception Class
+use Next\Application\Application;                     # Application Interface
+use Next\Components\Object;                           # Object Class
+use Next\View\CompositeQueue;                      # Composite View Queue
+use Next\File\Tools;                                            # File Tools
 
 /**
  * Standard View Engine Class
@@ -611,79 +612,89 @@ class Standard extends Object implements View {
      * @return Next\HTTP\Response
      *   Response Object
      *
-     * @throws Next\Voew\ViewException
-     *   Unable to find Template View File
+     * @throws Next\View\ViewException
+     *   Thrown if:
+     *
+     *   - Unable to find Template View File
+     *   - Any DataGatewayException is caught
      */
     public function render( $name = NULL, $search = TRUE ) {
 
-        $response = $this -> _application -> getResponse();
+        try {
 
-        /**
-         * @internal
-         * The Template Rendering will not happen if:
-         *
-         * - It shouldn't, which means Next\View\View::disableRender() was called
-         *
-         * - Any kind of output was already sent, like a debugging purposes
-         *   var_dump() or even a ControllerException which was caught
-         */
-        if( ! $this -> _shouldRender || ob_get_length() != 0 ) {
-            return $response;
-        }
+            $response = $this -> _application -> getResponse();
 
-        if( $search == FALSE && empty( $name ) ) {
-            throw ViewException::unableToFindFile();
-        }
+            /**
+             * @internal
+             * The Template Rendering will not happen if:
+             *
+             * - It shouldn't, which means Next\View\View::disableRender() was called
+             *
+             * - Any kind of output was already sent, like a debugging purposes
+             *   var_dump() or even a ControllerException which was caught
+             */
+            if( ! $this -> _shouldRender || ob_get_length() != 0 ) {
+                return $response;
+            }
 
-        // Adding high priority Partial Views
+            if( $search == FALSE && empty( $name ) ) {
+                throw ViewException::unableToFindFile();
+            }
 
-        foreach( $this -> _queue as $partial ) {
-            if( $partial -> getPriority() > self::PRIORITY ) $partial -> render();
-        }
+            // Adding high priority Partial Views
 
-        // Including Template File
+            foreach( $this -> _queue as $partial ) {
+                if( $partial -> getPriority() > self::PRIORITY ) $partial -> render();
+            }
 
-        ob_start();
+            // Including Template File
 
-            // ... manually
+            ob_start();
 
-        if( ! $search ) {
+                // ... manually
 
-            $file = stream_resolve_include_path( $name );
+            if( ! $search ) {
 
-            if( $file !== FALSE ) {
+                $file = stream_resolve_include_path( $name );
 
-                include $file;
+                if( $file !== FALSE ) {
+
+                    include $file;
+
+                } else {
+
+                    throw ViewException::missingFile( $name );
+                }
 
             } else {
 
-                throw ViewException::missingFile( $name );
+                // ... or automatically
+
+                include $this -> findFile( $name );
             }
 
-        } else {
+            // Adding Main View Content to Response Body
 
-            // ... or automatically
+            $response -> appendBody( ob_get_clean() );
 
-            include $this -> findFile( $name );
+            // Adding low priority Partial Views
+
+            foreach( $this -> _queue as $partial ) {
+                if( $partial -> getPriority() < self::PRIORITY ) $partial -> render();
+            }
+
+            /**
+             * Something was rendered, so let's disallow another
+             * rendering for this Request
+             */
+            $this -> _shouldRender = FALSE;
+
+            return $response;
+
+        } catch( DataGatewayException $e ) {
+
+           throw new ViewException( $e );
         }
-
-        // Adding Main View Content to Response Body
-
-        $response -> appendBody( ob_get_clean() );
-
-        // Adding low priority Partial Views
-
-        foreach( $this -> _queue as $partial ) {
-            if( $partial -> getPriority() < self::PRIORITY ) $partial -> render();
-        }
-
-        /**
-         * Something was rendered, so let's disallow another
-         * rendering for this Request
-         */
-        $this -> _shouldRender = FALSE;
-
-        return $response;
     }
 
     // Accessors

@@ -25,9 +25,9 @@ abstract class AbstractDataGateway extends Object implements DataGateway {
     /**
      * Data Source, from fetching processes
      *
-     * @var Iterator $source
+     * @var array $source
      */
-    protected $source;
+    protected $source = array();
 
     /**
      * Data Gateway Constructor.
@@ -49,6 +49,8 @@ abstract class AbstractDataGateway extends Object implements DataGateway {
         // Setting Up the Source Data
 
         $this -> setSource( $source );
+
+        // Additional Initialization
 
         $this -> init();
     }
@@ -87,25 +89,19 @@ abstract class AbstractDataGateway extends Object implements DataGateway {
      *   Number of elements in RowSet
      */
     public function count() {
-
-        if( $this -> source instanceof \Countable ) {
-
-            return $this -> source -> count();
-        }
-
         return count( $this -> source );
     }
 
-    // Auxiliary Methods
+    // Abstract Method Definition
 
     /**
-     * Set Data Source from different sources
+     * Set Data Source
      *
      * @param mixed|array $source
      *   Source Data
      */
     protected function setSource( $source ) {
-        $this -> source = new \ArrayIterator( (array) $source );
+        $this -> source = $source;
     }
 
     // Accessors
@@ -117,7 +113,7 @@ abstract class AbstractDataGateway extends Object implements DataGateway {
      *   Data Source
      */
     public function getSource() {
-        return (array) $this -> source;
+        return $this -> source;
     }
 
     /**
