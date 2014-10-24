@@ -34,6 +34,8 @@ class Select extends Object {
      */
     private $tables;
 
+    private $joins = array();
+
     /**
      * Select Constructor
      *
@@ -189,6 +191,44 @@ class Select extends Object {
          * From this point all SQL is a Clause
          */
         $this -> createQuery( $renderer -> select( $this -> columns, $this -> tables ) );
+
+        return $this;
+    }
+
+    /**
+     * Add a JOIN Clause
+     *
+     * @param  string|array $table
+     *  - A string with the JOIN Table
+     *  - A single-index array with JOIN Table and its alias. E.g.:
+     *  <code>array( 'm' => 'members' )</code>
+     *
+     * @param  string $on
+     *   The ON Clause
+     *
+     * @param  string|optional $type
+     *   The JOIN Type
+     *
+     *   The class Query interface has three values of JOIN Types:
+     *   Query::INNER_JOIN, Query::LEFT_OUTER_JOIN and Query::RIGHT_OUTER_JOIN
+     *
+     *  However there are no constraints about what it's accepted here because there are numerous
+     *  valid aliases for this values
+     *
+     * @return Next\DB\Table\Select
+     *   Table Select Object (Fluent-Interface)
+     */
+    public function join( $table, $on, $type = Query::INNER_JOIN ) {
+
+        $this -> createQuery(
+
+            $this -> getQuery() .
+
+            $this -> getRenderer() -> join(
+
+                array( $table, $on, $type )
+            )
+        );
 
         return $this;
     }

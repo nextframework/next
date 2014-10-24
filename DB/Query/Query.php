@@ -104,4 +104,13 @@ interface Query {
      * @var string
      */
     const SQL_UNION         = 'UNION';
+
+    /**
+     * JOIN Types
+     *
+     * @var string
+     */
+    const INNER_JOIN                 = 'INNER JOIN';
+    const LEFT_OUTER_JOIN      = 'LEFT OUTER JOIN';
+    const RIGHT_OUTER_JOIN    = 'RIGHT OUTER JOIN';
 }

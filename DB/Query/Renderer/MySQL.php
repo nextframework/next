@@ -378,4 +378,38 @@ class MySQL extends AbstractRenderer {
     public function limit( array $data ) {
         return sprintf( '%s %s, %s ', self::SQL_LIMIT, $data[ 0 ], $data[ 1 ] );
     }
+
+    /**
+     * Render the JOIN Clause
+     *
+     * @param array $data
+     *  JOIN Data
+     *
+     * @return string
+     *   JOIN Clause
+     */
+    public function join( array $join ) {
+
+        $query = NULL;
+
+        list( $tables, $on, $type ) = $join;
+
+        // Do we have a table alias?
+
+        if( is_array( $tables ) ) {
+
+            $t = NULL;
+
+            foreach( $tables as $alias => $table ) {
+
+                $t .= $this -> from( $alias, $table );
+            }
+
+            $tables = $t;
+        }
+
+        $query .= sprintf( ' %s %s ON( %s )', $type, trim( $tables, ',' ), $on );
+
+        return $query;
+    }
 }
