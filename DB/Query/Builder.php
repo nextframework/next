@@ -344,6 +344,19 @@ class Builder extends Object implements Query {
     }
 
     /**
+     * Get query
+     *
+     * @param string $query
+     *   Built Query, at moment of call
+     *
+     * @return string
+     *   Built query, at moment of call
+     */
+    public function getQuery() {
+        return self::$query;
+    }
+
+    /**
      * Create a query from external context
      *
      * @param string $query

@@ -146,4 +146,12 @@ interface Renderer extends Query {
      *   </p>
      */
     public function limit( array $data );
+
+    /**
+     * Render the JOIN Clause
+     *
+     * @param array $data
+     *  JOIN Data
+     */
+    public function join( array $join );
 }
