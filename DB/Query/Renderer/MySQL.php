@@ -171,7 +171,7 @@ class MySQL extends AbstractRenderer {
 
             $columns .= sprintf(
 
-                ' %s %s%s%s, ',
+                ' %s %s%s%s',
 
                 self::SQL_AS,
 
@@ -286,11 +286,14 @@ class MySQL extends AbstractRenderer {
     /**
      * Render the GROUP BY Clause
      *
+     * @param string $field
+     *   Field to group records
+     *
      * @return string
      *   GROUP BY Clause
      */
-    public function group() {
-        return sprintf( '%s ? ', self::SQL_GROUP_BY  );
+    public function group( $field ) {
+        return sprintf( '%s %s ', self::SQL_GROUP_BY , $field );
     }
 
     /**

@@ -15,6 +15,8 @@ use Next\Components\Object;               # Object Class
  */
 class Parameter extends Object implements \Countable {
 
+    private $parameters;
+
     /**
      * Parameter Object Constructor
      *
@@ -42,6 +44,10 @@ class Parameter extends Object implements \Countable {
      *   user to change one or all of the options.
      */
     public function __construct( $common, $custom = NULL, $user = NULL ) {
+
+        parent::__construct();
+
+        $this -> parameters = new \stdClass;
 
         // Building Options (by merging them)
 
@@ -108,7 +114,7 @@ class Parameter extends Object implements \Countable {
 
                 } else {
 
-                    $this -> {$property} = $value;
+                    $this -> parameters -> {$property} = $value;
                 }
             }
         }
@@ -126,5 +132,33 @@ class Parameter extends Object implements \Countable {
      */
     public function count() {
         return count( get_object_vars( $this ), TRUE );
+    }
+
+    // Overloading
+
+    /**
+     * Grant access to Parameter properties
+     *
+     * @param  string $property
+     *   Parameter property
+     *
+     * @return mixed
+     *   Parameter value
+     */
+    public function __get( $property ) {
+        return $this -> parameters -> {$property};
+    }
+
+    /**
+     * Check if a Parameter property exist
+     *
+     * @param  string  $property
+     *   Parameter property
+     *
+     * @return boolean
+     *   TRUE if Parameter property exist and FALSE otherwise
+     */
+    public function __isset( $property ) {
+        return ( isset( $this -> parameters -> {$property} ) );
     }
 }

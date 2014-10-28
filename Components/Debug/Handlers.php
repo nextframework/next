@@ -51,7 +51,7 @@ class Handlers {
 
                 set_exception_handler(
 
-                    ( DEVELOPMENT_MODE >= 1 ?
+                    ( defined( 'DEVELOPMENT_MODE' ) && DEVELOPMENT_MODE >= 1 ?
 
                         array( __CLASS__, 'development' ) :
 

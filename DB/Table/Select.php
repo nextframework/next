@@ -110,7 +110,14 @@ class Select extends Object {
 
         if( is_array( $columns ) ) {
 
-            $columns = array_map( 'trim', $columns );
+            $columns = array_map(
+
+                function( $column ) {
+                    return ( $column instanceof Expression ? $column : trim( $column ) );
+                },
+
+                $columns
+            );
 
             /**
              * Let's see if there are no mistakes like:
@@ -320,16 +327,9 @@ class Select extends Object {
      */
     public function group( $field ) {
 
-        if( ! self::$parts[ self::SQL_GROUP_BY ] ) {
+        if( ! $this -> getPart( Query::SQL_GROUP_BY ) ) {
 
-            Query::$parts[ self::SQL_GROUP_BY ] = TRUE;
-
-            // Registering Placeholder Replacement Value
-
-            $this -> setReplacements(
-
-                (array) trim( (string) $field ), self::SQL_GROUP_BY
-            );
+            $this -> setPart( Query::SQL_GROUP_BY, (string) $field );
         }
 
         return $this;

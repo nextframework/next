@@ -25,7 +25,6 @@ class Object extends Prototype implements Contextualizable {
      * Object Constructor
      */
     public function __construct() {
-
         $this -> context = new Context;
     }
 
@@ -68,7 +67,6 @@ class Object extends Prototype implements Contextualizable {
      * @return string Object Hash
      */
     public function getHash() {
-        //return md5( get_class( $this ) );
         return spl_object_hash( $this );
     }
 
@@ -82,18 +80,20 @@ class Object extends Prototype implements Contextualizable {
      *
      * @param string|array|optional $methods
      *   One or more methods accessible through extended Context.
+     *   Defaults to NULL, which means almost all PUBLIC methods will be accessible
      *
-     *   If NULL (default) all Object methods (respecting the filtering
-     *   conditions) will be accessible
+     *   @param string|array|optional $properties
+     *   One or more properties accessible through extended Context
+     *   Defaults to NULL, which means all PROTECTED properties will be accessible
      *
      * @return Next\Components\Object
      *   Object Instance (Fluent Interface)
      *
      * @see Next\Components\Context::extend()
      */
-    public function extend( Invoker $invoker, $methods = NULL ) {
+    final public function extend( Invoker $invoker, $methods = NULL, $properties = NULL ) {
 
-        $this -> context -> extend( $invoker, $methods );
+        $this -> context -> extend( $invoker, $methods, $properties );
 
         return $this;
     }
@@ -127,31 +127,17 @@ class Object extends Prototype implements Contextualizable {
      *   Variable list of arguments to the method
      *
      * @return mixed|boolean
-     *   Return what extended method returns
+     *   Return what extended method returns or FALSE if a ReflectionException
+     *   is caught in Next\Components\Context::call()
      *
-     * @throws Next\Components\Debug\Exception
+     * @throws Next\Components\ComponentsException
      *   Object Constructor was overwritten without invoking it through
-     *   parent:: context
+     *   parent context instead of using the Next\Components\Object::init()
      */
     public function __call( $method, array $args = array() ) {
 
         if( is_null( $this -> context ) ) {
-
-            throw \Next\Components\Debug\Exception::unfullfilledRequirements(
-
-                '<p>
-                    Method <strong>%s</strong> is not known by
-                    <strong>%s</strong> and was not trapped by
-                    <em>__call()</em>.
-                </p>
-
-                <p>
-                    Could you possibly overwrote <em>Object::__construct()</em>
-                    without invoke it under parent context?
-                </p>',
-
-                array( $method, $this )
-            );
+            throw ComponentsException::constructorOverwritten( $method, $this, 'method' );
         }
 
         // Trying to call as an extended method
@@ -160,11 +146,54 @@ class Object extends Prototype implements Contextualizable {
 
             return $this -> context -> call( $this, $method, $args );
 
-        } catch( \Next\Components\Debug\Exception $e ) {
+        } catch( ContextException $e ) {
 
-            // Trying to call as a prototyped method
+            if( $e -> getCode() == ContextException::METHOD_NOT_FOUND ) {
 
-            return $this -> call( $this, $method, $args );
+                // Trying to call as a prototyped method
+
+                return $this -> call( $this, $method, $args );
+            }
+        }
+    }
+
+    /**
+     * Allow change of properties from extended Objects in this Object context
+     *
+     * IMPORTANT!
+     *
+     * In order to be considered a property of an extended context,
+     * properties must be prefixed with an underscore, even if they don't have one in their original classes
+     *
+     * @param string $property
+     *   Property trying to be changed
+     *
+     * @param mixed $value
+     *   New value for the property
+     *
+     * @throws Next\Components\ComponentsException
+     *   Object Constructor was overwritten without invoking it through
+     *   parent context instead of using the Next\Components\Object::init()
+     */
+    public function __set( $property, $value ) {
+
+        if( is_null( $this -> context ) ) {
+            throw ComponentsException::constructorOverwritten( $property, $this, 'property' );
+        }
+
+        // Only properties prefixed with an underscore will be considered for extended context
+
+        if( substr( $property, 0, 1 ) == '_' ) {
+            $this -> context -> set( $this, str_replace( '_', '', $property ), $value );
+        }
+    }
+
+    public function __get( $property ) {
+
+        // Only properties prefixed with an underscore will be considered for extended context
+
+        if( substr( $property, 0, 1 ) == '_' ) {
+            return $this -> context -> get( $this, str_replace( '_', '', $property ) );
         }
     }
 

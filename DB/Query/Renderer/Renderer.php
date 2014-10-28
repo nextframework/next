@@ -108,8 +108,11 @@ interface Renderer extends Query {
 
     /**
      * Render the GROUP BY Clause
+     *
+     * @param string $field
+     *   Field to group records
      */
-    public function group();
+    public function group( $field );
 
     /**
      * Render the WHERE Clause

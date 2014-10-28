@@ -322,6 +322,25 @@ class Builder extends Object implements Query {
     }
 
     /**
+     * Set Query Component
+     *
+     * @param string $part
+     *   Part of SQL Builder to be retrieved
+     *
+     * @param string $value
+     *  SQL Part value
+     *
+     * @return Next\DB\Query\Builder
+     *   Builder Instance (Fluent Interface)
+     */
+    public function setPart( $part, $value ) {
+
+        self::$parts[ $part ] = $value;
+
+        return $this;
+    }
+
+    /**
      * Get Query Component
      *
      * @param string $part
@@ -484,15 +503,24 @@ class Builder extends Object implements Query {
             );
         }
 
-            // GROUP BY Clause
-
+        /**
+         * @internal
+         * GROUP BY Clause
+         *
+         * This is little different than the others because PDO::prepare() will
+         * try to wrap our question mark placeholder used to specify the grouping field
+         * in quotes, invalidating the SQL
+         */
         if( array_key_exists( self::SQL_GROUP_BY, self::$parts ) ) {
 
-            if( self::$parts[ self::SQL_GROUP_BY ] ) {
-                $clauses .= $this -> renderer -> group();
+            if( self::$parts[ self::SQL_GROUP_BY ] !== FALSE ) {
+
+                $clauses .= $this -> renderer -> group(
+
+                    self::$parts[ self::SQL_GROUP_BY ]
+                );
             }
         }
-
 
             // HAVING Clause
 
@@ -504,15 +532,11 @@ class Builder extends Object implements Query {
             );
         }
 
-        /**
-         * @internal
-         * ORDER BY Clause
-         *
-         * This is little different than the others because PDO::prepare() will
-         * try to wrap our question mark placeholder used to specify the ASC / DESC
-         * terms, in quotes, invalidating the SQL
-         */
+        // ORDER BY Clause
+
         if( array_key_exists( self::SQL_ORDER_BY, self::$parts ) ) {
+
+            // Same consideration of GROUP BY
 
             if( self::$parts[ self::SQL_ORDER_BY ] !== FALSE ) {
 
@@ -525,9 +549,9 @@ class Builder extends Object implements Query {
 
             // LIMIT Clause
 
-        // Same consideration above
-
         if( array_key_exists( self::SQL_LIMIT, self::$parts ) ) {
+
+            // Same consideration of GROUP BY
 
             if( self::$parts[ self::SQL_LIMIT ] !== NULL ) {
 

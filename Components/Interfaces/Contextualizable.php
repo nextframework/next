@@ -25,11 +25,13 @@ interface Contextualizable {
      *
      * @param string|array|optional $methods
      *   One or more methods accessible through extended Context.
+     *   Defaults to NULL, which means almost all PUBLIC methods will be accessible
      *
-     *   If NULL (default) all Object methods (respecting the filtering
-     *   conditions) will be accessible
+     *   @param string|array|optional $properties
+     *   One or more properties accessible through extended Context
+     *   Defaults to NULL, which means all PROTECTED properties will be accessible
      */
-    public function extend( Invoker $invoker, $methods = NULL );
+    public function extend( Invoker $invoker, $methods = NULL, $properties = NULL );
 
     /**
      * Get Context Callables
