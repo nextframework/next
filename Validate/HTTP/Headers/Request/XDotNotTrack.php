@@ -30,19 +30,19 @@ class XDoNotTrack extends Object implements Headers {
      * </p>
      *
      * @param string $data
-     *   Data to validate
+     *  Data to validate
      *
      * @return boolean
-     *   TRUE if valid and FALSE otherwise
+     *  TRUE if valid and FALSE otherwise
      *
      * @link
-     *   http://hackademix.net/2010/12/28/x-do-not-track-support-in-noscript/
+     *  http://hackademix.net/2010/12/28/x-do-not-track-support-in-noscript/
      *
      * @link
-     *   http://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Common_non-standard_request_headers
+     *  http://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Common_non-standard_request_headers
      *
      * @link
-     *   http://en.wikipedia.org/wiki/X-Do-Not-Track
+     *  http://en.wikipedia.org/wiki/X-Do-Not-Track
      */
     public function validate( $data ) {
 

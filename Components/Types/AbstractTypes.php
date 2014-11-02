@@ -25,10 +25,10 @@ abstract class AbstractTypes extends Object implements Type {
      * Datatype Constructor
      *
      * @param mixed|optional $value
-     *   Value to set
+     *  Value to set
      *
      * @throws InvalidArgumentException
-     *   Given argument ois not acceptable by concrete datatype class
+     *  Given argument ois not acceptable by concrete datatype class
      */
     public function __construct( $value = NULL ) {
 
@@ -62,10 +62,10 @@ abstract class AbstractTypes extends Object implements Type {
      * Set value
      *
      * @param mixed $value
-     *   Value to set
+     *  Value to set
      *
      * @return Next\Components\Interfaces\Type
-     *   A new object with new value
+     *  A new object with new value
      */
     public function set( $value ) {
         return new static( $value );
@@ -75,7 +75,7 @@ abstract class AbstractTypes extends Object implements Type {
      * Get value
      *
      * @return mixed
-     *   Object value
+     *  Object value
      */
     public function get() {
         return $this -> value;
@@ -87,7 +87,7 @@ abstract class AbstractTypes extends Object implements Type {
      * Check whether or not given value is acceptable by datatype class
      *
      * @param mixed $value
-     *   Value to set
+     *  Value to set
      */
     abstract protected function accept( $value );
 
@@ -95,7 +95,7 @@ abstract class AbstractTypes extends Object implements Type {
      * Prototype resources to object
      *
      * @param mixed|optional $value
-     *   An optional value to be used by prototyped resource
+     *  An optional value to be used by prototyped resource
      */
     abstract protected function prototype( $value = NULL );
 }

@@ -24,21 +24,21 @@ class RouterException extends \Next\Components\Debug\Exception {
      *
      * @var integer
      */
-    const DB_NOT_EXISTS                 = 0x00000165;
+    const DB_NOT_EXISTS             = 0x00000165;
 
     /**
      * Missing Required Parameter
      *
      * @var integer
      */
-    const MISSING_REQUIRED_PARAM        = 0x00000166;
+    const MISSING_REQUIRED_PARAM    = 0x00000166;
 
     /**
      * Invalid Required Parameter
      *
      * @var integer
      */
-    const INVALID_REQUIRED_PARAM        = 0x00000167;
+    const INVALID_REQUIRED_PARAM    = 0x00000167;
 
     // Exception Messages
 
@@ -49,13 +49,13 @@ class RouterException extends \Next\Components\Debug\Exception {
      * could not be done by Router Adapter
      *
      * @param string $message
-     *   Message to be thrown
+     *  Message to be thrown
      *
      * @param array|optional $args
-     *   Variable list of argument to build final message
+     *  Variable list of argument to build final message
      *
      * @return Next\Controller\Router\RouterException
-     *   Exception for Connection failure
+     *  Exception for Connection failure
      */
     public static function connectionFailure( $message, array $args = array() ) {
 
@@ -68,10 +68,10 @@ class RouterException extends \Next\Components\Debug\Exception {
      * A required Route Parameter is missing or mal-formed
      *
      * @param string $parameter
-     *   Route Parameter being analyzed
+     *  Route Parameter being analyzed
      *
      * @return Next\Controller\Router\RouterException
-     *   Exception for missing required parameter
+     *  Exception for missing required parameter
      */
     public static function missingParameter( $parameter ) {
 
@@ -95,10 +95,10 @@ class RouterException extends \Next\Components\Debug\Exception {
      * A required Route Parameter has an invalid value
      *
      * @param string $parameter
-     *   Route Parameter being analyzed
+     *  Route Parameter being analyzed
      *
      * @return Next\Controller\Router\RouterException
-     *   Exception for invalid required parameter
+     *  Exception for invalid required parameter
      */
     public static function invalidParameter( $parameter ) {
 

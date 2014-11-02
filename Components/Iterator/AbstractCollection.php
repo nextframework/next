@@ -60,7 +60,7 @@ abstract class AbstractCollection extends Object
      * </ul>
      *
      * @return Next\Components\Iterator\AbstractCollection
-     *   Collection Object (Fluent Interface)
+     *  Collection Object (Fluent Interface)
      */
     public function clear() {
 
@@ -68,7 +68,7 @@ abstract class AbstractCollection extends Object
 
         $this -> references = new \ArrayObject;
 
-        $this -> iterator    = $this -> collection -> getIterator();
+        $this -> iterator   = $this -> collection -> getIterator();
 
         return $this;
     }
@@ -79,10 +79,10 @@ abstract class AbstractCollection extends Object
      * Adds a new Object to Collection
      *
      * @param Next\Components\Object $object
-     *   Object to add to Collection
+     *  Object to add to Collection
      *
      * @return Next\Components\Iterator\AbstractCollection
-     *   Collection Object (Fluent Interface)
+     *  Collection Object (Fluent Interface)
      */
     public function add( Object $object ) {
 
@@ -104,10 +104,10 @@ abstract class AbstractCollection extends Object
      * Removes an Object from Collection
      *
      * @param integer $index
-     *   Offset to remove
+     *  Offset to remove
      *
      * @return Next\Components\Iterator\AbstractCollection
-     *   Collection Object (Fluent Interface)
+     *  Collection Object (Fluent Interface)
      */
     public function remove( $index ) {
 
@@ -132,10 +132,10 @@ abstract class AbstractCollection extends Object
      * Check if an Objects exists
      *
      * @param Next\Components\Object $object
-     *   Object to check if it's present in Collection
+     *  Object to check if it's present in Collection
      *
      * @return boolean
-     *   TRUE if given Object is already present in Collection and FALSE otherwise
+     *  TRUE if given Object is already present in Collection and FALSE otherwise
      */
     public function contains( Object $object ) {
         return in_array( $object -> getHash(), (array) $this -> references );
@@ -147,7 +147,7 @@ abstract class AbstractCollection extends Object
      * Get Collection Storage
      *
      * @return ArrayObject
-     *   Collection Object
+     *  Collection Object
      */
     public function getCollection() {
         return $this -> collection;
@@ -159,7 +159,7 @@ abstract class AbstractCollection extends Object
      * Check Object acceptance
      *
      * @param Next\Components\Object $object
-     *   Object to have its acceptance in Collection checked
+     *  Object to have its acceptance in Collection checked
      */
     abstract protected function accept( Object $object );
 
@@ -169,7 +169,7 @@ abstract class AbstractCollection extends Object
      * Count elements in Collection
      *
      * @return integer
-     *   The number of Objects present in Collection
+     *  The number of Objects present in Collection
      */
     public function count() {
         return count( $this -> collection );
@@ -181,10 +181,10 @@ abstract class AbstractCollection extends Object
      * Set an External Iterator
      *
      * @param string|Iterator $iterator
-     *   A valid Iterator or a classname string of a valid Iterator
+     *  A valid Iterator or a classname string of a valid Iterator
      *
      * @return Next\Components\Iterator\AbstractCollection
-     *   Collection Object (Fluent Interface)
+     *  Collection Object (Fluent Interface)
      */
     public function setIterator( $iterator ) {
 
@@ -197,8 +197,8 @@ abstract class AbstractCollection extends Object
      * Get External Iterator
      *
      * @return Iterator|ArrayIterator
-     *   An Object implementing Iterator Interface or an ArrayIterator,
-     *   if no valid Iterator was provided
+     *  An Object implementing Iterator Interface or an ArrayIterator,
+     *  if no valid Iterator was provided
      */
     public function getIterator() {
 
@@ -223,7 +223,7 @@ abstract class AbstractCollection extends Object
      * Serializes Collection
      *
      * @return string
-     *   The string representation fo Collection
+     *  The string representation fo Collection
      */
     public function serialize() {
         return serialize( $this -> collection );
@@ -233,10 +233,10 @@ abstract class AbstractCollection extends Object
      * Unserializes Collection, reconstructing it
      *
      * @param string $serialized
-     *   String representation of an Object
+     *  String representation of an Object
      *
      * @return Next\Components\Iterator\AbstractCollection
-     *   Collection Object (Fluent Interface)
+     *  Collection Object (Fluent Interface)
      */
     public function unserialize( $serialized ) {
 

@@ -55,7 +55,7 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
      * Header Field Constructor
      *
      * @param string $value
-     *   Header Value
+     *  Header Value
      */
     public function __construct( $value ) {
 
@@ -91,7 +91,7 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
      * representation of Header Field
      *
      * @return string
-     *   Header Field Name
+     *  Header Field Name
      */
     public function getName() {
         return $this -> options -> name;
@@ -101,7 +101,7 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
      * Get Header Value
      *
      * @return string
-     *   Header Field Value
+     *  Header Field Value
      */
     public function getValue() {
         return $this -> value;
@@ -113,7 +113,7 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
      * Get Header Fields Options
      *
      * @return Next\Components\Parameter
-     *   Parameter Object with merged options
+     *  Parameter Object with merged options
      */
     public function getOptions() {
         return $this -> options;
@@ -125,14 +125,14 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
      * Check Options Integrity
      *
      * @throws Next\HTTP\Headers\Fields\FieldsException
-     *   Header Field has no well-formed name
+     *  Header Field has no well-formed name
      *
      * @throws Next\HTTP\Headers\Fields\FieldsException
-     *   Object defined as validator is not instance of Nex\Validate\Validate
+     *  Object defined as validator is not instance of Nex\Validate\Validate
      *
      * @throws Next\HTTP\Headers\Fields\FieldsException
-     *   Provided validator is not a Header Field Validator, characterized
-     *   as instance of Nex\Validate\HTTP\Headers\Headers
+     *  Provided validator is not a Header Field Validator, characterized
+     *  as instance of Nex\Validate\HTTP\Headers\Headers
      */
     private function checkIntegrity() {
 
@@ -174,10 +174,10 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
      *  - Adjust it by apply a post-validation callback over it
      *
      * @param string $value
-     *   Header Value
+     *  Header Value
      *
      * @throws Next\HTTP\Headers\Fields\FieldsException
-     *   All possible values assigned to the Header are invalid
+     *  All possible values assigned to the Header are invalid
      */
     private function setValue( $value ) {
 
@@ -278,10 +278,10 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
      * Not all Header Fields need it, so, by default, the input data are outputted "as is"
      *
      * @param string $data
-     *   Data to manipulate before validation
+     *  Data to manipulate before validation
      *
      * @return string
-     *   Input Data
+     *  Input Data
      */
     protected function preCheck( $data ) {
         return $data;
@@ -296,10 +296,10 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
      * Not all Header Fields need it, so, by default, the input data are outputted "as is"
      *
      * @param string $data
-     *   Data to manipulate after validation
+     *  Data to manipulate after validation
      *
      * @return string
-     *   Input Data
+     *  Input Data
      */
     protected function postCheck( $data ) {
         return $data;

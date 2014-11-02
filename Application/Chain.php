@@ -22,16 +22,16 @@ class Chain extends AbstractCollection {
      * To be valid, the Object must implement Next\Application\Application
      *
      * @param Next\Components\Object $object
-     *   An Object object
+     *  An Object object
      *
-     *   The checking for Next\Application\Application implementation
-     *   will be done inside the method.
+     *  The checking for Next\Application\Application implementation
+     *  will be done inside the method.
      *
      * @return boolean
-     *   TRUE if given Object is acceptable by Application Collection and FALSE otherwise
+     *  TRUE if given Object is acceptable by Application Collection and FALSE otherwise
      *
      * @throws Next\Application\ApplicationException
-     *   Given application is not acceptable in Application Chain
+     *  Given application is not acceptable in Application Chain
      */
     protected function accept( Object $object ) {
 

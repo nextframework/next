@@ -18,7 +18,7 @@ interface Subject {
      * Attach a new Observer to this Subject
      *
      * @param Next\Components\Interfaces\Observer $observer
-     *   Observer to be attached to Subject
+     *  Observer to be attached to Subject
      */
     public function attach( Observer $observer );
 
@@ -26,7 +26,7 @@ interface Subject {
      * Detach an Observer from this Subject
      *
      * @param Next\Components\Interfaces\Observer $observer
-     *   Observer to be detached from Subject
+     *  Observer to be detached from Subject
      */
     public function detach( Observer $observer );
 

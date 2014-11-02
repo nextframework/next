@@ -34,19 +34,19 @@ class XXSSProtection extends Object implements Headers {
      * @note So far only "mode=block" (without quotes) is accepted as valid param
      *
      * @param string $data
-     *   Data to validate
+     *  Data to validate
      *
      * @return boolean
-     *   TRUE if valid and FALSE otherwise
+     *  TRUE if valid and FALSE otherwise
      *
      * @link
-     *   http://blogs.msdn.com/b/ie/archive/2008/07/02/ie8-security-part-iv-the-xss-filter.aspx
+     *  http://blogs.msdn.com/b/ie/archive/2008/07/02/ie8-security-part-iv-the-xss-filter.aspx
      *
      * @link
-     *   http://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Common_non-standard_response_headers
+     *  http://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Common_non-standard_response_headers
      *
      * @link
-     *   http://en.wikipedia.org/wiki/Cross-site_scripting
+     *  http://en.wikipedia.org/wiki/Cross-site_scripting
      */
     public function validate( $data ) {
         return ( preg_match( '/^1(?:;(?<mode>mode=[\'"]?block[\'"]?))?$/i', $data ) != 0 );

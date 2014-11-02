@@ -29,7 +29,7 @@ class Adapter extends AbstractStatement {
      * @param PDOStatement $stmt
      *
      * @return Next\DB\Statement\PDO\Adapter
-     *   Statement Adapter Object (Fluent Interface)
+     *  Statement Adapter Object (Fluent Interface)
      *
      * @internal
      * This method must always exist
@@ -51,7 +51,7 @@ class Adapter extends AbstractStatement {
      * Execute a prepared statement.
      *
      * @param array|optional $params
-     *   Values to bind to parameter placeholders.
+     *  Values to bind to parameter placeholders.
      *
      * @return boolean TRUE on success and FALSE on failure
      */
@@ -63,17 +63,17 @@ class Adapter extends AbstractStatement {
      * Fetch the next row from a ResultSet
      *
      * @param integer|optional $style
-     *   Fetch mode for this fetch operation
+     *  Fetch mode for this fetch operation
      *
      * @param integer|optional $cursor
-     *   Determines which row will be returned to the caller
+     *  Determines which row will be returned to the caller
      *
      * @param integer|optional $offset
-     *   Controls the cursor orientation
+     *  Controls the cursor orientation
      *
      * @return array|stdClass|boolean
-     *   An array or an stdClass object on success, depending
-     *   on <strong>$style</strong> argument and FALSE otherwise
+     *  An array or an stdClass object on success, depending
+     *  on <strong>$style</strong> argument and FALSE otherwise
      */
     public function fetch( $style = null, $cursor = null, $offset = null ) {
         return $this -> invoke( 'fetch', func_get_args() );
@@ -83,11 +83,11 @@ class Adapter extends AbstractStatement {
      * Return an array containing all of the ResultSet rows
      *
      * @param integer|optional $style
-     *   Fetch mode for this fetch operation
+     *  Fetch mode for this fetch operation
      *
      * @return array|object|boolean
-     *   An array or an stdClass object on success, depending
-     *   on <strong>$style</strong> argument and FALSE otherwise
+     *  An array or an stdClass object on success, depending
+     *  on <strong>$style</strong> argument and FALSE otherwise
      */
     public function fetchAll( $style = null ) {
         return $this -> invoke( 'fetchAll', $style );
@@ -97,10 +97,10 @@ class Adapter extends AbstractStatement {
      * Return a single column from the next row of a ResultSet
      *
      * @param integer|optional $column
-     *   Position of the column to fetch
+     *  Position of the column to fetch
      *
      * @return string|boolean
-     *   The next column value of a ResultSet or FALSE if there are no more rows
+     *  The next column value of a ResultSet or FALSE if there are no more rows
      */
     public function fetchColumn( $column = 0 ) {
         return $this -> invoke( 'fetchColumn', $column );
@@ -110,7 +110,7 @@ class Adapter extends AbstractStatement {
      * Return the number of rows affected by the last SQL statement
      *
      * @return integer
-     *   The number of rows affected
+     *  The number of rows affected
      */
     public function rowCount() {
         return $this -> invoke( 'rowCount' );
@@ -140,13 +140,13 @@ class Adapter extends AbstractStatement {
      * Set the default Fetch Mode for the Statement
      *
      * @param integer|optional $mode
-     *   The Fetch Mode
+     *  The Fetch Mode
      *
      * @param mixed|array|optional $params
-     *   Additional Parameters
+     *  Additional Parameters
      *
      * @return boolean
-     *   TRUE on success and FALSE otherwise
+     *  TRUE on success and FALSE otherwise
      */
     public function setFetchMode( $mode, $params = NULL ) {
         return $this -> invoke( 'setFetchMode' );
@@ -160,7 +160,7 @@ class Adapter extends AbstractStatement {
      * This enables the statement to be executed again
      *
      * @return boolean
-     *   TRUE on success and FALSE otherwise
+     *  TRUE on success and FALSE otherwise
      */
     public function closeCursor() {
         return $this -> invoke( 'closeCursor' );
@@ -173,17 +173,17 @@ class Adapter extends AbstractStatement {
      * adapting native PDOStatement Interface to our Statement Interface
      *
      * @param string $method
-     *   Method trying to be invoked
+     *  Method trying to be invoked
      *
      * @param array|optional $args
-     *   Variable list of arguments to the method, if exist
+     *  Variable list of arguments to the method, if exist
      *
      * @return mixed
-     *   Returns what called PDOStatement method return and
-     *   FALSE if a ReflectionException is caught
+     *  Returns what called PDOStatement method return and
+     *  FALSE if a ReflectionException is caught
      *
      * @throws Next\DB\Statement\StatementException
-     *   A PDOException was caught
+     *  A PDOException was caught
      */
     private function invoke( $method, $args = array() ) {
 
@@ -206,9 +206,7 @@ class Adapter extends AbstractStatement {
 
             throw new StatementException( $e -> getMessage() );
 
-        }catch( \ReflectionException $e ) {
-
-            // If a ReflectionException is caught, return FALSE
+        } catch( \ReflectionException $e ) {
 
             return FALSE;
         }

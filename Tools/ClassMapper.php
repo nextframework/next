@@ -26,14 +26,14 @@ class ClassMapper extends \FilterIterator {
      * Class Map Generator Constructor
      *
      * @param DirectoryIterator|RecursiveIterator|string $param
-     *   Directory to iterate or a well formed Recursive Iterator
+     *  Directory to iterate or a well formed Recursive Iterator
      *
      * @throws ClassMapperException
-     *   Given argument is a string but do not refers to avalid directory
+     *  Given argument is a string but do not refers to avalid directory
      *
      * @throws ClassMapperException
-     *   Given argument is not a string pointing to a valid Directory
-     *   nor is a DirectoryIterator Object
+     *  Given argument is not a string pointing to a valid Directory
+     *  nor is a DirectoryIterator Object
      *
      * @see https://bugs.php.net/bug.php?id=52560
      */
@@ -78,10 +78,10 @@ class ClassMapper extends \FilterIterator {
      * Build the Class Map
      *
      * @param string $format
-     *   Output Format from Available Formats
+     *  Output Format from Available Formats
      *
      * @param mixed|optional $options
-     *   List of Options to affect Database Drivers. Acceptable values are:
+     *  List of Options to affect Database Drivers. Acceptable values are:
      *
      *   <p>
      *
@@ -111,13 +111,13 @@ class ClassMapper extends \FilterIterator {
      * @see Next\Components\Parameter
      *
      * @return mixed|void
-     *   If chosen format allow the result to be returned, it will
-     *   accordingly to the its rules
+     *  If chosen format allow the result to be returned, it will
+     *  accordingly to the its rules
      *
-     *   Otherwise, nothing is returned
+     *  Otherwise, nothing is returned
      *
      * @throws Next\Tools\ClassMapper\ClassMapperException
-     *   Invalid or unsupported Mapping Format
+     *  Invalid or unsupported Mapping Format
      */
     public function build( $format, $options = NULL ) {
 
@@ -178,7 +178,7 @@ class ClassMapper extends \FilterIterator {
      * Authored by Matthew Weier O'Phinney (http://goo.gl/86Zy)
      *
      * @return boolean
-     *   TRUE if the current element is acceptable, otherwise FALSE
+     *  TRUE if the current element is acceptable, otherwise FALSE
      */
     public function accept() {
 

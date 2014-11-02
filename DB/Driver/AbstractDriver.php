@@ -147,7 +147,7 @@ abstract class AbstractDriver extends Object implements Parameterizable, Driver 
      * Get Connection
      *
      * @return mixed
-     *   Connection Object
+     *  Connection Object
      */
     public function getConnection() {
 
@@ -173,7 +173,7 @@ abstract class AbstractDriver extends Object implements Parameterizable, Driver 
      * Get DB Driver Options
      *
      * @return Next\Components\Parameter
-     *   Parameter Object with merged options
+     *  Parameter Object with merged options
      */
     public function getOptions() {
         return $this -> options;

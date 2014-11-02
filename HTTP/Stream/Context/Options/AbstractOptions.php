@@ -25,10 +25,10 @@ abstract class AbstractOptions extends Object implements Option {
      * Context Options Constructor
      *
      * @param string|array $option
-     *   Context Option Name
+     *  Context Option Name
      *
      * @param string|optional $value
-     *   Context Option Value
+     *  Context Option Value
      */
     public function __construct( $option, $value = NULL ) {
 
@@ -41,7 +41,7 @@ abstract class AbstractOptions extends Object implements Option {
      * Get COntext Options Values
      *
      * @return array
-     *   Context Options
+     *  Context Options
      */
     public function getValues() {
         return $this -> values;
@@ -53,10 +53,10 @@ abstract class AbstractOptions extends Object implements Option {
      * Set Context Option Value
      *
      * @param string|array $option
-     *   Context Option Name
+     *  Context Option Name
      *
      * @param string|optional $value
-     *   Context Option Value
+     *  Context Option Value
      */
     private function setValue( $option, $value = NULL ) {
 

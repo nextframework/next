@@ -25,7 +25,7 @@ class RoutesGenerator {
      * Routes Generator Constructor
      *
      * @param Next\Tools\RoutesGenerator\RoutesGenerator $generator
-     *   Routes Generator Strategy
+     *  Routes Generator Strategy
      */
     public function __construct( Generator $generator ) {
 
@@ -36,7 +36,7 @@ class RoutesGenerator {
      * Start Generation Process
      *
      * @param boolean|optional $format
-     *   Flag to condition whether or not a format action will be done
+     *  Flag to condition whether or not a format action will be done
      *
      * E.g.: If RoutesGenerator Strategy uses a Database (Standard),
      * all the records in it will be deleted first.

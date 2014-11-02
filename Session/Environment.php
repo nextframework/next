@@ -37,7 +37,7 @@ class Environment extends Object {
      * Environment Constructor
      *
      * @param string $environment
-     *   Environment name to be registered
+     *  Environment name to be registered
      */
     public function __construct( $environment ) {
 
@@ -50,7 +50,7 @@ class Environment extends Object {
      * Get Environment name
      *
      * @return string
-     *   Environment Name
+     *  Environment Name
      */
     public function getEnvironment() {
         return $this -> environment;
@@ -64,10 +64,10 @@ class Environment extends Object {
      * Locked Environments are ready-only
      *
      * @return Next\Session\Environment
-     *   Environment Object (Fluent Interface)
+     *  Environment Object (Fluent Interface)
      *
      * @throws Next\Session\Environment\EnvironmentException
-     *   Environment has been explicitly destroyed
+     *  Environment has been explicitly destroyed
      */
     public function lock() {
 
@@ -82,10 +82,10 @@ class Environment extends Object {
      * Unlock current Environment
      *
      * @return Next\Session\Environment
-     *   Environment Object (Fluent Interface)
+     *  Environment Object (Fluent Interface)
      *
      * @throws Next\SessionEnvironmentEnvironmentException
-     *   Environment has been explicitly destroyed
+     *  Environment has been explicitly destroyed
      */
     public function unlock() {
 
@@ -100,13 +100,13 @@ class Environment extends Object {
      * Check if current Environment is Locked
      *
      * @return boolean
-     *   TRUE if Locked. FALSE otherwise
+     *  TRUE if Locked. FALSE otherwise
      *
      * @throws Next\Session\Environment\EnvironmentException
-     *   Environment has been explicitly destroyed.
+     *  Environment has been explicitly destroyed.
      *
      * @throws Next\Session\Environment\EnvironmentException
-     *   Environment is locked
+     *  Environment is locked
      */
     public function isLocked() {
 
@@ -129,10 +129,10 @@ class Environment extends Object {
      * removed from $_SESSION super global array
      *
      * @return Next\Session\Environment
-     *   Environment Object (Fluent Interface)
+     *  Environment Object (Fluent Interface)
      *
      * @throws Next\Session\Environment\EnvironmentException
-     *   Environment has been explicitly destroyed
+     *  Environment has been explicitly destroyed
      */
     public function destroy() {
 
@@ -147,10 +147,10 @@ class Environment extends Object {
      * Check if current Environment was Destroyed
      *
      * @return boolean
-     *   TRUE if Destroyed. FALSE otherwise
+     *  TRUE if Destroyed. FALSE otherwise
      *
      * @throws Next\Session\Environment\EnvironmentException
-     *   Environment has been destroyed</p>
+     *  Environment has been destroyed</p>
      */
     public function isDestroyed() {
 
@@ -167,7 +167,7 @@ class Environment extends Object {
      * Unset anything previously assigned to Environment
      *
      * @return Next\Session\Environment
-     *   Environment Object (Fluent Interface)
+     *  Environment Object (Fluent Interface)
      */
     public function unsetAll() {
 
@@ -183,7 +183,7 @@ class Environment extends Object {
      *   $_SESSION slice of current Environment
      *
      * @throws Next\Session\Environment\EnvironmentException
-     *   Environment has been explicitly destroyed
+     *  Environment has been explicitly destroyed
      */
     public function getAll() {
 
@@ -205,13 +205,13 @@ class Environment extends Object {
      *   </p>
      *
      * @param mixed|optional $value
-     *   Value to be appended
+     *  Value to be appended
      *
      * @return Next\Session\Environment
-     *   Environment Object (Fluent Interface)
+     *  Environment Object (Fluent Interface)
      *
      * @throws Next\Session\Environment\EnvironmentException
-     *   Environment is Locked
+     *  Environment is Locked
      */
     public function append( $name, $value = NULL ) {
 
@@ -244,16 +244,16 @@ class Environment extends Object {
      * @note Before return, we'll test the PRESENCE of key, not its value
      *
      * @param string $name
-     *   Index to be searched in Environment and returned, if exists
+     *  Index to be searched in Environment and returned, if exists
      *
      * @return mixed
-     *   Desired value from current Environment
+     *  Desired value from current Environment
      *
      * @throws Next\Session\Environment\EnvironmentException
-     *   Environment has been explicitly destroyed
+     *  Environment has been explicitly destroyed
      *
      * @throws Next\Session\Environment\EnvironmentException
-     *   Requested index doesn't exists
+     *  Requested index doesn't exists
      */
     public function __get( $name ) {
 
@@ -274,13 +274,13 @@ class Environment extends Object {
      * Add a new index/value to Environment
      *
      * @param string $name
-     *   Index to be added to Environment
+     *  Index to be added to Environment
      *
      * @param mixed $value
-     *   Value of the new index
+     *  Value of the new index
      *
      * @throws Next\Session\Environment\EnvironmentException
-     *   Environment is Locked
+     *  Environment is Locked
      */
     public function __set( $name, $value ) {
 
@@ -295,13 +295,13 @@ class Environment extends Object {
      * @note The PRESENCE of key is tested, not its value
      *
      * @param string $name
-     *   Index to be searched
+     *  Index to be searched
      *
      * @return boolean
-     *   TRUE if desired argument exists and FALSE otherwise
+     *  TRUE if desired argument exists and FALSE otherwise
      *
      * @throws Next\Session\Environment\EnvironmentException
-     *   Environment has been explicitly destroyed
+     *  Environment has been explicitly destroyed
      */
     public function __isset( $name ) {
 
@@ -316,13 +316,13 @@ class Environment extends Object {
      * @note Before unset, we'll test the PRESENCE of key, not its value
      *
      * @param string $name
-     *   Index to be removed
+     *  Index to be removed
      *
      * @throws Next\Session\Environment\EnvironmentException
-     *   Environment has been explicitly destroyed
+     *  Environment has been explicitly destroyed
      *
      * @throws Next\Session\Environment\EnvironmentException
-     *   Requested index doesn't exists
+     *  Requested index doesn't exists
      */
     public function __unset( $name ) {
 
@@ -347,10 +347,10 @@ class Environment extends Object {
      * in $_SESSION super global array
      *
      * @param string $environment
-     *   Environment name to be registered
+     *  Environment name to be registered
      *
      * @throws Next\Session\Environment\EnvironmentException
-     *   Environment name starts with a number
+     *  Environment name starts with a number
      */
     private function registerEnvironment( $environment ) {
 

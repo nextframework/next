@@ -31,7 +31,7 @@ class Meta {
      * Meta Cache Constructor
      *
      * @param Next\Cache\Backend\Backend $backend
-     *   Backend from which read options
+     *  Backend from which read options
      */
     public function __construct( Backend $backend ) {
 
@@ -42,27 +42,27 @@ class Meta {
      * Load Data from Meta File
      *
      * @param string|optional $key
-     *   Optional Metadata Entry
+     *  Optional Metadata Entry
      *
      * @return boolean|string|array|null
      *
-     *   FALSE if unable to read Metadata File
+     *  FALSE if unable to read Metadata File
      *
-     *   If <strong>$key</strong> argument IS null the whole Metadata
-     *   Content will be returned
+     *  If <strong>$key</strong> argument IS null the whole Metadata
+     *  Content will be returned
      *
-     *   If <strong>$key</strong> is NOT null and given key is present in
-     *   Metadata Content, for simple Information, a string will returned.
-     *   For complex Information, an array will.
+     *  If <strong>$key</strong> is NOT null and given key is present in
+     *  Metadata Content, for simple Information, a string will returned.
+     *  For complex Information, an array will.
      *
-     *   If given key is not present in Metadata Content OR an Exception is thrown,
-     *   NULL will returned
-     *
-     * @throws Next\Cache\CacheException
-     *   Fail to read Meta Data
+     *  If given key is not present in Metadata Content OR an Exception is thrown,
+     *  NULL will returned
      *
      * @throws Next\Cache\CacheException
-     *   Meta Data is Corrupted (not an array)
+     *  Fail to read Meta Data
+     *
+     * @throws Next\Cache\CacheException
+     *  Meta Data is Corrupted (not an array)
      */
     public function load( $key = NULL ) {
 
@@ -143,13 +143,13 @@ class Meta {
      * Write Data in Meta File
      *
      * @param string $key
-     *   Metadata Entry Key
+     *  Metadata Entry Key
      *
      * @param array $meta
-     *   Metadata to write
+     *  Metadata to write
      *
      * @return boolean
-     *   TRUE if Metadata was successfully written and FALSE otherwise
+     *  TRUE if Metadata was successfully written and FALSE otherwise
      */
     public function write( $key, array $meta ) {
 
@@ -179,10 +179,10 @@ class Meta {
      * Delete Meta Data entry
      *
      * @param string $key
-     *   Metadata Entry Key
+     *  Metadata Entry Key
      *
      * @return boolean
-     *   TRUE if Metadata was successfully written and FALSE otherwise
+     *  TRUE if Metadata was successfully written and FALSE otherwise
      */
     public function delete( $key ) {
 
@@ -211,8 +211,8 @@ class Meta {
      * If the loading process fail for some reason, an empty array will be returned
      *
      * @return array
-     *   If we're able to load contents from existent Metadata File,
-     *   then it will be returned. Otherwise, an empty array will
+     *  If we're able to load contents from existent Metadata File,
+     *  then it will be returned. Otherwise, an empty array will
      */
     private function loadMeta() {
 
@@ -241,10 +241,10 @@ class Meta {
      * Writing Metadata Wrapper
      *
      * @param array $data
-     *   Data to Write
+     *  Data to Write
      *
      * @return boolean
-     *   TRUE if Metadata was successfully written and FALSE otherwise
+     *  TRUE if Metadata was successfully written and FALSE otherwise
      */
     private function writeMeta( array $data ) {
 

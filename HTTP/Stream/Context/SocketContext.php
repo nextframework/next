@@ -18,7 +18,7 @@ class SocketContext extends AbstractContext {
      * Create a Stream Context
      *
      * @return resource
-     *   Stream Context Resource
+     *  Stream Context Resource
      */
     protected function createContext() {
         return stream_context_create( $this -> options );

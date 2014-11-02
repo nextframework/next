@@ -41,17 +41,17 @@ class SetCookie extends Object implements Headers {
      * </code>
      *
      * @param string $data
-     *   Data to validate
+     *  Data to validate
      *
      * @return boolean
-     *   TRUE if valid and FALSE otherwise
+     *  TRUE if valid and FALSE otherwise
      *
      * @link
-     *   http://tools.ietf.org/html/rfc2109#section-4.2.2
-     *   RFC 2109 Section 4.2.2
+     *  http://tools.ietf.org/html/rfc2109#section-4.2.2
+     *  RFC 2109 Section 4.2.2
      *
      * @link
-     *   http://en.wikipedia.org/wiki/HTTP_Cookie
+     *  http://en.wikipedia.org/wiki/HTTP_Cookie
      */
     public function validate( $data ) {
 

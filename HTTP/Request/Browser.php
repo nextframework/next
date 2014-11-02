@@ -26,7 +26,7 @@ class Browser extends Object {
      *
      * @var string
      */
-    const UNKNOWN  = 'unknown';
+    const UNKNOWN               = 'unknown';
 
     /**
      * Opera
@@ -365,7 +365,7 @@ class Browser extends Object {
      * Get ALL Detected Information
      *
      * @return Next\HTTP\Request\Browser
-     *   Bowser Object (Information are stored in a stdClass)
+     *  Bowser Object (Information are stored in a stdClass)
      */
     public function getInfo() {
 
@@ -384,7 +384,7 @@ class Browser extends Object {
      * Get detected IP Address
      *
      * @return string
-     *   User IP Address
+     *  User IP Address
      */
     public function getIP() {
 
@@ -402,7 +402,7 @@ class Browser extends Object {
      * Get detected Platform
      *
      * @return string
-     *   User Platform, Operating System or Mobile Device Name
+     *  User Platform, Operating System or Mobile Device Name
      */
     public function getPlatform() {
 
@@ -420,8 +420,8 @@ class Browser extends Object {
      * Get detected Browser
      *
      * @param boolean|optional $includeVersion
-     *   If TRUE, detected Browser Version will be returned too and, in that case,
-     *   as an array of Information
+     *  If TRUE, detected Browser Version will be returned too and, in that case,
+     *  as an array of Information
      *
      * @return array|string
      *
@@ -455,15 +455,15 @@ class Browser extends Object {
 
         // Basic Information
 
-        $this -> info -> browser   = self::UNKNOWN;
-        $this -> info -> version    = self::UNKNOWN;
-        $this -> info -> platform  = self::UNKNOWN;
+        $this -> info -> browser     = self::UNKNOWN;
+        $this -> info -> version     = self::UNKNOWN;
+        $this -> info -> platform    = self::UNKNOWN;
 
         // Features
 
-        $this -> info -> isMobile  = FALSE;
-        $this -> info -> isRobot   = FALSE;
-        $this -> info -> IP            = NULL;
+        $this -> info -> isMobile    = FALSE;
+        $this -> info -> isRobot     = FALSE;
+        $this -> info -> IP          = NULL;
     }
 
     /**
@@ -617,7 +617,7 @@ class Browser extends Object {
      * @see http://www.webtv.net/pc
      *
      * @return boolean
-     *   TRUE if is WebTV Browser and FALSE otherwise
+     *  TRUE if is WebTV Browser and FALSE otherwise
      */
     private function WebTv() {
 
@@ -648,11 +648,11 @@ class Browser extends Object {
      * Internet Explorer, Pocket Internet Explorer and the odd MSN Explorer
      *
      * @see http://www.microsoft.com/ie
-     *   http://en.wikipedia.org/wiki/Internet_Explorer_Mobile
-     *   http://explorer.msn.com
+     *  http://en.wikipedia.org/wiki/Internet_Explorer_Mobile
+     *  http://explorer.msn.com
      *
      * @return boolean
-     *   TRUE if is Internet Explorer Browser and FALSE otherwise
+     *  TRUE if is Internet Explorer Browser and FALSE otherwise
      */
     private function InternetExplorer() {
 
@@ -756,10 +756,10 @@ class Browser extends Object {
      * Opera and Opera Mini
      *
      * @see http://www.opera.com
-     *   http://www.opera.com/mini
+     *  http://www.opera.com/mini
      *
      * @return boolean
-     *   TRUE if is Opera Browser and FALSE otherwise
+     *  TRUE if is Opera Browser and FALSE otherwise
      */
     private function Opera() {
 
@@ -848,7 +848,7 @@ class Browser extends Object {
      * @see http://galeon.sourceforge.net
      *
      * @return boolean
-     *   TRUE if is Galeon Browser and FALSE otherwise
+     *  TRUE if is Galeon Browser and FALSE otherwise
      */
     private function Galeon() {
 
@@ -879,7 +879,7 @@ class Browser extends Object {
      * @see http://browser.netscape.com
      *
      * @return boolean
-     *   TRUE if is etscape Navigator Browser and FALSE otherwise
+     *  TRUE if is etscape Navigator Browser and FALSE otherwise
      */
     private function NetscapeNavigator() {
 
@@ -915,7 +915,7 @@ class Browser extends Object {
      * @see http://www.mozilla.com/en-US/firefox/firefox.html
      *
      * @return boolean
-     *   TRUE if is Firefox Browser and FALSE otherwise
+     *  TRUE if is Firefox Browser and FALSE otherwise
      */
     private function Firefox() {
 
@@ -942,7 +942,7 @@ class Browser extends Object {
      * @see http://www.google.com/chrome
      *
      * @return boolean
-     *   TRUE if is Chrome Browser and FALSE otherwise
+     *  TRUE if is Chrome Browser and FALSE otherwise
      */
     private function Chrome() {
 
@@ -975,7 +975,7 @@ class Browser extends Object {
      * @see http://www.omnigroup.com/applications/omniweb
      *
      * @return boolean
-     *   TRUE if is OmniWeb Browser and FALSE otherwise
+     *  TRUE if is OmniWeb Browser and FALSE otherwise
      */
     private function OmniWeb() {
 
@@ -1010,7 +1010,7 @@ class Browser extends Object {
      * @see http://www.android.com
      *
      * @return boolean
-     *   TRUE if is under an Android Device and FALSE otherwise
+     *  TRUE if is under an Android Device and FALSE otherwise
      */
     private function Android() {
 
@@ -1047,7 +1047,7 @@ class Browser extends Object {
      * @see http://www.apple.com
      *
      * @return boolean
-     *   TRUE if is under iPad Browser and FALSE otherwise
+     *  TRUE if is under iPad Browser and FALSE otherwise
      */
     private function iPad() {
 
@@ -1082,7 +1082,7 @@ class Browser extends Object {
      * @see http://www.apple.com
      *
      * @return boolean
-     *   TRUE if is under iPod Device and FALSE otherwise
+     *  TRUE if is under iPod Device and FALSE otherwise
      */
     private function iPod() {
 
@@ -1117,7 +1117,7 @@ class Browser extends Object {
      * @see http://www.apple.com
      *
      * @return boolean
-     *   TRUE if is under iPhone Device and FALSE otherwise
+     *  TRUE if is under iPhone Device and FALSE otherwise
      */
     private function iPhone() {
 
@@ -1152,7 +1152,7 @@ class Browser extends Object {
      * @see http://www.blackberry.com
      *
      * @return boolean
-     *   TRUE if is under Blackberry Device and FALSE otherwise
+     *  TRUE if is under Blackberry Device and FALSE otherwise
      */
     private function BlackBerry() {
 
@@ -1189,7 +1189,7 @@ class Browser extends Object {
      * @see http://en.wikipedia.org/wiki/Web_for_S60
      *
      * @return boolean
-     *   TRUE if is Nokia Device and FALSE otherwise
+     *  TRUE if is Nokia Device and FALSE otherwise
      */
     private function Nokia() {
 
@@ -1228,7 +1228,7 @@ class Browser extends Object {
      * @see http://en.wikipedia.org/wiki/Googlebot
      *
      * @return boolean
-     *   TRUE if is the Google Crawler Bot and FALSE otherwise
+     *  TRUE if is the Google Crawler Bot and FALSE otherwise
      */
     private function GoogleBot() {
 
@@ -1263,10 +1263,10 @@ class Browser extends Object {
      * MSNBot
      *
      * @see http://search.msn.com/msnbot.htm
-     *   http://en.wikipedia.org/wiki/Msnbot (used for Bing too)
+     *  http://en.wikipedia.org/wiki/Msnbot (used for Bing too)
      *
      * @return boolean
-     *   TRUE if is the MSN Crawler Bot and FALSE otherwise
+     *  TRUE if is the MSN Crawler Bot and FALSE otherwise
      */
     private function MSNBot() {
 
@@ -1303,7 +1303,7 @@ class Browser extends Object {
      * @see http://en.wikipedia.org/wiki/Yahoo!_Slurp
      *
      * @return boolean
-     *   TRUE if is the Yahoo! Slurp Crawler Bot and FALSE otherwise
+     *  TRUE if is the Yahoo! Slurp Crawler Bot and FALSE otherwise
      */
     private function Slurp() {
 
@@ -1342,7 +1342,7 @@ class Browser extends Object {
      * @see http://www.apple.com
      *
      * @return boolean
-     *   TRUE if is Safari Browser and FALSE otherwise
+     *  TRUE if is Safari Browser and FALSE otherwise
      */
     private function Safari() {
 
@@ -1376,7 +1376,7 @@ class Browser extends Object {
      * @see http://en.wikipedia.org/wiki/NetPositive
      *
      * @return boolean
-     *   TRUE if is Net Positive Browser and FALSE otherwise
+     *  TRUE if is Net Positive Browser and FALSE otherwise
      */
     private function NetPositive() {
 
@@ -1409,7 +1409,7 @@ class Browser extends Object {
      * @see http://www.ibphoenix.com
      *
      * @return boolean
-     *   TRUE if is Firebird Browser and FALSE otherwise
+     *  TRUE if is Firebird Browser and FALSE otherwise
      */
     private function Firebird() {
 
@@ -1438,7 +1438,7 @@ class Browser extends Object {
      * @see http://www.konqueror.org
      *
      * @return boolean
-     *   TRUE if is Konqueror Browser and FALSE otherwise
+     *  TRUE if is Konqueror Browser and FALSE otherwise
      */
     private function Konqueror() {
 
@@ -1469,7 +1469,7 @@ class Browser extends Object {
      * @see http://www.icab.de
      *
      * @return boolean
-     *   TRUE if is iCab Browser and FALSE otherwise
+     *  TRUE if is iCab Browser and FALSE otherwise
      */
     private function Icab() {
 
@@ -1500,7 +1500,7 @@ class Browser extends Object {
      * @see http://en.wikipedia.org/wiki/History_of_Mozilla_Firefox
      *
      * @return boolean
-     *   TRUE if is Phoenix Browser and FALSE otherwise
+     *  TRUE if is Phoenix Browser and FALSE otherwise
      */
     private function Phoenix() {
 
@@ -1531,7 +1531,7 @@ class Browser extends Object {
      * @see http://www.w3.org/Amaya
      *
      * @return boolean
-     *   TRUE if is Amaya Browser and FALSE otherwise
+     *  TRUE if is Amaya Browser and FALSE otherwise
      */
     private function Amaya() {
 
@@ -1564,7 +1564,7 @@ class Browser extends Object {
      * @see http://en.wikipedia.org/wiki/Lynx
      *
      * @return boolean
-     *   TRUE if is Lynx Browser and FALSE otherwise
+     *  TRUE if is Lynx Browser and FALSE otherwise
      */
     private function Lynx() {
 
@@ -1597,7 +1597,7 @@ class Browser extends Object {
      * @see http://wiki.mozilla.org/Projects/shiretoko
      *
      * @return boolean
-     *   TRUE if is Shiretoko Browser and FALSE otherwise
+     *  TRUE if is Shiretoko Browser and FALSE otherwise
      */
     private function Shiretoko() {
 
@@ -1622,7 +1622,7 @@ class Browser extends Object {
      * @see http://en.wikipedia.org/wiki/GNU_IceCat
      *
      * @return boolean
-     *   TRUE if is Ice Cat Browser and FALSE otherwise
+     *  TRUE if is Ice Cat Browser and FALSE otherwise
      */
     private function IceCat() {
 
@@ -1647,7 +1647,7 @@ class Browser extends Object {
      * @see http://validator.w3.org
      *
      * @return boolean
-     *   TRUE if is W3CValidator Access and FALSE otherwise
+     *  TRUE if is W3CValidator Access and FALSE otherwise
      */
     private function W3CValidator() {
 
@@ -1699,7 +1699,7 @@ class Browser extends Object {
      * @see http://www.geticeweasel.org
      *
      * @return boolean
-     *   TRUE if is IceWheasel Browser and FALSE otherwise
+     *  TRUE if is IceWheasel Browser and FALSE otherwise
      */
     private function IceWeasel() {
 
@@ -1732,7 +1732,7 @@ class Browser extends Object {
      * @see http://www.mozilla.com/en-US
      *
      * @return boolean
-     *   TRUE if is generic Mozilla Browser and FALSE otherwise
+     *  TRUE if is generic Mozilla Browser and FALSE otherwise
      */
     private function Mozilla() {
 

@@ -30,21 +30,21 @@ class Response extends Object {
      *
      * @var integer
      */
-    const HTTP_CONTINUE                          = 100;
+    const HTTP_CONTINUE                           = 100;
 
     /**
      * SWITCHING_PROTOCOLS
      *
      * @var integer
      */
-    const SWITCHING_PROTOCOLS                    = 101;
+    const SWITCHING_PROTOCOLS                     = 101;
 
     /**
      * PROCESSING
      *
      * @var integer
      */
-    const PROCESSING                             = 102; // WebDAV (RFC 2518)
+    const PROCESSING                              = 102; // WebDAV (RFC 2518)
 
     // [ Successful 2xx ]
 
@@ -53,70 +53,70 @@ class Response extends Object {
      *
      * @var integer
      */
-    const OK                                     = 200;
+    const OK                                      = 200;
 
     /**
      * CREATED
      *
      * @var integer
      */
-    const CREATED                                = 201;
+    const CREATED                                 = 201;
 
     /**
      * ACCEPTED
      *
      * @var integer
      */
-    const ACCEPTED                               = 202;
+    const ACCEPTED                                = 202;
 
     /**
      * NONAUTHORITATIVE_INFORMATION
      *
      * @var integer
      */
-    const NONAUTHORITATIVE_INFORMATION           = 203;
+    const NONAUTHORITATIVE_INFORMATION            = 203;
 
     /**
      * NO_CONTENT
      *
      * @var integer
      */
-    const NO_CONTENT                             = 204;
+    const NO_CONTENT                              = 204;
 
     /**
      * RESET_CONTENT
      *
      * @var integer
      */
-    const RESET_CONTENT                          = 205;
+    const RESET_CONTENT                           = 205;
 
     /**
      * PARTIAL_CONTENT
      *
      * @var integer
      */
-    const PARTIAL_CONTENT                        = 206;
+    const PARTIAL_CONTENT                         = 206;
 
     /**
      * MULTI_STATUS
      *
      * @var integer
      */
-    const MULTI_STATUS                           = 207; // WebDAV (RFC 4918)
+    const MULTI_STATUS                            = 207; // WebDAV (RFC 4918)
 
     /**
      * ALREADY_REPORTED
      *
      * @var integer
      */
-    const ALREADY_REPORTED                       = 208; // WebDAV (RFC 5842)
+    const ALREADY_REPORTED                        = 208; // WebDAV (RFC 5842)
 
     /**
      * IM_USED
      *
      * @var integer
      */
-    const IM_USED                                = 226; // RFC 3229
+    const IM_USED                                 = 226; // RFC 3229
 
     // [ Redirection 3xx ]
 
@@ -125,63 +125,63 @@ class Response extends Object {
      *
      * @var integer
      */
-    const MULTIPLE_CHOICES                       = 300;
+    const MULTIPLE_CHOICES                        = 300;
 
     /**
      * MOVED_PERMANENTLY
      *
      * @var integer
      */
-    const MOVED_PERMANENTLY                      = 301;
+    const MOVED_PERMANENTLY                       = 301;
 
     /**
      * FOUND
      *
      * @var integer
      */
-    const FOUND                                  = 302;
+    const FOUND                                   = 302;
 
     /**
      * SEE_OTHER
      *
      * @var integer
      */
-    const SEE_OTHER                              = 303;
+    const SEE_OTHER                               = 303;
 
     /**
      * NOT_MODIFIED
      *
      * @var integer
      */
-    const NOT_MODIFIED                           = 304;
+    const NOT_MODIFIED                            = 304;
 
     /**
      * USE_PROXY
      *
      * @var integer
      */
-    const USE_PROXY                              = 305;
+    const USE_PROXY                               = 305;
 
     /**
      * UNUSED
      *
      * @var integer
      */
-    const UNUSED                                 = 306;
+    const UNUSED                                  = 306;
 
     /**
      * TEMPORARY_REDIRECT
      *
      * @var integer
      */
-    const TEMPORARY_REDIRECT                     = 307;
+    const TEMPORARY_REDIRECT                      = 307;
 
     /**
      * PERMANENT_REDIRECT
      *
      * @var integer
      */
-    const PERMANENT_REDIRECT                     = 308; // Experimental
+    const PERMANENT_REDIRECT                      = 308; // Experimental
 
     // [ Client Error 4xx ]
 
@@ -190,261 +190,261 @@ class Response extends Object {
      *
      * @var integer
      */
-    const BAD_REQUEST                            = 400;
+    const BAD_REQUEST                             = 400;
 
     /**
      * UNAUTHORIZED
      *
      * @var integer
      */
-    const UNAUTHORIZED                           = 401;
+    const UNAUTHORIZED                            = 401;
 
     /**
      * PAYMENT_REQUIRED
      *
      * @var integer
      */
-    const PAYMENT_REQUIRED                       = 402;
+    const PAYMENT_REQUIRED                        = 402;
 
     /**
      * FORBIDDEN
      *
      * @var integer
      */
-    const FORBIDDEN                              = 403;
+    const FORBIDDEN                               = 403;
 
     /**
      * NOT_FOUND
      *
      * @var integer
      */
-    const NOT_FOUND                              = 404;
+    const NOT_FOUND                               = 404;
 
     /**
      * METHOD_NOT_ALLOWED
      *
      * @var integer
      */
-    const METHOD_NOT_ALLOWED                     = 405;
+    const METHOD_NOT_ALLOWED                      = 405;
 
     /**
      * NOT_ACCEPTABLE
      *
      * @var integer
      */
-    const NOT_ACCEPTABLE                         = 406;
+    const NOT_ACCEPTABLE                          = 406;
 
     /**
      * PROXY_AUTHENTICATION_REQUIRED
      *
      * @var integer
      */
-    const PROXY_AUTHENTICATION_REQUIRED          = 407;
+    const PROXY_AUTHENTICATION_REQUIRED           = 407;
 
     /**
      * REQUEST_TIMEOUT
      *
      * @var integer
      */
-    const REQUEST_TIMEOUT                        = 408;
+    const REQUEST_TIMEOUT                         = 408;
 
     /**
      * CONFLICT
      *
      * @var integer
      */
-    const CONFLICT                               = 409;
+    const CONFLICT                                = 409;
 
     /**
      * GONE
      *
      * @var integer
      */
-    const GONE                                   = 410;
+    const GONE                                    = 410;
 
     /**
      * LENGTH_REQUIRED
      *
      * @var integer
      */
-    const LENGTH_REQUIRED                        = 411;
+    const LENGTH_REQUIRED                         = 411;
 
     /**
      * PRECONDITION_FAILED
      *
      * @var integer
      */
-    const PRECONDITION_FAILED                    = 412;
+    const PRECONDITION_FAILED                     = 412;
 
     /**
      * REQUEST_ENTITY_TOO_LARGE
      *
      * @var integer
      */
-    const REQUEST_ENTITY_TOO_LARGE               = 413;
+    const REQUEST_ENTITY_TOO_LARGE                = 413;
 
     /**
      * REQUEST_URI_TOO_LONG
      *
      * @var integer
      */
-    const REQUEST_URI_TOO_LONG                   = 414;
+    const REQUEST_URI_TOO_LONG                    = 414;
 
     /**
      * UNSUPPORTED_MEDIA_TYPE
      *
      * @var integer
      */
-    const UNSUPPORTED_MEDIA_TYPE                 = 415;
+    const UNSUPPORTED_MEDIA_TYPE                  = 415;
 
     /**
      * REQUESTED_RANGE_NOT_SATISFIABLE
      *
      * @var integer
      */
-    const REQUESTED_RANGE_NOT_SATISFIABLE        = 416;
+    const REQUESTED_RANGE_NOT_SATISFIABLE         = 416;
 
     /**
      * EXPECTATION_FAILED
      *
      * @var integer
      */
-    const EXPECTATION_FAILED                     = 417;
+    const EXPECTATION_FAILED                      = 417;
 
     /**
      * IM_TEAPOT
      *
      * @var integer
      */
-    const IM_TEAPOT                              = 418;
+    const IM_TEAPOT                               = 418;
 
     /**
      * ENHANCE_YOUR_CALM
      *
      * @var integer
      */
-    const ENHANCE_YOUR_CALM                      = 420; //  Twitter
+    const ENHANCE_YOUR_CALM                       = 420; //  Twitter
 
     /**
      * UNPROCESSABLE_ENTITY
      *
      * @var integer
      */
-    const UNPROCESSABLE_ENTITY                   = 422; //  WebDAV (RFC 4918)
+    const UNPROCESSABLE_ENTITY                    = 422; //  WebDAV (RFC 4918)
 
     /**
      * LOCKED
      *
      * @var integer
      */
-    const LOCKED                                 = 423; //  WebDAV (RFC 4918)
+    const LOCKED                                  = 423; //  WebDAV (RFC 4918)
 
     /**
      * FAILED_DEPENDENCY
      *
      * @var integer
      */
-    const FAILED_DEPENDENCY                      = 424; //  WebDAV (RFC 4918)
+    const FAILED_DEPENDENCY                       = 424; //  WebDAV (RFC 4918)
 
-    //const METHOD_FAILURE                       = 424; //  WebDAV - Duplicated?
+    //const METHOD_FAILURE                        = 424; //  WebDAV - Duplicated?
 
     /**
      * UNORDERED_COLLECTION
      *
      * @var integer
      */
-    const UNORDERED_COLLECTION                   = 425; //  Internet Draft
+    const UNORDERED_COLLECTION                    = 425; //  Internet Draft
 
     /**
      * UPGRADE_RREQUIRED
      *
      * @var integer
      */
-    const UPGRADE_RREQUIRED                      = 426; //  RFC 2817
+    const UPGRADE_RREQUIRED                       = 426; //  RFC 2817
 
     /**
      * PRECONDITION_REQUIRED
      *
      * @var integer
      */
-    const PRECONDITION_REQUIRED                  = 428; //  RFC 6585
+    const PRECONDITION_REQUIRED                   = 428; //  RFC 6585
 
     /**
      * TOO_MANU_REQUESTS
      *
      * @var integer
      */
-    const TOO_MANU_REQUESTS                      = 429; //  RFC 6585
+    const TOO_MANU_REQUESTS                       = 429; //  RFC 6585
 
     /**
      * REQUEST_HEADER_FIELDS_TOO_LARGE
      *
      * @var integer
      */
-    const REQUEST_HEADER_FIELDS_TOO_LARGE        = 431; //  RFC 6585
+    const REQUEST_HEADER_FIELDS_TOO_LARGE         = 431; //  RFC 6585
 
     /**
      * NO_RESPONSE
      *
      * @var integer
      */
-    const NO_RESPONSE                            = 444; //  Nginx
+    const NO_RESPONSE                             = 444; //  Nginx
 
     /**
      * RETRY_WITH
      *
      * @var integer
      */
-    const RETRY_WITH                             = 449; //  Microsoft
+    const RETRY_WITH                              = 449; //  Microsoft
 
     /**
      * BLOCKED_BY_WINDOWS_PARENTAL_CONTROLS
      *
      * @var integer
      */
-    const BLOCKED_BY_WINDOWS_PARENTAL_CONTROLS   = 450; //  Microsoft
+    const BLOCKED_BY_WINDOWS_PARENTAL_CONTROLS    = 450; //  Microsoft
 
     /**
      * UNAVAILABLE_FOR_LEGAL_REASONS
      *
      * @var integer
      */
-    const UNAVAILABLE_FOR_LEGAL_REASONS          = 451; //  Internet Draft
+    const UNAVAILABLE_FOR_LEGAL_REASONS           = 451; //  Internet Draft
 
     /**
      * REQUEST_HEADER_TOO_LARGE
      *
      * @var integer
      */
-    const REQUEST_HEADER_TOO_LARGE               = 494; //  Nginx
+    const REQUEST_HEADER_TOO_LARGE                = 494; //  Nginx
 
     /**
      * CERT_ERROR
      *
      * @var integer
      */
-    const CERT_ERROR                             = 495; //  Nginx
+    const CERT_ERROR                              = 495; //  Nginx
 
     /**
      * NO_CERT
      *
      * @var integer
      */
-    const NO_CERT                                = 496; //  Nginx
+    const NO_CERT                                 = 496; //  Nginx
 
     /**
      * TO_HTTPS
      *
      * @var integer
      */
-    const TO_HTTPS                               = 497; //  Nginx
+    const TO_HTTPS                                = 497; //  Nginx
 
     /**
      * CLIENT_CLOSED_REQUEST
      *
      * @var integer
      */
-    const CLIENT_CLOSED_REQUEST                  = 499; //  Nginx
+    const CLIENT_CLOSED_REQUEST                   = 499; //  Nginx
 
     // [ Server Error 5xx ]
 
@@ -453,91 +453,91 @@ class Response extends Object {
      *
      * @var integer
      */
-    const INTERNAL_SERVER_ERROR                  = 500;
+    const INTERNAL_SERVER_ERROR                   = 500;
 
     /**
      * NOT_IMPLEMENTED
      *
      * @var integer
      */
-    const NOT_IMPLEMENTED                        = 501;
+    const NOT_IMPLEMENTED                         = 501;
 
     /**
      * BAD_GATEWAY
      *
      * @var integer
      */
-    const BAD_GATEWAY                            = 502;
+    const BAD_GATEWAY                             = 502;
 
     /**
      * SERVICE_UNAVAILABLE
      *
      * @var integer
      */
-    const SERVICE_UNAVAILABLE                    = 503;
+    const SERVICE_UNAVAILABLE                     = 503;
 
     /**
      * GATEWAY_TIMEOUT
      *
      * @var integer
      */
-    const GATEWAY_TIMEOUT                        = 504;
+    const GATEWAY_TIMEOUT                         = 504;
 
     /**
      * VERSION_NOT_SUPPORTED
      *
      * @var integer
      */
-    const VERSION_NOT_SUPPORTED                  = 505;
+    const VERSION_NOT_SUPPORTED                   = 505;
 
     /**
      * INSUFFICIENT_STORAGE
      *
      * @var integer
      */
-    const INSUFFICIENT_STORAGE                   = 507; //  WebDAV (RFC 4918)
+    const INSUFFICIENT_STORAGE                    = 507; //  WebDAV (RFC 4918)
 
     /**
      * LOOP_DETECTED
      *
      * @var integer
      */
-    const LOOP_DETECTED                          = 508; //  WebDAV (RFC 5842)
+    const LOOP_DETECTED                           = 508; //  WebDAV (RFC 5842)
 
     /**
      * BANDWIDTH_LIMIT_EXCEEDED
      *
      * @var integer
      */
-    const BANDWIDTH_LIMIT_EXCEEDED               = 509; //  Apache bw/limited extension
+    const BANDWIDTH_LIMIT_EXCEEDED                = 509; //  Apache bw/limited extension
 
     /**
      * NOT_EXTENDED
      *
      * @var integer
      */
-    const NOT_EXTENDED                           = 510; //  RFC 2774
+    const NOT_EXTENDED                            = 510; //  RFC 2774
 
     /**
      * NETWORK_AUTHENTICATION_REQUIRED
      *
      * @var integer
      */
-    const NETWORK_AUTHENTICATION_REQUIRED        = 511; //  RFC 6585
+    const NETWORK_AUTHENTICATION_REQUIRED         = 511; //  RFC 6585
 
     /**
      * NETWORK_READ_TIMEOUT_ERROR
      *
      * @var integer
      */
-    const NETWORK_READ_TIMEOUT_ERROR             = 598; //  Unknown
+    const NETWORK_READ_TIMEOUT_ERROR              = 598; //  Unknown
 
     /**
      * NETWORK_CONNECT_TIMEOUT_ERROR
      *
      * @var integer
      */
-    const NETWORK_CONNECT_TIMEOUT_ERROR          = 599; //  Unknown
+    const NETWORK_CONNECT_TIMEOUT_ERROR           = 599; //  Unknown
 
     /**
      * Blank Lines Regexp
@@ -690,10 +690,10 @@ class Response extends Object {
      * Response Constructor
      *
      * @param string|optional $data
-     *   Response Data
+     *  Response Data
      *
      * @param array|optional $metaData
-     *   Response Meta Data
+     *  Response Meta Data
      */
     public function __construct( $data = NULL, array $metaData = array() ) {
 
@@ -778,10 +778,10 @@ class Response extends Object {
      * Append content in the end of Response Body
      *
      * @param string $content
-     *   Content to be appended to Response Body
+     *  Content to be appended to Response Body
      *
      * @return Next\HTTP\Response
-     *   Response Object (Fluent Interface)
+     *  Response Object (Fluent Interface)
      */
     public function appendBody( $content ) {
 
@@ -794,10 +794,10 @@ class Response extends Object {
      * Prepend content in the beginning of Response Body
      *
      * @param string $content
-     *   Content to be prepended to Response Body
+     *  Content to be prepended to Response Body
      *
      * @return Next\HTTP\Response
-     *   Response Object (Fluent Interface)
+     *  Response Object (Fluent Interface)
      */
     public function prependBody( $content ) {
 
@@ -869,10 +869,10 @@ class Response extends Object {
      * Send a Redirect Header
      *
      * @param string $url
-     *   URL to be Redirected
+     *  URL to be Redirected
      *
      * @throws Next\HTTP\Response\ResponseException
-     *   Any header was already sent
+     *  Any header was already sent
      */
     public function redirect( $url ) {
 
@@ -908,7 +908,7 @@ class Response extends Object {
      * Get current state of Response returning flag
      *
      * @return boolean
-     *   Response returning flag value
+     *  Response returning flag value
      */
     public function shouldReturn() {
         return $this -> shouldReturn;
@@ -918,10 +918,10 @@ class Response extends Object {
      * Change state of Response return conditional flag
      *
      * @param boolean $flag
-     *   New state for the flag
+     *  New state for the flag
      *
      * @return Next\HTTP\Response
-     *   Response Instance (Fluent Interface)
+     *  Response Instance (Fluent Interface)
      */
     public function returnResponse( $flag ) {
 
@@ -934,7 +934,7 @@ class Response extends Object {
      * Get current state of Response Flow abortion flag
      *
      * @return boolean
-     *   Response Flow Abortion flag value
+     *  Response Flow Abortion flag value
      */
     public function shouldAbort() {
         return $this -> shouldAbort;
@@ -944,10 +944,10 @@ class Response extends Object {
      * Change state of Response Flow Abortion flag
      *
      * @param boolean $flag
-     *   New state for the flag
+     *  New state for the flag
      *
      * @return Next\HTTP\Response
-     *   Response Instance (Fluent Interface)
+     *  Response Instance (Fluent Interface)
      */
     public function abortFlow( $flag ) {
 
@@ -960,7 +960,7 @@ class Response extends Object {
      * Get current state of Headers Sending flag
      *
      * @return boolean
-     *   Headers Sending flag value
+     *  Headers Sending flag value
      */
     public function shouldSendHeaders() {
         return $this -> disableSendingHeaders;
@@ -970,10 +970,10 @@ class Response extends Object {
      * Change state of Headers Sending flag
      *
      * @param boolean $flag
-     *   New state for the flag
+     *  New state for the flag
      *
      * @return Next\HTTP\Response
-     *   Response Instance (Fluent Interface)
+     *  Response Instance (Fluent Interface)
      */
     public function disableSendingHeaders( $flag ) {
 
@@ -995,7 +995,7 @@ class Response extends Object {
      *   </p>
      *
      * @throws Next\HTTP\Response\ResponseException
-     *   Any header was already sent
+     *  Any header was already sent
      */
     public static function canSendHeaders() {
 
@@ -1075,13 +1075,13 @@ class Response extends Object {
      *   </p>
      *
      * @param string|optional $value
-     *   Header value
+     *  Header value
      *
      * @param float $schemaVersion
-     *   Schema Version. Only used if <strong>$header</strong> is an integer
+     *  Schema Version. Only used if <strong>$header</strong> is an integer
      *
      * @return Next\HTTP\Response
-     *   Response Object (Fluent Interface)
+     *  Response Object (Fluent Interface)
      */
     public function addHeader( $header, $value = NULL, $schemaVersion = 1.1 ) {
 
@@ -1126,7 +1126,7 @@ class Response extends Object {
      * Check whether or not Response Body is empty
      *
      * @return boolean
-     *   TRUE if Response Body is not empty and FALSE otherwise
+     *  TRUE if Response Body is not empty and FALSE otherwise
      */
     public function hasBody() {
         return (bool) ! empty( $this -> body );
@@ -1136,7 +1136,7 @@ class Response extends Object {
      * Get Response Body
      *
      * @return string
-     *   The Response Body
+     *  The Response Body
      */
     public function getBody() {
         return $this -> body;
@@ -1148,7 +1148,7 @@ class Response extends Object {
      * Does the status code indicate a client error?
      *
      * @return bool
-     *   TRUE if HTTP Response Code is in Client Error Range and FALSE otherwise
+     *  TRUE if HTTP Response Code is in Client Error Range and FALSE otherwise
      */
     public function isClientError() {
         return ( $this -> statusCode <  self::INTERNAL_SERVER_ERROR &&
@@ -1159,8 +1159,8 @@ class Response extends Object {
      * Is a Forbidden Request?
      *
      * @return bool
-     *   TRUE if HTTP Response Code is equal to Forbidden Response Code
-     *   and FALSE otherwise
+     *  TRUE if HTTP Response Code is equal to Forbidden Response Code
+     *  and FALSE otherwise
      */
     public function isForbidden() {
         return ( self::FORBIDDEN == $this -> statusCode );
@@ -1170,8 +1170,8 @@ class Response extends Object {
      * Is the current status informational?
      *
      * @return bool
-     *   TRUE if HTTP Response Code is in Informational Range
-     *   and FALSE otherwise
+     *  TRUE if HTTP Response Code is in Informational Range
+     *  and FALSE otherwise
      */
     public function isInformational() {
         return ( $this -> statusCode >= self::HTTP_CONTINUE && $this -> statusCode < self::OK );
@@ -1181,8 +1181,8 @@ class Response extends Object {
      * Does the status code indicate the resource is not found?
      *
      * @return bool
-     *   TRUE if HTTP Response Code is equal to Not Found Response Code
-     *   and FALSE otherwise
+     *  TRUE if HTTP Response Code is equal to Not Found Response Code
+     *  and FALSE otherwise
      */
     public function isNotFound() {
         return ( self::NOT_FOUND === $this -> statusCode );
@@ -1192,8 +1192,8 @@ class Response extends Object {
      * Do we have a normal / OK response?
      *
      * @return bool
-     *   TRUE if HTTP Response Code is equal to Success/OK Response Code
-     *   and FALSE otherwise
+     *  TRUE if HTTP Response Code is equal to Success/OK Response Code
+     *  and FALSE otherwise
      */
     public function isOk() {
         return ( self::OK === $this -> statusCode );
@@ -1203,7 +1203,7 @@ class Response extends Object {
      * Does the status code reflects a server error?
      *
      * @return bool
-     *   TRUE if HTTP Response Code is in Server Error Range and FALSE otherwise
+     *  TRUE if HTTP Response Code is in Server Error Range and FALSE otherwise
      */
     public function isServerError() {
 
@@ -1215,7 +1215,7 @@ class Response extends Object {
      * Do we have a redirect?
      *
      * @return bool
-     *   TRUE if HTTP Response Code is in Redirection Range and FALSE otherwise
+     *  TRUE if HTTP Response Code is in Redirection Range and FALSE otherwise
      */
     public function isRedirect() {
 
@@ -1227,7 +1227,7 @@ class Response extends Object {
      * Was the response successful?
      *
      * @return bool
-     *   TRUE if HTTP Response Code is in Success Range and FALSE otherwise
+     *  TRUE if HTTP Response Code is in Success Range and FALSE otherwise
      */
     public function isSuccess() {
 
@@ -1239,7 +1239,7 @@ class Response extends Object {
      * Get HTTP Status Code
      *
      * @return integer|NULL
-     *   HTTP Response Code, if found and NULL otherwise
+     *  HTTP Response Code, if found and NULL otherwise
      */
     public function getStatusCode() {
         return $this -> statusCode;
@@ -1251,7 +1251,7 @@ class Response extends Object {
      * Send Response Headers
      *
      * @throws Next\HTTP\Response\ResponseException
-     *   Any header was already sent
+     *  Any header was already sent
      */
     private function sendHeaders() {
 
@@ -1298,7 +1298,7 @@ class Response extends Object {
      * Fill Response Information
      *
      * @param array $meta
-     *   Response Metadata
+     *  Response Metadata
      */
     private function addResponseData( array $meta ) {
 

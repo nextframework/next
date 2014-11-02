@@ -53,7 +53,7 @@ class EnvironmentException extends \Next\Components\Debug\Exception {
      * Invalid Environment
      *
      * @return Next\Session\Environment\EnvironmentException
-     *   Exception for invalid Environment name
+     *  Exception for invalid Environment name
      */
     public static function invalidEnvironment() {
 
@@ -69,10 +69,10 @@ class EnvironmentException extends \Next\Components\Debug\Exception {
      * Environment is Locked
      *
      * @param string $environmentName
-     *   Environment Name
+     *  Environment Name
      *
      * @return Next\Session\Environment\EnvironmentException
-     *   Exception for locked Environment being used
+     *  Exception for locked Environment being used
      */
     public static function locked( $environmentName ) {
 
@@ -90,10 +90,10 @@ class EnvironmentException extends \Next\Components\Debug\Exception {
      * Environment was explicitly Destroyed
      *
      * @param string $environmentName
-     *   Environment Name
+     *  Environment Name
      *
      * @return Next\Session\Environment\EnvironmentException
-     *   Exception for explicitly destroyed Environment being used
+     *  Exception for explicitly destroyed Environment being used
      */
     public static function destroyed( $environmentName ) {
 
@@ -111,13 +111,13 @@ class EnvironmentException extends \Next\Components\Debug\Exception {
      * Undefined Index
      *
      * @param string $index
-     *   Desired Index
+     *  Desired Index
      *
      * @param string $environmentName
-     *   Environment Name
+     *  Environment Name
      *
      * @return Next\Session\Environment\EnvironmentException
-     *   Exception for undefined index being used
+     *  Exception for undefined index being used
      */
     public static function undefinedIndex( $index, $environmentName ) {
 

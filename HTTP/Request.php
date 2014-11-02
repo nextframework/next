@@ -31,56 +31,56 @@ class Request extends Object {
      *
      * @var string
      */
-    const GET       = 'GET';
+    const GET             = 'GET';
 
     /**
      * POST Methods
      *
      * @var string
      */
-    const POST      = 'POST';
+    const POST            = 'POST';
 
     /**
      * PUT Method
      *
      * @var string
      */
-    const PUT       = 'PUT';
+    const PUT             = 'PUT';
 
     /**
      * DELETE Method
      *
      * @var string
      */
-    const DELETE    = 'DELETE';
+    const DELETE          = 'DELETE';
 
     /**
      * HTTP Scheme
      *
      * @var string
      */
-    const SCHEME_HTTP  = 'HTTP';
+    const SCHEME_HTTP     = 'HTTP';
 
     /**
      * HTTPS Scheme
      *
      * @var string
      */
-    const SCHEME_HTTPS = 'HTTPS';
+    const SCHEME_HTTPS    = 'HTTPS';
 
     /**
      * HTTP 1.0 Protocol
      *
      * @var float
      */
-    const HTTP10       = 1.0;
+    const HTTP10          = 1.0;
 
     /**
      * HTTP 1.1 Protocol
      *
      * @var float
      */
-    const HTTP11       = 1.0;
+    const HTTP11          = 1.0;
 
     // Protocol Detection Regexp
 
@@ -294,10 +294,10 @@ class Request extends Object {
      * Set BasePath
      *
      * @param string $basepath
-     *   Request Base Path
+     *  Request Base Path
      *
      * @return Next\HTTP\Request
-     *   Request Object (Fluent Interface)
+     *  Request Object (Fluent Interface)
      */
     public function setBasepath( $basepath ) {
 
@@ -310,7 +310,7 @@ class Request extends Object {
      * Get Basepath
      *
      * @return string
-     *   The BasePath
+     *  The BasePath
      */
     public function getBasepath() {
         return $this -> basepath;
@@ -320,10 +320,10 @@ class Request extends Object {
      * Get Request Uri
      *
      * @param boolean $stripBasePath
-     *   If TRUE removes what is defined in Request:basepath property
+     *  If TRUE removes what is defined in Request:basepath property
      *
      * @return string
-     *   The Request URI
+     *  The Request URI
      */
     public function getRequestUri( $stripBasePath = TRUE ) {
 
@@ -351,7 +351,7 @@ class Request extends Object {
      * Get Full URL
      *
      * @return string
-     *   The full URL
+     *  The full URL
      */
     public function getURL() {
 
@@ -378,11 +378,11 @@ class Request extends Object {
      * Base URL is the union of: Scheme (HTTP, HTTPS, FTP...), HTTP Host and Base Path
      *
      * @return string
-     *   The Base URL
+     *  The Base URL
      */
     public function getBaseUrl() {
 
-        $parts   = parse_url( $this -> uri );
+        $parts = parse_url( $this -> uri );
 
         if( isset( $parts['scheme'] ) ) {
 
@@ -405,17 +405,17 @@ class Request extends Object {
      * Get Request Protocol
      *
      * @param boolean|optional $includeVersion
-     *   If TRUE Next\HTTP\Request::getProtocolVersion() will be
-     *   invoked in order to *try to) provide Server Protocol version too
+     *  If TRUE Next\HTTP\Request::getProtocolVersion() will be
+     *  invoked in order to *try to) provide Server Protocol version too
      *
-     *   This can be a little slow!
+     *  This can be a little slow!
      *
      * @return string|stdClass
-     *   If <strong>$includeVersion</strong> is set to TRUE, all informations
-     *   about Server protocol will be returned as an
+     *  If <strong>$includeVersion</strong> is set to TRUE, all informations
+     *  about Server protocol will be returned as an
      *   {@link http://php.net/manual/en/reserved.classes.php stdClass Object}
      *
-     *   Otherwise, only Server Protocol... "name" will, as string
+     *  Otherwise, only Server Protocol... "name" will, as string
      */
     public function getProtocol( $includeVersion = FALSE ) {
 
@@ -437,7 +437,7 @@ class Request extends Object {
      * this is not an extremely useful information, this routine is executed only when required
      *
      * @return integer|NULL
-     *   Protocol version if able to match and NULL otherwise
+     *  Protocol version if able to match and NULL otherwise
      */
     public function getProtocolVersion() {
 
@@ -477,7 +477,7 @@ class Request extends Object {
      * Just a formality, since its use is not very necessary
      *
      * @return string
-     *   The Request Method
+     *  The Request Method
      */
     public function getRequestMethod() {
         return $this -> method;
@@ -487,7 +487,7 @@ class Request extends Object {
      * Check if we're dealing with an AJAX Request
      *
      * @return boolean
-     *   TRUE if is an AJAX Request and FALSE otherwise
+     *  TRUE if is an AJAX Request and FALSE otherwise
      */
     public function isAjax() {
 
@@ -500,7 +500,7 @@ class Request extends Object {
      * Check if we're dealing with a Flash Request
      *
      * @return boolean
-     *   TRUE if is a Flash Request and FALSE otherwise
+     *  TRUE if is a Flash Request and FALSE otherwise
      */
     public function isFlash() {
 
@@ -513,7 +513,7 @@ class Request extends Object {
      * Check if we're under a Secure (HTTPS) connection
      *
      * @return boolean
-     *   TRUE if is under an SSL Request and FALSE otherwise
+     *  TRUE if is under an SSL Request and FALSE otherwise
      */
     public function isSsl() {
         return $this -> getData( $_SERVER, 'HTTPS' ) === 'on';
@@ -523,7 +523,7 @@ class Request extends Object {
      * Check if we're runing under Command Line (CLI)
      *
      * @return boolean
-     *   TRUE if is under Command Line (CLI) and FALSE otherwise
+     *  TRUE if is under Command Line (CLI) and FALSE otherwise
      */
     public function isCli() {
         return ( PHP_SAPI == 'cli' || PHP_SAPI == 'cli-server' );
@@ -533,10 +533,10 @@ class Request extends Object {
      * Set Query Data a.k.a. GET Data
      *
      * @param array $data
-     *   Params to be used as Dynamic (a.k.a. GET) Params
+     *  Params to be used as Dynamic (a.k.a. GET) Params
      *
      * @return Next\HTTP\Request
-     *   Request Instance (Fluent Interface)
+     *  Request Instance (Fluent Interface)
      */
     public function setQuery( array $data ) {
 
@@ -549,7 +549,7 @@ class Request extends Object {
      * Get Query Data (a.k.a. GET Data)
      *
      * @param string|optional $key
-     *   Desired Dynamic Param
+     *  Desired Dynamic Param
      *
      * @return mixed
      *
@@ -573,17 +573,17 @@ class Request extends Object {
      * Set POST Data
      *
      * @param array|string $field
-     *   POST Field
+     *  POST Field
      *
      * @param mixed|optional $value
-     *   Field Value
+     *  Field Value
      *
      * @return Next\HTTP\Request
-     *   Request Instance (Fluent Interface)
+     *  Request Instance (Fluent Interface)
      *
      * @throws Next\HTTP\Request\RequestException
      *   <strong>$value</strong> argument is NULL, case in which a
-     *   possible RAW Data should be considered instead
+     *  possible RAW Data should be considered instead
      */
     public function setPostData( $field, $value = NULL ) {
 
@@ -618,16 +618,16 @@ class Request extends Object {
      * Set RAW POST Data
      *
      * @note
-     *   Raw Data will NOT be URLEncoded
+     *  Raw Data will NOT be URLEncoded
      *
      * @param array|string $field
-     *   Raw POST Field
+     *  Raw POST Field
      *
      * @param mixed|optional $value
-     *   Field Value
+     *  Field Value
      *
      * @return Next\HTTP\Request
-     *   Request Instance (Fluent Interface)
+     *  Request Instance (Fluent Interface)
      */
     public function setRawPostData( $field, $value = NULL ) {
 
@@ -657,7 +657,7 @@ class Request extends Object {
      * Get POST Data
      *
      * @param string|optional $key
-     *   Desired POST Param
+     *  Desired POST Param
      *
      * @return mixed
      *
@@ -697,7 +697,7 @@ class Request extends Object {
      * Get SERVER Data
      *
      * @param string|optional $key
-     *   Desired SERVER Param
+     *  Desired SERVER Param
      *
      * @return mixed
      *
@@ -721,7 +721,7 @@ class Request extends Object {
      * Get Environment Data
      *
      * @param string|optional $key
-     *   Desired ENV Param
+     *  Desired ENV Param
      *
      * @return mixed
      *
@@ -748,16 +748,16 @@ class Request extends Object {
      *
      * @return Next\HTTP\Response|NULL
      *
-     *   If an AdapterException is caught
-     *   something is wrong with Response being send and thus NULL is returned
+     *  If an AdapterException is caught
+     *  something is wrong with Response being send and thus NULL is returned
      *
-     *   Otherwise, if everything is fine, a Next\HTTP\Response instance will
+     *  Otherwise, if everything is fine, a Next\HTTP\Response instance will
      *
      * @throws Next\HTTP\Request\RequestException
-     *   No HTTP Stream Adapter provided
+     *  No HTTP Stream Adapter provided
      *
      * @throws Next\HTTP\Headers\Fields\FieldsException
-     *   Invalid or mal-formed Cookie (s) Value (s)
+     *  Invalid or mal-formed Cookie (s) Value (s)
      *
      * @see Next\HTTP\Stream\Adapter\AdapterException
      */
@@ -878,7 +878,7 @@ class Request extends Object {
      * Get Connection Adapter, available only in External Requests
      *
      * @return Next\HTTP\Adapter\Adapter
-     *   Adapter Object
+     *  Adapter Object
      */
     public function getAdapter() {
         return $this -> adapter;
@@ -890,10 +890,10 @@ class Request extends Object {
      * Wrapper Method for Data Retrievement
      *
      * @param array $source
-     *   Data Source, superglobal or class property
+     *  Data Source, superglobal or class property
      *
      * @param string|optional $key
-     *   Desired Param
+     *  Desired Param
      *
      * @return mixed
      *

@@ -23,7 +23,7 @@ class Standard implements Adapter {
      * Standard Adapter Constructor
      *
      * @param array $source
-     *   Data Source
+     *  Data Source
      */
     public function __construct( array $source ) {
 
@@ -36,13 +36,13 @@ class Standard implements Adapter {
      * Get items from given offset
      *
      * @param integer $offset
-     *   Offset to start the range
+     *  Offset to start the range
      *
      * @param integer $itemsPerPage
-     *   Number of Items per Page
+     *  Number of Items per Page
      *
      * @return array
-     *   Range of pages
+     *  Range of pages
      */
     public function getItems( $offset, $itemsPerPage ) {
         return array_slice( $this -> source, $offset, $itemsPerPage );
@@ -54,7 +54,7 @@ class Standard implements Adapter {
      * Count Pagination Data Source
      *
      * @return integer
-     *   Number of elements present in given source
+     *  Number of elements present in given source
      */
     public function count() {
         return count( $this -> source );

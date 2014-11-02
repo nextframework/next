@@ -92,7 +92,7 @@ abstract class AbstractController extends Object implements Controller {
      * Get Request Object
      *
      * @return Next\HTTP\Request
-     *   Request Object
+     *  Request Object
      */
     public function getRequest() {
         return $this -> _application -> getRequest();
@@ -102,7 +102,7 @@ abstract class AbstractController extends Object implements Controller {
      * Get Response Object
      *
      * @return Next\HTTP\Response
-     *   Response Object
+     *  Response Object
      */
     public function getResponse() {
         return $this -> _application -> getResponse();
@@ -116,14 +116,14 @@ abstract class AbstractController extends Object implements Controller {
      * @note The PRESENCE of key is tested, not its value
      *
      * @param string $param
-     *   Desired Param from Dynamic Params
+     *  Desired Param from Dynamic Params
      *
      * @return boolean
-     *   TRUE if exists, FALSE otherwise OR if a
-     *   Next\HTTP\Request\RequestException is caught
+     *  TRUE if exists, FALSE otherwise OR if a
+     *  Next\HTTP\Request\RequestException is caught
      *
      * @throws Next\Controller\ControllerException
-     *   Testing existence of internal properties
+     *  Testing existence of internal properties
      */
     public function __isset( $param ) {
 
@@ -150,16 +150,16 @@ abstract class AbstractController extends Object implements Controller {
      * Grant access to a Request Dynamic Params using Property Notation instead Array Notation
      *
      * @param string $param
-     *   Desired Param from Dynamic Params
+     *  Desired Param from Dynamic Params
      *
      * @return mixed Dynamic Param Value
      *
      * @throws Next\Controller\ControllerException
-     *   Trying to access internal properties prefixed with an underscore
-     *   without use their correct accessors
+     *  Trying to access internal properties prefixed with an underscore
+     *  without use their correct accessors
      *
      * @throws Next\Controller\ControllerException
-     *   Trying to access non-existent param
+     *  Trying to access non-existent param
      */
     public function __get( $param ) {
 
@@ -194,15 +194,15 @@ abstract class AbstractController extends Object implements Controller {
      * </p>
      *
      * @param string $param
-     *   Template Variable Name
+     *  Template Variable Name
      *
      * @param string $value
-     *   Template Variable Value
+     *  Template Variable Value
      *
      * @throws Next\Controller\ControllerException
-     *   A Next\View\ViewException was caught due a Template Variable
-     *   forbiddenness, because it conflicts with a reserved (or internal)
-     *   Template Variable name
+     *  A Next\View\ViewException was caught due a Template Variable
+     *  forbiddenness, because it conflicts with a reserved (or internal)
+     *  Template Variable name
      */
     public function __set( $param, $value ) {
 
@@ -229,7 +229,7 @@ abstract class AbstractController extends Object implements Controller {
      *
      *   // OR
      *
-     *   unset( $this -> view -> variable );
+     *  unset( $this -> view -> variable );
      * </code>
      *
      * This method is slightly different of others. While __get() and __isset()
@@ -237,14 +237,14 @@ abstract class AbstractController extends Object implements Controller {
      * Template Variables
      *
      * @param string $param
-     *   Desired Template Variable
+     *  Desired Template Variable
      *
      * @throws Next\Controller\ControllerException
-     *   Trying to unset an forbidden Template Variable,
-     *   always prefixed with an unserscore.
+     *  Trying to unset an forbidden Template Variable,
+     *  always prefixed with an unserscore.
      *
      * @throws Next\Controller\ControllerException
-     *   Trying to unset a nonexistent Template Variable
+     *  Trying to unset a nonexistent Template Variable
      */
     public function __unset( $param ) {
 

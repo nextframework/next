@@ -44,10 +44,10 @@ class GetText extends AbstractAdapter {
      * Get Translation Table
      *
      * @param string|optional $key
-     *   Cache Key
+     *  Cache Key
      *
      * @return array
-     *   Table of keys and their associated translations
+     *  Table of keys and their associated translations
      */
     public function getTranslationTable( $key = NULL ) {
 
@@ -151,16 +151,16 @@ class GetText extends AbstractAdapter {
      * Information found at: http://www.gnu.org/software/hello/manual/gettext/MO-Files.html
      *
      * @param string|optional $cacheKey
-     *   Cache Key
+     *  Cache Key
      *
      * @return array
-     *   Table of keys and their associated tranlations
+     *  Table of keys and their associated tranlations
      *
      * @throws
      *
      *   @link Translate::Adapter::AdapterException @endlink
      *
-     *   Thrown if we have a Cache Backend to work with, but no Cache Key was provided
+     *  Thrown if we have a Cache Backend to work with, but no Cache Key was provided
      */
     private function load( $cacheKey = NULL ) {
 
@@ -174,14 +174,14 @@ class GetText extends AbstractAdapter {
 
         // N...O...T...S...H... (see table above)
 
-        $notsh    = array(
+        $notsh = array(
 
-                        $this -> read( 1 ),
-                        $this -> read( 1 ),
-                        $this -> read( 1 ),
-                        $this -> read( 1 ),
-                        $this -> read( 1 )
-                    );
+                     $this -> read( 1 ),
+                     $this -> read( 1 ),
+                     $this -> read( 1 ),
+                     $this -> read( 1 ),
+                     $this -> read( 1 )
+                );
 
         list( $N, $O, $T, $S, $H ) = $notsh;
 
@@ -269,7 +269,7 @@ class GetText extends AbstractAdapter {
      *
      *   @link Translate::Adapter::AdapterException @endlink
      *
-     *   Thrown if file of given Stream is not neither Big or Little Endian
+     *  Thrown if file of given Stream is not neither Big or Little Endian
      */
     private function detectEndianness() {
 
@@ -306,10 +306,10 @@ class GetText extends AbstractAdapter {
      * Parse and build found headers
      *
      * @param string $headers
-     *   File Headers
+     *  File Headers
      *
      * @return array
-     *   MO File Metadata
+     *  MO File Metadata
      */
     private function buildHeaders( $headers ) {
 
@@ -335,13 +335,13 @@ class GetText extends AbstractAdapter {
      * Read unpacked data in according to detected Endianness
      *
      * @param integer $bytes
-     *   Number of bytes to read
+     *  Number of bytes to read
      *
      * @param boolean $shift
-     *   Defines whether or not read bytes will be shifted off
+     *  Defines whether or not read bytes will be shifted off
      *
      * @return integer
-     *   Bytes read
+     *  Bytes read
      */
     private function read( $bytes, $shift = TRUE ) {
 

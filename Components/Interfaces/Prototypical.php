@@ -19,13 +19,13 @@ interface Prototypical  {
      * Implement a new callable resource, prototyping it to Object
      *
      * @param string $name
-     *   Callable resource name. Should be unique
+     *  Callable resource name. Should be unique
      *
      * @param callable $callable
-     *   Callable resource
+     *  Callable resource
      *
      * @param array $args
-     *   Default arguments available to callable resource
+     *  Default arguments available to callable resource
      */
     public function implement( $name, $callable, $args = array() );
 

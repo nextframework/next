@@ -48,7 +48,7 @@ class BackendException extends \Next\Components\Debug\Exception {
      * Chosen comparison Hash Type is invalid or not supported yet
      *
      * @return Next\Cache\Backend\BackendException
-     *   Exception for Invalid Hash Type, used for data integrity check
+     *  Exception for Invalid Hash Type, used for data integrity check
      */
     public static function invalidHashType() {
 
@@ -67,7 +67,7 @@ class BackendException extends \Next\Components\Debug\Exception {
      * the deletion of Old Cached Files
      *
      * @return Next\Cache\Backend\BackendException
-     *   Exception for old caches cleaning from unsupported Backend context
+     *  Exception for old caches cleaning from unsupported Backend context
      */
     public static function cleanOldCache() {
 
@@ -86,7 +86,7 @@ class BackendException extends \Next\Components\Debug\Exception {
      * the deletion of User Cached Files
      *
      * @return Next\Cache\Backend\BackendException
-     *   Exception for user caches cleaning from unsupported Backend context
+     *  Exception for user caches cleaning from unsupported Backend context
      */
     public static function cleanUserCache() {
 

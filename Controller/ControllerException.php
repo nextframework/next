@@ -30,35 +30,35 @@ class ControllerException extends \Next\Components\Debug\Exception {
      *
      * @var integer
      */
-    const INVALID_CONTROLLER  = 0x00000198;
+    const INVALID_CONTROLLER                      = 0x00000198;
 
     /**
      * Unnecessary tests being made
      *
      * @var integer
      */
-    const UNNECESSARY_TEST  = 0x00000199;
+    const UNNECESSARY_TEST                        = 0x00000199;
 
     /**
      * HTTP Param not Found
      *
      * @var integer
      */
-    const PARAM_NOT_FOUND   = 0x0000019A;
+    const PARAM_NOT_FOUND                         = 0x0000019A;
 
     /**
      * Template Variable Assignment failure
      *
      * @var integer
      */
-    const TEMPLATE_VARIABLE_ASSIGNMENT_FAILURE  = 0x0000019B;
+    const TEMPLATE_VARIABLE_ASSIGNMENT_FAILURE    = 0x0000019B;
 
     /**
      * Template Variable Removal failure
      *
      * @var integer
      */
-    const TEMPLATE_VARIABLE_REMOVAL_FAILURE     = 0x0000019C;
+    const TEMPLATE_VARIABLE_REMOVAL_FAILURE       = 0x0000019C;
 
     // Exception Messages
 
@@ -69,10 +69,10 @@ class ControllerException extends \Next\Components\Debug\Exception {
      * implements Next\Controller\Controller Interface
      *
      * @param Next\Components\Object $object
-     *   Object used as Controller
+     *  Object used as Controller
      *
      * @return Next\Controller\ControllerException
-     *   Exception for Invalid Controllers
+     *  Exception for Invalid Controllers
      */
     public static function invalidController( Object $object ) {
 
@@ -101,7 +101,7 @@ class ControllerException extends \Next\Components\Debug\Exception {
      * because they are always in there.
      *
      * @return Next\Controller\ControllerException
-     *   Exception for unnecessary tests being made
+     *  Exception for unnecessary tests being made
      */
     public static function unnecessaryTest() {
 
@@ -124,7 +124,7 @@ class ControllerException extends \Next\Components\Debug\Exception {
      *     RequestException caught
      *
      * @return Next\Controller\ControllerException
-     *   Exception for missing HTTP GET Param
+     *  Exception for missing HTTP GET Param
      */
     public static function paramNotFound( RequestException $e ) {
 
@@ -143,7 +143,7 @@ class ControllerException extends \Next\Components\Debug\Exception {
      *     ViewException caught
      *
      * @return Next\Controller\ControllerException
-     *   Exception for Template Variable assignment failure
+     *  Exception for Template Variable assignment failure
      */
     public static function assignmentFailure( ViewException $e ) {
 
@@ -162,7 +162,7 @@ class ControllerException extends \Next\Components\Debug\Exception {
      *     ViewException caught
      *
      * @return Next\Controller\ControllerException
-     *   Exception for Template Variable removal failure
+     *  Exception for Template Variable removal failure
      */
     public static function removalFailure( ViewException $e ) {
 

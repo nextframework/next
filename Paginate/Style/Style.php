@@ -18,7 +18,7 @@ interface Style {
      * Build Pages Range
      *
      * @param Next\Paginate\Paginator $paginator
-     *   Paginator Object
+     *  Paginator Object
      */
     public function buildRange( Paginator $paginator );
 }

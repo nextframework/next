@@ -39,7 +39,7 @@ class SessionException extends \Next\Components\Debug\Exception {
      * Session was already initialized
      *
      * @return Next\Session\SessionException
-     *   Exception for initialization impossibility
+     *  Exception for initialization impossibility
      */
     public static function alreadyInitiated() {
 
@@ -55,7 +55,7 @@ class SessionException extends \Next\Components\Debug\Exception {
      * Session could not be initialized
      *
      * @return Next\Session\SessionException
-     *   Exception for initialization impossibility
+     *  Exception for initialization impossibility
      */
     public static function initializationFailure() {
 

@@ -59,14 +59,14 @@ class Exception extends \Exception {
      *
      * @var integer
      */
-    const PHP_ERROR                   = 0x00000004;
+    const PHP_ERROR                    = 0x00000004;
 
     /**
      * Unfulfilled Requirements
      *
      * @var integer
      */
-    const UNFULFILLED_REQUIREMENTS    = 0x00000005;
+    const UNFULFILLED_REQUIREMENTS     = 0x00000005;
 
     /**
      * Usage Failure
@@ -136,13 +136,13 @@ class Exception extends \Exception {
      * the minimum requirements defined by desired Module
      *
      * @param string $message
-     *   Message to be thrown
+     *  Message to be thrown
      *
      * @param array|optional $args
-     *   Variable list of argument to build final message
+     *  Variable list of argument to build final message
      *
      * @return Next\Components\Debug
-     *   Exception for Unfulfilled requirements
+     *  Exception for Unfulfilled requirements
      */
     public static function unfullfilledRequirements( $message, array $args = array() ) {
         return new static( $message, self::UNFULFILLED_REQUIREMENTS, $args );
@@ -155,13 +155,13 @@ class Exception extends \Exception {
      * Logic Violation's Exceptions are thrown basically when your actions makes no sense :P
      *
      * @param string $message
-     *   Message to be thrown
+     *  Message to be thrown
      *
      * @param array|optional $args
-     *   Variable list of argument to build final message
+     *  Variable list of argument to build final message
      *
      * @return Next\Components\Debug
-     *   Exception for Unfulfilled requirements
+     *  Exception for Unfulfilled requirements
      */
     public static function logic( $message, array $args = array() ) {
         return new static( $message, self::LOGIC_ERROR, $args );
@@ -173,13 +173,13 @@ class Exception extends \Exception {
      * Something is going wrong after using a Framework Feature
      *
      * @param string $message
-     *   Message to be thrown
+     *  Message to be thrown
      *
      * @param array|optional $args
-     *   Variable list of argument to build final message
+     *  Variable list of argument to build final message
      *
      * @return Next\Components\Debug
-     *   Exception for Unfulfilled requirements
+     *  Exception for Unfulfilled requirements
      */
     public static function wrongUse( $message, array $args = array() ) {
         return new static( $message, self::WRONG_USE, $args );
@@ -191,7 +191,7 @@ class Exception extends \Exception {
      * Get defined HTTP Response Code
      *
      * @return integer
-     *   HTTP Response Code, if any, associated to Exception thrown
+     *  HTTP Response Code, if any, associated to Exception thrown
      */
     public function getResponseCode() {
         return $this -> responseCode;
@@ -210,7 +210,7 @@ class Exception extends \Exception {
      * to string
      *
      * @return string
-     *   Exception Message
+     *  Exception Message
      */
     public function __toString() {
         return $this -> getMessage();
@@ -226,10 +226,10 @@ class Exception extends \Exception {
      * We could do this inside Exception::getMessage(), but it's final :(
      *
      * @param string $message
-     *   Exception Message
+     *  Exception Message
      *
      * @return string
-     *   Translated Exception Message
+     *  Translated Exception Message
      */
     private function _getMessage( $message ) {
 
@@ -271,7 +271,7 @@ class Exception extends \Exception {
      * These checks includes:
      *
      * - Make sure the number of Message Placeholders fits the number
-     *   of Placeholders Replacements provided
+     *  of Placeholders Replacements provided
      *
      * We'll always provide an Exception Code, in case none is specified,
      * but when specified, we'll compare it within the range provided in 'range'
@@ -294,18 +294,18 @@ class Exception extends \Exception {
      * So, using die(), it's not very elegant, but no one can complain ^^
      *
      * @param string $message
-     *   Exception Message
+     *  Exception Message
      *
      * @param array $replacements
      *
-     *   Placeholders Replacements.
-     *   Must match the number o Placeholders in Exception Message
+     *  Placeholders Replacements.
+     *  Must match the number o Placeholders in Exception Message
      *
      * @param integer $code
-     *   Exception Code
+     *  Exception Code
      *
      * @param integer $responseCode
-     *   HTTP response Code
+     *  HTTP response Code
      */
     private function checkComponents( $message, array $replacements, $code, $responseCode ) {
 

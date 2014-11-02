@@ -2,7 +2,7 @@
 
 namespace Next\DB\Query\Renderer;
 
-use Next\DB\Query\Expression;    # Expression Class
+use Next\DB\Query\Expression;    # Query Expression Class
 
 /**
  * MySQL Query Renderer Class
@@ -14,99 +14,109 @@ use Next\DB\Query\Expression;    # Expression Class
  */
 class MySQL extends AbstractRenderer {
 
-    // Mapper-related Rendering Methods
+    // CRUD-related methods
 
     /**
      * Render INSERT Statement
      *
      * @param string $table
-     *   Table name
+     *  Table name
      *
      * @param array $fields
-     *   Columns to be added in INSERT Statement
+     *  Columns to be added in INSERT Statement
      *
      * @return string
-     *   INSERT Statement
+     *  INSERT Statement
      */
     public function insert( $table, array $fields ) {
 
         return sprintf(
 
-                   'INSERT INTO %s ( %s ) VALUES ( %s )',
+            'INSERT INTO %s ( %s ) VALUES ( %s )',
 
-                   // Table Name
+            // Table Name
 
-                   sprintf( '%s%s%s', $this -> quoteIdentifier, $table, $this -> quoteIdentifier ),
+            $this -> quote( $table ),
 
-                   // Table Fields
+            // Table Fields
 
-                   sprintf(
+            implode( ', ', array_map( array( $this, 'quote' ), $fields ) ),
 
-                       sprintf( '%s%%s%s', $this -> quoteIdentifier, $this -> quoteIdentifier ),
+            // Fields Values
 
-                       implode(
-                           sprintf( '%s, %s', $this -> quoteIdentifier, $this -> quoteIdentifier ), $fields
-                       )
-                   ),
+            implode(
 
-                   // Fields Values
+                ', ',
 
-                   implode( ', ', array_fill( 0, count( $fields ), '?' ) )
-               );
+                array_map(
+
+                    function( $field ) {
+                        return sprintf( ':%s', $field );
+                    },
+
+                    $fields
+                )
+            )
+       );
     }
 
     /**
      * Render UPDATE Statement
      *
      * @param string $table
-     *   Table name
+     *  Table name
      *
      * @param array $fields
-     *   Columns to be added in UPDATE Statement
+     *  Columns to be added in UPDATE Statement
      *
      * @return string
-     *   UPDATE Statement
+     *  UPDATE Statement
      */
     public function update( $table, array $fields ) {
 
         return sprintf(
 
-           'UPDATE %s SET %s',
+            'UPDATE %s SET %s',
 
-           // Table Name
+            // Table Name
 
-           sprintf( '%s%s%s', $this -> quoteIdentifier, $table, $this -> quoteIdentifier ),
+            $this -> quote( $table ),
 
-           // Table Fields and their new Values
+            urldecode(
 
-           urldecode(
+                http_build_query(
 
-               http_build_query(
+                    array_combine(
 
-                   array_combine(
+                        $fields,
 
-                       $fields,
+                        array_map(
 
-                       array_fill( 0, count( $fields ), '?' )
-                   ),
+                            function( $field ) {
+                                return sprintf( ':%s', $field );
+                            },
 
-                   '', ', '
-               )
-           )
-       );
+                            $fields
+                        )
+                    ),
+
+                    '', ', '
+                )
+            )
+        );
     }
 
     /**
      * Render DELETE Statement
      *
      * @param string $table
-     *   Table Name
+     *  Table Name
      *
      * @return string
-     *   DELETE Statement
+     *  DELETE Statement
      */
     public function delete( $table ) {
-        return sprintf( 'DELETE FROM %s%s%s', $this -> quoteIdentifier, $table, $this -> quoteIdentifier );
+        return sprintf( 'DELETE FROM %s', $this -> quote( $table ) );
     }
 
     // Select-related Rendering Methods
@@ -115,304 +125,231 @@ class MySQL extends AbstractRenderer {
      * Render SELECT Statement
      *
      * @param string $columns
-     *   Columns to be included in SELECT Statement
+     *  Columns to be included in SELECT Statement
      *
      * @param string $tables
-     *   Tables from which data will be retrieved
+     *  Tables from which data will be retrieved
+     *
+     * @param boolean|optional $isDistinct
+     *  Flag to whether or not the DISTINCT Clause will be added.
+     *  Defaults to FALSE
      *
      * @return string
-     *   SELECT Statement
+     *  SELECT Statement
      */
-    public function select( $columns, $tables ) {
-        return sprintf( 'SELECT #%s FROM %s', rtrim( $columns, ', ' ), rtrim( $tables, ', ' ) );
+    public function select( $columns, $tables, $isDistinct = FALSE ) {
+
+        return sprintf(
+
+            'SELECT %s%s FROM %s',
+
+            ( $isDistinct ? self::DISTINCT . ' ' : NULL ), implode( ', ', $columns ), implode( ', ', $tables )
+        );
     }
 
     /**
      * Render SELECT Statement Columns
      *
-     * @param string $alias
-     *   Columns Aliases
-     *
      * @param string $column
-     *   Column name
+     *  Column name
      *
-     * @return string
-     *   SELECT Statement Columns
+     * @param string|optional $alias
+     *  Optional Column Alias
      */
     public function columns( $column, $alias = NULL ) {
 
-        // Keep Expressions untouched
-
         if( $column instanceof Expression ) {
-
-            $columns = $column -> getExpression();
-
-        } elseif( strpos( $column, '.' ) !== FALSE ) {
-
-            // As well with Implicit Join Notation
-
-            $columns =& $column;
-
-        } else {
-
-            // Adding quote identifier to everything else
-
-            $columns = sprintf(
-
-                '%s%s%s',
-
-                $this -> quoteIdentifier, $column, $this -> quoteIdentifier
-            );
+            $column = $column -> getExpression();
         }
 
-        // Adding alias, if any
+        elseif( strpos( $column, '.' ) === FALSE ) {
+            $column = $this -> quote( $column );
+        }
 
         if( ( is_string( $alias ) && ! is_numeric( $alias ) ) ) {
-
-            $columns .= sprintf(
-
-                ' %s %s%s%s',
-
-                self::SQL_AS,
-
-                $this -> quoteIdentifier, $alias, $this -> quoteIdentifier
-            );
+            $column .= sprintf( ' %s %s', self::ALIAS, $this -> quote( $alias ) );
         }
 
-        return sprintf( '%s, ', $columns );
+        return $column;
     }
 
     /**
      * Render SELECT Statement FROM Clause
      *
      * @param string $alias
-     *   Table Alias
+     *  Table Alias
      *
      * @param string $table
-     *   Table Name
+     *  Table Name
      *
      * @return string
-     *   SELECT Statement FROM Clause
+     *  SELECT Statement FROM Clause
      */
     public function from( $alias, $table ) {
 
-        // If we have a Table Alias, it cannot be wrapped into backticks
-
         if( is_string( $alias ) && ! is_numeric( $alias ) ) {
 
-            return sprintf( '%s%s%s %s,', $this -> quoteIdentifier, $table, $this -> quoteIdentifier, $alias );
+            return sprintf( '%s %s', $this -> quote( $table ), $alias );
 
         } else {
 
-            return sprintf( '%s%s%s, ', $this -> quoteIdentifier, $table, $this -> quoteIdentifier );
+            return $this -> quote( $table );
         }
-    }
-
-    /**
-     * Render the DISTINCT Clause.
-     *
-     * <p>This Clause is not rendered in the same way as the others.</p>
-     *
-     * <p>
-     *     Instead that we just replace an Internal Placeholder with
-     *     DISTINCT Keyword if dealing with this type of SELECT Statement,
-     *     or we remove the PlaceHolder itself, if don't
-     * </p>
-     *
-     * @param string $query
-     *   SQL Statement built so far
-     *
-     * @param boolean $isDistinct
-     *   Flag to define should be done: Add the keyword, or remove the Placeholder
-     *
-     * @return string
-     *   SELECT Statement DISTINCT Clause -OR- without the Placeholder
-     */
-    public function distinct( $query, $isDistinct = FALSE ) {
-
-        if( $isDistinct ) {
-
-            return str_replace(
-
-                '#', sprintf( '%s ', self::SQL_DISTINCT ), $query
-            );
-
-        } else {
-
-            return str_replace( '#', '', $query );
-        }
-    }
-
-    /**
-     * Render the HAVING Clause
-     *
-     * @param array $having
-     *   HAVING Clauses
-     *
-     * @return string
-     *   SELECT Statement HAVING Clause
-     */
-    public function having( array $having ) {
-
-        // No Conditions to deal. Just return
-
-        if( count( $having ) == 0 ) {
-            return NULL;
-        }
-
-        // Building WHERE Clauses
-
-        $return = NULL;
-
-        foreach( $having as $index => $clauses ) {
-
-            $clause = key( $clauses );
-
-            // The first Clause has no connector
-
-            if( $index == 0 ) {
-
-                $return .= $clause;
-
-            } else {
-
-                $return .= sprintf( ' %s %s ', current( $clauses ), $clause );
-            }
-        }
-
-        return ( ! is_null( $return ) ? sprintf( '%s %s ', self::SQL_HAVING, rtrim( $return ) ) : NULL );
-    }
-
-    /**
-     * Render the GROUP BY Clause
-     *
-     * @param string $field
-     *   Field to group records
-     *
-     * @return string
-     *   GROUP BY Clause
-     */
-    public function group( $field ) {
-        return sprintf( '%s %s ', self::SQL_GROUP_BY , $field );
     }
 
     /**
      * Render the WHERE Clause
      *
-     * @param array $where
-     *   WHERE Clauses
+     * @param array $conditions
+     *  WHERE Conditions
      *
      * @return string
-     *   WHERE Clause
+     *  WHERE Clause
      */
-    public function where( array $where ) {
+    public function where( $conditions ) {
 
-        // No Conditions to deal. Just return
+        $clause = NULL;
 
-        if( count( $where ) == 0 ) {
-            return NULL;
-        };
+        array_walk(
 
-        // Building WHERE Clauses
+            $conditions,
 
-        $return = NULL;
+            function( $condition, $type ) use( &$clause ) {
 
-        foreach( $where as $index => $clauses ) {
+                if( count( $condition ) == 1 && ! is_null( $clause ) ) {
 
-            $clause = key( $clauses );
+                    $clause .= sprintf( ' %s %s', $type, implode( $type, $condition ) );
 
-            // The first Clause has no connector
+                } else {
 
-            if( $index == 0 ) {
-
-                $return .= $clause;
-
-            } else {
-
-                $return .= sprintf( ' %s %s', current( $clauses ), $clause );
+                    $clause .= implode( sprintf( ' %s ', $type ), $condition );
+                }
             }
+        );
+
+        return sprintf( ' %s %s', self::WHERE, $clause );
+    }
+
+    /**
+     * Render the JOIN Clause
+     *
+     * @param  string|array $table
+     *  - A string with the JOIN Table
+     *  - An associative single-index array for JOIN Table and its alias. E.g.:
+     *  <code>array( 'm' => 'members' )</code>
+     *
+     * @param  string $on
+     *  The ON Clause
+     *
+     * @param  string|optional $type
+     *  The JOIN Type. Defaults to INNER JOIN
+     *
+     * @return string
+     *  JOIN Clause
+     */
+    public function join( $table, $on, $type = Query::INNER_JOIN ) {
+
+        // Do we have an alias?
+
+        if( is_array( $table ) ) {
+            $table = $this -> from( key( $table ), current( $table ) );
         }
 
-        return ( ! is_null( $return ) ? sprintf( '%s %s ', self::SQL_WHERE, rtrim( $return ) ) : NULL );
+        return sprintf( ' %s %s ON( %s )', $type, $table, $on );
+    }
+
+    /**
+     * Render the HAVING Clause
+     *
+     * @param array $conditions
+     *  HAVING Clauses
+     *
+     * @return string
+     *  HAVING Clause
+     */
+    public function having( array $conditions ) {
+
+        $clause = NULL;
+
+        array_walk(
+
+            $conditions,
+
+            function( $condition, $type ) use( &$clause ) {
+
+                if( count( $condition ) == 1 && ! is_null( $clause ) ) {
+
+                    $clause .= sprintf( ' %s %s', $type, implode( $type, $condition ) );
+
+                } else {
+
+                    $clause .= implode( sprintf( ' %s ', $type ), $condition );
+                }
+            }
+        );
+
+        return sprintf( ' %s %s', self::HAVING, $clause );
+    }
+
+    /**
+     * Render the GROUP BY Clause
+     *
+     * @param array $fields
+     *  Fields to group records
+     *
+     * @return string
+     *  GROUP BY Clause
+     */
+    public function group( array $fields ) {
+        return sprintf( ' %s %s', self::GROUP_BY, implode( ', ', $fields ) );
     }
 
     /**
      * Render the ORDER BY Clause
      *
-     * @param array $data
-     *
-     *   <p>Information about ordenation:</p>
-     *
-     *   <p>
-     *       Keys are the fields which will lead the ordenation and
-     *       the Values the ordening directions: ASC or DESC
-     *   </p>
+     * @param array $fields
+     *  An associative array, where keys are the fields and values orientations
      *
      * @return string
-     *   ORDER BY Clause
+     *  ORDER BY Clause
      */
-    public function order( array $data ) {
+    public function order( array $fields ) {
 
-        return sprintf(
+        $clause = array();
 
-            '%s %s ',
+        $orientation = self::ORDER_ASCENDING;   # Default orientation
 
-            self::SQL_ORDER_BY,
+        array_walk_recursive(
 
-            str_replace( '=', ' ', http_build_query( $data, NULL, ', ' ) )
+            $fields,
+
+            function( $value, $key ) use( &$clause, $orientation ) {
+
+                $clause[] = vsprintf(
+
+                    '%s %s',
+
+                    ( is_int( $key ) ? array( $value, $orientation ) : array( $key, $value ) )
+                );
+            }
         );
+
+        return sprintf( ' %s %s', self::ORDER_BY, implode( ', ', $clause ) );
     }
 
     /**
      * Render the LIMIT Clause
      *
      * @param array $data
+     *  LIMIT Clause data
      *
-     *   <p>Information about limitations:</p>
-     *
-     *   <p>
-     *       First index is the offset to start results
-     *       Second Index is the number of records to be returned
-     *   </p>
+     *  First index should be the number of records and the second index
+     *  the offset in which they start
      *
      * @return string
-     *   LIMIT Clause
+     *  LIMIT Clause
      */
     public function limit( array $data ) {
-        return sprintf( '%s %s, %s ', self::SQL_LIMIT, $data[ 0 ], $data[ 1 ] );
-    }
-
-    /**
-     * Render the JOIN Clause
-     *
-     * @param array $data
-     *  JOIN Data
-     *
-     * @return string
-     *   JOIN Clause
-     */
-    public function join( array $join ) {
-
-        $query = NULL;
-
-        list( $tables, $on, $type ) = $join;
-
-        // Do we have a table alias?
-
-        if( is_array( $tables ) ) {
-
-            $t = NULL;
-
-            foreach( $tables as $alias => $table ) {
-
-                $t .= $this -> from( $alias, $table );
-            }
-
-            $tables = $t;
-        }
-
-        $query .= sprintf( ' %s %s ON( %s )', $type, trim( $tables, ',' ), $on );
-
-        return $query;
+        return sprintf( ' %s %s, %s ', self::LIMIT, $data[ 0 ], $data[ 1 ] );
     }
 }

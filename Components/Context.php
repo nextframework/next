@@ -30,18 +30,18 @@ class Context implements Contextualizable {
      * Register a new Invoker Object to be used as context extension
      *
      * @param Next\Components\Invoker $invoker
-     *   Invoker Object
+     *  Invoker Object
      *
      * @param string|array|optional $methods
-     *   One or more methods accessible through extended Context.
-     *   Defaults to NULL, which means almost all PUBLIC methods will be accessible
+     *  One or more methods accessible through extended Context.
+     *  Defaults to NULL, which means almost all PUBLIC methods will be accessible
      *
      *   @param string|array|optional $properties
-     *   One or more properties accessible through extended Context
-     *   Defaults to NULL, which means all PROTECTED properties will be accessible
+     *  One or more properties accessible through extended Context
+     *  Defaults to NULL, which means all PROTECTED properties will be accessible
      *
      * @return Next\Components\Context
-     *   Context Instance (Fluent Interface)
+     *  Context Instance (Fluent Interface)
      */
     function extend( Invoker $invoker, $methods = NULL, $properties = NULL ) {
 
@@ -83,21 +83,21 @@ class Context implements Contextualizable {
      * Invoke an extended resource from a caller context
      *
      * @param Next\Components\Object $caller
-     *   Caller Object
+     *  Caller Object
      *
      * @param string $method
-     *   Callable resource name
+     *  Callable resource name
      *
      * @param array $args
-     *   Calling Arguments
+     *  Calling Arguments
      *
      * @return mixed|boolean
-     *   Return what extended method returns.
+     *  Return what extended method returns.
      *
-     *   If invoking process fail, false will returned.
+     *  If invoking process fail, false will returned.
      *
      * @throws Next\Components\Debug\Exception
-     *   Called resource is not known as an extended method
+     *  Called resource is not known as an extended method
      */
     public function call( Object $caller, $method, array $args = array() ) {
 
@@ -146,13 +146,13 @@ class Context implements Contextualizable {
      * Get value of a protected property from caller context
      *
      * @param Next\Components\Object $caller
-     *   Caller Object
+     *  Caller Object
      *
      * @param string $property
-     *   Property trying to be accessed
+     *  Property trying to be accessed
      *
      * @return mixed
-     *   The value of the property
+     *  The value of the property
      */
     public function get( Object $caller, $property ) {
 
@@ -171,7 +171,7 @@ class Context implements Contextualizable {
 
                     $reflector = new \ReflectionProperty(
 
-                        (string) $this -> callables[ $caller ][ $offset ][ 0 ], $property
+                        $this -> callables[ $caller ][ $offset ][ 0 ], $property
                     );
 
                     $reflector -> setAccessible( TRUE );
@@ -213,13 +213,13 @@ class Context implements Contextualizable {
      * Set value to a protected property from caller context
      *
      * @param Next\Components\Object $caller
-     *   Caller Object
+     *  Caller Object
      *
      * @param string $property
-     *   Property trying to be changed
+     *  Property trying to be changed
      *
      * @param mixed $value
-     *   New value for the property
+     *  New value for the property
      */
     public function set( Object $caller, $property, $value ) {
 
@@ -238,7 +238,7 @@ class Context implements Contextualizable {
 
                     $reflector = new \ReflectionProperty(
 
-                        (string) $this -> callables[ $caller ][ $offset ][ 0 ], $property
+                        $this -> callables[ $caller ][ $offset ][ 0 ], $property
                     );
 
                     $reflector -> setAccessible( TRUE );
@@ -271,7 +271,7 @@ class Context implements Contextualizable {
      * Get Context Callables
      *
      * @return array
-     *   Registered Context Callables
+     *  Registered Context Callables
      */
     public function getCallables() {
         return $this -> callables;
@@ -288,14 +288,14 @@ class Context implements Contextualizable {
      * - Any magic method (__get(), __set()...)
      *
      * @param  string|ReflectionMethod|ReflectionProperty $element
-     *   The current element in the "behind the scenes" loop of array_filter()
+     *  The current element in the "behind the scenes" loop of array_filter()
      *
      * @return boolean
-     *   TRUE if current element is not a ReflectionMethod or ReflectionProperty object -OR-
-     *   if current element IS a ReflectionMethod or ReflectionProperty object -AND-
-     *   is not a method of one of the classes mentioned above
+     *  TRUE if current element is not a ReflectionMethod or ReflectionProperty object -OR-
+     *  if current element IS a ReflectionMethod or ReflectionProperty object -AND-
+     *  is not a method of one of the classes mentioned above
      *
-     *   FALSE otherwise
+     *  FALSE otherwise
      */
     private function filter( $element ) {
 
@@ -319,13 +319,13 @@ class Context implements Contextualizable {
      * Get method name from ReflectionMethod and ReflectionProperty objects
      *
      * @param  string|reflectionMethod|ReflectionProperty $element
-     *   The current element in the "behind the scenes" loop of array_map()
+     *  The current element in the "behind the scenes" loop of array_map()
      *
      * @return string
-     *   If current element is an instance of ReflectionMethod or ReflectionProperty then the
-     *   value of their public property 'name' will be returned
+     *  If current element is an instance of ReflectionMethod or ReflectionProperty then the
+     *  value of their public property 'name' will be returned
      *
-     *   If the current element is not an object of neither of these classes, it will be returned "as is"
+     *  If the current element is not an object of neither of these classes, it will be returned "as is"
      */
     private function simplify( $element ) {
 

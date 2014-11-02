@@ -21,7 +21,7 @@ class TE extends AbstractField implements Request {
      * Get Header Field Validator
      *
      * @return Next\Validate\Validate
-     *   Associated Validator
+     *  Associated Validator
      */
     protected function getValidator() {
         return new \Next\Validate\HTTP\Headers\Request\TE;
@@ -31,7 +31,7 @@ class TE extends AbstractField implements Request {
      * Set Up Header Options
      *
      * @return array
-     *   Header Field Validation Options
+     *  Header Field Validation Options
      */
     public function setOptions() {
         return array( 'name' => 'TE', 'acceptMultiples' => TRUE );

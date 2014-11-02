@@ -42,10 +42,10 @@ class RowSet extends AbstractDataGateway implements \Iterator {
      * Set Data Source from different sources
      *
      * @param mixed|array $source
-     *   Source Data
+     *  Source Data
      *
      * @return array
-     *   Input array with its values mapped as an instance of Next\DB\Table\Row
+     *  Input array with its values mapped as an instance of Next\DB\Table\Row
      */
     protected function setSource( $source ) {
 
@@ -60,7 +60,7 @@ class RowSet extends AbstractDataGateway implements \Iterator {
      * Return the current element
      *
      * @return mixed
-     *   Current element value
+     *  Current element value
      */
     public function current() {
         return $this -> source[ $this -> offset ];
@@ -70,7 +70,7 @@ class RowSet extends AbstractDataGateway implements \Iterator {
      * Return the key of the current element
      *
      * @return scalar
-     *   Current element key
+     *  Current element key
      */
     public function key() {
         return $this -> offset;
@@ -94,7 +94,7 @@ class RowSet extends AbstractDataGateway implements \Iterator {
      * Check if current position is valid
      *
      * @return boolean
-     *   TRUE if current position is valid and FALSE otherwise
+     *  TRUE if current position is valid and FALSE otherwise
      */
     public function valid() {
         return array_key_exists( $this -> offset, $this -> source );
@@ -111,16 +111,16 @@ class RowSet extends AbstractDataGateway implements \Iterator {
      * Return the value at the specified offset
      *
      * @param mixed $offset
-     *   Offset to retrieve value from
+     *  Offset to retrieve value from
      *
      * @return mixed
-     *   The value at the specified offset, if exists and FALSE id doesn't
+     *  The value at the specified offset, if exists and FALSE id doesn't
      *
      * @link http://php.net/manual/en/arrayobject.offsetget.php
-     *   ArrayObject::offsetGet()
+     *  ArrayObject::offsetGet()
      *
      * @throws Next\DB\Table\DataGatewayException
-     *   Thrown if trying to access a Row when the RowSet has more than just one Row
+     *  Thrown if trying to access a Row when the RowSet has more than just one Row
      */
     public function __get( $offset ) {
 
@@ -135,16 +135,16 @@ class RowSet extends AbstractDataGateway implements \Iterator {
      * Set a new value at specified offset
      *
      * @param mixed $offset
-     *   Offset to set
+     *  Offset to set
      *
      * @param mixed $value
-     *   New value
+     *  New value
      *
      * @link http://php.net/manual/en/arrayobject.offsetset.php
-     *   ArrayObject::offsetSet()
+     *  ArrayObject::offsetSet()
      *
      * @throws Next\DB\Table\DataGatewayException
-     *   Thrown if trying to access a Row when the RowSet has more than just one Row
+     *  Thrown if trying to access a Row when the RowSet has more than just one Row
      */
     public function __set( $offset, $value ) {
 

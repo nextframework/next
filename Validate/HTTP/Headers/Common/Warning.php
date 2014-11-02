@@ -56,14 +56,14 @@ class Warning extends Object implements Headers {
      * </code>
      *
      * @param string $data
-     *   Data to validate
+     *  Data to validate
      *
      * @return boolean
-     *   TRUE if valid and FALSE otherwise
+     *  TRUE if valid and FALSE otherwise
      *
      * @link
-     *   http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.46
-     *   RFC 2616 Section 14.46
+     *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.46
+     *  RFC 2616 Section 14.46
      */
     public function validate( $data ) {
 
@@ -71,16 +71,16 @@ class Warning extends Object implements Headers {
 
             sprintf(
 
-                '/(?<code>\d{3})\s*                                                   # Code
+                '/(?<code>\d{3})\s*                                                    # Code
 
                   (?<agent>
-                      (?<host>(?:(?:(?:(?:http|ftp)s?):\/\/)?[\w\#:.?+=&%%@!\/-]+))   # Sender Host and port
-                      (?<port>:[0-9]+)?|%s                                            # or a pseudonym
+                      (?<host>(?:(?:(?:(?:http|ftp)s?):\/\/)?[\w\#:.?+=&%%@!\/-]+))    # Sender Host and port
+                      (?<port>:[0-9]+)?|%s                                             # or a pseudonym
                   )?\s*
 
-                  (?<message>[\'"]?[^\#]+[\'"]?)?\s*                                  # Warning Message
+                  (?<message>[\'"]?[^\#]+[\'"]?)?\s*                                   # Warning Message
 
-                  (?:\#(?<date>.*))?                                                  # Warning Date
+                  (?:\#(?<date>.*))?                                                   # Warning Date
 
                 /x',
 

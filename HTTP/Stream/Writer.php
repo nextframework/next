@@ -28,7 +28,7 @@ class Writer extends Object implements Writer\Writer {
      * Stream Writer Constructor
      *
      * @param Next\HTTP\Stream\Adapter\Adapter $adapter
-     *   Stream Adapter where data will be written
+     *  Stream Adapter where data will be written
      */
     public function __construct( Adapter $adapter ) {
 
@@ -48,20 +48,20 @@ class Writer extends Object implements Writer\Writer {
      * Write some bytes in File Stream
      *
      * @param string $string
-     *   Data to write
+     *  Data to write
      *
      * @param integer|optional $length
-     *   Optional number of bytes of given data to write
+     *  Optional number of bytes of given data to write
      *
      * @return integer
-     *   Always return the number of bytes written, because if failed
-     *   to write an Exception is thrown
+     *  Always return the number of bytes written, because if failed
+     *  to write an Exception is thrown
      *
      * @throws Next\HTTP\Stream\Writer\WriterException
-     *   Number of bytes is zero
+     *  Number of bytes is zero
      *
      * @throws Next\HTTP\Stream\Writer\WriterException
-     *   Fail when trying to write data
+     *  Fail when trying to write data
      */
     public function write( $string, $length = NULL ) {
 
@@ -102,7 +102,7 @@ class Writer extends Object implements Writer\Writer {
      * Get Adapter Object
      *
      * @return Next\HTTP\Stream\Adapter\Adapter
-     *   HTTP Stream Adapter
+     *  HTTP Stream Adapter
      */
     public function getAdapter() {
         return $this -> adapter;
@@ -112,7 +112,7 @@ class Writer extends Object implements Writer\Writer {
      * Get Stream Resource
      *
      * @return resource
-     *   HTTP Stream
+     *  HTTP Stream
      */
     public function getStream() {
         return $this -> adapter -> getStream();

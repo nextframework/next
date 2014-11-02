@@ -1265,10 +1265,10 @@ class Charset implements Validate {
      * Validates given Character Set
      *
      * @param string $data
-     *   Data to validate
+     *  Data to validate
      *
      * @return boolean
-     *   TRUE if valid and FALSE otherwise
+     *  TRUE if valid and FALSE otherwise
      */
     public function validate( $data ) {
 
@@ -1285,7 +1285,7 @@ class Charset implements Validate {
      * Get Charset Registry
      *
      * @return array
-     *   Charsets List
+     *  Charsets List
      */
     public static function getCharsets() {
         return self::$charsets;

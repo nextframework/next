@@ -16,10 +16,10 @@ interface Adapter extends \Countable {
      * Get items from given offset
      *
      * @param integer $offset
-     *   Offset to start the range
+     *  Offset to start the range
      *
      * @param integer $itemsPerPage
-     *   Number of Items per Page
+     *  Number of Items per Page
      */
     public function getItems( $offset, $itemsPerPage );
 }

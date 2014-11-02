@@ -16,10 +16,10 @@ class ISO8601 {
      * Validates a ISO 8601 Duration Format
      *
      * @param string $spec
-     *   ISO 8601 Period Spec to validate
+     *  ISO 8601 Period Spec to validate
      *
      * @return boolean
-     *   TRUE if given value is a valid ISO 8601 Period and FALSE otherwise
+     *  TRUE if given value is a valid ISO 8601 Period and FALSE otherwise
      *
      * @see http://en.wikipedia.org/wiki/Iso8601#Durations
      */

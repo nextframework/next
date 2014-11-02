@@ -228,13 +228,13 @@ class Writer extends \XMLWriter implements Parameterizable {
      * Add a parent node in XML
      *
      * @param string $name
-     *   Parent Node Name
+     *  Parent Node Name
      *
      * @param array|optional $attributes
-     *   Parent Node Attributes
+     *  Parent Node Attributes
      *
      * @return Next\XML\Writer
-     *   XML Writer Object (Fluent Interface)
+     *  XML Writer Object (Fluent Interface)
      */
     public function addParent( $name, array $attributes = array() ) {
 
@@ -255,19 +255,19 @@ class Writer extends \XMLWriter implements Parameterizable {
      * Add a new child node in XML
      *
      * @param string $name
-     *   Child Node Name
+     *  Child Node Name
      *
      * @param string|optional $value
-     *   Optional Child Node Value
+     *  Optional Child Node Value
      *
      * @param array|optional $attributes
-     *   Optional Child Node Attributes
+     *  Optional Child Node Attributes
      *
      * @param boolean|optional $close
-     *   If TRUE closes the first parent node of the child
+     *  If TRUE closes the first parent node of the child
      *
      * @return Next\XML\Writer
-     *   XML Writer Object (Fluent Interface)
+     *  XML Writer Object (Fluent Interface)
      */
     public function addChild( $name, $value = NULL, array $attributes = array(), $close = FALSE ) {
 
@@ -314,7 +314,7 @@ class Writer extends \XMLWriter implements Parameterizable {
      *   <p>If set, a Content-Type Header will also be sent</p>
      *
      * @param boolean|optional $decode
-     *   When returning, defines whether or not the entities will be decoded
+     *  When returning, defines whether or not the entities will be decoded
      *
      * @return string|void
      *
@@ -385,7 +385,7 @@ class Writer extends \XMLWriter implements Parameterizable {
      * Get XML Writer Options
      *
      * @return Next\Components\Parameter
-     *   Parameter Object with merged options
+     *  Parameter Object with merged options
      */
     public function getOptions() {
         return $this -> options;
@@ -400,7 +400,7 @@ class Writer extends \XMLWriter implements Parameterizable {
      * This is a wrapper method used in addParent() and addChild()
      *
      * @param array $attributes
-     *   XML Node Attributes
+     *  XML Node Attributes
      */
     private function writeAttributes( array $attributes ) {
 

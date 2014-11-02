@@ -21,7 +21,7 @@ class Standard extends AbstractRouter {
      *
      * @var string
      */
-    const DBPATH    = 'Data/Routes.sqlite';
+    const DBPATH             = 'Data/Routes.sqlite';
 
     // RegExp and String Delimiter Constants
 
@@ -30,7 +30,7 @@ class Standard extends AbstractRouter {
      *
      * @var string
      */
-    const SEPARATOR_TOKEN       = '|';
+    const SEPARATOR_TOKEN    = '|';
 
     /**
      * SQLite Connection Resource
@@ -55,15 +55,15 @@ class Standard extends AbstractRouter {
      * Finds a Route that matches to an Application AND current Request
      *
      * @param Next\Application\Application $application
-     *   Application to iterate Controllers
+     *  Application to iterate Controllers
      *
      * @return array|object|boolean
      *
-     *   If a Route could be match against current Request URI an
-     *   array or an object will be returned (depending on Connection
-     *   Driver configuration).
+     *  If a Route could be match against current Request URI an
+     *  array or an object will be returned (depending on Connection
+     *  Driver configuration).
      *
-     *   If none could, FALSE will be returned
+     *  If none could, FALSE will be returned
      */
     public function find( Application $application ) {
 
@@ -169,7 +169,7 @@ class Standard extends AbstractRouter {
      * Establishes a Connection with the SQLITE Database File
      *
      * @throws Next\Controller\Router\RouterException
-     *   SQLITE Database File doesn't exist in defined directory
+     *  SQLITE Database File doesn't exist in defined directory
      */
     protected function connect() {
 
@@ -237,16 +237,16 @@ class Standard extends AbstractRouter {
      * Lookup for Required Params in URL
      *
      * @param array $params
-     *   Array of Params to validate
+     *  Array of Params to validate
      *
      * @param string $URI
-     *   Request URI to be checked against
+     *  Request URI to be checked against
      *
      * @param array|optional $queryData
-     *   Manually set GET parameters to be considered as validatable arguments too
+     *  Manually set GET parameters to be considered as validatable arguments too
      *
      * @throws Next\Controller\Router\RouterException
-     *   Any of the Required Parameters is missing or has no value
+     *  Any of the Required Parameters is missing or has no value
      */
     protected function lookup( array $params, $URI, array $queryData = array() ) {
 
@@ -282,13 +282,13 @@ class Standard extends AbstractRouter {
      * Check if required parameters are valid in a list of valid values
      *
      * @param array $params
-     *   Route Params
+     *  Route Params
      *
      * @param string $URI
-     *   Route URI
+     *  Route URI
      *
      * @throws Next\Controller\Router\RouterException
-     *   Any of the Required Parameters has an invalid value from a
+     *  Any of the Required Parameters has an invalid value from a
      *   [list|of|possible|values]
      */
     protected function validate( array $params, $URI ) {
@@ -353,13 +353,13 @@ class Standard extends AbstractRouter {
      * Process Dynamic Params, in order to register them as Request Params
      *
      * @param array $params
-     *   Array of Params to parse
+     *  Array of Params to parse
      *
      * @param string $URI
-     *   Request URI to be checked against
+     *  Request URI to be checked against
      *
      * @return array
-     *   An array with all parsed Dynamic Parameters and their proper values
+     *  An array with all parsed Dynamic Parameters and their proper values
      */
     protected function process( array $params, $URI ) {
 
@@ -416,10 +416,10 @@ class Standard extends AbstractRouter {
      * Find Parameter Value
      *
      * @param array $param
-     *   Parameter Data
+     *  Parameter Data
      *
      * @param string $value
-     *   Parameter Value
+     *  Parameter Value
      *
      * @return string
      *
@@ -479,8 +479,8 @@ class Standard extends AbstractRouter {
      * for REGEXP keyword use
      *
      * @throws Next\Controller\Router\RouterException
-     *   Current Database Connection Adapter doesn't have the
-     *   sqliteCreateFunction() method
+     *  Current Database Connection Adapter doesn't have the
+     *  sqliteCreateFunction() method
      */
     private function extend() {
 

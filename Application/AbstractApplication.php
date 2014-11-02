@@ -85,7 +85,7 @@ abstract class AbstractApplication extends Object implements Application {
      *  </p>
      *
      * @throws Next\Application\ApplicationException
-     *   Invalid Controller added to Controllers Chain
+     *  Invalid Controller added to Controllers Chain
      */
     public function __construct( Router $router = NULL, Request $request = NULL, Response $response = NULL ) {
 
@@ -180,7 +180,7 @@ abstract class AbstractApplication extends Object implements Application {
      * Application directory comes from Application Class NameSpace
      *
      * @return string
-     *   Application Class Namespace
+     *  Application Class Namespace
      */
     public function getApplicationDirectory() {
         return $this -> getClass() -> getNamespaceName();
@@ -192,7 +192,7 @@ abstract class AbstractApplication extends Object implements Application {
      * Get all Controller Objects associated to Application
      *
      * @return Next\Controller\Chain
-     *   Controllers Collection Object
+     *  Controllers Collection Object
      */
     public function getControllers() {
         return $this -> controllers;
@@ -202,7 +202,7 @@ abstract class AbstractApplication extends Object implements Application {
      * Get View Engine
      *
      * @return Next\View\View
-     *   View Engine Object
+     *  View Engine Object
      */
     public function getView() {
         return $this -> view;
@@ -212,7 +212,7 @@ abstract class AbstractApplication extends Object implements Application {
      * Get Router
      *
      * @return Next\Controller\Router\Router
-     *   Router Object
+     *  Router Object
      */
     public function getRouter() {
         return $this -> router;
@@ -222,10 +222,10 @@ abstract class AbstractApplication extends Object implements Application {
      * Set Request Object
      *
      * @param Next\HTTP\Request $request
-     *   Request Object
+     *  Request Object
      *
      * @return Next\Application\Application
-     *   Application Instance (Fluent Interface)
+     *  Application Instance (Fluent Interface)
      */
     public function setRequest( Request $request ) {
 
@@ -238,7 +238,7 @@ abstract class AbstractApplication extends Object implements Application {
      * Get Request Object
      *
      * @return Next\HTTP\Request
-     *   Request Object
+     *  Request Object
      */
     public function getRequest() {
         return $this -> request;
@@ -248,10 +248,10 @@ abstract class AbstractApplication extends Object implements Application {
      * Set Response Object
      *
      * @param Next\HTTP\Response $response
-     *   Response Object
+     *  Response Object
      *
      * @return Next\Application\Application
-     *   Application Instance (Fluent Interface)
+     *  Application Instance (Fluent Interface)
      */
     public function setResponse( Response $response ) {
 
@@ -264,7 +264,7 @@ abstract class AbstractApplication extends Object implements Application {
      * Get Response Object
      *
      * @return Next\HTTP\Response
-     *   Response Object
+     *  Response Object
      */
     public function getResponse() {
         return $this -> response;
@@ -285,10 +285,10 @@ abstract class AbstractApplication extends Object implements Application {
      * Check Application Integrity
      *
      * @throws Next\Application\ApplicationException
-     *   Application has no View Engine assigned
+     *  Application has no View Engine assigned
      *
      * @throws Next\Application\ApplicationException
-     *   Assigned View Engine is invalid over interface implementing check
+     *  Assigned View Engine is invalid over interface implementing check
      */
     private function checkIntegrity() {
 

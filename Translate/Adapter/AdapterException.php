@@ -45,7 +45,7 @@ class AdapterException extends \Next\Components\Debug\Exception {
      * Without a Cache Key we're unable to cache Translation Data Structure
      *
      * @return Next\Translate\Adapter\AdapterException
-     *   Exception for missing Cache Key
+     *  Exception for missing Cache Key
      */
     public static function missingCacheKey() {
 
@@ -63,10 +63,10 @@ class AdapterException extends \Next\Components\Debug\Exception {
      * GetText Adapter can only work with legitimate GNU MO Files
      *
      * @param string $filename
-     *   Invalid MO Filename
+     *  Invalid MO Filename
      *
      * @return Next\Translate\Adapter\AdapterException
-     *   Exception for invalid MO Files
+     *  Exception for invalid MO Files
      */
     public static function invalidMOFile( $filename ) {
 

@@ -25,7 +25,7 @@ class Expression extends Object {
      * SQL Expression COntructor
      *
      * @param string $expression
-     *   SQL Expression
+     *  SQL Expression
      */
     public function __construct( $expression ) {
 
@@ -36,7 +36,7 @@ class Expression extends Object {
      * Get SQL Expression
      *
      * @return string
-     *   SQL Expression
+     *  SQL Expression
      */
     public function getExpression() {
         return $this -> expression;

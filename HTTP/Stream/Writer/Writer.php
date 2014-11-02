@@ -18,10 +18,10 @@ interface Writer extends Stream {
      * Write some bytes in File Stream
      *
      * @param string $string
-     *   Data to write
+     *  Data to write
      *
      * @param integer|optional $length
-     *   Optional number of bytes of given data to write
+     *  Optional number of bytes of given data to write
      */
     public function write( $string, $length = NULL );
 }

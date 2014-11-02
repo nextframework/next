@@ -43,7 +43,7 @@ interface Application {
      * Set Request Object
      *
      * @param Next\HTTP\Request $request
-     *   Request Object
+     *  Request Object
      */
     public function setRequest( Request $request );
 
@@ -56,7 +56,7 @@ interface Application {
      * Set Response Object
      *
      * @param Next\HTTP\Response $response
-     *   Response Object
+     *  Response Object
      */
     public function setResponse( Response $response );
 

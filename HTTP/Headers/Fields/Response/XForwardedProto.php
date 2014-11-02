@@ -23,7 +23,7 @@ class XForwardedProto extends AbstractField implements Response {
      * Connection types must be lowercased
      *
      * @param string $data
-     *   Data to manipulate after validation
+     *  Data to manipulate after validation
      *
      * @return string Validated Data
      */
@@ -37,7 +37,7 @@ class XForwardedProto extends AbstractField implements Response {
      * Get Header Field Validator
      *
      * @return Next\Validate\Validate
-     *   Associated Validator
+     *  Associated Validator
      */
     protected function getValidator() {
         return new \Next\Validate\HTTP\Headers\Response\XForwardedProto;
@@ -47,7 +47,7 @@ class XForwardedProto extends AbstractField implements Response {
      * Set Up Header Options
      *
      * @return array
-     *   Header Field Validation Options
+     *  Header Field Validation Options
      */
     public function setOptions() {
         return array( 'name' => 'X-Forwarded-Proto' );

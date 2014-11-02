@@ -29,19 +29,19 @@ class XFrameOptions extends Object implements Headers {
      * </code>
      *
      * @param string $data
-     *   Data to validate
+     *  Data to validate
      *
      * @return boolean
-     *   TRUE if valid and FALSE otherwise
+     *  TRUE if valid and FALSE otherwise
      *
      * @link
-     *   http://blogs.msdn.com/b/ie/archive/2009/01/27/ie8-security-part-vii-clickjacking-defenses.aspx
+     *  http://blogs.msdn.com/b/ie/archive/2009/01/27/ie8-security-part-vii-clickjacking-defenses.aspx
      *
      * @link
-     *   http://en.wikipedia.org/wiki/Clickjacking
+     *  http://en.wikipedia.org/wiki/Clickjacking
      *
      * @link
-     *   http://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Common_non-standard_response_headers
+     *  http://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Common_non-standard_response_headers
      */
     public function validate( $data ) {
         return ( strcasecmp( $data, 'deny' ) == 0 || strcasecmp( $data, 'sameorigin' ) == 0 );

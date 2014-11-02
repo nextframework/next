@@ -46,7 +46,7 @@ class TranslateException extends \Next\Components\Debug\Exception {
      * Missing HTTP Stream Adapter
      *
      * @return Next\Translate\TranslateException
-     *   Exception for missing HTTP Stream Adapter
+     *  Exception for missing HTTP Stream Adapter
      */
     public static function noAdapter() {
 
@@ -62,10 +62,10 @@ class TranslateException extends \Next\Components\Debug\Exception {
      * Locale File not Found
      *
      * @param string $filename
-     *   Locale Filename
+     *  Locale Filename
      *
      * @return Next\Translate\TranslateException
-     *   Exception for missing Locale File
+     *  Exception for missing Locale File
      */
     public static function fileNotFound( $filename ) {
 
@@ -83,10 +83,10 @@ class TranslateException extends \Next\Components\Debug\Exception {
      * Locale File not Readable
      *
      * @param string $filename
-     *   Locale Filename
+     *  Locale Filename
      *
      * @return Next\Translate\TranslateException
-     *   Exception for Locale File unreadability
+     *  Exception for Locale File unreadability
      */
     public static function fileNotReadable( $filename ) {
 

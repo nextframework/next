@@ -3,7 +3,7 @@
 namespace Next\Tools\RoutesGenerator\Annotations;
 
 use Next\Tools\RoutesGenerator\RoutesGeneratorException;    # Router Generator Exception Class
-use Next\Components\Utils\ArrayUtils;                                         # Array Utils Class
+use Next\Components\Utils\ArrayUtils;                       # Array Utils Class
 
 /**
  * Annotation Routes Generator: Annotations Parser
@@ -42,19 +42,19 @@ class Parser {
      * Parses found Routes
      *
      * @param string|array $routes
-     *   Route(s) to be parsed
+     *  Route(s) to be parsed
      *
      * @param array $args
      *  Routes Argument(s)
      *
      * @param string $controller
-     *   Controller to whom belongs the Route(s)
+     *  Controller to whom belongs the Route(s)
      *
      * @param string $method
-     *   Method to whom belongs the Route(s)
+     *  Method to whom belongs the Route(s)
      *
      * @param string $basepath
-     *   Routes Basepath, prepended to every route
+     *  Routes Basepath, prepended to every route
      */
     public function __construct( array $routes, array $args, $controller, $method, $basepath = '' ) {
 
@@ -78,27 +78,27 @@ class Parser {
      * Parse one or more Routes, recursively
      *
      * @param string|array $routes
-     *   Route(s) to be parsed
+     *  Route(s) to be parsed
      *
      * @param array $args
      *  Routes Argument(s)
      *
      * @param string $controller
-     *   Controller to whom belongs the Route(s)
+     *  Controller to whom belongs the Route(s)
      *
      * @param string $method
-     *   Method to whom belongs the Route(s)
+     *  Method to whom belongs the Route(s)
      *
      * @throws Next\Tools\RoutesGenerator\RoutesGeneratorException
-     *   Route has less than 2 Components (a Request Method and a Route)
+     *  Route has less than 2 Components (a Request Method and a Route)
      *
      * @throws Next\Tools\RoutesGenerator\RoutesGeneratorException
-     *   Routes defined as single slash (usually for homepages) DO have
-     *   arguments (hierarchy concept)
+     *  Routes defined as single slash (usually for homepages) DO have
+     *  arguments (hierarchy concept)
      *
      * @throws Next\Tools\RoutesGenerator\RoutesGeneratorException
-     *   There is another Route with exactly the same definition, including
-     *   the Request Method
+     *  There is another Route with exactly the same definition, including
+     *  the Request Method
      */
     private function parseRoutes( $routes, array $args, $controller, $method, $basepath ) {
 
@@ -221,13 +221,13 @@ class Parser {
      * Parse Route Parameters
      *
      * @param array $params
-     *   Route's Params to parse/filter
+     *  Route's Params to parse/filter
      *
      * @param string $token
-     *   Token to be used as Parsing Anchor
+     *  Token to be used as Parsing Anchor
      *
      * @return array
-     *   Filtered list in according to given Token
+     *  Filtered list in according to given Token
      */
     private function parseParams( $params, $token ) {
 

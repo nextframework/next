@@ -45,14 +45,14 @@ class File extends AbstractBackend {
      * Load Cached Data
      *
      * @param string $key
-     *   Cache Key
+     *  Cache Key
      *
      * @param boolean|optional $keepSerialized
-     *   Flag to condition if Cache Data will keep serialized or not
+     *  Flag to condition if Cache Data will keep serialized or not
      *
      * @return mixed|boolean
      *
-     *   FALSE if:
+     *  FALSE if:
      *
      *   <ul>
      *
@@ -163,20 +163,20 @@ class File extends AbstractBackend {
      * Add new Data into Cache
      *
      * @param string $key
-     *   Cache Key
+     *  Cache Key
      *
      * @param mixed $value
-     *   Data to Cache
+     *  Data to Cache
      *
      * @param integer|optional $ttl
-     *   Optional Lifetime
+     *  Optional Lifetime
      *
      * @param boolean|optional $isTouching
-     *   Flag to condition when we're touching the Cache File in order to give
-     *   it an extra lifetime
+     *  Flag to condition when we're touching the Cache File in order to give
+     *  it an extra lifetime
      *
      * @return boolean
-     *   TRUE on success and FALSE otherwise
+     *  TRUE on success and FALSE otherwise
      */
     public function add( $key, $value, $ttl = NULL, $isTouching = FALSE ) {
 
@@ -233,10 +233,10 @@ class File extends AbstractBackend {
      * Remove Data from Cache
      *
      * @param string $key
-     *   Cache Key
+     *  Cache Key
      *
      * @return boolean
-     *   TRUE if Cache Metadata entry and the Cache itself were successfully removed
+     *  TRUE if Cache Metadata entry and the Cache itself were successfully removed
      */
     public function remove( $key ) {
         return ( ! Tools::delete( $this -> buildFilePath( $key ) ) && $this -> meta -> delete( $key ) );
@@ -246,10 +246,10 @@ class File extends AbstractBackend {
      * Test Cache Validity
      *
      * @param string $key
-     *   Cache Key
+     *  Cache Key
      *
      * @return boolean
-     *   TRUE if a Cache entry was found with given key AND it's a non-expired Cached Data
+     *  TRUE if a Cache entry was found with given key AND it's a non-expired Cached Data
      */
     public function test( $key ) {
 
@@ -284,14 +284,14 @@ class File extends AbstractBackend {
      * Clean Cached Data
      *
      * @param string|optional $mode
-     *   Cleaning Mode
+     *  Cleaning Mode
      *
      * @return boolean
-     *   TRUE on success and FALSE otherwise
+     *  TRUE on success and FALSE otherwise
      *
      * @throws Next\Cache\Backend\BackendException
-     *   Trying to clean old or user caches, which is not supported
-     *   by File Backend
+     *  Trying to clean old or user caches, which is not supported
+     *  by File Backend
      */
     public function clean( $mode = self::CLEAN_USER ) {
 
@@ -326,7 +326,7 @@ class File extends AbstractBackend {
      * Set Up Backend Options
      *
      * @return array
-     *   File Backend specific default options
+     *  File Backend specific default options
      */
     public function setOptions() {
 
@@ -358,10 +358,10 @@ class File extends AbstractBackend {
      *  Output Cache Directory is empty
      *
      * @throws Next\Cache\Backend\BackendException
-     *   Output Cache Directory doesn't exists
+     *  Output Cache Directory doesn't exists
      *
      * @throws Next\Cache\Backend\BackendException
-     *   Output Cache Directory is not writeable
+     *  Output Cache Directory is not writeable
      */
     protected function checkIntegrity() {
 
@@ -416,10 +416,10 @@ class File extends AbstractBackend {
      * Build the Filepath
      *
      * @param string $key
-     *   Cache Key
+     *  Cache Key
      *
      * @return string
-     *   The full path of given Cache Key, including Output Directory and File prefix, if any
+     *  The full path of given Cache Key, including Output Directory and File prefix, if any
      */
     private function buildFilePath( $key ) {
 

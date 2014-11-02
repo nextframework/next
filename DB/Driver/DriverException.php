@@ -39,10 +39,10 @@ class DriverException extends \Next\Components\Debug\Exception {
      * PDOException Caught
      *
      * @param PDOException $e
-     *   PDOException caught
+     *  PDOException caught
      *
      * @return Next\DB\Driver\DriverException
-     *   Exception for a caught PDOException
+     *  Exception for a caught PDOException
      */
     public static function PDOException( \PDOException $e ) {
 
@@ -53,10 +53,10 @@ class DriverException extends \Next\Components\Debug\Exception {
      * Missing Connection Parameter
      *
      * @param string $message
-     *   Message to be thrown
+     *  Message to be thrown
      *
      * @return Next\DB\Driver\DriverException
-     *   Exception for missing Connection Adapter
+     *  Exception for missing Connection Adapter
      */
     public static function missingConnectionAdapterParameter( $message ) {
 

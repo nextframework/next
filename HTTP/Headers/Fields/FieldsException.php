@@ -24,7 +24,7 @@ class FieldsException extends \Next\Components\Debug\Exception {
      *
      * @var integer
      */
-    const ALL_INVALID     = 0x0000042F;
+    const ALL_INVALID    = 0x0000042F;
 
     // Exception Messages
 
@@ -32,10 +32,10 @@ class FieldsException extends \Next\Components\Debug\Exception {
      * All values assigned to Header Field are invalid
      *
      * @param string $header
-     *   Header Name
+     *  Header Name
      *
      * @return Next\HTTP\Headers\Fields\FieldsException
-     *   Exception for invalid header value(s)
+     *  Exception for invalid header value(s)
      */
     public static function invalidHeaderValue( $header ) {
 

@@ -629,10 +629,10 @@ class MIME implements Validate {
      * Validates given MIME Type
      *
      * @param string $data
-     *   Data to Validate
+     *  Data to Validate
      *
      * @return boolean
-     *   TRUE if valid and FALSE otherwise
+     *  TRUE if valid and FALSE otherwise
      */
     public function validate( $data ) {
 
@@ -665,7 +665,7 @@ class MIME implements Validate {
      * Get Charset Registry
      *
      * @return array
-     *   MIME Types List
+     *  MIME Types List
      */
     public static function getMimeTypes() {
         return self::$mimes;

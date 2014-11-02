@@ -27,19 +27,19 @@ class XForwardedFor extends Object implements Headers {
      * </code>
      *
      * @param string $data
-     *   Data to validate
+     *  Data to validate
      *
      * @return boolean
-     *   TRUE if valid and FALSE otherwise
+     *  TRUE if valid and FALSE otherwise
      *
      * @link
-     *   http://wiki.squid-cache.org/SquidFaq/ConfiguringSquid#head-3518b69c63e221cc3cd7885415e365ffaf3dd27f
+     *  http://wiki.squid-cache.org/SquidFaq/ConfiguringSquid#head-3518b69c63e221cc3cd7885415e365ffaf3dd27f
      *
      * @link
-     *   http://en.wikipedia.org/wiki/X-Forwarded-For
+     *  http://en.wikipedia.org/wiki/X-Forwarded-For
      *
      * @link
-     *   http://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Common_non-standard_response_headers
+     *  http://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Common_non-standard_response_headers
      */
     public function validate( $data ) {
 

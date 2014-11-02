@@ -24,7 +24,7 @@ class Socket extends AbstractAdapter {
      *
      * @var string
      */
-    const READ                = 'rb';
+    const READ                   = 'rb';
 
     /**
      * Read and Write
@@ -33,7 +33,7 @@ class Socket extends AbstractAdapter {
      *
      * @var string
      */
-    const READ_WRITE          = 'r+b';
+    const READ_WRITE             = 'r+b';
 
     /**
      * Write-only
@@ -47,7 +47,7 @@ class Socket extends AbstractAdapter {
      *
      * @var string
      */
-    const TRUNCATE_WRITE      = 'wb';
+    const TRUNCATE_WRITE         = 'wb';
 
     /**
      * Read and Write
@@ -61,7 +61,7 @@ class Socket extends AbstractAdapter {
      *
      * @var string
      */
-    const TRUNCATE_READ_WRITE = 'w+b';
+    const TRUNCATE_READ_WRITE    = 'w+b';
 
     /**
      * Write-only
@@ -72,7 +72,7 @@ class Socket extends AbstractAdapter {
      *
      * @var string
      */
-    const APPEND_WRITE        = 'ab';
+    const APPEND_WRITE           = 'ab';
 
     /**
      * Read and Write
@@ -83,7 +83,7 @@ class Socket extends AbstractAdapter {
      *
      * @var string
      */
-    const APPEND_READ_WRITE   = 'a+b';
+    const APPEND_READ_WRITE      = 'a+b';
 
     /**
      * Opening Mode
@@ -96,16 +96,16 @@ class Socket extends AbstractAdapter {
      * HTTP Stream Socket Adapter Constructor
      *
      * @param string $filename
-     *   File/URL to be opened
+     *  File/URL to be opened
      *
      * @param string|optional $mode
-     *   Opening Mode
+     *  Opening Mode
      *
      * @param Next\HTTP\Stream\Context\Context|optional $context
-     *   Optional Stream Context to be used
+     *  Optional Stream Context to be used
      *
      * @throws Next\HTTP\Stream\Adapter\AdapterException
-     *   Chosen mode is invalid
+     *  Chosen mode is invalid
      */
     public function __construct( $filename, $mode = self::READ, Context $context = NULL ) {
 
@@ -128,7 +128,7 @@ class Socket extends AbstractAdapter {
      * Open a File (or URL)
      *
      * @throws Next\HTTP\Stream\Adapter\AdapterException
-     *   Unable to open stream
+     *  Unable to open stream
      */
     public function open() {
 
@@ -164,7 +164,7 @@ class Socket extends AbstractAdapter {
      * Close opened Stream
      *
      * @return boolean
-     *   TRUE on success and FALSE otherwise
+     *  TRUE on success and FALSE otherwise
      */
     public function close() {
 
@@ -184,10 +184,10 @@ class Socket extends AbstractAdapter {
      * Test if Stream has achieved the End of File
      *
      * @return boolean
-     *   TRUE if EOF (End-of-File) was achieved and FALSE otherwise
+     *  TRUE if EOF (End-of-File) was achieved and FALSE otherwise
      *
      * @throws Next\HTTP\Stream\Adapter\AdapterException
-     *   Stream is not opened
+     *  Stream is not opened
      */
     public function eof() {
 
@@ -202,10 +202,10 @@ class Socket extends AbstractAdapter {
      * Tell the current position of Stream Pointer
      *
      * @return integer|boolean
-     *   Pointer position if it could be retrieved and FALSE otherwise
+     *  Pointer position if it could be retrieved and FALSE otherwise
      *
      * @throws Next\HTTP\Stream\Adapter\AdapterException
-     *   Pointer position could be be retrieved
+     *  Pointer position could be be retrieved
      */
     public function tell() {
 
@@ -227,11 +227,11 @@ class Socket extends AbstractAdapter {
      * Check if Stream was opened, by testing its Resource
      *
      * @return boolean
-     *   Always TRUE, because if Stream is not opened an Exception
-     *   will be thrown
+     *  Always TRUE, because if Stream is not opened an Exception
+     *  will be thrown
      *
      * @throws Next\HTTP\Stream\Adapter\AdapterException
-     *   Stream is not a valid Resource.
+     *  Stream is not a valid Resource.
      */
     public function isOpened() {
 
@@ -252,7 +252,7 @@ class Socket extends AbstractAdapter {
      * Get Stream Meta Data
      *
      * @return array
-     *   Stream Metadata
+     *  Stream Metadata
      */
     public function getMetaData() {
 
@@ -269,16 +269,16 @@ class Socket extends AbstractAdapter {
      * Seek Stream to given position
      *
      * @param integer $position
-     *   Offset to seek Stream Pointer
+     *  Offset to seek Stream Pointer
      *
      * @return integer
-     *   If Stream is valid and fseek() is a success, zero will be returned
+     *  If Stream is valid and fseek() is a success, zero will be returned
      *
-     *   If Stream is not valid, -1 will be returned, just as
-     *   fomality
+     *  If Stream is not valid, -1 will be returned, just as
+     *  fomality
      *
      * @throws Next\HTTP\Stream\Adapter\AdapterException
-     *   Unable to seek a position in Stream
+     *  Unable to seek a position in Stream
      */
     public function seek( $position ) {
 
@@ -301,9 +301,9 @@ class Socket extends AbstractAdapter {
      *
      * @return string|boolean
      *
-     *   If current element can be read, a string will be returned
+     *  If current element can be read, a string will be returned
      *
-     *   Otherwise, FALSE will.
+     *  Otherwise, FALSE will.
      */
     public function current() {
         return ( $this -> valid() ? fgets( $this -> stream ) : FALSE );
@@ -314,9 +314,9 @@ class Socket extends AbstractAdapter {
      *
      * @return integer|boolean
      *
-     *   If Pointer position could be retrieved, it will be returned
+     *  If Pointer position could be retrieved, it will be returned
      *
-     *   If it couldn't or if Stream is not valid, FALSE will.
+     *  If it couldn't or if Stream is not valid, FALSE will.
      */
     public function key() {
 
@@ -339,10 +339,10 @@ class Socket extends AbstractAdapter {
      * Move forward to next element
      *
      * @return ineteger|NULL
-     *   If Pointer position can be retrieved and Stream can be seeked to
-     *   its position, zero will be returned, as returned by fseek()
+     *  If Pointer position can be retrieved and Stream can be seeked to
+     *  its position, zero will be returned, as returned by fseek()
      *
-     *   Otherwise, NULL will
+     *  Otherwise, NULL will
      */
     public function next() {
 
@@ -362,9 +362,9 @@ class Socket extends AbstractAdapter {
      * <p>In Stream context, moves pointer to beginning of file</p>
      *
      * @return boolean
-     *   TRUE if Stream is valid and Pointer could be rewinded.
+     *  TRUE if Stream is valid and Pointer could be rewinded.
      *
-     *   FALSE otherwise
+     *  FALSE otherwise
      */
     public function rewind() {
         return ( $this -> valid() && rewind( $this -> stream ) );
@@ -379,7 +379,7 @@ class Socket extends AbstractAdapter {
      * This a "Interface Alias" for Next\HTTP\Stream\Adapter\Adapter::eof()
      *
      * @return boolean
-     *   TRUE if EOF (End-of-File) was NOT achieved and FALSE otherwise
+     *  TRUE if EOF (End-of-File) was NOT achieved and FALSE otherwise
      */
     public function valid() {
 
@@ -400,14 +400,14 @@ class Socket extends AbstractAdapter {
      * in according to given Opening's Mode
      *
      * @return boolean
-     *   Always TRUE, because on failure an Exception is thrown
+     *  Always TRUE, because on failure an Exception is thrown
      *
      * @throws Next\HTTP\Stream\Adapter\AdapterException
-     *   Stream is not readable and opening more requires readability
+     *  Stream is not readable and opening more requires readability
      *
      * @throws Next\HTTP\Stream\Adapter\AdapterException
-     *   Stream is not writable (nor its parnt directory) and opening mode
-     *   required writability
+     *  Stream is not writable (nor its parnt directory) and opening mode
+     *  required writability
      */
     private function checkPermissions() {
 

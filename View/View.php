@@ -19,7 +19,7 @@ interface View {
      *
      * @var string
      */
-    const CONTROLLERS_KEYWORD   = 'Controllers';
+    const CONTROLLERS_KEYWORD            = 'Controllers';
 
     /**
      * Action Method 'View' Suffix
@@ -48,35 +48,35 @@ interface View {
      *
      * @var string
      */
-    const APPLICATION             = ':application';
+    const APPLICATION                    = ':application';
 
     /**
      * Controller FileSpec Token
      *
      * @var string
      */
-    const CONTROLLER              = ':controller';
+    const CONTROLLER                     = ':controller';
 
     /**
      * Action FileSpec Token
      *
      * @var string
      */
-    const ACTION                  = ':action';
+    const ACTION                         = ':action';
 
     /**
      * Subpath FileSpec Token
      *
      * @var string
      */
-    const SUBPATH                 = ':subpath';
+    const SUBPATH                        = ':subpath';
 
     /**
      * Controller Exception Keyword
      *
      * @var string
      */
-    const CONTROLLER_EXCEPTION    = '__EXCEPTION__';
+    const CONTROLLER_EXCEPTION           = '__EXCEPTION__';
 
     /**
      * Reset View to its defaults
@@ -94,17 +94,17 @@ interface View {
      * Add a new Composite View to be rendered
      *
      * @param Next\View\View $view
-     *   Composite View to be added
+     *  Composite View to be added
      *
      * @param integer $priority
      *
-     *   Priority of the Composite View
+     *  Priority of the Composite View
      *
-     *   Priorities higher than this class priority,
-     *   will be prepended to Response.
+     *  Priorities higher than this class priority,
+     *  will be prepended to Response.
      *
-     *   Priorities lower than this class priority,
-     *   will be appended to Response
+     *  Priorities lower than this class priority,
+     *  will be appended to Response
      */
     public function addView( View $view, $priority = 0 );
 
@@ -119,7 +119,7 @@ interface View {
      * constant
      *
      * @param integer $priority
-     *   Partial View Priority
+     *  Partial View Priority
      */
     public function setPriority( $priority );
 
@@ -142,7 +142,7 @@ interface View {
      * automatically
      *
      * @param string $extension
-     *   Template ViewS File Extensions
+     *  Template ViewS File Extensions
      */
     public function setExtension( $extension ) ;
 
@@ -157,7 +157,7 @@ interface View {
      * Set a basepath to be prepended in Template Files Location
      *
      * @param string $path
-     *   Template Views Bsepath
+     *  Template Views Bsepath
      */
     public function setBasepath( $path );
 
@@ -183,7 +183,7 @@ interface View {
      *       specially when your Template Files are in a different directory levels than your Controllers
      *
      * @param string $path
-     *   Template Views Optional Subpath
+     *  Template Views Optional Subpath
      */
     public function setSubpath( $path );
 
@@ -196,7 +196,7 @@ interface View {
      * Add more paths to Template Files Location
      *
      * @param string $path
-     *   Another Path to locate Template Views
+     *  Another Path to locate Template Views
      */
     public function addPath( $path );
 
@@ -210,7 +210,7 @@ interface View {
      * for auto-detection
      *
      * @param boolean $flag
-     *   Value to define
+     *  Value to define
      */
     public function setUseFileSpec( $flag );
 
@@ -218,7 +218,7 @@ interface View {
      * Set a FileSpec to be used
      *
      * @param string $spec
-     *   FileSpec for automatically find the proper Template View
+     *  FileSpec for automatically find the proper Template View
      */
     public function setFileSpec( $spec );
 
@@ -233,7 +233,7 @@ interface View {
      * Redefine Template Variables behavior
      *
      * @param boolean $behavior
-     *   Flag to set: TRUE, they'll be returned. FALSE they'll echoed
+     *  Flag to set: TRUE, they'll be returned. FALSE they'll echoed
      */
     public function setVariablesBehavior( $behavior );
 
@@ -246,7 +246,7 @@ interface View {
      * Assign one or more Template Variables
      *
      * @param string|array $tplVar
-     *   Template Variable Name or an array of Variables
+     *  Template Variable Name or an array of Variables
      *
      * @param mixed|optional $value
      *
@@ -279,11 +279,11 @@ interface View {
      * Render the page, outputs the buffer
      *
      * @param string|optional $name
-     *   Template View File to render. If NULL, we'll try to find it
+     *  Template View File to render. If NULL, we'll try to find it
      *
      * @param boolean|optional $search
-     *   Flag to condition whether or not we should try to find the
-     *   proper Template View File automatically
+     *  Flag to condition whether or not we should try to find the
+     *  proper Template View File automatically
      */
     public function render( $name = NULL, $search = TRUE );
 

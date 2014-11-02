@@ -58,7 +58,7 @@ class ClassMapperException extends \Next\Components\Debug\Exception {
      * Unknown Mapping Strategy
      *
      * @return Next\Tools\ClassMapper\ClassMapperException
-     *   Exception for invalid mapping output format
+     *  Exception for invalid mapping output format
      */
     public static function unknown() {
 
@@ -74,7 +74,7 @@ class ClassMapperException extends \Next\Components\Debug\Exception {
      * Output Directory is not set
      *
      * @return Next\Tools\ClassMapper\ClassMapperException
-     *   Exception for missing Output Directory
+     *  Exception for missing Output Directory
      */
     public static function noOutputDirectory() {
 
@@ -90,10 +90,10 @@ class ClassMapperException extends \Next\Components\Debug\Exception {
      * Invalid Output Directory
      *
      * @param string $directory
-     *   Output Directory
+     *  Output Directory
      *
      * @return Next\Tools\ClassMapper\ClassMapperException
-     *   Exception for Output Directory invalidity
+     *  Exception for Output Directory invalidity
      */
     public static function invalidOutputDirectory( $directory ) {
 
@@ -111,10 +111,10 @@ class ClassMapperException extends \Next\Components\Debug\Exception {
      * Output Directory is not writable
      *
      * @param string $directory
-     *   Output Directory
+     *  Output Directory
      *
      * @return Next\Tools\ClassMapper\ClassMapperException
-     *   Exception for Output Directory unwritability
+     *  Exception for Output Directory unwritability
      */
     public static function unwritableOutputDirectory( $directory ) {
 
@@ -132,7 +132,7 @@ class ClassMapperException extends \Next\Components\Debug\Exception {
      * Missing Output Filename
      *
      * @return Next\Tools\ClassMapper\ClassMapperException
-     *   Exception for missing Output Filename
+     *  Exception for missing Output Filename
      */
     public static function missingOutputFilename() {
 

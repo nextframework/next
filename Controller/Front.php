@@ -41,7 +41,7 @@ class Front extends Object {
      * Front Controller Constructor
      *
      * @param Next\Application\Chain $applications
-     *   Applications Chain
+     *  Applications Chain
      */
     public function __construct( Applications $applications ) {
 
@@ -68,8 +68,8 @@ class Front extends Object {
      * </ul>
      *
      * @return mixed|void
-     *   Returns what the chosen Dispatcher have dispatched, if configured to
-     *   do so
+     *  Returns what the chosen Dispatcher have dispatched, if configured to
+     *  do so
      */
     public function dispatch() {
 
@@ -179,10 +179,10 @@ class Front extends Object {
      * Set a Dispatcher Object
      *
      * @param Next\Controller\Dispatcher\Dispatcher $dispatcher
-     *   Dispatcher Object
+     *  Dispatcher Object
      *
      * @return Next\Controller\Front
-     *   Front Controller Instance (Fluent Interface)
+     *  Front Controller Instance (Fluent Interface)
      */
     public function setDispatcher( Dispatcher $dispatcher ) {
 
@@ -195,7 +195,7 @@ class Front extends Object {
      * Get Dispatcher Object
      *
      * @return Next\Controller\Dispatcher\Dispatcher
-     *   Dispatcher Object
+     *  Dispatcher Object
      */
     public function getDispatcher() {
         return $this -> dispatcher;

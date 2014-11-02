@@ -13,13 +13,13 @@ class Chain extends Set {
      * Check Object acceptance
      *
      * @param Next\Components\Object $object
-     *   Object to test before add to Collection
+     *  Object to test before add to Collection
      *
      * @return boolean
-     *   TRUE if given Object is not present in Set Collection and FALSE otherwise
+     *  TRUE if given Object is not present in Set Collection and FALSE otherwise
      *
      * @throws Next\Components\Decorators\DecoratorException
-     *   Given decorator is not acceptable in Decorators Chain
+     *  Given decorator is not acceptable in Decorators Chain
      */
     protected function accept( Object $object ) {
 

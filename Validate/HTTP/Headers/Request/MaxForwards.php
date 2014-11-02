@@ -25,14 +25,14 @@ class MaxForwards extends Object implements Headers {
      * </code>
      *
      * @param string $data
-     *   Data to validate
+     *  Data to validate
      *
      * @return boolean
-     *   TRUE if valid and FALSE otherwise
+     *  TRUE if valid and FALSE otherwise
      *
      * @link
-     *   http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.31
-     *   RFC 2616 Section 14.31
+     *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.31
+     *  RFC 2616 Section 14.31
      */
     public function validate( $data ) {
         return ( preg_match( '/^(?:[1-9][0-9]*)$/', $data ) != 0 );

@@ -18,10 +18,10 @@ class Raw extends Object implements Headers {
      * Validates Generic Header Field
      *
      * @param string $data
-     *   Data to validate
+     *  Data to validate
      *
      * @return boolean
-     *   TRUE if valid and FALSE otherwise
+     *  TRUE if valid and FALSE otherwise
      */
     public function validate( $data ) {
 

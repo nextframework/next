@@ -102,7 +102,7 @@ abstract class AbstractMapper extends Object implements Parameterizable, Mapper 
      * Get Header Fields Options
      *
      * @return Next\Components\Parameter
-     *   Parameter Object with merged options
+     *  Parameter Object with merged options
      */
     public function getOptions() {
         return $this -> options;

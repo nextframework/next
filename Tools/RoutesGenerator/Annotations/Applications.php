@@ -27,7 +27,7 @@ class Applications implements Annotations {
      *
      * @var string
      */
-    const PATH_PREFIX    =    '!Path';
+    const PATH_PREFIX      =    '!Path';
 
     /**
      * Application Object
@@ -40,7 +40,7 @@ class Applications implements Annotations {
      * Applications Annotations Constructor
      *
      * @param Next\Application\Application $application
-     *   Application to get Annotations from
+     *  Application to get Annotations from
      */
     public function __construct( ApplicationInterface $application ) {
 
@@ -53,7 +53,7 @@ class Applications implements Annotations {
      * Get Annotations Found
      *
      * @return array
-     *   Found Annotations
+     *  Found Annotations
      */
     public function getAnnotations() {
 
@@ -113,10 +113,10 @@ class Applications implements Annotations {
      * Domain Annotations start with !Domain
      *
      * @param Next\Components\Object $application
-     *   Application Object
+     *  Application Object
      *
      * @return array
-     *   Found Annotations
+     *  Found Annotations
      */
     private function matchDomainAnnotations( Object $application ) {
 
@@ -136,10 +136,10 @@ class Applications implements Annotations {
      * Path Annotations start with !Path
      *
      * @param Next\Components\Object $application
-     *   Application Object
+     *  Application Object
      *
      * @return string
-     *   Found Annotation
+     *  Found Annotation
      */
     private function matchPathAnnotation( Object $application ) {
 

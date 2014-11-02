@@ -28,14 +28,14 @@ class Connection extends Object implements Headers {
      * </code>
      *
      * @param string $data
-     *   Data to validate
+     *  Data to validate
      *
      * @return boolean
-     *   TRUE if valid and FALSE otherwise
+     *  TRUE if valid and FALSE otherwise
      *
      * @link
-     *   http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.10
-     *   RFC 2616 Section 14.10
+     *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.10
+     *  RFC 2616 Section 14.10
      */
     public function validate( $data ) {
         return ( strcasecmp( $data, 'close' ) == 0 || strcasecmp( $data, 'keep-alive' ) == 0 );

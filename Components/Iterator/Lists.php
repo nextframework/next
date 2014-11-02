@@ -20,10 +20,10 @@ class Lists extends AbstractCollection {
      * Get Object from specified Index
      *
      * @param integer $index
-     *   Offset to retrieve
+     *  Offset to retrieve
      *
      * @return Next\Components\Object|boolean
-     *   Object of given offset or FALSE if given offset doesn't exists
+     *  Object of given offset or FALSE if given offset doesn't exists
      */
     public function get( $index ) {
 
@@ -44,13 +44,13 @@ class Lists extends AbstractCollection {
      * Object String Rpresentation
      *
      * @param string $param
-     *   Object name (or any string) to find in Collection Lists
+     *  Object name (or any string) to find in Collection Lists
      *
      * @param integer|float|optional $level
-     *   Minimum similarity level
+     *  Minimum similarity level
      *
      * @return Next\Components\Object|boolean
-     *   Object found, if found and FALSE otherwise
+     *  Object found, if found and FALSE otherwise
      */
     public function find( $param, $level = 90 ) {
 
@@ -103,10 +103,10 @@ class Lists extends AbstractCollection {
      * Check Object acceptance
      *
      * @param Next\Components\Object $object
-     *   Object to have its acceptance in Collection checked
+     *  Object to have its acceptance in Collection checked
      *
      * @return boolean
-     *   Always TRUE, because a Collection Lists accepts everything
+     *  Always TRUE, because a Collection Lists accepts everything
      */
     protected function accept( Object $object ) {
 

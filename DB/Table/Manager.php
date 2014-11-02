@@ -36,6 +36,13 @@ class Manager extends Object {
     private $table;
 
     /**
+     * Query Builder
+     *
+     * @var Next\DB\Query\Builder $builder
+     */
+    private $builder;
+
+    /**
      * Data Source
      *
      * An associative array where the keys are Table Columns and
@@ -49,10 +56,10 @@ class Manager extends Object {
      * Table Manager Constructor
      *
      * @param Next\DB\Driver\Driver $driver
-     *   Connection Driver
+     *  Connection Driver
      *
      * @param Next\DB\Table\Table $table
-     *   Table Object
+     *  Table Object
      */
     public function __construct( Driver $driver, Table $table ) {
 
@@ -63,6 +70,8 @@ class Manager extends Object {
         $this -> driver =& $driver;
 
         $this -> table  =& $table;
+
+        $this -> builder = new Builder( $driver -> getRenderer() );
 
         /**
          * @internal Data Source
@@ -77,17 +86,17 @@ class Manager extends Object {
 
         // Extend Object Context to QueryBuilder Class
 
-        $this -> extend( new Invoker( $this, new Builder( $driver -> getRenderer() ) ) );
+        $this -> extend( new Invoker( $this, $this -> builder ) );
     }
 
     /**
      * Set Data Source
      *
      * @param array $source
-     *   Data Source
+     *  Data Source
      *
      * @return Next\DB\Table\Manager
-     *   Table Manager Object (Fluent Interface)
+     *  Table Manager Object (Fluent Interface)
      */
     public function setSource( array $source ) {
 
@@ -102,7 +111,7 @@ class Manager extends Object {
      * Return the number of rows affected by the last SQL statement
      *
      * @return integer
-     *   The number of rows affected
+     *  The number of rows affected
      *
      * @see Next\DB\Driver\Driver::lastInsertId()
      */
@@ -117,10 +126,10 @@ class Manager extends Object {
      * a RowSet
      *
      * @param string|integer|optional $fetchStyle
-     *   The Fetch Mode, accordingly to chosen Driver
+     *  The Fetch Mode, accordingly to chosen Driver
      *
      * @return Next\DB\Table\RowSet
-     *   RowSet Object with fetched data, if any
+     *  RowSet Object with fetched data, if any
      *
      * @see Next\DB\Statement\Statement::fetch()
      */
@@ -132,10 +141,10 @@ class Manager extends Object {
      * Return an array containing all of the result set rows
      *
      * @param string|integer|optional $fetchStyle
-     *   The Fetch Mode, accordingly to chosen Driver
+     *  The Fetch Mode, accordingly to chosen Driver
      *
      * @return Next\DB\Table\Row|Next\DB\Table\RowSet
-     *   RowSet Object with fetched data, if any
+     *  RowSet Object with fetched data, if any
      *
      * @see Next\DB\Statement\Statement::fetchAll()
      */
@@ -149,13 +158,13 @@ class Manager extends Object {
      * Select Records from Table
      *
      * @param string|array|optional $columns
-     *   Columns to be included in SELECT Statement
+     *  Columns to be included in SELECT Statement
      *
      * @return Next\DB\Table\Select
-     *   Select Object
+     *  Select Object
      */
-    public function select( $columns = Query::SQL_WILDCARD ) {
-        return new Select( $this -> driver -> getRenderer(), $columns );
+    public function select( $columns = Query::WILDCARD ) {
+        return $this -> builder -> select( $columns );
     }
 
     /**
@@ -170,10 +179,10 @@ class Manager extends Object {
      *   <p>Used by PDO_PGSQL, for example (according to manual)</p>
      *
      * @return integer|string
-     *   The ID fo last record inserted
+     *  The ID of last record inserted
      *
      * @throws Next\DB\Table\TableException
-     *   Trying to insert something without define any field
+     *  Trying to insert something without define any field
      */
     public function insert( $name = NULL ) {
 
@@ -183,19 +192,7 @@ class Manager extends Object {
             throw TableException::nothingToInsert();
         }
 
-        // Building SQL INSERT Statement
-
-        $this -> createQuery(
-
-            $this -> driver -> getRenderer() -> insert(
-
-                $this -> table -> getTable(), array_keys( $this -> source )
-            )
-        );
-
-        // Registering Placeholders Replacements
-
-        $this -> setReplacements( $this -> source );
+        $this -> builder -> insert( $this -> table -> getTable(), $this -> source );
 
         // Executing and returning the Last Insert ID...
 
@@ -208,10 +205,10 @@ class Manager extends Object {
      * Update Records in Table
      *
      * @return Next\DB\Table\Manager
-     *   Manager instance, in order to allow method chaining to build the final query
+     *  Manager instance, in order to allow method chaining to build the final query
      *
      * @throws Next\DB\Table\TableException
-     *   Trying to execute an UPDATE Statement without define any field
+     *  Trying to execute an UPDATE Statement without define any field
      */
     public function update() {
 
@@ -221,19 +218,11 @@ class Manager extends Object {
             throw TableException::nothingToUpdate();
         }
 
-        // Building SQL UPDATE Statement
-
-        $this -> createQuery(
-
-            $this -> driver -> getRenderer() -> update(
-
-                $this -> table -> getTable(), array_keys( $this -> source )
-            )
-        );
+        $this -> builder -> update( $this -> table -> getTable(), $this -> source );
 
         // Registering Placeholders Replacements
 
-        $this -> setReplacements( $this -> source );
+        $this -> addReplacements( $this -> source );
 
         return $this;
     }
@@ -242,16 +231,11 @@ class Manager extends Object {
      * Delete Records from Table
      *
      * @return Next\DB\Table\Manager
-     *   Manager instance, in order to allow method chaining to build the final query
+     *  Manager instance, in order to allow method chaining to build the final query
      */
     public function delete() {
 
-        // Building SQL DELETE Statement
-
-        $this -> createQuery(
-
-            $this -> driver -> getRenderer() -> delete( $this -> table -> getTable() )
-        );
+        $this -> builder -> delete( $this -> table -> getTable() );
 
         return $this;
     }
@@ -262,7 +246,7 @@ class Manager extends Object {
      * Get associated Table Object
      *
      * @return Next\DB\Table\Table
-     *   Table Object
+     *  Table Object
      */
     public function getTable() {
         return $this -> table;
@@ -272,7 +256,7 @@ class Manager extends Object {
      * Get Data Source
      *
      * @return array
-     *   Data Source
+     *  Data Source
      */
     public function getSource() {
         return $this -> source;
@@ -282,7 +266,7 @@ class Manager extends Object {
      * Get associated Connection Driver
      *
      * @return Next\DB\Driver\Driver
-     *   Connection Driver
+     *  Connection Driver
      */
     public function getDriver() {
         return $this -> driver;
@@ -294,20 +278,19 @@ class Manager extends Object {
      * Wrapper method for Next\DB\Driver\Driver::prepare() and Next\DB\Statement\Statement:execute()
      *
      * @return Next\DB\Statement\Statement
-     *   Statement Object
+     *  Statement Object
      *
      * @throws Next\DB\Table\TableException
-     *   SQL Statement is empty
+     *  SQL Statement is empty
      *
      * @throws Next\DB\Table\TableException
-     *   A DriverException or a StatementException is caught
+     *  A DriverException or a StatementException is caught
      */
     private function execute() {
 
         $query = $this -> assemble();
 
         if( empty( $query ) ) {
-
             throw TableException::logic( 'Query is empty' );
         }
 

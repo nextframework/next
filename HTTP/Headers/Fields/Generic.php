@@ -18,7 +18,7 @@ class Generic extends AbstractField {
      * Get Header Field Validator
      *
      * @return Next\Validate\Validate
-     *   Associated Validator
+     *  Associated Validator
      */
     protected function getValidator() {
         return new \Next\Validate\HTTP\Headers\Generic;
@@ -28,7 +28,7 @@ class Generic extends AbstractField {
      * Set Up Header Options
      *
      * @return array
-     *   Header Field Validation Options
+     *  Header Field Validation Options
      */
     public function setOptions() {
         return array( 'name' => 'Generic', 'acceptMultiples' => TRUE, 'preserveWhitespace' => TRUE );

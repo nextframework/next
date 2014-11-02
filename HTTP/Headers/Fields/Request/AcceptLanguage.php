@@ -23,7 +23,7 @@ class AcceptLanguage extends AbstractField implements Request {
      * Fix Language Abbreviation and/or Country Code cases
      *
      * @param string $data
-     *   Data to manipulate after validation
+     *  Data to manipulate after validation
      *
      * @return string Validated Data
      */
@@ -66,7 +66,7 @@ class AcceptLanguage extends AbstractField implements Request {
      * Get Header Field Validator
      *
      * @return Next\Validate\Validate
-     *   Associated Validator
+     *  Associated Validator
      */
     protected function getValidator() {
         return new \Next\Validate\HTTP\Headers\Request\AcceptLanguage;
@@ -76,7 +76,7 @@ class AcceptLanguage extends AbstractField implements Request {
      * Set Up Header Options
      *
      * @return array
-     *   Header Field Validation Options
+     *  Header Field Validation Options
      */
     public function setOptions() {
         return array( 'name' => 'Accept-Language', 'acceptMultiples' => TRUE );

@@ -20,10 +20,10 @@ class All implements Style {
      * Build Pages Range
      *
      * @param Next\Paginate\Paginator $paginator
-     *   Paginator Object
+     *  Paginator Object
      *
      * @return array
-     *   Range of pages
+     *  Range of pages
      */
     public function buildRange( Paginator $paginator ) {
         return range( 1, count( $paginator ) );

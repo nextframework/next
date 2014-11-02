@@ -28,13 +28,13 @@ class Standard implements AutoLoadable {
      * PHP-Array Map File AutoLoader
      *
      * @param string $file
-     *   PHP-Array Map File to work with
+     *  PHP-Array Map File to work with
      *
      * @throws Next\LoaderException
-     *   PHP-Array Filename was not set
+     *  PHP-Array Filename was not set
      *
      * @throws Next\LoaderException
-     *   PHP-Array File is not readable
+     *  PHP-Array File is not readable
      */
     public function __construct( $file ) {
 
@@ -77,7 +77,7 @@ class Standard implements AutoLoadable {
      * AutoLoading Function
      *
      * @return Closure
-     *   An anonymous function to be invoked as SPL Autoload callback
+     *  An anonymous function to be invoked as SPL Autoload callback
      */
     public function call() {
 

@@ -35,7 +35,7 @@ interface Driver {
      * Execute an SQL statement
      *
      * @param string $statement
-     *   Query Statement
+     *  Query Statement
      *
      * @see Next\DB\Statement\Statement
      */
@@ -45,7 +45,7 @@ interface Driver {
      * Prepare an SQL Statement
      *
      * @param string $statement
-     *   Statement to be prepared
+     *  Statement to be prepared
      *
      * @see Next\DB\Statement\Statement
      */

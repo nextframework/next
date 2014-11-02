@@ -16,10 +16,10 @@ interface Handler {
      * Open Session
      *
      * @param string $savePath
-     *   Session Save Path
+     *  Session Save Path
      *
      * @param string $name
-     *   Session Name
+     *  Session Name
      */
     public function open( $savePath, $name );
 
@@ -32,7 +32,7 @@ interface Handler {
      * Read Session Data
      *
      * @param string $id
-     *   Session Data ID
+     *  Session Data ID
      */
     public function read( $id );
 
@@ -40,13 +40,13 @@ interface Handler {
      * Write Session Data
      *
      * @param string $id
-     *   Session Data ID
+     *  Session Data ID
      *
      * @param string $data
-     *   Data to Store
+     *  Data to Store
      *
      * @param integer $expires
-     *   Expiration Timestamp
+     *  Expiration Timestamp
      */
     public function write( $id, $data, $expires );
 
@@ -54,7 +54,7 @@ interface Handler {
      * Destroy Session Data
      *
      * @param string $id
-     *   Session Data ID
+     *  Session Data ID
      */
     public function destroy( $id );
 
@@ -64,7 +64,7 @@ interface Handler {
      * Garbage Collector to delete too old Session Data
      *
      * @param integer $maxlifetime
-     *   Maximum Lifetime of a Session Data
+     *  Maximum Lifetime of a Session Data
      */
     public function renew( $maxlifetime );
 }

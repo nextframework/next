@@ -19,7 +19,7 @@ interface Adapter extends Cacheable {
      * Get Translation Table
      *
      * @param string|optional $key
-     *   Cache Key
+     *  Cache Key
      */
     public function getTranslationTable( $key = NULL );
 
@@ -27,7 +27,7 @@ interface Adapter extends Cacheable {
      * Set Translate Adapter Stream
      *
      * @param Next\HTTP\Stream\Stream $stream
-     *   HTTP Stream from which data will be read
+     *  HTTP Stream from which data will be read
      */
     public function setStream( Stream $stream );
 }

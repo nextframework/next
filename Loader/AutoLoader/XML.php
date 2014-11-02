@@ -28,13 +28,13 @@ class XML implements AutoLoadable {
      * XML Map File AutoLoader
      *
      * @param string $file
-     *   XML Map File to work with
+     *  XML Map File to work with
      *
      * @throws Next\LoaderException
-     *   XML Filename was not set
+     *  XML Filename was not set
      *
      * @throws Next\LoaderException
-     *   XML File is not readable
+     *  XML File is not readable
      */
     public function __construct( $file ) {
 
@@ -77,7 +77,7 @@ class XML implements AutoLoadable {
      * AutoLoading Function
      *
      * @return Closure
-     *   An anonymous function to be invoked as SPL Autoload callback
+     *  An anonymous function to be invoked as SPL Autoload callback
      */
     public function call() {
 

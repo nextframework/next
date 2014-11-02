@@ -18,7 +18,7 @@ interface Statement {
      * Execute a prepared statement.
      *
      * @param array|optional $params
-     *   Values to bind to parameter placeholders.
+     *  Values to bind to parameter placeholders.
      */
     public function execute( array $params = array() );
 
@@ -26,13 +26,13 @@ interface Statement {
      * Fetch the next row from a ResultSet
      *
      * @param integer|optional $style
-     *   Fetch mode for this fetch operation
+     *  Fetch mode for this fetch operation
      *
      * @param integer|optional $cursor
-     *   Determines which row will be returned to the caller
+     *  Determines which row will be returned to the caller
      *
      * @param integer|optional $offset
-     *   Controls the cursor orientation
+     *  Controls the cursor orientation
      */
     public function fetch( $style = null, $cursor = null, $offset = null );
 
@@ -40,7 +40,7 @@ interface Statement {
      * Return an array containing all of the ResultSet rows
      *
      * @param integer|optional $style
-     *   Fetch mode for this fetch operation
+     *  Fetch mode for this fetch operation
      */
     public function fetchAll( $style = null );
 
@@ -48,7 +48,7 @@ interface Statement {
      * Return a single column from the next row of a ResultSet
      *
      * @param integer|optional $column
-     *   Position of the column to fetch
+     *  Position of the column to fetch
      */
     public function fetchColumn( $column = 0 );
 
@@ -73,10 +73,10 @@ interface Statement {
      * Set the default Fetch Mode for Statement
      *
      * @param integer|optional $mode
-     *   The Fetch Mode
+     *  The Fetch Mode
      *
      * @param mixed|array|optional $params
-     *   Additional Parameters
+     *  Additional Parameters
      */
     public function setFetchMode( $mode, $params = NULL );
 

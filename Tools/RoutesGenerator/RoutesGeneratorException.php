@@ -24,7 +24,7 @@ class RoutesGeneratorException extends \Next\Components\Debug\Exception {
      *
      * @var integer
      */
-    const NO_ROUTES       =    0x00000792;
+    const NO_ROUTES           =    0x00000792;
 
     /**
      * Invalid Route Structure
@@ -70,10 +70,10 @@ class RoutesGeneratorException extends \Next\Components\Debug\Exception {
      * to distinguish Action Methods from Common Methods
      *
      * @param array $args
-     *   Variable list of arguments to build final message
+     *  Variable list of arguments to build final message
      *
      * @return Next\Tools\RoutesGenerator\RoutesGeneratorException
-     *   Exception for an Action Methods without Routes
+     *  Exception for an Action Methods without Routes
      */
     public static function noRoutes( array $args ) {
 
@@ -96,10 +96,10 @@ class RoutesGeneratorException extends \Next\Components\Debug\Exception {
      * required components
      *
      * @param array $args
-     *   Variable list of arguments to build final message
+     *  Variable list of arguments to build final message
      *
      * @return Next\Tools\RoutesGenerator\RoutesGeneratorException
-     *   Exception for conceptual invalid Route structure
+     *  Exception for conceptual invalid Route structure
      */
     public static function invalidRouteStructure( array $args ) {
 
@@ -122,10 +122,10 @@ class RoutesGeneratorException extends \Next\Components\Debug\Exception {
      * Defined Route URI is mal-formed because violates hierarchy concepts
      *
      * @param array $args
-     *   Variable list of arguments to build final message
+     *  Variable list of arguments to build final message
      *
      * @return Next\Tools\RoutesGenerator\RoutesGeneratorException
-     *   Exception for malformed Routes
+     *  Exception for malformed Routes
      */
     public static function malformedRoute( array $args ) {
 
@@ -148,10 +148,10 @@ class RoutesGeneratorException extends \Next\Components\Debug\Exception {
      * Define Route URI was already assigned to another Controller Action
      *
      * @param array $args
-     *   Variable list of arguments to build final message
+     *  Variable list of arguments to build final message
      *
      * @return Next\Tools\RoutesGenerator\RoutesGeneratorException
-     *   Exception for duplicated Routes
+     *  Exception for duplicated Routes
      */
     public static function duplicatedRoute( array $args ) {
 
@@ -175,10 +175,10 @@ class RoutesGeneratorException extends \Next\Components\Debug\Exception {
      * required components
      *
      * @param array $args
-     *   Variable list of arguments to build final message
+     *  Variable list of arguments to build final message
      *
      * @return Next\Tools\RoutesGenerator\RoutesGeneratorException
-     *   Exception for conceptual invalid Route Arguments structure
+     *  Exception for conceptual invalid Route Arguments structure
      */
     public static function malformedArguments( array $args ) {
 
@@ -200,10 +200,10 @@ class RoutesGeneratorException extends \Next\Components\Debug\Exception {
      * Something is going wrong when trying to record found Routes
      *
      * @param array $args
-     *   Variable list of arguments to build final message
+     *  Variable list of arguments to build final message
      *
      * @return Next\Tools\RoutesGenerator\RoutesGeneratorException
-     *   Exception for Routes writability failure
+     *  Exception for Routes writability failure
      */
     public static function recordingFailure( array $args ) {
 

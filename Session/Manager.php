@@ -73,11 +73,11 @@ class Manager {
      * Session Object Starter
      *
      * @return Session
-     *   Session Instance
+     *  Session Instance
      *
      * @throws Next\Session\SessionException
-     *   Session has been already initialized, through a manually
-     *   called session_start()
+     *  Session has been already initialized, through a manually
+     *  called session_start()
      */
     public static function start() {
 
@@ -126,14 +126,14 @@ class Manager {
      * Session Starter
      *
      * @param string|optional $name
-     *   Optional Session Name
+     *  Optional Session Name
      *
      * @param string|optional $id
-     *   Optional Session ID.
-     *   Mostly used by custom Session Handlers
+     *  Optional Session ID.
+     *  Mostly used by custom Session Handlers
      *
      * @throws Next\Session\SessionException
-     *   session_start() failed, returning FALSE
+     *  session_start() failed, returning FALSE
      */
     public function init( $name = NULL, $id = NULL ) {
 
@@ -207,7 +207,7 @@ class Manager {
      * Regenerate Session ID
      *
      * @return Session
-     *   Session Object (Fluent Interface)
+     *  Session Object (Fluent Interface)
      */
     public function regenerateID() {
 
@@ -231,7 +231,7 @@ class Manager {
      * Get current Session Data
      *
      * @return string
-     *   Encoded Session Data
+     *  Encoded Session Data
      */
     public function getSessionData() {
         return session_encode();
@@ -241,7 +241,7 @@ class Manager {
      * Get Handlers Management Object
      *
      * @return Next\Session\Handlers
-     *   Session Handler Management Object
+     *  Session Handler Management Object
      */
     public function getHandlersManager() {
         return $this -> handlers;
@@ -253,7 +253,7 @@ class Manager {
      * Get Session Name
      *
      * @return string
-     *   Session Name
+     *  Session Name
      */
     public function getSessionName() {
         return self::$name;
@@ -263,7 +263,7 @@ class Manager {
      * Set Session Name
      *
      * @param string $sessionName
-     *   Session Name
+     *  Session Name
      */
     public static function setSessionName( $sessionName ) {
 
@@ -276,7 +276,7 @@ class Manager {
      * Get Session ID
      *
      * @return string
-     *   Session ID
+     *  Session ID
      */
     public function getSessionID() {
         return self::$ID;
@@ -286,7 +286,7 @@ class Manager {
      * Set Session ID
      *
      * @param string $id
-     *   Session ID
+     *  Session ID
      */
     public static function setSessionID( $id ) {
 
@@ -299,7 +299,7 @@ class Manager {
      * Get Session Cache Lifetime
      *
      * @return integer
-     *   Session Max Lifetime
+     *  Session Max Lifetime
      */
     public function getSessionLifetime() {
         return self::$lifetime;
@@ -309,7 +309,7 @@ class Manager {
      * Set Session Cache Lifetime
      *
      * @param integer $lifetime
-     *   Session Lifetime
+     *  Session Lifetime
      */
     public function setSessionLifetime( $lifetime ) {
 
@@ -322,7 +322,7 @@ class Manager {
      * Get Session Save Path
      *
      * @return string
-     *   Session SavePath
+     *  Session SavePath
      */
     public function getSessionSavePath() {
         return $this -> savePath;
@@ -332,10 +332,10 @@ class Manager {
      * Set Session Save Path
      *
      * @param string $savePath
-     *   Session Save Path
+     *  Session Save Path
      *
      * @return Session
-     *   Session Object (Fluent Interface)
+     *  Session Object (Fluent Interface)
      */
     public function setSessionSavePath( $savePath ) {
 

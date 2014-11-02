@@ -19,7 +19,7 @@ class Actions extends \FilterIterator implements Annotations {
      *
      * @var string
      */
-    const FRAMEWORK        =    'Next';
+    const FRAMEWORK       =    'Next';
 
     /**
      * Routes Token
@@ -33,13 +33,13 @@ class Actions extends \FilterIterator implements Annotations {
      *
      * @var string
      */
-    const ARGS_PREFIX    =    '!Argument';
+    const ARGS_PREFIX     =    '!Argument';
 
     /**
      * Controller Actions Annotations Constructor
      *
      * @param Iterator $iterator
-     *   Actions Iterator
+     *  Actions Iterator
      *
      * @see https://bugs.php.net/bug.php?id=52560
      */
@@ -56,7 +56,7 @@ class Actions extends \FilterIterator implements Annotations {
      * Get Annotations Found
      *
      * @return array
-     *   Found annotations
+     *  Found annotations
      */
     public function getAnnotations() {
 
@@ -142,7 +142,7 @@ class Actions extends \FilterIterator implements Annotations {
      * </ul>
      *
      * @return boolean
-     *   TRUE if annotation is acceptable as Action Annotation and FALSE otherwise
+     *  TRUE if annotation is acceptable as Action Annotation and FALSE otherwise
      */
     public function accept() {
 
@@ -160,13 +160,13 @@ class Actions extends \FilterIterator implements Annotations {
      * Find Actions Annotations
      *
      * @param ReflectionMethod $action
-     *   Action to get Routes Annotations from
+     *  Action to get Routes Annotations from
      *
      * @param string $annotationPrefix
      *  Annotation prefix used to distinguish an API doc-comment from an Action Annotation
      *
      * @return array
-     *   Found Annotations
+     *  Found Annotations
      */
     private function findActionAnnotations( \ReflectionMethod $action, $annotationPrefix ) {
 

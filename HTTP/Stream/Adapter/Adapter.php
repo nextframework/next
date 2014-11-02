@@ -58,7 +58,7 @@ interface Adapter extends \SeekableIterator {
      * Set Adapter Context
      *
      * @param Next\HTTP\Stream\Context\Context $context
-     *   Stream Context
+     *  Stream Context
      */
     public function setContext( Context $context );
 

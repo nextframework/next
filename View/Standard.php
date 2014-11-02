@@ -2,12 +2,12 @@
 
 namespace Next\View;
 
-use Next\View\ViewException;                           # View Exception Class
+use Next\View\ViewException;                # View Exception Class
 use Next\DB\Table\DataGatewayException;     # Data Gateway Exception Class
-use Next\Application\Application;                     # Application Interface
-use Next\Components\Object;                           # Object Class
-use Next\View\CompositeQueue;                      # Composite View Queue
-use Next\File\Tools;                                            # File Tools
+use Next\Application\Application;           # Application Interface
+use Next\Components\Object;                 # Object Class
+use Next\View\CompositeQueue;               # Composite View Queue
+use Next\File\Tools;                        # File Tools
 
 /**
  * Standard View Engine Class
@@ -174,7 +174,7 @@ class Standard extends Object implements View {
      * View Constructor
      *
      * @param Next\Application\Application $application
-     *   Application Object
+     *  Application Object
      */
     public function __construct( Application $application = NULL ) {
 
@@ -211,7 +211,7 @@ class Standard extends Object implements View {
      * If, for some reason, it's already empty, simply create them.
      *
      * @return Next\View\View
-     *   View Object (Fluent Interface)
+     *  View Object (Fluent Interface)
      */
     public function resetDefaults() {
 
@@ -230,23 +230,23 @@ class Standard extends Object implements View {
      * Add a new Composite View to be rendered
      *
      * @param Next\View\View $view
-     *   Composite View to be added
+     *  Composite View to be added
      *
      * @param integer $priority
      *
-     *   Priority of the Composite View
+     *  Priority of the Composite View
      *
-     *   Priorities higher than this class priority,
-     *   will be prepended to Response.
+     *  Priorities higher than this class priority,
+     *  will be prepended to Response.
      *
-     *   Priorities lower than this class priority,
-     *   will be appended to Response
+     *  Priorities lower than this class priority,
+     *  will be appended to Response
      *
      * @return Next\View\View
-     *   View Object (Fluent Interface)
+     *  View Object (Fluent Interface)
      *
      * @throws Next\View\ViewException
-     *   Composite View has an invalid priority
+     *  Composite View has an invalid priority
      */
     public function addView( View $view, $priority = 0 ) {
 
@@ -266,13 +266,13 @@ class Standard extends Object implements View {
      * constant
      *
      * @param integer $priority
-     *   Partial View Priority
+     *  Partial View Priority
      *
      * @return Next\View\View
      *
      * @throws Next\View\ViewException
-     *   Given priority is the same of Main View Priority, defined
-     *   in PRIORITY constant
+     *  Given priority is the same of Main View Priority, defined
+     *  in PRIORITY constant
      */
     public function setPriority( $priority ) {
 
@@ -291,7 +291,7 @@ class Standard extends Object implements View {
      * Get View Priority
      *
      * @return integer
-     *   Partial View Priority
+     *  Partial View Priority
      */
     public function getPriority() {
         return $this -> _priority;
@@ -315,10 +315,10 @@ class Standard extends Object implements View {
      * automatically
      *
      * @param string $extension
-     *   Template ViewS File Extensions
+     *  Template ViewS File Extensions
      *
      * @return Next\View\View
-     *   View Object (Fluent Interface)
+     *  View Object (Fluent Interface)
      */
     public function setExtension( $extension ) {
 
@@ -331,7 +331,7 @@ class Standard extends Object implements View {
      * Get default File Extension
      *
      * @return string
-     *   Template Views File Extensions
+     *  Template Views File Extensions
      */
     public function getExtension() {
         return $this -> _extension;
@@ -343,10 +343,10 @@ class Standard extends Object implements View {
      * Set a basepath to be prepended in Template Files Location
      *
      * @param string $path
-     *   Template Views Bsepath
+     *  Template Views Bsepath
      *
      * @return Next\View\View
-     *   View Object (Fluent Interface)
+     *  View Object (Fluent Interface)
      */
     public function setBasepath( $path ) {
 
@@ -359,7 +359,7 @@ class Standard extends Object implements View {
      * Get current Basepath
      *
      * @return string
-     *   Template Views Files Basepath
+     *  Template Views Files Basepath
      */
     public function getBasepath() {
         return $this -> _basepath;
@@ -382,10 +382,10 @@ class Standard extends Object implements View {
      *       specially when your Template Files are in a different directory levels than your Controllers
      *
      * @param string $path
-     *   Template Views Optional Subpath
+     *  Template Views Optional Subpath
      *
      * @return Next\View\View
-     *   View Object (Fluent Interface)
+     *  View Object (Fluent Interface)
      */
     public function setSubpath( $path ) {
 
@@ -405,7 +405,7 @@ class Standard extends Object implements View {
      * Get current Subpath
      *
      * @return string
-     *   Templates Views Files Subpath
+     *  Templates Views Files Subpath
      */
     public function getSubpath() {
         return $this -> _subpath;
@@ -415,10 +415,10 @@ class Standard extends Object implements View {
      * Add more paths to Template Files Location
      *
      * @param string $path
-     *   Another Path to locate Template Views
+     *  Another Path to locate Template Views
      *
      * @return Next\View\View
-     *   View Object (Fluent Interface)
+     *  View Object (Fluent Interface)
      */
     public function addPath( $path ) {
 
@@ -438,7 +438,7 @@ class Standard extends Object implements View {
      * Get current paths
      *
      * @return array
-     *   List of paths to search Template Views
+     *  List of paths to search Template Views
      */
     public function getPaths() {
         return $this -> _paths;
@@ -449,10 +449,10 @@ class Standard extends Object implements View {
      * for auto-detection
      *
      * @param boolean $flag
-     *   Value to define
+     *  Value to define
      *
      * @return Next\View\View
-     *   View Object (Fluent Interface)
+     *  View Object (Fluent Interface)
      */
     public function setUseFileSpec( $flag ) {
 
@@ -465,13 +465,13 @@ class Standard extends Object implements View {
      * Set a FileSpec to be used
      *
      * @param string $spec
-     *   FileSpec for automatically find the proper Template View
+     *  FileSpec for automatically find the proper Template View
      *
      * @return Next\View\View
-     *   View Object (Fluent Interface)
+     *  View Object (Fluent Interface)
      *
      * @throws Next\View\ViewException
-     *   Given FileSpec is invalid
+     *  Given FileSpec is invalid
      */
     public function setFileSpec( $spec ) {
 
@@ -488,7 +488,7 @@ class Standard extends Object implements View {
      * Get FileSpec definition
      *
      * @return string
-     *   FileSpec Definition
+     *  FileSpec Definition
      */
     public function getFileSpec() {
         return $this -> _fileSpec;
@@ -500,10 +500,10 @@ class Standard extends Object implements View {
      * Redefine Template Variables behavior
      *
      * @param boolean $behavior
-     *   Flag to set: TRUE, they'll be returned. FALSE they'll echoed
+     *  Flag to set: TRUE, they'll be returned. FALSE they'll echoed
      *
      * @return Next\View\View
-     *   View Object (Fluent Interface)
+     *  View Object (Fluent Interface)
      */
     public function setVariablesBehavior( $behavior ) {
 
@@ -516,7 +516,7 @@ class Standard extends Object implements View {
      * Get Variable Behavior
      *
      * @return boolean
-     *   Template Variables behavior
+     *  Template Variables behavior
      */
     public function getVariablesBehavior() {
         return $this -> _returnVariables;
@@ -526,17 +526,17 @@ class Standard extends Object implements View {
      * Assign one or more Template Variables
      *
      * @param string|array $tplVar
-     *   Template Variable Name or an array of Variables
+     *  Template Variable Name or an array of Variables
      *
      * @param mixed|optional $value
-     *   Value for Template Variable when <strong>$tplVar</strong>
-     *   is not an array
+     *  Value for Template Variable when <strong>$tplVar</strong>
+     *  is not an array
      *
      * @return Next\View\View
-     *   View Object (Fluent Interface)
+     *  View Object (Fluent Interface)
      *
      * @throws Next\View\ViewException
-     *   Chosen Template Variable is defined as reserved
+     *  Chosen Template Variable is defined as reserved
      */
     public function assign( $tplVar, $value = NULL ) {
 
@@ -577,10 +577,10 @@ class Standard extends Object implements View {
      * Set Default Template
      *
      * @param string $file
-     *   Default Template View File
+     *  Default Template View File
      *
      * @return Next\View\View
-     *   View Object (Fluent Interface)
+     *  View Object (Fluent Interface)
      */
     public function setDefaultTemplate( $file ) {
 
@@ -593,7 +593,7 @@ class Standard extends Object implements View {
      * Get Default Template
      *
      * @return string
-     *   Default Template View File
+     *  Default Template View File
      */
     public function getDefaultTemplate() {
         return $this -> _defaultTemplate;
@@ -603,17 +603,17 @@ class Standard extends Object implements View {
      * Render the page, outputs the buffer
      *
      * @param string|optional $name
-     *   Template View File to render. If NULL, we'll try to find it
+     *  Template View File to render. If NULL, we'll try to find it
      *
      * @param boolean|optional $search
-     *   Flag to condition whether or not we should try to find the
-     *   proper Template View File automatically
+     *  Flag to condition whether or not we should try to find the
+     *  proper Template View File automatically
      *
      * @return Next\HTTP\Response
-     *   Response Object
+     *  Response Object
      *
      * @throws Next\View\ViewException
-     *   Thrown if:
+     *  Thrown if:
      *
      *   - Unable to find Template View File
      *   - Any DataGatewayException is caught
@@ -631,7 +631,7 @@ class Standard extends Object implements View {
              * - It shouldn't, which means Next\View\View::disableRender() was called
              *
              * - Any kind of output was already sent, like a debugging purposes
-             *   var_dump() or even a ControllerException which was caught
+             *  var_dump() or even a ControllerException which was caught
              */
             if( ! $this -> _shouldRender || ob_get_length() != 0 ) {
                 return $response;
@@ -703,7 +703,7 @@ class Standard extends Object implements View {
      * Disable Rendering process
      *
      * @return Next\View\View
-     *   View Object (Fluent Interface)
+     *  View Object (Fluent Interface)
      */
     public function disableRender() {
 
@@ -720,13 +720,13 @@ class Standard extends Object implements View {
      * @note The PRESENCE of key is tested, not its value
      *
      * @param string $tplVar
-     *   Template Variable to be tested
+     *  Template Variable to be tested
      *
      * @return boolean
-     *   TRUE if desired Template Variable exists and FALSE otherwise
+     *  TRUE if desired Template Variable exists and FALSE otherwise
      *
      * @throws Next\View\ViewException
-     *   Testing existence of internal properties
+     *  Testing existence of internal properties
      */
     public function __isset( $tplVar ) {
 
@@ -745,13 +745,13 @@ class Standard extends Object implements View {
      * @note The PRESENCE of key is tested before unset it, not its value
      *
      * @param string $tplVar
-     *   Template Variable to be deleted
+     *  Template Variable to be deleted
      *
      * @throws Next\View\ViewException
-     *   Trying to unset a undefined Template Variable
+     *  Trying to unset a undefined Template Variable
      *
      * @throws Next\View\ViewException
-     *   Trying to unset internal properties
+     *  Trying to unset internal properties
      */
     public function __unset( $tplVar ) {
 
@@ -775,13 +775,13 @@ class Standard extends Object implements View {
      * </p>
      *
      * @param string $tplVar
-     *   Template Variable Name
+     *  Template Variable Name
      *
      * @param mixed|optional $value
-     *   Template Variable Value
+     *  Template Variable Value
      *
      * @throws Next\View\ViewException
-     *   Trying to set value for internal properties (prefixed with "_")
+     *  Trying to set value for internal properties (prefixed with "_")
      */
     public function __set( $tplVar, $value = NULL ) {
 
@@ -812,7 +812,7 @@ class Standard extends Object implements View {
      *
      * @param string $tplVar]
      *
-     *   Template Variable to be displayed or retrieved, accordingly to
+     *  Template Variable to be displayed or retrieved, accordingly to
      *   <strong>$_returnVariables</strong> property
      *
      * @return mixed|void
@@ -829,11 +829,11 @@ class Standard extends Object implements View {
      *   </p>
      *
      * @throws Next\View\ViewException
-     *   Trying to access internal properties (prefixed with "_" without
-     *   use their correct accessors
+     *  Trying to access internal properties (prefixed with "_" without
+     *  use their correct accessors
      *
      * @throws Next\View\ViewException
-     *   Trying to get a undefined Template Variable
+     *  Trying to get a undefined Template Variable
      */
     public function __get( $tplVar ) {
 
@@ -867,16 +867,16 @@ class Standard extends Object implements View {
      * Find given Template View file in defined Views Directories
      *
      * @param string|optional $file
-     *   Template View File
+     *  Template View File
      *
      * @return string
-     *   Template View Filepath
+     *  Template View Filepath
      *
      * @throws Next\View\ViewException
-     *   There are no directories assigned to iterate and search the file
+     *  There are no directories assigned to iterate and search the file
      *
      * @throws Next\View\ViewException
-     *   No file could be found
+     *  No file could be found
      */
     private function findFile( $file = NULL ) {
 
@@ -978,11 +978,11 @@ class Standard extends Object implements View {
      * Find the Template View File from FileSpec
      *
      * @return string
-     *   Template View FilePath from defined FileSpec
+     *  Template View FilePath from defined FileSpec
      *
      * @see
-     *   Next\Controller\Router\Router::getController()
-     *   Next\Controller\Router\Router::getAction()
+     *  Next\Controller\Router\Router::getController()
+     *  Next\Controller\Router\Router::getAction()
      */
     private function findFileBySpec() {
 

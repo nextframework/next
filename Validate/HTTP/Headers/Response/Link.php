@@ -67,14 +67,14 @@ class Link extends Object implements Headers {
      * </code>
      *
      * @param string $data
-     *   Data to validate
+     *  Data to validate
      *
      * @return boolean
-     *   TRUE if valid and FALSE otherwise
+     *  TRUE if valid and FALSE otherwise
      *
      * @link
-     *   http://tools.ietf.org/html/rfc2183#section-2
-     *   RFC 2183 Section 2
+     *  http://tools.ietf.org/html/rfc2183#section-2
+     *  RFC 2183 Section 2
      */
     public function validate( $data ) {
 

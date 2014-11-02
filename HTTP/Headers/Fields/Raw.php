@@ -18,7 +18,7 @@ class Raw extends AbstractField {
      * Get Header Field Validator
      *
      * @return Next\Validate\Validate
-     *   Associated Validator
+     *  Associated Validator
      */
     protected function getValidator() {
         return new \Next\Validate\HTTP\Headers\Raw;
@@ -28,7 +28,7 @@ class Raw extends AbstractField {
      * Set Up Header Options
      *
      * @return array
-     *   Header Field Validation Options
+     *  Header Field Validation Options
      */
     public function setOptions() {
         return array( 'name' => 'Raw', 'acceptMultiples' => FALSE, 'preserveWhitespace' => TRUE );

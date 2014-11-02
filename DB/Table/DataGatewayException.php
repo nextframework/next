@@ -32,7 +32,7 @@ class DataGatewayException extends \Next\Components\Debug\Exception {
      * Trying to access a Row object directly when the RowSet has multiple Rows
      *
      * @return Next\DB\Table\TableException
-     *   Exception when a Row object is accessed in a multiple Rows RowSet
+     *  Exception when a Row object is accessed in a multiple Rows RowSet
      */
     public static function accessViolation() {
 

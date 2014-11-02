@@ -23,14 +23,14 @@ class Tools {
      * <p><strong>Usage:</strong></p>
      *
      * <code>
-     *   Tools::cleanAndInvertPath( '   path\with\backslashes' ) // path/with/backslashes (without left spaces)
+     *  Tools::cleanAndInvertPath( '   path\with\backslashes' ) // path/with/backslashes (without left spaces)
      * </code>
      *
      * @param string $path
-     *   Path to work with
+     *  Path to work with
      *
      * @return string
-     *   Cleaned and fixed path
+     *  Cleaned and fixed path
      */
     public static function cleanAndInvertPath( $path ) {
 
@@ -46,6 +46,22 @@ class Tools {
     }
 
     /**
+     * Quotes a string, by wrapping it with given identifier
+     *
+     * @param  string $string
+     *  String to quote
+     *
+     * @param  string $identifier
+     *  Quote identifier
+     *
+     * @return string
+     *  Input string, quoted
+     */
+    public static function quote( $string, $identifier = '"' ) {
+        return sprintf( '%s%s%s', $identifier, $string, $identifier );
+    }
+
+    /**
      * Delete file(s) and/or folder(s)
      *
      * <p>
@@ -58,33 +74,33 @@ class Tools {
      * <code>
      *   // Delete all files but keep given directory empty
      *
-     *   Tools::delete( 'path/to/delete/files' )
+     *  Tools::delete( 'path/to/delete/files' )
      *
      *   // Delete 'file1.txt' and 'file2.txt' from given directory if exists
      *
-     *   Tools::delete( 'path/to/delete/files', array( 'file1.txt', 'file2.txt' ) )
+     *  Tools::delete( 'path/to/delete/files', array( 'file1.txt', 'file2.txt' ) )
      *
      *   // Delete 'file1.txt' and 'file2.txt', if exists, from and inside 'TXT' subdirectory yif exists
      *
-     *   Tools::delete( 'path/to/delete/files', array( 'TXT' => array( 'file1.txt', 'file2.txt' ) ) )
+     *  Tools::delete( 'path/to/delete/files', array( 'TXT' => array( 'file1.txt', 'file2.txt' ) ) )
      *
      *   // Delete all files and remove empty directory
      *
-     *   Tools::delete( 'path/to/delete/files', array, TRUE )
+     *  Tools::delete( 'path/to/delete/files', array, TRUE )
      * </code>
      *
      * @param string $path
-     *   Directory to work with
+     *  Directory to work with
      *
      * @param array|optional $files
-     *   A list of files to be deleted. If empty, all files found will
+     *  A list of files to be deleted. If empty, all files found will
      *
      * @param boolean|optional $destroy
-     *   Flag conditioning is given directory should be destroyed if empty,
-     *   after the process
+     *  Flag conditioning is given directory should be destroyed if empty,
+     *  after the process
      *
      * @return boolean
-     *   TRUE on success and FALSE otherwise
+     *  TRUE on success and FALSE otherwise
      */
     public static function delete( $path, array $files = array(), $destroy = FALSE ) {
 

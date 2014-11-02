@@ -18,10 +18,10 @@ final class String extends AbstractTypes {
      * Check whether or not given value is acceptable by datatype class
      *
      * @param mixed $value
-     *   Value to set
+     *  Value to set
      *
      * @return boolean
-     *   TRUE if given value is of the type string and FALSE otherwise
+     *  TRUE if given value is of the type string and FALSE otherwise
      */
     protected function accept( $value ) {
         return gettype( $value ) == 'string';
@@ -31,7 +31,7 @@ final class String extends AbstractTypes {
      * Prototype resources to object
      *
      * @param mixed|optional $value
-     *   An optional value to be used by prototyped resource
+     *  An optional value to be used by prototyped resource
      */
     protected function prototype( $s = NULL ) {
 

@@ -30,10 +30,10 @@ class ContentEncoding implements Validate {
      * Validates given Content Encoding
      *
      * @param string $data
-     *   Data to validate
+     *  Data to validate
      *
      * @return boolean
-     *   TRUE if valid and FALSE otherwise
+     *  TRUE if valid and FALSE otherwise
      */
     public function validate( $data ) {
         return ( preg_match( sprintf( '/^%s$/i', self::ENCODING ), $data ) != 0 );

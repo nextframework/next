@@ -45,7 +45,7 @@ class ExceptionController extends AbstractController {
      * @param string $template
      *
      * @throws Next\Components\Debug
-     *   A ViewException was caught
+     *  A ViewException was caught
      *
      * @see Next\View\ViewException
      */

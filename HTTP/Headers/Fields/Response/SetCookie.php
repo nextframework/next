@@ -26,7 +26,7 @@ class SetCookie extends AbstractField implements Response {
      * Also try to fix some structure problems in Cookies string
      *
      * @param string $data
-     *   Data to manipulate before validation
+     *  Data to manipulate before validation
      *
      * @return string Data to Validate
      */
@@ -78,7 +78,7 @@ class SetCookie extends AbstractField implements Response {
      * Changes the Multiple separator in runtime, after checking process
      *
      * @param string $data
-     *   Data to manipulate after validation
+     *  Data to manipulate after validation
      *
      * @return string Validated Data
      */
@@ -95,7 +95,7 @@ class SetCookie extends AbstractField implements Response {
      * Get Header Field Validator
      *
      * @return Next\Validate\Validate
-     *   Associated Validator
+     *  Associated Validator
      */
     protected function getValidator() {
         return new \Next\Validate\HTTP\Headers\Response\SetCookie;
@@ -105,7 +105,7 @@ class SetCookie extends AbstractField implements Response {
      * Set Up Header Options
      *
      * @return array
-     *   Header Field Validation Options
+     *  Header Field Validation Options
      */
     public function setOptions() {
 

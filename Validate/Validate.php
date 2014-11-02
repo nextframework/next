@@ -16,7 +16,7 @@ interface Validate {
      * Validates given Character Set
      *
      * @param string $data
-     *   Data to Validate
+     *  Data to Validate
      */
     public function validate( $data );
 }

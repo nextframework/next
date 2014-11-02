@@ -50,10 +50,10 @@ class Translator extends Object {
      * Set Translation Adapter
      *
      * @param Next\Translate\Adapter\Adapter $adapter
-     *   Translate Adapter
+     *  Translate Adapter
      *
      * @return Next\Translate
-     *   Translate Object (Fluent Interface)
+     *  Translate Object (Fluent Interface)
      */
     public function setAdapter( Adapter $adapter ) {
 
@@ -66,10 +66,10 @@ class Translator extends Object {
      * Set new Current Locale
      *
      * @param string $locale
-     *   Default Locale
+     *  Default Locale
      *
      * @return Next\Translate
-     *   Translate Object (Fluent Interface)
+     *  Translate Object (Fluent Interface)
      */
     public function setLocale( $locale ) {
 
@@ -82,7 +82,7 @@ class Translator extends Object {
      * Get Current Locale
      *
      * @return string
-     *   Current Locale
+     *  Current Locale
      */
     public function getLocale() {
         return $this -> locale;
@@ -99,10 +99,10 @@ class Translator extends Object {
      * without overload the Application
      *
      * @param string $filename
-     *   Translate Filename
+     *  Translate Filename
      *
      * @return Next\Translate
-     *   Translate Object (Fluent Interface)
+     *  Translate Object (Fluent Interface)
      */
     public function setCurrent( $filename ) {
 
@@ -115,13 +115,13 @@ class Translator extends Object {
      * Add a new Language Set
      *
      * @param string $locale
-     *   Locale Name
+     *  Locale Name
      *
      * @param string $filename
-     *   Path to Localization File
+     *  Path to Localization File
      *
      * @return Next\Translate
-     *   Translate Object (Fluent Interface)
+     *  Translate Object (Fluent Interface)
      *
      * @throws Next\Translate\TranslateException
      *  Given filepath doesn't exists
@@ -165,10 +165,10 @@ class Translator extends Object {
      * Return given string translated
      *
      * @param string $string
-     *   String to be translated
+     *  String to be translated
      *
      * @return string
-     *   Translated sentence
+     *  Translated sentence
      */
     public function __( $string ) {
 

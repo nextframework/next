@@ -23,7 +23,7 @@ abstract class AbstractPDO extends AbstractDriver {
      * @return PDO
      *
      * @throws Next\DB\Driver\DriverException
-     *   A PDOException was caught
+     *  A PDOException was caught
      */
     public function connect() {
 
@@ -96,7 +96,7 @@ abstract class AbstractPDO extends AbstractDriver {
      * Check if it's Connected
      *
      * @return boolean
-     *   TRUE if we have a valid connection and FALSE otherwise
+     *  TRUE if we have a valid connection and FALSE otherwise
      */
     public function isConnected() {
         return ( $this -> connection instanceof \PDO );
@@ -108,13 +108,13 @@ abstract class AbstractPDO extends AbstractDriver {
      * Executes an SQL statement
      *
      * @param string $statement
-     *   Query Statement
+     *  Query Statement
      *
      * @return Next\DB\Statement\Statement
-     *   Statement Object
+     *  Statement Object
      *
      * @throws Next\DB\Driver\DriverException
-     *   A PDOException was caught
+     *  A PDOException was caught
      */
     public function query( $statement ) {
 
@@ -132,13 +132,13 @@ abstract class AbstractPDO extends AbstractDriver {
      * Prepares an SQL Statement
      *
      * @param string $statement
-     *   Statement to be prepared
+     *  Statement to be prepared
      *
      * @return Next\DB\Statement\Statement
-     *   Statement Object
+     *  Statement Object
      *
      * @throws Next\DB\Driver\DriverException
-     *   A PDOException was caught
+     *  A PDOException was caught
      */
     public function prepare( $statement ) {
 
@@ -164,10 +164,10 @@ abstract class AbstractPDO extends AbstractDriver {
      *   <p>Used by PDO_PGSQL, for example (according to manual)</p>
      *
      * @return integer|string
-     *   ID of last inserted record
+     *  ID of last inserted record
      *
      * @throws Next\DB\Driver\DriverException
-     *   A PDOException was caught
+     *  A PDOException was caught
      */
     public function lastInsertId( $name = NULL ) {
 
@@ -206,7 +206,7 @@ abstract class AbstractPDO extends AbstractDriver {
      * Check for Connection Driver Requirements
      *
      * @throws Next\DB\Driver\DriverException
-     *   PDO Extension was not loaded
+     *  PDO Extension was not loaded
      */
     protected function checkRequirements() {
 

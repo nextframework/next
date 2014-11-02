@@ -18,7 +18,7 @@ class FTP extends AbstractOptions {
      * Get Wrapper Name
      *
      * @return string
-     *   Context Wrapper Name
+     *  Context Wrapper Name
      */
     public function getWrapperName() {
         return 'ftp';
@@ -28,10 +28,10 @@ class FTP extends AbstractOptions {
      * Check if Context Option is acceptable by wrapper
      *
      * @param string $option
-     *   Context Option to be checked
+     *  Context Option to be checked
      *
      * @return boolean
-     *   TRUE if Context Options is acceptable and FALSE otherwise
+     *  TRUE if Context Options is acceptable and FALSE otherwise
      */
     public function accept( $option ) {
         return ( in_array( $option, array( 'overwrite', 'resume_pos', 'proxy' ) ) );

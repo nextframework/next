@@ -22,17 +22,17 @@ class CompositeQueue extends Lists {
      * To be valid, the Object must implement Next\View\View Interface
      *
      * @param Next\Components\Object $object
-     *   An Object object
+     *  An Object object
      *
-     *   The checking for Next\View\View Interface
-     *   will be done inside the method.
+     *  The checking for Next\View\View Interface
+     *  will be done inside the method.
      *
      * @return boolean
-     *   Always TRUE, because if given value is not a valid Composite View
-     *   an Exception will be thrown
+     *  Always TRUE, because if given value is not a valid Composite View
+     *  an Exception will be thrown
      *
      * @throws Next\View\ViewException
-     *   Given argument is not acceptable as a Composite View
+     *  Given argument is not acceptable as a Composite View
      */
     public function accept( Object $object ) {
 

@@ -20,10 +20,10 @@ class Set extends Lists {
      * Check Object acceptance
      *
      * @param Next\Components\Object $object
-     *   Object to test before add to Collection
+     *  Object to test before add to Collection
      *
      * @return boolean
-     *   TRUE if given Object is not present in Set Collection and FALSE otherwise
+     *  TRUE if given Object is not present in Set Collection and FALSE otherwise
      */
     protected function accept( Object $object ) {
 

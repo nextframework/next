@@ -18,10 +18,10 @@ final class Float extends Number {
      * Check whether or not given value is acceptable by datatype class
      *
      * @param mixed $value
-     *   Value to set
+     *  Value to set
      *
      * @return boolean
-     *   TRUE if given value is of the type integer and FALSE otherwise
+     *  TRUE if given value is of the type integer and FALSE otherwise
      */
     protected function accept( $value ) {
         return ( gettype( $value ) != 'integer' );

@@ -22,10 +22,10 @@ class NullRouter extends AbstractRouter {
      * Finds a match Route
      *
      * @param Next\Application\Application $application
-     *   Application to iterate Controllers
+     *  Application to iterate Controllers
      *
      * @return boolean
-     *   Always FALSE because this Router does nothing
+     *  Always FALSE because this Router does nothing
      */
     public function find( Application $application ) {
         return FALSE;
@@ -51,13 +51,13 @@ class NullRouter extends AbstractRouter {
      * Lookup for Required Params in URL
      *
      * @param array $params
-     *   Array of Params to validate
+     *  Array of Params to validate
      *
      * @param string $uri
-     *   Request URI to be checked against
+     *  Request URI to be checked against
      *
      * @param array|optional $queryData
-     *   Manually set GET parameters to be considered as validatable arguments too
+     *  Manually set GET parameters to be considered as validatable arguments too
      */
     protected function lookup( array $params, $uri, array$queryData = array() ) {}
 
@@ -67,10 +67,10 @@ class NullRouter extends AbstractRouter {
      * Also check if they are valid in a list of valid values, if defined
      *
      * @param array $params
-     *   Route Params
+     *  Route Params
      *
      * @param string $URI
-     *   Route URI
+     *  Route URI
      */
     protected function validate( array $params, $URI ) {}
 
@@ -78,10 +78,10 @@ class NullRouter extends AbstractRouter {
      * Process Dynamic Params
      *
      * @param array $params
-     *   Array of Params to parse
+     *  Array of Params to parse
      *
      * @param string $URI
-     *   Request URI to be checked against
+     *  Request URI to be checked against
      */
     protected function process( array $params, $URI ) {}
 }

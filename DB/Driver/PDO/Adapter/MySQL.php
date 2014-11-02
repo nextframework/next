@@ -31,11 +31,11 @@ class MySQL extends AbstractPDO {
      * Get MySQL Adapter DSN
      *
      * @return string
-     *   MySQL Adapter DSN used by PDO Connection
+     *  MySQL Adapter DSN used by PDO Connection
      *
      * @throws Next\DB\Driver\DriverException
-     *   Required <strong>Host</strong> or <strong>Database</strong>
-     *   parameters was not set in Connection Parameters
+     *  Required <strong>Host</strong> or <strong>Database</strong>
+     *  parameters was not set in Connection Parameters
      */
     protected function getDSN() {
 
@@ -62,7 +62,7 @@ class MySQL extends AbstractPDO {
      * Check for MySQL Adapter Requirements
      *
      * @throws Next\DB\Driver\DriverException
-     *   PDO_MYSQL Extension was not loaded
+     *  PDO_MYSQL Extension was not loaded
      */
     protected function checkRequirements() {
 
@@ -87,7 +87,7 @@ class MySQL extends AbstractPDO {
      * Set an SQL Statement Renderer
      *
      * @return Next\DB\Query\Renderer\Renderer
-     *   MySQL Renderer Object
+     *  MySQL Renderer Object
      */
     public function getRenderer() {
         return new \Next\DB\Query\Renderer\MySQL( "`" );

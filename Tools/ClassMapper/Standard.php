@@ -18,7 +18,7 @@ class Standard extends AbstractMapper {
      * PHP Array Builder
      *
      * @param array $map
-     *   Mapped Array
+     *  Mapped Array
      */
     public function build( array $map ) {
 
@@ -54,7 +54,7 @@ class Standard extends AbstractMapper {
      * Setup Standard (PHP-Array) ClassMapper Options
      *
      * @return array
-     *   Standard (PHP-Array) ClassMapper Options
+     *  Standard (PHP-Array) ClassMapper Options
      */
     public function setOptions() {
 
@@ -70,16 +70,16 @@ class Standard extends AbstractMapper {
      * Check Options Integrity
      *
      * @throws Next\Tools\ClassMapper\ClassMapperException
-     *   Output directory is not set
+     *  Output directory is not set
      *
      * @throws Next\Tools\ClassMapper\ClassMapperException
-     *   Output directory doesn't exist or it's not a valid directory
+     *  Output directory doesn't exist or it's not a valid directory
      *
      * @throws Next\Tools\ClassMapper\ClassMapperException
-     *   Output directory is not writable
+     *  Output directory is not writable
      *
      * @throws Next\Tools\ClassMapper\ClassMapperException
-     *   Filename is missing
+     *  Filename is missing
      */
     protected function checkIntegrity() {
 

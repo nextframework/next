@@ -35,7 +35,7 @@ abstract class AbstractAdapter extends Object {
      * GetText Adapter Constructor
      *
      * @param Next\HTTP\Stream\Adapter\Adapter|optional $adapter
-     *   HTTP Stream Adapter used to read data
+     *  HTTP Stream Adapter used to read data
      */
     public function __construct( Adapter $adapter = NULL ) {
 
@@ -48,10 +48,10 @@ abstract class AbstractAdapter extends Object {
      * Set Cache Backend
      *
      * @param Next\Cache\Backend\Backend $backend
-     *   Cache Backend
+     *  Cache Backend
      *
      * @return Next\Translate\Adapter\Adapter
-     *   Translate Adapter Object (Fluent Interface)
+     *  Translate Adapter Object (Fluent Interface)
      */
     public function setCacheBackend( Backend $backend ) {
 
@@ -64,7 +64,7 @@ abstract class AbstractAdapter extends Object {
      * Get Cache Backend
      *
      * @return Next\Cache\Backend\Backend
-     *   Cache Backend Object
+     *  Cache Backend Object
      */
     public function getBackend() {
         return $this -> cacheBackend;

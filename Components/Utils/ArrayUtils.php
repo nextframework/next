@@ -24,10 +24,10 @@ class ArrayUtils {
      * And both arguments must be passed as reference, so the changes can be applied
      *
      * @param array|optional $a
-     *   First Array
+     *  First Array
      *
      * @param array|optional $b
-     *   Second Array
+     *  Second Array
      */
     public static function equalize( array &$a = array(), array &$b = array() ) {
 
@@ -54,17 +54,17 @@ class ArrayUtils {
      * Original function by "giulio provasi" (link below)
      *
      * @param mixed|array $haystack
-     *   The haystack to search
+     *  The haystack to search
      *
      * @param mixed $needle
-     *   The needle we are looking for
+     *  The needle we are looking for
      *
      * @param mixed|optional $index
-     *   Allow to define a specific index where the data will be searched
+     *  Allow to define a specific index where the data will be searched
      *
      * @return integer|string
-     *   If given needle can be found in given haystack, its index will
-     *   be returned. Otherwise, -1 will
+     *  If given needle can be found in given haystack, its index will
+     *  be returned. Otherwise, -1 will
      *
      * @see http://www.php.net/manual/en/function.array-search.php#97645
      */
@@ -96,10 +96,10 @@ class ArrayUtils {
      * Map given (stdClass) Object to array, recursively
      *
      * @param mixed $param
-     *   Object to be mapped
+     *  Object to be mapped
      *
      * @return array
-     *   Given object map into array
+     *  Given object map into array
      */
     public static function map( $param ) {
 
@@ -125,13 +125,13 @@ class ArrayUtils {
      * Original function by "bpat1434" (link below)
      *
      * @param array $a
-     *   Initial array
+     *  Initial array
      *
      * @param array $b
-     *   Array to unite
+     *  Array to unite
      *
      * @return array
-     *   A new array with elements in <strong>$b</strong> united to elements in <strong>$a</strong>
+     *  A new array with elements in <strong>$b</strong> united to elements in <strong>$a</strong>
      *
      * @see http://www.phpbuilder.com/board/showpost.php?p=10886411&postcount=6
      */
@@ -164,10 +164,10 @@ class ArrayUtils {
      * without overwrite any value
      *
      * @param array $a
-     *   Array to insert
+     *  Array to insert
      *
      * @param array $b
-     *   Array where new data will be inserted
+     *  Array where new data will be inserted
      */
     public static function insert( array $a, array &$b ) {
 
@@ -191,18 +191,18 @@ class ArrayUtils {
      * Check if a value exists in array
      *
      * @param mixed $needle
-     *   The needle we are looking for
+     *  The needle we are looking for
      *
      * @param array $haystack
-     *   The haystack to search
+     *  The haystack to search
      *
      * @param boolean|optional $strict
-     *   Different of native in_array(), the strict flag here distinguishes
-     *   two different strings and not two different types of data
+     *  Different of native in_array(), the strict flag here distinguishes
+     *  two different strings and not two different types of data
      *
      * @return boolean
-     *   TRUE if given needle is present in given haystack, even
-     *   multidimensionally. FALSE otherwise.
+     *  TRUE if given needle is present in given haystack, even
+     *  multidimensionally. FALSE otherwise.
      */
     public static function in( $needle, array $haystack, $strict = FALSE ) {
 
@@ -265,22 +265,22 @@ class ArrayUtils {
      * Also allow the resulting array to be reindexed.
      *
      * @param array $array
-     *   The array to be cleaned
+     *  The array to be cleaned
      *
      * @param boolean|optional $allowZeros
-     *   Defines whether or not if a 'zero' will be considered as NULL
+     *  Defines whether or not if a 'zero' will be considered as NULL
      *
      * @param boolean|optional $recursive
-     *   Defines whether or not if the cleanup will be applied recursively
+     *  Defines whether or not if the cleanup will be applied recursively
      *
      * @param boolean|optional $destruct
-     *   Defines whether or not if an empty dimension will be removed
+     *  Defines whether or not if an empty dimension will be removed
      *
      * @param boolean|optional $reindex
-     *   Defines whether ot not if the resulting array will be reindexed
+     *  Defines whether ot not if the resulting array will be reindexed
      *
      * @return array
-     *   Input array, now cleaned
+     *  Input array, now cleaned
      */
     public static function clean( array $array, $allowZeros = TRUE, $recursive = FALSE,
                                   $destruct = FALSE, $reindex = FALSE ) {
@@ -329,10 +329,10 @@ class ArrayUtils {
      * Get last key
      *
      * @param array $stack
-     *   Given array
+     *  Given array
      *
      * @return string|integer
-     *   Last index of given array
+     *  Last index of given array
      */
     public static function lastKey( array $stack ) {
         return key( array_slice( $stack, -1, 1, TRUE ) );

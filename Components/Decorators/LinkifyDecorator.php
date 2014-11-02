@@ -15,7 +15,7 @@ class LinkifyDecorator extends AbstractDecorator {
 
         'Next\\.*' => array(
 
-            'url'       => 'http://www.notready.com',
+            'url'      => 'http://www.notready.com',
             'format'   => '<a href="%1$s/%4$s.%5$s">%2$s::%3$s()</a>'
         )
     );

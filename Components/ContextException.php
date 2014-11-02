@@ -52,10 +52,10 @@ class ContextException extends \Next\Components\Debug\Exception {
      * For debugging purposes only
      *
      * @param string $caller
-     *   Object caller name
+     *  Object caller name
      *
      * @return Next\Components\ComponentsException
-     *   Caller Object not found
+     *  Caller Object not found
      */
     public static function callerNotFound( $caller ) {
 
@@ -73,10 +73,10 @@ class ContextException extends \Next\Components\Debug\Exception {
      * Called method could not be found in the extended context
      *
      * @param string $method
-     *   Method being called
+     *  Method being called
      *
      * @return Next\Components\ComponentsException
-     *   Method not found
+     *  Method not found
      */
     public static function methodNotFound( $method ) {
 
@@ -95,13 +95,13 @@ class ContextException extends \Next\Components\Debug\Exception {
      * Property could not be found in extended context
      *
      * @param string $property
-     *   Property name
+     *  Property name
      *
      * @param string $caller
-     *   Object caller name
+     *  Object caller name
      *
      * @return Next\Components\ComponentsException
-     *   Property not found
+     *  Property not found
      */
     public static function propertyNotFound( $property, $caller ) {
 
@@ -121,19 +121,19 @@ class ContextException extends \Next\Components\Debug\Exception {
      * For debugging purposes only
      *
      * @param string $property
-     *   Object caller name
+     *  Object caller name
      *
      * @param string $caller
-     *   Object caller name
+     *  Object caller name
      *
      * @param boolean $isAccess
-     *   A support argument to reuse some text. Defaults to TRUE
+     *  A support argument to reuse some text. Defaults to TRUE
      *
-     *   If TRUE then the sentence will refer on property access.
-     *   If FALSE then the sentence will refer on property change.
+     *  If TRUE then the sentence will refer on property access.
+     *  If FALSE then the sentence will refer on property change.
      *
      * @return Next\Components\ComponentsException
-     *   Unable to access/modify property
+     *  Unable to access/modify property
      */
     public static function propertyFailure( $property, $caller, $isAccess = TRUE ) {
 

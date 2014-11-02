@@ -39,14 +39,14 @@ class Accept extends Object implements Headers {
      * to make it compatible with Doc Comment Syntax \endinternal
      *
      * @param string $data
-     *   Data to validate
+     *  Data to validate
      *
      * @return boolean
-     *   TRUE if valid and FALSE otherwise
+     *  TRUE if valid and FALSE otherwise
      *
      * @link
-     *   http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
-     *   RFC 2616 Section 14.1
+     *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
+     *  RFC 2616 Section 14.1
      */
     public function validate( $data ) {
 

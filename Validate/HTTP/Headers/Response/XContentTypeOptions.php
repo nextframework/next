@@ -29,19 +29,19 @@ class XContentTypeOptions extends Object implements Headers {
      * </code>
      *
      * @param string $data
-     *   Data to validate
+     *  Data to validate
      *
      * @return boolean
-     *   TRUE if valid and FALSE otherwise
+     *  TRUE if valid and FALSE otherwise
      *
      * @link
-     *   http://blogs.msdn.com/b/ie/archive/2008/09/02/ie8-security-part-vi-beta-2-update.aspx
+     *  http://blogs.msdn.com/b/ie/archive/2008/09/02/ie8-security-part-vi-beta-2-update.aspx
      *
      * @link
-     *   http://asert.arbornetworks.com/2009/03/mime-sniffing-and-phishing/
+     *  http://asert.arbornetworks.com/2009/03/mime-sniffing-and-phishing/
      *
      * @link
-     *   http://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Common_non-standard_response_headers
+     *  http://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Common_non-standard_response_headers
      */
     public function validate( $data ) {
         return ( strcasecmp( $data, 'nosniff' ) == 0 );

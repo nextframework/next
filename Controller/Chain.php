@@ -22,16 +22,16 @@ class Chain extends AbstractCollection {
      * To be valid, the Controller must implement Next\Controller\Controller Interface
      *
      * @param Next\Components\Object $object
-     *   An Object object
+     *  An Object object
      *
-     *   The checking for Next\Controller\Controller Interface will be inside
-     *   the method.
+     *  The checking for Next\Controller\Controller Interface will be inside
+     *  the method.
      *
      * @return boolean
-     *   TRUE if given Object is acceptable by Controllers Collection and FALSE otherwise
+     *  TRUE if given Object is acceptable by Controllers Collection and FALSE otherwise
      *
      * @throws Next\Controller\ControllerException
-     *   Given application is not acceptable in the Controller Chain
+     *  Given application is not acceptable in the Controller Chain
      */
     public function accept( Object $object ) {
 

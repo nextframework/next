@@ -12,6 +12,8 @@ namespace Next\DB\Query;
  */
 interface Query {
 
+    const SELECT = 'SELECT';
+
     // SQL Statement Reserved Keywords
 
     /**
@@ -19,98 +21,98 @@ interface Query {
      *
      * @var string
      */
-    const SQL_WILDCARD      = '*';
+    const WILDCARD = '*';
 
     /**
      * Alias
      *
      * @var string
      */
-    const SQL_AS            = 'AS';
+    const ALIAS = 'AS';
 
     /**
      * Distinct Clause
      *
      * @var string
      */
-    const SQL_DISTINCT      = 'DISTINCT';
+    const DISTINCT = 'DISTINCT';
 
     /**
      * WHERE Clause
      *
      * @var string
      */
-    const SQL_WHERE         = 'WHERE';
+    const WHERE = 'WHERE';
 
     /**
      * AND Clause Connector
      *
      * @var string
      */
-    const SQL_AND           = 'AND';
+    const SQL_AND = 'AND';
 
     /**
      * OR Clause Connector
      *
      * @var string
      */
-    const SQL_OR            = 'OR';
+    const SQL_OR = 'OR';
 
     /**
      * GROUP BY Clause
      *
      * @var string
      */
-    const SQL_GROUP_BY      = 'GROUP BY';
+    const GROUP_BY = 'GROUP BY';
 
     /**
      * ORDER BY Clause
      *
      * @var string
      */
-    const SQL_ORDER_BY      = 'ORDER BY';
+    const ORDER_BY = 'ORDER BY';
 
     /**
      * Ascending Order
      *
      * @var string
      */
-    const SQL_ORDER_ASC     = 'ASC';
+    const ORDER_ASCENDING = 'ASC';
 
     /**
      * Descending Order
      *
      * @var string
      */
-    const SQL_ORDER_DESC    = 'DESC';
+    const ORDER_DESCENDING = 'DESC';
 
     /**
      * LIMIT Clause
      *
      * @var string
      */
-    const SQL_LIMIT         = 'LIMIT';
+    const LIMIT = 'LIMIT';
 
     /**
      * HAVING Clause
      *
      * @var string
      */
-    const SQL_HAVING        = 'HAVING';
+    const HAVING = 'HAVING';
 
     /**
      * UNION Clause
      *
      * @var string
      */
-    const SQL_UNION         = 'UNION';
+    const UNION = 'UNION';
 
     /**
      * JOIN Types
      *
      * @var string
      */
-    const INNER_JOIN                 = 'INNER JOIN';
-    const LEFT_OUTER_JOIN      = 'LEFT OUTER JOIN';
-    const RIGHT_OUTER_JOIN    = 'RIGHT OUTER JOIN';
+    const INNER_JOIN = 'INNER JOIN';
+    const LEFT_OUTER_JOIN = 'LEFT OUTER JOIN';
+    const RIGHT_OUTER_JOIN = 'RIGHT OUTER JOIN';
 }

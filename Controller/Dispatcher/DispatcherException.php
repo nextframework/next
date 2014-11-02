@@ -35,10 +35,10 @@ class DispatcherException extends \Next\Components\Debug\Exception {
      * ReflectionException caught
      *
      * @param \ReflectionException $e
-     *   RflectionException caught
+     *  RflectionException caught
      *
      * @return \Next\Controller\Dispatcher\DispatcherException
-     *   Exception for caught ReflectionException
+     *  Exception for caught ReflectionException
      */
     public static function reflection( \ReflectionException $e ) {
 

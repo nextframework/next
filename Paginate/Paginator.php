@@ -61,10 +61,10 @@ class Paginator implements \Countable, \IteratorAggregate {
      * Paginator Constructor
      *
      * @param Next\Paginate\Adapter\Adapter $adapter
-     *   Paginate Adapter
+     *  Paginate Adapter
      *
      * @param Next\Paginate\Style\Style|optional $style
-     *   Optional Paginate Scrolling Style Algorithm
+     *  Optional Paginate Scrolling Style Algorithm
      */
     public function __construct( Adapter $adapter, Style $style = NULL ) {
 
@@ -79,7 +79,7 @@ class Paginator implements \Countable, \IteratorAggregate {
      * List Information about Pagination
      *
      * @return stdClass Object
-     *   Pagination Information
+     *  Pagination Information
      */
     public function getInfo() {
 
@@ -146,7 +146,7 @@ class Paginator implements \Countable, \IteratorAggregate {
      * Get Pagination Adapter
      *
      * @return Next\Paginate\Adapter\Adapter
-     *   Pagination Adapter Object
+     *  Pagination Adapter Object
      */
     public function getAdapter() {
         return $this -> adapter;
@@ -156,7 +156,7 @@ class Paginator implements \Countable, \IteratorAggregate {
      * Get Scrolling Style
      *
      * @return Next\Paginate\Style\Style
-     *   Pagination Style Algorithm Object
+     *  Pagination Style Algorithm Object
      */
     public function getStyle() {
         return $this -> style;
@@ -166,10 +166,10 @@ class Paginator implements \Countable, \IteratorAggregate {
      * Set Scrolling Style
      *
      * @param Next\Paginate\Style\Style $style
-     *   Paginate Algorithm Style
+     *  Paginate Algorithm Style
      *
      * @return Next\Paginate\Paginator
-     *   Paginator Object (Fluent Interface)
+     *  Paginator Object (Fluent Interface)
      */
     public function setStyle( Style $style ) {
 
@@ -182,7 +182,7 @@ class Paginator implements \Countable, \IteratorAggregate {
      * Get Current Page
      *
      * @return integer
-     *   Current Page
+     *  Current Page
      */
     public function getCurrentPage() {
 
@@ -195,10 +195,10 @@ class Paginator implements \Countable, \IteratorAggregate {
      * Set Current Page
      *
      * @param integer $page
-     *   Current Page
+     *  Current Page
      *
      * @return Next\Paginate\Paginator
-     *   Paginator Object (Fluent Interface)
+     *  Paginator Object (Fluent Interface)
      */
     public function setCurrentPage( $page ) {
 
@@ -215,7 +215,7 @@ class Paginator implements \Countable, \IteratorAggregate {
      * Get Items Per Page
      *
      * @return integer
-     *   Number of Items to be displayed per page
+     *  Number of Items to be displayed per page
      */
     public function getItemsPerPage() {
         return $this -> itemsPerPage;
@@ -225,10 +225,10 @@ class Paginator implements \Countable, \IteratorAggregate {
      * Set Items Per Page
      *
      * @param integer $amount
-     *   Number of items per page
+     *  Number of items per page
      *
      * @return Next\Paginate\Paginator
-     *   Paginator Object (Fluent Interface)
+     *  Paginator Object (Fluent Interface)
      */
     public function setItemsPerPage( $amount ) {
 
@@ -247,7 +247,7 @@ class Paginator implements \Countable, \IteratorAggregate {
      * is not triggered twice
      *
      * @return integer
-     *   Number of paginated elements
+     *  Number of paginated elements
      */
     public function count() {
 
@@ -274,7 +274,7 @@ class Paginator implements \Countable, \IteratorAggregate {
      * IteratorAggregate Interface documentation compatibility
      *
      * @return Traversable
-     *   Traversable Element
+     *  Traversable Element
      */
     public function getIterator() {
 

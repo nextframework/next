@@ -40,11 +40,11 @@ class XML extends AbstractMapper {
      * XML Content Builder
      *
      * @param array $map
-     *   Mapped Array
+     *  Mapped Array
      *
      * @return string
-     *   If <strng>save</strong> option is set to FALSE, the
-     *   XML Output Memory will be returned as string
+     *  If <strng>save</strong> option is set to FALSE, the
+     *  XML Output Memory will be returned as string
      */
     public function build( array $map ) {
 
@@ -88,7 +88,7 @@ class XML extends AbstractMapper {
      * Setup XML ClassMapper Options
      *
      * @return array
-     *   XML ClassMapper Options
+     *  XML ClassMapper Options
      */
     public function setOptions() {
 
@@ -107,16 +107,16 @@ class XML extends AbstractMapper {
      * Checks Options Integrity
      *
      * @throws Next\Tools\ClassMapper\ClassMapperException
-     *   Output directory is not set
+     *  Output directory is not set
      *
      * @throws Next\Tools\ClassMapper\ClassMapperException
-     *   Output directory doesn't exist or it's not a valid directory
+     *  Output directory doesn't exist or it's not a valid directory
      *
      * @throws Next\Tools\ClassMapper\ClassMapperException
-     *   Output directory is not writable
+     *  Output directory is not writable
      *
      * @throws Next\Tools\ClassMapper\ClassMapperException
-     *   Filename is missing
+     *  Filename is missing
      */
     protected function checkIntegrity() {
 

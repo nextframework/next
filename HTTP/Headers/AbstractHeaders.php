@@ -137,7 +137,7 @@ abstract class AbstractHeaders extends Object {
      * Add a Header
      *
      * @param mixed $header
-     *   Header name. Possible values are:
+     *  Header name. Possible values are:
      *
      *   <ul>
      *
@@ -168,13 +168,13 @@ abstract class AbstractHeaders extends Object {
      *   </ul>
      *
      * @param string|optional $value
-     *   Header Field Value
+     *  Header Field Value
      *
      * @return Next\HTTP\Headers\AbstractHeaders
-     *   AbstractHeaders Object (Fluent Interface)
+     *  AbstractHeaders Object (Fluent Interface)
      *
      * @throws Next\HTTP\Headers\Fields\FieldsException
-     *   Invalid or mal-formed Header Value
+     *  Invalid or mal-formed Header Value
      */
     public function addHeader( $header, $value = NULL ) {
 
@@ -293,13 +293,13 @@ abstract class AbstractHeaders extends Object {
      * This is an accessor to be used mainly in Mixin Objects
      *
      * @param string $header
-     *   Header Field to be searched
+     *  Header Field to be searched
      *
      * @param integer|float|optional $level
-     *   Minimum similarity level
+     *  Minimum similarity level
      *
      * @return boolean
-     *   TRUE if it exists and FALSE otherwise
+     *  TRUE if it exists and FALSE otherwise
      */
     public function hasHeader( $header, $level = NULL ) {
         return ( $this -> headers -> find( $header, $level ) instanceof Field );
@@ -309,15 +309,15 @@ abstract class AbstractHeaders extends Object {
      * Return Header Field Object from given name, if it exists
      *
      * @param string $header
-     *   Header Field to be searched
+     *  Header Field to be searched
      *
      * @param integer|float|optional $level
-     *   Minimum similarity level
+     *  Minimum similarity level
      *
      * @return Next\HTTP\Headers\Fields\Field|boolean
-     *   If Header exists, it will be returned.
+     *  If Header exists, it will be returned.
      *
-     *   Otherwise, FALSE will
+     *  Otherwise, FALSE will
      */
     public function findHeader( $header, $level = NULL ) {
         return $this -> headers -> find( $header, $level );
@@ -327,7 +327,7 @@ abstract class AbstractHeaders extends Object {
      * Get registered Headers
      *
      * @param boolean $asString
-     *   If TRUE, instead a Collection, a string of all the headers will be returned
+     *  If TRUE, instead a Collection, a string of all the headers will be returned
      *
      * @return Next\Components\Iterator\Lists|string|void
      *
@@ -397,8 +397,8 @@ abstract class AbstractHeaders extends Object {
      *
      * @param Next\HTTP\Headers\Fields\Field $field
      *
-     *   Header Field Object to have its
-     *   acceptance in Headers Lists Collection checked
+     *  Header Field Object to have its
+     *  acceptance in Headers Lists Collection checked
      */
     abstract protected function accept( Field $field );
 }

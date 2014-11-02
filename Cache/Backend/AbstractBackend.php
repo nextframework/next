@@ -25,35 +25,35 @@ abstract class AbstractBackend extends Object implements Backend {
      *
      * @var string
      */
-    const MD5      = 'md5';
+    const MD5        = 'md5';
 
     /**
      * CRC32 Hash Algorithm
      *
      * @var string
      */
-    const CRC32    = 'crc32';
+    const CRC32      = 'crc32';
 
     /**
      * SHA1 Hash Algorithm
      *
      * @var string
      */
-    const SHA1     = 'sha1';
+    const SHA1       = 'sha1';
 
     /**
      * SHA512 Hash Algorithm
      *
      * @var string
      */
-    const SHA512   = 'sh512';
+    const SHA512     = 'sh512';
 
     /**
      * Adler32 Hash Algorithm
      *
      * @var string
      */
-    const ADLER32  = 'adler32';
+    const ADLER32    = 'adler32';
 
     /**
      * Backend Default Common Options
@@ -272,13 +272,13 @@ abstract class AbstractBackend extends Object implements Backend {
      * </p>
      *
      * @param string $key
-     *   Cache Key
+     *  Cache Key
      *
      * @param integer $extra
-     *   Extra Lifetime
+     *  Extra Lifetime
      *
      * @return boolean
-     *   TRUE if we were able to touch the Cache File and FALSE otherwise
+     *  TRUE if we were able to touch the Cache File and FALSE otherwise
      */
     public function touch( $key, $extra ) {
 
@@ -318,7 +318,7 @@ abstract class AbstractBackend extends Object implements Backend {
      * Get Backend Options
      *
      * @return Next\Components\Parameter
-     *   Parameter Object with merged options
+     *  Parameter Object with merged options
      */
     public function getOptions() {
         return $this -> options;
@@ -330,13 +330,13 @@ abstract class AbstractBackend extends Object implements Backend {
      * Generate a File ID
      *
      * @param string $filename
-     *   Cache Filename
+     *  Cache Filename
      *
      * @param string|optional $prefix
-     *   An optional prefix to distinguish multiple Cache Files
+     *  An optional prefix to distinguish multiple Cache Files
      *
      * @return string
-     *   A Cache File ID made an optional prefix and the MD5 hash of the real filename
+     *  A Cache File ID made an optional prefix and the MD5 hash of the real filename
      */
     protected function generateID( $filename, $prefix = NULL ) {
 
@@ -359,10 +359,10 @@ abstract class AbstractBackend extends Object implements Backend {
      * </p>
      *
      * @param string $data
-     *   Data to calculate proper hash
+     *  Data to calculate proper hash
      *
      * @return string
-     *   Hash of Cached Data according to chosen algorithm
+     *  Hash of Cached Data according to chosen algorithm
      */
     protected function hash( $data ) {
 
@@ -387,20 +387,20 @@ abstract class AbstractBackend extends Object implements Backend {
      * Write Cache Metadata
      *
      * @param string $key
-     *   Cache Key to describe what is being cached
+     *  Cache Key to describe what is being cached
      *
      * @param string|optional $data
-     *   Data to Cache
+     *  Data to Cache
      *
      * @param integer|optional $ttl
-     *   Optional Lifetime
+     *  Optional Lifetime
      *
      * @param boolean|optional $isTouching
-     *   Flag to condition when we're touching the Cache File
-     *   in order to give it an extra lifetime
+     *  Flag to condition when we're touching the Cache File
+     *  in order to give it an extra lifetime
      *
      * @return array
-     *   Metadata array with Information about Caches Data
+     *  Metadata array with Information about Caches Data
      */
     protected function metadata( $key = NULL, $data, $ttl = NULL, $isTouching = FALSE ) {
 
@@ -483,7 +483,7 @@ abstract class AbstractBackend extends Object implements Backend {
      * </p>
      *
      * @throws Next\Cache\CacheException
-     *   Invalid or unsupported Hash Algorithm
+     *  Invalid or unsupported Hash Algorithm
      */
     protected function checkIntegrity() {
 

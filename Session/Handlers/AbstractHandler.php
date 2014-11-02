@@ -116,7 +116,7 @@ abstract class AbstractHandler extends Object implements Parameterizable, Handle
      * Get Session Handler Options
      *
      * @return Next\Components\Parameter
-     *   Parameter Object with merged options
+     *  Parameter Object with merged options
      */
     public function getOptions() {
         return $this -> options;

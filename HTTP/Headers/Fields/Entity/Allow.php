@@ -23,7 +23,7 @@ class Allow extends AbstractField implements Entity {
      * Allowed methods should be uppercased
      *
      * @param string $data
-     *   Data to manipulate after validation
+     *  Data to manipulate after validation
      *
      * @return string Validated Data
      */
@@ -37,7 +37,7 @@ class Allow extends AbstractField implements Entity {
      * Get Header Field Validator
      *
      * @return Next\Validate\Validate
-     *   Associated Validator
+     *  Associated Validator
      */
     protected function getValidator() {
         return new \Next\Validate\HTTP\Headers\Entity\Allow;
@@ -47,7 +47,7 @@ class Allow extends AbstractField implements Entity {
      * Set Up Header Options
      *
      * @return array
-     *   Header Field Validation Options
+     *  Header Field Validation Options
      */
     public function setOptions() {
         return array( 'name' => 'Allow', 'acceptMultiples' => TRUE );

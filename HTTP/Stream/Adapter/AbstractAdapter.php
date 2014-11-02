@@ -42,7 +42,7 @@ abstract class AbstractAdapter extends Object implements Adapter {
      * Get Stream Filename (or URL)
      *
      * @return string
-     *   Opened File or URL
+     *  Opened File or URL
      */
     public function getFilename() {
         return $this -> filename;
@@ -52,7 +52,7 @@ abstract class AbstractAdapter extends Object implements Adapter {
      * Get Stream Resource
      *
      * @return mixed
-     *   Stream Resource
+     *  Stream Resource
      */
     public function getStream() {
         return $this -> stream;
@@ -62,10 +62,10 @@ abstract class AbstractAdapter extends Object implements Adapter {
      * Set Adapter Context
      *
      * @param Next\HTTP\Stream\Context\Context $context
-     *   Context Object
+     *  Context Object
      *
      * @return Next\HTTP\Stream\Adapter\Adapter
-     *   Stream Adapter Object (Fluent Interface)
+     *  Stream Adapter Object (Fluent Interface)
      */
     public function setContext( Context $context ) {
 
@@ -78,7 +78,7 @@ abstract class AbstractAdapter extends Object implements Adapter {
      * Get Adapter Context
      *
      * @return Next\HTTP\Stream\Context\Context
-     *   Stream Context Object (Fluent Interface)
+     *  Stream Context Object (Fluent Interface)
      */
     public function getContext() {
         return $this -> context;

@@ -38,7 +38,7 @@ class Row extends AbstractDataGateway {
      * Get DataSource
      *
      * @return array
-     *   Data Source
+     *  Data Source
      */
     public function getSource() {
         return (array) $this -> storage;
@@ -52,21 +52,8 @@ class Row extends AbstractDataGateway {
      */
     public function update() {
 
-        $updatedData = array_diff( (array) $this -> storage, (array) $this -> source );
-
-        $conditions  = array_intersect( (array) $this -> storage, (array) $this -> source );
-
-        $this -> manager -> reset();
-
-        $this -> manager -> setSource( $updatedData )
-                                      -> update();
-
-        foreach( $conditions as $field => $condition ) {
-
-            $this -> manager -> where( sprintf( '%s = ?', $field ), NULL );
-        }
-
-        $this -> manager -> setReplacements( array_values( $conditions ) );
+        $this -> manager -> setSource( array_diff( (array) $this -> storage, (array) $this -> source ) )
+                         -> update();
 
         return $this -> manager;
     }
@@ -82,13 +69,13 @@ class Row extends AbstractDataGateway {
      * Check whether or not an offset exists
      *
      * @param mixed $offset
-     *   Offset to test
+     *  Offset to test
      *
      * @return boolean
-     *   TRUE if the requested index exists and FALSE otherwise
+     *  TRUE if the requested index exists and FALSE otherwise
      *
      * @link http://php.net/manual/en/arrayobject.offsetexists.php
-     *   ArrayObject::offsetExists()
+     *  ArrayObject::offsetExists()
      */
     public function __isset( $offset ) {
         return $this -> storage -> offsetExists( $offset );
@@ -98,13 +85,13 @@ class Row extends AbstractDataGateway {
      * Return the value at the specified offset
      *
      * @param mixed $offset
-     *   Offset to retrieve value from
+     *  Offset to retrieve value from
      *
      * @return mixed
-     *   The value at the specified offset, if exists and FALSE id doesn't
+     *  The value at the specified offset, if exists and FALSE id doesn't
      *
      * @link http://php.net/manual/en/arrayobject.offsetget.php
-     *   ArrayObject::offsetGet()
+     *  ArrayObject::offsetGet()
      */
     public function __get( $offset ) {
         return $this -> storage -> offsetGet( $offset );
@@ -114,13 +101,13 @@ class Row extends AbstractDataGateway {
      * Set a new value at specified offset
      *
      * @param mixed $offset
-     *   Offset to set
+     *  Offset to set
      *
      * @param mixed $value
-     *   New value
+     *  New value
      *
      * @link http://php.net/manual/en/arrayobject.offsetset.php
-     *   ArrayObject::offsetSet()
+     *  ArrayObject::offsetSet()
      */
     public function __set( $offset, $value ) {
         $this -> storage -> offsetSet( $offset, $value );
@@ -130,10 +117,10 @@ class Row extends AbstractDataGateway {
      * Unset the value at the specified index
      *
      * @param mixed $offset
-     *   Offset to unset
+     *  Offset to unset
      *
      * @link http://php.net/manual/en/arrayobject.offsetunset.php
-     *   ArrayObject::offsetUnset()
+     *  ArrayObject::offsetUnset()
      */
     public function __unset( $offset ) {
         $this -> storage -> offsetUnset( $offset );

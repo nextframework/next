@@ -39,10 +39,10 @@ class DecoratorException extends \Next\Components\Debug\Exception {
      * implements Next\Components\Decorators\Decorator
      *
      * @param Next\Components\Object $object
-     *   Object assigned as Decorator
+     *  Object assigned as Decorator
      *
      * @return Next\Components\Decorators\DecoratorException
-     *   Exception for invalid Decorators
+     *  Exception for invalid Decorators
      */
     public static function invalidDecorators( Object $object ) {
 

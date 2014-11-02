@@ -35,10 +35,10 @@ abstract class AbstractDataGateway extends Object implements DataGateway {
      * Set Table Manager object and Data Source obtained from fetching processes
      *
      * @param Next\DB\Table\Manager $manager
-     *   Table Manager Object
+     *  Table Manager Object
      *
      * @param mixed $source
-     *   Source Data to populate the Row/Rowset
+     *  Source Data to populate the Row/Rowset
      *
      * @see Next\DB\Table\AbstractDataGateway::setSource()
      */
@@ -66,7 +66,7 @@ abstract class AbstractDataGateway extends Object implements DataGateway {
      * Delete a Record from Table
      *
      * @return Next\DB\Table\Manager
-     *   Table Manager Object (Fluent Interface)
+     *  Table Manager Object (Fluent Interface)
      */
     public function delete() {
 
@@ -86,7 +86,7 @@ abstract class AbstractDataGateway extends Object implements DataGateway {
      * Count elements of Data Source
      *
      * @return integer
-     *   Number of elements in RowSet
+     *  Number of elements in RowSet
      */
     public function count() {
         return count( $this -> source );
@@ -98,7 +98,7 @@ abstract class AbstractDataGateway extends Object implements DataGateway {
      * Set Data Source
      *
      * @param mixed|array $source
-     *   Source Data
+     *  Source Data
      */
     protected function setSource( $source ) {
         $this -> source = $source;
@@ -110,7 +110,7 @@ abstract class AbstractDataGateway extends Object implements DataGateway {
      * Get DataSource
      *
      * @return array
-     *   Data Source
+     *  Data Source
      */
     public function getSource() {
         return $this -> source;
@@ -120,7 +120,7 @@ abstract class AbstractDataGateway extends Object implements DataGateway {
      * Get Table Manager
      *
      * @return Next\DB\Table\Manager
-     *   Table Manager Object
+     *  Table Manager Object
      */
     public function getManager() {
         return $this -> manager;

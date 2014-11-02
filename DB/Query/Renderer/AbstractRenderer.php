@@ -2,7 +2,8 @@
 
 namespace Next\DB\Query\Renderer;
 
-use Next\Components\Object;    # Object Class
+use Next\Components\Object;     # Object Class
+use Next\File\Tools as File;    # File Tools
 
 /**
  * Query Renderer Abstract Class
@@ -25,18 +26,33 @@ abstract class AbstractRenderer extends Object implements Renderer {
      * Renderer Constructor
      *
      * @param string $quoteIdentifier
-     *   Quote Identifier
+     *  Quote Identifier
      */
     public function __construct( $quoteIdentifier ) {
 
-        $this -> quoteIdentifier =& $quoteIdentifier;
+        $this -> quoteIdentifier = $quoteIdentifier;
+    }
+
+    /**
+     * Quote a string using the quote identifier defined
+     *
+     * @param  string $string
+     *  String to quote
+     *
+     * @return string
+     *  Inout string, quote
+     *
+     * @see Next\File\Tools::quote()
+     */
+    public function quote( $string ) {
+        return File::quote( $string, $this -> quoteIdentifier );
     }
 
     /**
      * Get Quote Identifier
      *
      * @return string
-     *   The Quote Identifier
+     *  The Quote Identifier
      */
     public function getQuoteIdentifier() {
         return $this -> quoteIdentifier;

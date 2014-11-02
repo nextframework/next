@@ -41,7 +41,7 @@ class LoaderException extends \Next\Components\Debug\Exception {
      * Duplicated AutoLoader
      *
      * @return Next\LoaderException
-     *   Exception for duplicated Autoloader
+     *  Exception for duplicated Autoloader
      */
     public static function duplicated() {
 
@@ -57,7 +57,7 @@ class LoaderException extends \Next\Components\Debug\Exception {
      * Unknown AutoLoader
      *
      * @return Next\LoaderException
-     *   Exception for unknown AutoLoader
+     *  Exception for unknown AutoLoader
      */
     public static function unknown() {
 

@@ -28,7 +28,7 @@ class Reader extends Object implements Reader\Reader {
      * Stream Reader Constructor
      *
      * @param Next\HTTP\Stream\Adapter\Adapter $adapter
-     *   Stream Adapter from which data will be read
+     *  Stream Adapter from which data will be read
      */
     public function __construct( Adapter $adapter ) {
 
@@ -48,17 +48,17 @@ class Reader extends Object implements Reader\Reader {
      * Read some bytes from File Stream
      *
      * @param integer|optional $length
-     *   Optional number of bytes to rwad
+     *  Optional number of bytes to rwad
      *
      * @return string
-     *   Always return the read data, because if failed
-     *   to read an Exception is thrown
+     *  Always return the read data, because if failed
+     *  to read an Exception is thrown
      *
      * @throws Next\HTTP\Stream\Reader\ReaderException
-     *   Number of bytes is equal zero
+     *  Number of bytes is equal zero
      *
      * @throws Next\HTTP\Stream\Reader\ReaderException
-     *   Fail when trying to read
+     *  Fail when trying to read
      */
     public function read( $length = 4096 ) {
 
@@ -86,16 +86,16 @@ class Reader extends Object implements Reader\Reader {
      * Read one line from Stream
      *
      * @param integer|optional $length
-     *   Optional number of bytes to read from line
+     *  Optional number of bytes to read from line
      *
      * @return string Always return the read data, because if failed
      * to read an Exception is thrown
      *
      * @throws Next\HTTP\Stream\Reader\ReaderException
-     *   Number of bytes is zero
+     *  Number of bytes is zero
      *
      * @throws Next\HTTP\Stream\Reader\ReaderException
-     *   Fail when trying to read
+     *  Fail when trying to read
      */
     public function readLine( $length = 1024 ) {
 
@@ -121,7 +121,7 @@ class Reader extends Object implements Reader\Reader {
      * Read the whole Stream
      *
      * @return string
-     *   Read data
+     *  Read data
      */
     public function readAll() {
 
@@ -149,7 +149,7 @@ class Reader extends Object implements Reader\Reader {
      * Get Adapter Object
      *
      * @return Next\HTTP\Stream\Adapter\Adapter
-     *   HTTP Stream Adapter
+     *  HTTP Stream Adapter
      */
     public function getAdapter() {
         return $this -> adapter;
@@ -159,7 +159,7 @@ class Reader extends Object implements Reader\Reader {
      * Get Stream Resource
      *
      * @return resource
-     *   HTTP Stream
+     *  HTTP Stream
      */
     public function getStream() {
         return $this -> adapter -> getStream();

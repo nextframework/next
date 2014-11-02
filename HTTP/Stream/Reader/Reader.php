@@ -18,7 +18,7 @@ interface Reader extends Stream {
      * Read some bytes from File Stream
      *
      * @param integer|optional $length
-     *   Optional number of bytes to read
+     *  Optional number of bytes to read
      */
     public function read( $length = NULL );
 
@@ -26,7 +26,7 @@ interface Reader extends Stream {
      * Read one line from File Stream
      *
      * @param integer|optional $length
-     *   Optional number of bytes to read from line
+     *  Optional number of bytes to read from line
      */
     public function readLine( $length = 1024 );
 

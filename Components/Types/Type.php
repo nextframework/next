@@ -16,7 +16,7 @@ interface Type {
      * Set value
      *
      * @param mixed $value
-     *   Value to set
+     *  Value to set
      */
     public function set( $value );
 

@@ -18,14 +18,14 @@ class APC extends AbstractBackend {
      * Load Cached Data
      *
      * @param string $key
-     *   Cache Key
+     *  Cache Key
      *
      * @param boolean|optional $keepSerialized
-     *   Flag to condition if Cache Data will keep serialized or not
+     *  Flag to condition if Cache Data will keep serialized or not
      *
      * @return mixed|boolean
      *
-     *   FALSE if:
+     *  FALSE if:
      *
      *   <ul>
      *
@@ -96,20 +96,20 @@ class APC extends AbstractBackend {
      * Add new Data into Cache
      *
      * @param string $key
-     *   Cache Key
+     *  Cache Key
      *
      * @param mixed $value
-     *   Data to Cache
+     *  Data to Cache
      *
      * @param integer|optional $ttl
-     *   Optional Lifetime
+     *  Optional Lifetime
      *
      * @param boolean|optional $isTouching
-     *   Flag to condition when we're touching the Cache File in order to give
-     *   it an extra lifetime
+     *  Flag to condition when we're touching the Cache File in order to give
+     *  it an extra lifetime
      *
      * @return boolean
-     *   TRUE on success and FALSE otherwise
+     *  TRUE on success and FALSE otherwise
      */
     public function add( $key, $value, $ttl = NULL, $isTouching = FALSE ) {
 
@@ -136,10 +136,10 @@ class APC extends AbstractBackend {
      * Remove Data from Cache
      *
      * @param string $key
-     *   Cache Key
+     *  Cache Key
      *
      * @return boolean
-     *   TRUE if Cache Metadata entry and the Cache itself were successfully removed
+     *  TRUE if Cache Metadata entry and the Cache itself were successfully removed
      */
     public function remove( $key ) {
         return ( $this -> meta -> delete( $key ) && apc_delete( $key ) );
@@ -149,10 +149,10 @@ class APC extends AbstractBackend {
      * Test Cache Validity
      *
      * @param string $key
-     *   Cache Key
+     *  Cache Key
      *
      * @return boolean
-     *   TRUE if a Cache entry was found with given key AND it's a non-expired Cached Data
+     *  TRUE if a Cache entry was found with given key AND it's a non-expired Cached Data
      */
     public function test( $key ) {
 
@@ -181,13 +181,13 @@ class APC extends AbstractBackend {
      * Clean Cached Data
      *
      * @param string|optional $mode
-     *   Cleaning Mode
+     *  Cleaning Mode
      *
      * @return boolean
-     *   TRUE on success and FALSE otherwise
+     *  TRUE on success and FALSE otherwise
      *
      * @throws Next\Cache\Backend\BackendException
-     *   Trying to clean old caches, which is not supported by APC Backend
+     *  Trying to clean old caches, which is not supported by APC Backend
      */
     public function clean( $mode = self::CLEAN_USER ) {
 
@@ -216,7 +216,7 @@ class APC extends AbstractBackend {
      * Check Backend Requirements
      *
      * @throws Next\Cache\Backend\BackendException
-     *   APC Extension is not loaded
+     *  APC Extension is not loaded
      */
     protected function checkRequirements() {
 

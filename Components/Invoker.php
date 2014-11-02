@@ -33,10 +33,10 @@ class Invoker {
      * Invoker Constructor
      *
      * @param Next\Components\Object $caller
-     *   Caller Object
+     *  Caller Object
      *
      * @param Next\Components\Object $callee
-     *   Callee Object
+     *  Callee Object
      */
     function __construct ( Object $caller, Object $callee ) {
 
@@ -49,7 +49,7 @@ class Invoker {
      * Get Caller Object
      *
      * @return Next\Components\Object
-     *   Caller Object
+     *  Caller Object
      */
     public function getCaller() {
         return $this -> caller;
@@ -59,7 +59,7 @@ class Invoker {
      * Get Callee Object
      *
      * @return Next\Components\Object
-     *   Callee Object
+     *  Callee Object
      */
     public function getCallee() {
         return $this -> callee;

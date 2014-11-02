@@ -44,11 +44,11 @@ class ISO639 implements Validate {
      * Validates given Content Language
      *
      * @param string $data
-     *   Data to Validate
+     *  Data to Validate
      *
      * @return boolean
      *
-     *   TRUE if valid and FALSE otherwise
+     *  TRUE if valid and FALSE otherwise
      */
     public function validate( $data ) {
         return ( strlen( $data ) == 2 && in_array( $data, self::$codes ) );
@@ -60,7 +60,7 @@ class ISO639 implements Validate {
      * Get ISO-639 Language Abbreviations List
      *
      * @return array
-     *   ISO 639 Codes
+     *  ISO 639 Codes
      */
     public static function getCodes() {
         return self::$codes;

@@ -34,10 +34,10 @@ class ResponseHeaders extends AbstractHeaders {
      *
      * @param Next\HTTP\Headers\Fields\Field $field
      *
-     *   Header Field Object to have its acceptance in Response Headers Lists Collection checked
+     *  Header Field Object to have its acceptance in Response Headers Lists Collection checked
      *
      * @return boolean
-     *   TRUE if given Object is acceptable by Response Headers Collection and FALSE otherwise
+     *  TRUE if given Object is acceptable by Response Headers Collection and FALSE otherwise
      */
     protected function accept( Field $field ) {
 

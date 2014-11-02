@@ -38,16 +38,16 @@ class Cookies extends Object {
      * Cookie definition: <em>cookiename[=cookievalue]</em>
      *
      * @param string|array $cookie
-     *   Cookie to add
+     *  Cookie to add
      *
      * @param string|optional $value
-     *   Cookie value, in case a non RFC definition is being used
+     *  Cookie value, in case a non RFC definition is being used
      *
      * @return Next\HTTP\Cookies
-     *   Cookies Object (Fluent Interface)
+     *  Cookies Object (Fluent Interface)
      *
      * @throws Next\HTTP\Headers\Fields\FieldsException
-     *   Invalid or mal-formed Cookie Value
+     *  Invalid or mal-formed Cookie Value
      */
     public function addCookie( $cookie, $value = NULL ) {
 
@@ -116,7 +116,7 @@ class Cookies extends Object {
      * Get registered Cookies
      *
      * @param boolean $asString
-     *   If TRUE, instead a Collection, a string of all the cookies will be returned
+     *  If TRUE, instead a Collection, a string of all the cookies will be returned
      *
      * @return Next\Components\Iterator\Lists|Next\HTTP\Headers\Fields\Request\Cookie
      *
@@ -169,7 +169,7 @@ class Cookies extends Object {
      * Empties Request Cookies
      *
      * @return Next\HTTP\Cookies
-     *   Cookies Object (Fluent Interface)
+     *  Cookies Object (Fluent Interface)
      */
     public function clearCookies() {
 

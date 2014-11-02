@@ -16,7 +16,7 @@ interface Option {
      * Check if Context Option is acceptable by wrapper
      *
      * @param string $option
-     *   Context Option to be checked
+     *  Context Option to be checked
      */
     public function accept( $option );
 

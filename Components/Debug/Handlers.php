@@ -69,7 +69,7 @@ class Handlers {
      * Development Mode Exception Handler
      *
      * @param Exception $e
-     *   Exception thrown
+     *  Exception thrown
      */
     public static function development( \Exception $e ) {
 
@@ -97,7 +97,7 @@ class Handlers {
      * Production Mode Exception Handler
      *
      * @param Exception $e
-     *   Exception thrown
+     *  Exception thrown
      */
     public static function production( \Exception $e ) {
 
@@ -119,7 +119,7 @@ class Handlers {
      * Error Response
      *
      * @param integer $code
-     *   Response Code
+     *  Response Code
      */
     public static function response( $code ) {
 
@@ -162,10 +162,10 @@ class Handlers {
      * Exception Response Wrapper
      *
      * @param Exception $e
-     *   Exception thrown
+     *  Exception thrown
      *
      * @param string $mode
-     *   Exception Mode, also an ExceptionController method to be invoked
+     *  Exception Mode, also an ExceptionController method to be invoked
      */
     private static function handle( $controller, $action, array $query = array(), $code = NULL ) {
 

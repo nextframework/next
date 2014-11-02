@@ -40,7 +40,7 @@ abstract class AbstractRoutesGenerator extends Object implements RoutesGenerator
      * Routes Generator Constructor
      *
      * @param Next\Application\Chain $applications
-     *   Applications Chain to iterate through
+     *  Applications Chain to iterate through
      */
     public function __construct( Applications $applications ) {
 

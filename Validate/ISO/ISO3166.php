@@ -48,10 +48,10 @@ class ISO3166 implements Validate {
      * Validates given Country Code
      *
      * @param string $data
-     *   Data to Validate
+     *  Data to Validate
      *
      * @return boolean
-     *   TRUE if valid and FALSE otherwise
+     *  TRUE if valid and FALSE otherwise
      */
     public function validate( $data ) {
         return ( strlen( $data ) == 2 && in_array( $data, self::$codes ) );
@@ -63,7 +63,7 @@ class ISO3166 implements Validate {
      * Get ISO-3166 Country Codes List
      *
      * @return array
-     *   ISO 3166 Codes
+     *  ISO 3166 Codes
      */
     public static function getCodes() {
         return self::$codes;

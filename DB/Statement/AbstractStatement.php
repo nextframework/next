@@ -26,7 +26,7 @@ abstract class AbstractStatement extends Object implements Statement {
      * Statement Constructor.
      *
      * @param Next\DB\Driver\Driver $driver
-     *   Connection Driver
+     *  Connection Driver
      */
     public function __construct( Driver $driver ) {
 

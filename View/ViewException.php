@@ -125,10 +125,10 @@ class ViewException extends \Next\Components\Debug\Exception {
      * Invalid Partial View
      *
      * @param Next\Components\Object $object
-     *   Object trying to be used as Partial View
+     *  Object trying to be used as Partial View
      *
      * @return Next\View\ViewException
-     *   Exception for invalid Partial View Object
+     *  Exception for invalid Partial View Object
      */
     public static function invalidPartial( Object $object ) {
 
@@ -150,13 +150,13 @@ class ViewException extends \Next\Components\Debug\Exception {
      * Invalid Partial View Priority
      *
      * @param Next\View\View $partialView
-     *   Partial View Object
+     *  Partial View Object
      *
      * @param integer $priority
-     *   Partial View Priority
+     *  Partial View Priority
      *
      * @return Next\View\ViewException
-     *   Exception for invalid Partial View Priority
+     *  Exception for invalid Partial View Priority
      */
     public static function invalidPriority( View $partialView, $priority ) {
 
@@ -181,7 +181,7 @@ class ViewException extends \Next\Components\Debug\Exception {
      * Invalid FileSpec defined
      *
      * @return Next\View\ViewException
-     *   Exception for invalid FileSpec
+     *  Exception for invalid FileSpec
      */
     public static function invalidSpec() {
 
@@ -197,10 +197,10 @@ class ViewException extends \Next\Components\Debug\Exception {
      * Forbidden Template Variable Name
      *
      * @param string $tplVar
-     *   Desired Template Variable Name
+     *  Desired Template Variable Name
      *
      * @return Next\View\ViewException
-     *   Exception for forbidden variable name
+     *  Exception for forbidden variable name
      */
     public static function forbiddenVariable( $tplVar ) {
 
@@ -221,7 +221,7 @@ class ViewException extends \Next\Components\Debug\Exception {
      * auto-searching feature disabled
      *
      * @return Next\View\ViewException
-     *   Exception for Template View File findability failure
+     *  Exception for Template View File findability failure
      */
     public static function unableToFindFile() {
 
@@ -240,7 +240,7 @@ class ViewException extends \Next\Components\Debug\Exception {
      * If you're testing its presence, you're doing it wrong
      *
      * @return Next\View\ViewException
-     *   Exception for unnecessary tests being made
+     *  Exception for unnecessary tests being made
      */
     public static function unnecessaryTest() {
 
@@ -258,10 +258,10 @@ class ViewException extends \Next\Components\Debug\Exception {
      * If you receive this error, you're doing it wrong
      *
      * @param string $tplVar
-     *   Desired Template Variable Name
+     *  Desired Template Variable Name
      *
      * @return Next\View\ViewException
-     *   Exception for missing Template Variable being used
+     *  Exception for missing Template Variable being used
      */
     public static function missingVariable( $tplVar ) {
 
@@ -282,7 +282,7 @@ class ViewException extends \Next\Components\Debug\Exception {
      * to not cause confusion.
      *
      * @return Next\View\ViewException
-     *   Exception for Template Variable use forbiddenness
+     *  Exception for Template Variable use forbiddenness
      */
     public static function forbiddenAccess() {
 
@@ -301,7 +301,7 @@ class ViewException extends \Next\Components\Debug\Exception {
      * FileSpec, auto-search cannot work
      *
      * @return Next\View\ViewException
-     *   Exception for FileSpec inactivity when no Template View name is provided
+     *  Exception for FileSpec inactivity when no Template View name is provided
      */
     public static function disabledFileSpec() {
 
@@ -317,10 +317,10 @@ class ViewException extends \Next\Components\Debug\Exception {
      * No Paths to search for Template View Files
      *
      * @param string $filename
-     *   Template View Filename
+     *  Template View Filename
      *
      * @return Next\View\ViewException
-     *   Exception for impossibility to find a Template View File when no paths were provided
+     *  Exception for impossibility to find a Template View File when no paths were provided
      */
     public static function noPaths( $filename ) {
 
@@ -345,10 +345,10 @@ class ViewException extends \Next\Components\Debug\Exception {
      * Are you sure this Subpath is correctly defined?
      *
      * @param string $file
-     *   File we could not find
+     *  File we could not find
      *
      * @return Next\View\ViewException
-     *   Exception for subpaths being wrongly used
+     *  Exception for subpaths being wrongly used
      */
     public static function wrongUseOfSubpath( $file ) {
 
@@ -373,10 +373,10 @@ class ViewException extends \Next\Components\Debug\Exception {
      * Unable to find a Template View in defined FileSpec
      *
      * @param string $file
-     *   File we could not find
+     *  File we could not find
      *
      * @return Next\View\ViewException
-     *   Exception for impossibility to find Template View File
+     *  Exception for impossibility to find Template View File
      */
     public static function unableToFindUnderFileSpec( $file ) {
 
@@ -399,10 +399,10 @@ class ViewException extends \Next\Components\Debug\Exception {
      * That's it! We REALLY can't find a Template View File
      *
      * @param string $file
-     *   File we could not find
+     *  File we could not find
      *
      * @return Next\View\ViewException
-     *   Exception for missing Template View File
+     *  Exception for missing Template View File
      */
     public static function missingFile( $file ) {
 

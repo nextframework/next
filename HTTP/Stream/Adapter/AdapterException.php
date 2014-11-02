@@ -71,10 +71,10 @@ class AdapterException extends \Next\Components\Debug\Exception {
      * Invalid Stream Opening Mode
      *
      * @param array $validModes
-     *   Valid Opening Modes
+     *  Valid Opening Modes
      *
      * @return Next\HTTP\Stream\Adapter\AdapterException
-     *   Exception for invalid Stream Opening Mode
+     *  Exception for invalid Stream Opening Mode
      */
     public static function invalidOpeningMode( array $validModes ) {
 
@@ -92,10 +92,10 @@ class AdapterException extends \Next\Components\Debug\Exception {
      * Unable to open a File/URL Stream
      *
      * @param string $filename
-     *   File/URL being opened
+     *  File/URL being opened
      *
      * @return Next\HTTP\Stream\Adapter\AdapterException
-     *   Exception for Stream opening failure
+     *  Exception for Stream opening failure
      */
     public static function unableToOpen( $filename ) {
 
@@ -115,10 +115,10 @@ class AdapterException extends \Next\Components\Debug\Exception {
      * @note Read Stream is different from Read Bytes from Stream
      *
      * @param string $filename
-     *   File being opened
+     *  File being opened
      *
      * @return Next\HTTP\Stream\Reader\ReaderException
-     *   Exception for Stream readability failure
+     *  Exception for Stream readability failure
      */
     public static function unableToRead( $filename ) {
 
@@ -138,10 +138,10 @@ class AdapterException extends \Next\Components\Debug\Exception {
      * @note Write on Stream is ifferent from Write Data on Stream
      *
      * @param string $filename
-     *   File being opened
+     *  File being opened
      *
      * @return Next\HTTP\Stream\Writer\WriterException
-     *   Exception for Stream writability failure
+     *  Exception for Stream writability failure
      */
     public static function unableToWrite( $filename ) {
 
@@ -159,7 +159,7 @@ class AdapterException extends \Next\Components\Debug\Exception {
      * Unable to tell Stream Pointer position
      *
      * @return Next\HTTP\Stream\Adapter\AdapterException
-     *   Exception for Stream Pointer retrieval failure
+     *  Exception for Stream Pointer retrieval failure
      */
     public static function unableToTell() {
 
@@ -175,7 +175,7 @@ class AdapterException extends \Next\Components\Debug\Exception {
      * Unable to seek to Stream Pointer to a position
      *
      * @return Next\HTTP\Stream\Adapter\AdapterException
-     *   Exception for Stream Pointer seeking failure
+     *  Exception for Stream Pointer seeking failure
      */
     public static function unableToSeek() {
 

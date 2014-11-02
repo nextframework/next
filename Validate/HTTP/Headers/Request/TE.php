@@ -27,14 +27,14 @@ class TE extends Object implements Headers {
      * </code>
      *
      * @param string $data
-     *   Data to validate
+     *  Data to validate
      *
      * @return boolean
-     *   TRUE if valid and FALSE otherwise
+     *  TRUE if valid and FALSE otherwise
      *
      * @link
-     *   http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.39
-     *   RFC 2616 Section 14.39
+     *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.39
+     *  RFC 2616 Section 14.39
      */
     public function validate( $data ) {
 

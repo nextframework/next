@@ -56,7 +56,7 @@ class TableException extends \Next\Components\Debug\Exception {
      * Unable to insert new record
      *
      * @return Next\DB\Table\TableException
-     *   Exception when there is nothing to insert
+     *  Exception when there is nothing to insert
      */
     public static function nothingToInsert() {
         return new self( 'Nothing to insert', self::NOTHING_TO_INSERT );
@@ -66,7 +66,7 @@ class TableException extends \Next\Components\Debug\Exception {
      * Unable to update an existent record
      *
      * @return Next\DB\Table\TableException
-     *   Exception when there is nothing to update
+     *  Exception when there is nothing to update
      */
     public static function nothingToUpdate() {
         return new self( 'Nothing to update', self::NOTHING_TO_UPDATE );
@@ -76,11 +76,11 @@ class TableException extends \Next\Components\Debug\Exception {
      * Unable to prepare statement
      *
      * @param Next\DB\Driver\DriverException $e
-     *   DriverException caught while invoking
-     *   Next\DB\Driver\Driver::prepare()
+     *  DriverException caught while invoking
+     *  Next\DB\Driver\Driver::prepare()
      *
      * @return Next\DB\Table\TableException
-     *   Exception for statement preparing failure
+     *  Exception for statement preparing failure
      */
     public static function prepare( DriverException $e ) {
         return new self( $e -> getMessage(), self::PREPARE );
@@ -90,11 +90,11 @@ class TableException extends \Next\Components\Debug\Exception {
      * Unable to execute statement
      *
      * @param Next\DB\Statement\StatementException $e
-     *   StatementException caught while invoking
-     *   Next\DB\Statement\Statement::execute()
+     *  StatementException caught while invoking
+     *  Next\DB\Statement\Statement::execute()
      *
      * @return Next\DB\Table\TableException
-     *   Exception for statement execution failure
+     *  Exception for statement execution failure
      */
     public static function execute( StatementException $e ) {
         return new self( $e -> getMessage(), self::EXECUTE );

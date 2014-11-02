@@ -18,7 +18,7 @@ interface Observer {
      * Receive update from Subject
      *
      * @param Next\Components\Interfaces\Subject $subject
-     *   The Subject notifying the observer of an update
+     *  The Subject notifying the observer of an update
      */
     public function update( Subject $subject );
 }

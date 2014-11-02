@@ -16,7 +16,7 @@ interface Mapper {
      * Map Builder
      *
      * @param array $map
-     *   Mapped Array
+     *  Mapped Array
      */
     public function build( array $map );
 }

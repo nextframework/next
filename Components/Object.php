@@ -32,10 +32,10 @@ class Object extends Prototype implements Contextualizable {
      * Map given array to stdClass Object recursively
      *
      * @param mixed $param
-     *   Argument to mapped into an stdClass Object
+     *  Argument to mapped into an stdClass Object
      *
      * @return stdClass
-     *   Given argument mapped into an stdClass Object
+     *  Given argument mapped into an stdClass Object
      */
     public static function map( $param ) {
 
@@ -52,7 +52,7 @@ class Object extends Prototype implements Contextualizable {
      * Retrieves a Reflection instance for the Object
      *
      * @return ReflectionClass
-     *   Reflector instance of Object
+     *  Reflector instance of Object
      */
     public function getClass() {
         return new \ReflectionClass( get_class( $this ) );
@@ -76,18 +76,18 @@ class Object extends Prototype implements Contextualizable {
      * Register a new Invoker Object to be used as context extension
      *
      * @param Next\Components\Invoker $invoker
-     *   Invoker Object
+     *  Invoker Object
      *
      * @param string|array|optional $methods
-     *   One or more methods accessible through extended Context.
-     *   Defaults to NULL, which means almost all PUBLIC methods will be accessible
+     *  One or more methods accessible through extended Context.
+     *  Defaults to NULL, which means almost all PUBLIC methods will be accessible
      *
      *   @param string|array|optional $properties
-     *   One or more properties accessible through extended Context
-     *   Defaults to NULL, which means all PROTECTED properties will be accessible
+     *  One or more properties accessible through extended Context
+     *  Defaults to NULL, which means all PROTECTED properties will be accessible
      *
      * @return Next\Components\Object
-     *   Object Instance (Fluent Interface)
+     *  Object Instance (Fluent Interface)
      *
      * @see Next\Components\Context::extend()
      */
@@ -102,7 +102,7 @@ class Object extends Prototype implements Contextualizable {
      * Get Context Callables
      *
      * @return array
-     *   Registered Context Callables
+     *  Registered Context Callables
      *
      * @see Next\Components\Context::getCallables()
      */
@@ -121,18 +121,18 @@ class Object extends Prototype implements Contextualizable {
      * feature WILL return the METHOD called, not the invoker object
      *
      * @param string $method
-     *   Method trying to be invoked
+     *  Method trying to be invoked
      *
      * @param array|optional $args
-     *   Variable list of arguments to the method
+     *  Variable list of arguments to the method
      *
      * @return mixed|boolean
-     *   Return what extended method returns or FALSE if a ReflectionException
-     *   is caught in Next\Components\Context::call()
+     *  Return what extended method returns or FALSE if a ReflectionException
+     *  is caught in Next\Components\Context::call()
      *
      * @throws Next\Components\ComponentsException
-     *   Object Constructor was overwritten without invoking it through
-     *   parent context instead of using the Next\Components\Object::init()
+     *  Object Constructor was overwritten without invoking it through
+     *  parent context instead of using the Next\Components\Object::init()
      */
     public function __call( $method, array $args = array() ) {
 
@@ -166,14 +166,14 @@ class Object extends Prototype implements Contextualizable {
      * properties must be prefixed with an underscore, even if they don't have one in their original classes
      *
      * @param string $property
-     *   Property trying to be changed
+     *  Property trying to be changed
      *
      * @param mixed $value
-     *   New value for the property
+     *  New value for the property
      *
      * @throws Next\Components\ComponentsException
-     *   Object Constructor was overwritten without invoking it through
-     *   parent context instead of using the Next\Components\Object::init()
+     *  Object Constructor was overwritten without invoking it through
+     *  parent context instead of using the Next\Components\Object::init()
      */
     public function __set( $property, $value ) {
 
@@ -201,7 +201,7 @@ class Object extends Prototype implements Contextualizable {
      * Return a nice name for the class
      *
      * @return string
-     *   Classname without namespaces
+     *  Classname without namespaces
      */
     public function __toString() {
         return $this -> getClass() -> getShortName();

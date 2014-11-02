@@ -5,7 +5,7 @@ namespace Next\Controller\Dispatcher;
 use Next\Controller\ControllerException;    # Controller Exception Class
 use Next\View\ViewException;                # View Exception Class
 use Next\Application\Application;           # Application Interface
-use Next\Components\Debug\Handlers;     # Exceptions Handlers
+use Next\Components\Debug\Handlers;         # Exceptions Handlers
 
 /**
  * Standard Controller Dispatcher Class
@@ -23,16 +23,16 @@ class Standard extends AbstractDispatcher {
      * Dispatches the Controller
      *
      * @param Next\Application\Application $application
-     *   Application to Configure
+     *  Application to Configure
      *
      * @param stdClass $data
-     *   Data to Configure Application
+     *  Data to Configure Application
      *
      * @return Next\HTTP\Response
-     *   Response Object
+     *  Response Object
      *
      * @throws Next\Controller\Dispatcher\DispatcherException
-     *   ReflectionException was caught
+     *  ReflectionException was caught
      */
     public function dispatch( Application $application, \stdClass $data ) {
 

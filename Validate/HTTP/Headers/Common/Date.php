@@ -51,14 +51,14 @@ class Date extends Object implements Headers {
      * </code>
      *
      * @param string $data
-     *   Data to validate
+     *  Data to validate
      *
      * @return boolean
-     *   TRUE if valid and FALSE otherwise
+     *  TRUE if valid and FALSE otherwise
      *
      * @link
-     *   http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.18
-     *   RFC 2616 Section 14.18
+     *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.18
+     *  RFC 2616 Section 14.18
      */
     public function validate( $data ) {
         return ( gmdate( 'D, d M Y H:i:s T', strtotime( $data ) ) == $data );

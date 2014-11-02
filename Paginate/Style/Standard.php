@@ -32,10 +32,10 @@ class Standard implements Style {
      * Set number of elements displayed before Current Page
      *
      * @param integer $amount
-     *   Number of Pages displayed before current page
+     *  Number of Pages displayed before current page
      *
      * @return Next\Paginate\Style\Style
-     *   Paginate Style Object (Fluent Interface)
+     *  Paginate Style Object (Fluent Interface)
      */
     public function setBefore( $amount ) {
 
@@ -50,10 +50,10 @@ class Standard implements Style {
      * Set number of items displayed after Current Page
      *
      * @param integer $amount
-     *   Number of pages displayed after current page
+     *  Number of pages displayed after current page
      *
      * @return Next\Paginate\Style\Style
-     *   Paginate Style Object (Fluent Interface)
+     *  Paginate Style Object (Fluent Interface)
      */
     public function setAfter( $amount ) {
 
@@ -73,10 +73,10 @@ class Standard implements Style {
      * Build Pages Range
      *
      * @param Next\Paginate\Paginator $paginator
-     *   Paginator Object
+     *  Paginator Object
      *
      * @return array
-     *   Range of pages
+     *  Range of pages
      */
     public function buildRange( Paginator $paginator ) {
 

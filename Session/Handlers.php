@@ -41,7 +41,7 @@ class Handlers {
      * Session Handlers Constructor
      *
      * @param Next\Session\Manager $session
-     *   Session Object
+     *  Session Object
      */
     public function __construct( Manager $session ) {
 
@@ -54,13 +54,13 @@ class Handlers {
      * Add a new Session Handler
      *
      * @param Next\Session\Handlers\Handler $handler
-     *   Session Handler
+     *  Session Handler
      *
      * @param boolean|optional $activate
-     *   Flag to condition the immediate activation of Handler
+     *  Flag to condition the immediate activation of Handler
      *
      * @return Next\Session\Handlers
-     *   Session Handlers Object (Fluent Interface)
+     *  Session Handlers Object (Fluent Interface)
      */
     public function addHandler( Handler $handler, $activate = FALSE ) {
 
@@ -82,11 +82,11 @@ class Handlers {
      * Change current Session Handler
      *
      * @param string|Next\Session\Handlers\Handler $handler
-     *   Handler Object or Handler Name
+     *  Handler Object or Handler Name
      *
      * @throws Next\Session\Handlers\HandlerException
-     *   Changing Session Handler to a invalid Handler, characterized as
-     *   instance of Next\Session\Hndlers\Handler
+     *  Changing Session Handler to a invalid Handler, characterized as
+     *  instance of Next\Session\Hndlers\Handler
      */
     public function changeHandler( $handler ) {
 

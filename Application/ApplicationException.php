@@ -53,10 +53,10 @@ class ApplicationException extends \Next\Components\Debug\Exception {
      * implements Next\Application\\Application
      *
      * @param Next\Components\Object $object
-     *   Object assigned as Application
+     *  Object assigned as Application
      *
      * @return Next\Application\ApplicationException
-     *   Exception for invalid Applications
+     *  Exception for invalid Applications
      */
     public static function invalidApplication( Object $object ) {
 
@@ -80,10 +80,10 @@ class ApplicationException extends \Next\Components\Debug\Exception {
      * Application has no View Engine assigned to it
      *
      * @param Next\Application\Application $application
-     *   Assigned Application
+     *  Assigned Application
      *
      * @return Next\Application\ApplicationException
-     *   Exception for Applications without View Engine
+     *  Exception for Applications without View Engine
      */
     public static function noViewEngine( Application $application ) {
 
@@ -104,7 +104,7 @@ class ApplicationException extends \Next\Components\Debug\Exception {
      * implements Next\View\View
      *
      * @return Next\Application\ApplicationException
-     *   Exception for Applications with invalid View Engine
+     *  Exception for Applications with invalid View Engine
      */
     public static function invalidViewEngine() {
 

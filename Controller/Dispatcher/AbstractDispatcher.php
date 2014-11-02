@@ -33,7 +33,7 @@ abstract class AbstractDispatcher extends Object implements Dispatcher {
      * Dispatcher Contructor
      *
      * @param boolean $shouldReturn
-     *   Dispatcher shoul be returned?
+     *  Dispatcher shoul be returned?
      */
     public function __construct( $shouldReturn = FALSE ) {
 
@@ -44,10 +44,10 @@ abstract class AbstractDispatcher extends Object implements Dispatcher {
      * Set Response as Dispatched
      *
      * @param boolean $flag
-     *   Defines whether or not the Controller was already dispatched
+     *  Defines whether or not the Controller was already dispatched
      *
      * @return Next\Controller\Dispatcher\Dispatcher
-     *   Dispatcher Instance (Fluent Interface)
+     *  Dispatcher Instance (Fluent Interface)
      */
     public function setDispatched( $flag ) {
 
@@ -60,7 +60,7 @@ abstract class AbstractDispatcher extends Object implements Dispatcher {
      * Checks if a Controller was Dispatched
      *
      * @return boolean
-     *   TRUE if a Controller was already Dispatched and FALSE otherwise
+     *  TRUE if a Controller was already Dispatched and FALSE otherwise
      */
     public function isDispatched() {
         return $this -> isDispatched;
@@ -70,10 +70,10 @@ abstract class AbstractDispatcher extends Object implements Dispatcher {
      * Change state of dispatching return conditional flag
      *
      * @param boolean $flag
-     *   New state for the flag
+     *  New state for the flag
      *
      * @return Next\Controller\Dispatcher\Dispatcher
-     *   Dispatcher Instance (Fluent Interface)
+     *  Dispatcher Instance (Fluent Interface)
      */
     public function returnResponse( $flag ) {
 
@@ -86,7 +86,7 @@ abstract class AbstractDispatcher extends Object implements Dispatcher {
      * Get current state of dispatching returning conditional flag
      *
      * @return boolean
-     *   Dispatching returning flag value
+     *  Dispatching returning flag value
      */
     public function shouldReturn() {
         return $this -> shouldReturn;

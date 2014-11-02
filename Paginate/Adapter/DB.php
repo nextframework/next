@@ -35,7 +35,7 @@ class DB implements Adapter {
      * DB Adapter Constructor
      *
      * @param array $source
-     *   Data Source
+     *  Data Source
      */
     public function __construct( Manager $em ) {
 
@@ -48,13 +48,13 @@ class DB implements Adapter {
      * Get items from given offset
      *
      * @param integer $offset
-     *   Offset to start the range
+     *  Offset to start the range
      *
      * @param integer $itemsPerPage
-     *   Number of Items per Page
+     *  Number of Items per Page
      *
      * @return array
-     *   Range of pages
+     *  Range of pages
      */
     public function getItems( $offset, $itemsPerPage ) {
 
@@ -72,7 +72,7 @@ class DB implements Adapter {
      * Count Pagination Data Source
      *
      * @return integer
-     *   Number of elements present in given source
+     *  Number of elements present in given source
      *
      * @TODO Optimize to not query database twice
      */

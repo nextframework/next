@@ -29,14 +29,14 @@ class Messages {
      *
      * @var integer
      */
-    const APPEND        = 1;
+    const APPEND         = 1;
 
     /**
      * Message Overwriting Mode
      *
      * @var integer
      */
-    const OVERWRITE     = 2;
+    const OVERWRITE      = 2;
 
     /**
      * Environment Object
@@ -51,10 +51,10 @@ class Messages {
      * Creates a Session Environment and sets the working mode
      *
      * @param string|optional $environment
-     *   Environment Name
+     *  Environment Name
      *
      * @param integer|optional $mode
-     *   Working Mode
+     *  Working Mode
      */
     public function __construct( $environment = self::ENVIRONMENT, $mode = self::APPEND ) {
 
@@ -69,10 +69,10 @@ class Messages {
      * A Message Group which means another dimension in Session Environment
      *
      * @param string|optional $group
-     *   Index where the messages will be saved in Session Environment
+     *  Index where the messages will be saved in Session Environment
      *
      * @return Next\Controller\Action\Helpers\Messages
-     *   Messages Instance (Fluent Interface)
+     *  Messages Instance (Fluent Interface)
      */
     public function addGroup( $group = 'messages' ) {
 
@@ -90,17 +90,17 @@ class Messages {
      * Add a new Message
      *
      * @param mixed $message
-     *   Message to add
+     *  Message to add
      *
      * @param string|optional $group
-     *   A group to store messages
+     *  A group to store messages
      *
      * @return Next\Controller\Action\Helpers\Messages
-     *   Messages Instance (Fluent Interface)
+     *  Messages Instance (Fluent Interface)
      *
      * @throws Next\Controller\Action\Helpers\HelpersException
-     *   A Next\Session\Environment\EnvironmentException is caught when
-     *   Next\Session\Environment::append() is invoked
+     *  A Next\Session\Environment\EnvironmentException is caught when
+     *  Next\Session\Environment::append() is invoked
      *
      * @see Next\Session\Environment\EnvironmentException
      * @see Next\Environment::append()
@@ -149,7 +149,7 @@ class Messages {
      * Get Messages
      *
      * @return array
-     *   Session Environment with stored Messages
+     *  Session Environment with stored Messages
      */
     public function getMessages() {
 
@@ -182,10 +182,10 @@ class Messages {
      * Set Working Mode
      *
      * @param integer|optional $mode
-     *   Working Mode
+     *  Working Mode
      *
      * @return Next\Controller\Action\Helpers\Messages
-     *   Messages Helper Instance (Fluent Interface)
+     *  Messages Helper Instance (Fluent Interface)
      */
     public function setMode( $mode = self::APPEND ) {
 

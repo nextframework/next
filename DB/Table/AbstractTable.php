@@ -27,7 +27,7 @@ abstract class AbstractTable extends Object implements Table {
      * Get Table Name
      *
      * @return string
-     *   Table Name
+     *  Table Name
      */
     public function getTable() {
         return ( ! is_null( $this -> _table ) ? $this -> _table : strtolower( $this ) );
@@ -37,7 +37,7 @@ abstract class AbstractTable extends Object implements Table {
      * List Table Fields
      *
      * @return array
-     *   Modified Table Fields
+     *  Modified Table Fields
      */
     public function getFields() {
 
@@ -92,10 +92,10 @@ abstract class AbstractTable extends Object implements Table {
      * @note Plain and simple! No treatment will be applied!
      *
      * @param string $field
-     *   Table Field
+     *  Table Field
      *
      * @param mixed $value
-     *   Field Value
+     *  Field Value
      */
     public function __set( $field, $value ) {
 

@@ -31,16 +31,16 @@ class ComponentsException extends \Next\Components\Debug\Exception {
      * context and/or function prototyping feature were nullified
      *
      * @param string $target
-     *   Target of the Exception: A called method or an invoked property
+     *  Target of the Exception: A called method or an invoked property
      *
      * @param Next\Components\Object $object
-     *   The Object context
+     *  The Object context
      *
      * @param string $type
-     *   A support argument to reuse some paragraph text. It may be 'method' or 'property' (no quotes)
+     *  A support argument to reuse some paragraph text. It may be 'method' or 'property' (no quotes)
      *
      * @return Next\Components\ComponentsException
-     *   Exception for constructor overwritten
+     *  Exception for constructor overwritten
      */
     public static function constructorOverwritten( $target, Object $object, $type ) {
 

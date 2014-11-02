@@ -22,26 +22,26 @@ class Parameter extends Object implements \Countable {
      *
      * @param mixed $common
      *
-     *   Common Options
+     *  Common Options
      *
-     *   Usually defined in abstract classes these options will be available
-     *   for all its children
+     *  Usually defined in abstract classes these options will be available
+     *  for all its children
      *
      * @param mixed|optional $custom
      *
-     *   children Options
+     *  children Options
      *
-     *   Defined in concrete classes these options will affect individually
-     *   the working mode of each class.
+     *  Defined in concrete classes these options will affect individually
+     *  the working mode of each class.
      *
-     *   These options can sometimes overwrite Common Options too.
+     *  These options can sometimes overwrite Common Options too.
      *
      * @param mixed|optional $user
      *
-     *   User Options
+     *  User Options
      *
-     *   Defined in class constructor, when instantiating the object, allow
-     *   user to change one or all of the options.
+     *  Defined in class constructor, when instantiating the object, allow
+     *  user to change one or all of the options.
      */
     public function __construct( $common, $custom = NULL, $user = NULL ) {
 
@@ -67,9 +67,9 @@ class Parameter extends Object implements \Countable {
      *
      * @param mixed $param
      *
-     *   Argument to merge as Parameter Options
+     *  Argument to merge as Parameter Options
      *
-     *   Acceptable values are:
+     *  Acceptable values are:
      *
      *   <ul>
      *
@@ -87,8 +87,8 @@ class Parameter extends Object implements \Countable {
      *   </ul>
      *
      * @throws Next\Components\Debug\Exception
-     *   Any option is not an associative array, because
-     *   doesn't make sense to have a public property just to store NULL
+     *  Any option is not an associative array, because
+     *  doesn't make sense to have a public property just to store NULL
      */
     public function merge( $param ) {
 
@@ -126,7 +126,7 @@ class Parameter extends Object implements \Countable {
      * Count Parameters Options
      *
      * @return integer
-     *   Number of Options set
+     *  Number of Options set
      *
      * @see Countable::count()
      */
@@ -140,10 +140,10 @@ class Parameter extends Object implements \Countable {
      * Grant access to Parameter properties
      *
      * @param  string $property
-     *   Parameter property
+     *  Parameter property
      *
      * @return mixed
-     *   Parameter value
+     *  Parameter value
      */
     public function __get( $property ) {
         return $this -> parameters -> {$property};
@@ -153,10 +153,10 @@ class Parameter extends Object implements \Countable {
      * Check if a Parameter property exist
      *
      * @param  string  $property
-     *   Parameter property
+     *  Parameter property
      *
      * @return boolean
-     *   TRUE if Parameter property exist and FALSE otherwise
+     *  TRUE if Parameter property exist and FALSE otherwise
      */
     public function __isset( $property ) {
         return ( isset( $this -> parameters -> {$property} ) );

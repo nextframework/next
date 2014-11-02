@@ -22,7 +22,7 @@ class Stream implements AutoLoadable {
      * AutoLoading Function
      *
      * @return Closure
-     *   An anonymous function to be invoked as SPL Autoload callback
+     *  An anonymous function to be invoked as SPL Autoload callback
      */
     public function call() {
 

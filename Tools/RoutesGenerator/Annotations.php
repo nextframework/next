@@ -32,10 +32,10 @@ class Annotations extends AbstractRoutesGenerator {
      * to be used in Table Manager
      *
      * @param Next\Application\Chain $applications
-     *   Applications Chain to iterate through
+     *  Applications Chain to iterate through
      *
      * @param string $dbPath
-     *   SQLite Database Filepath
+     *  SQLite Database Filepath
      */
     public function __construct( Applications $applications, $dbPath ) {
 
@@ -62,7 +62,7 @@ class Annotations extends AbstractRoutesGenerator {
      * The constructor is automatically ignored
      *
      * @return Next\Tools\RoutesGenerator\Annotations
-     *   Routes Generator Annotations Object (Fluent Interface)
+     *  Routes Generator Annotations Object (Fluent Interface)
      */
     public function find() {
 
@@ -107,7 +107,7 @@ class Annotations extends AbstractRoutesGenerator {
      * Save them, to be used by Router Classes
      *
      * @throws Next\Tools\RoutesGerenerator\RoutesGeneratorException
-     *   Unable to record route
+     *  Unable to record route
      */
     public function save() {
 
@@ -220,10 +220,10 @@ class Annotations extends AbstractRoutesGenerator {
      * and shortest routes (more generic) to the bottom, minimizing the conflicts.
      *
      * @param array $routes
-     *   Found Routes
+     *  Found Routes
      *
      * @return array
-     *   Routes Data Source now sorted, from the longest to the shortest
+     *  Routes Data Source now sorted, from the longest to the shortest
      */
     private function sort( array $routes ) {
 

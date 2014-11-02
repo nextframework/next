@@ -32,13 +32,13 @@ class Mongo extends AbstractHandler {
      * Open Session
      *
      * @param string $savePath
-     *   Session Save Path
+     *  Session Save Path
      *
      * @param string $name
-     *   Session Name
+     *  Session Name
      *
      * @return boolean
-     *   Always TRUE, otherwise the Handler won't work properly
+     *  Always TRUE, otherwise the Handler won't work properly
      */
     public function open( $savePath, $name ) {
 
@@ -56,7 +56,7 @@ class Mongo extends AbstractHandler {
      * Close Session
      *
      * @return boolean
-     *   TRUE on success and FALSE on failure
+     *  TRUE on success and FALSE on failure
      */
     public function close() {
 
@@ -69,7 +69,7 @@ class Mongo extends AbstractHandler {
      * Read Session Data
      *
      * @param string $id
-     *   Session Data ID
+     *  Session Data ID
      *
      * @return string|NULL
      *
@@ -99,16 +99,16 @@ class Mongo extends AbstractHandler {
      * Write Session Data
      *
      * @param string $id
-     *   Session Data ID
+     *  Session Data ID
      *
      * @param string $data
-     *   Data to Store
+     *  Data to Store
      *
      * @param integer $expires
-     *   Expiration Timestamp
+     *  Expiration Timestamp
      *
      * @return boolean
-     *   TRUE on success and FALSE on failure
+     *  TRUE on success and FALSE on failure
      */
     public function write( $id, $data, $expires ) {
 
@@ -144,10 +144,10 @@ class Mongo extends AbstractHandler {
      * Destroy Session Data
      *
      * @param string $id
-     *   Session Data ID
+     *  Session Data ID
      *
      * @return boolean
-     *   TRUE on success and FALSE on failure
+     *  TRUE on success and FALSE on failure
      */
     public function destroy( $id ) {
         return $this -> collection -> remove( array( '_id' => $id ) );
@@ -159,10 +159,10 @@ class Mongo extends AbstractHandler {
      * Garbage Collector to delete too old Session Data
      *
      * @param integer $maxlifetime
-     *   Maximum Lifetime of a Session Data
+     *  Maximum Lifetime of a Session Data
      *
      * @return boolean
-     *   TRUE on success and FALSE on failure
+     *  TRUE on success and FALSE on failure
      */
     public function renew( $maxlifetime ) {
 

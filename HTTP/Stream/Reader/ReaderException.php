@@ -24,7 +24,7 @@ class ReaderException extends \Next\Components\Debug\Exception {
      *
      * @var integer
      */
-    const UNABLE_TO_READ     = 0x00000561;
+    const UNABLE_TO_READ    = 0x00000561;
 
     // Exception Messages
 
@@ -32,7 +32,7 @@ class ReaderException extends \Next\Components\Debug\Exception {
      * Unable to read bytes from opened Stream
      *
      * @return Next\HTTP\Stream\Reader\ReaderException
-     *   Exception for Stream readability failure
+     *  Exception for Stream readability failure
      */
     public static function readFailure() {
 

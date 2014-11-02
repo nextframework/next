@@ -25,7 +25,7 @@ class Statement extends \PDOStatement {
      * PDOStatement Constructor
      *
      * @param Next\DB\Statement\Statement $adapter
-     *   Statement Adapter
+     *  Statement Adapter
      */
     private function __construct( StatementInterface $adapter ) {
 
@@ -40,7 +40,7 @@ class Statement extends \PDOStatement {
      * Execute a prepared statement.
      *
      * @param array|optional $input_parameters
-     *   Values to bind to parameter placeholders.
+     *  Values to bind to parameter placeholders.
      *
      * @return boolean TRUE on success and FALSE on failure
      */
@@ -52,17 +52,17 @@ class Statement extends \PDOStatement {
      * Fetch the next row from a ResultSet
      *
      * @param integer|optional $fetch_style
-     *   Fetch mode for this fetch operation
+     *  Fetch mode for this fetch operation
      *
      * @param integer|optional $cursor_orientation
-     *   Determines which row will be returned to the caller
+     *  Determines which row will be returned to the caller
      *
      * @param integer|optional $cursor_offset
-     *   Controls the cursor orientation
+     *  Controls the cursor orientation
      *
      * @return array|stdClass|boolean
-     *   An array or an stdClass object on success, depending
-     *   on <strong>$style</strong> argument and FALSE otherwise
+     *  An array or an stdClass object on success, depending
+     *  on <strong>$style</strong> argument and FALSE otherwise
      */
     public function fetch( $fetch_style = null, $cursor_orientation = null, $cursor_offset = null ) {
         return $this -> adapter -> fetch( $fetch_style );
@@ -72,10 +72,10 @@ class Statement extends \PDOStatement {
      * Return an array containing all of the ResultSet rows
      *
      * @param integer|optional $fetch_style
-     *   Fetch mode for this fetch operation
+     *  Fetch mode for this fetch operation
      *
      * @param mixed|optional $fetch_argument
-     *   Complementary argument to Fetch Style
+     *  Complementary argument to Fetch Style
      *
      * @param array|optional $ctor_args
      *
@@ -87,8 +87,8 @@ class Statement extends \PDOStatement {
      *   </p>
      *
      * @return array|stdClass|boolean
-     *   An array or an stdClass object on success, depending
-     *   on <strong>$style</strong> argument and FALSE otherwise
+     *  An array or an stdClass object on success, depending
+     *  on <strong>$style</strong> argument and FALSE otherwise
      */
     public function fetchAll( $fetch_style = NULL, $fetch_argument = NULL, $ctor_args = NULL ) {
         return $this -> adapter -> fetchAll( $fetch_style );
@@ -98,10 +98,10 @@ class Statement extends \PDOStatement {
      * Return a single column from the next row of a ResultSet
      *
      * @param integer|optional $column_number
-     *   Position of the column to fetch
+     *  Position of the column to fetch
      *
      * @return string|boolean
-     *   The next column value of a ResultSet or FALSE if there are no more rows
+     *  The next column value of a ResultSet or FALSE if there are no more rows
      */
     public function fetchColumn( $column_number = 0 ) {
         return $this -> adapter -> fetchColumn( $column_number );
@@ -111,7 +111,7 @@ class Statement extends \PDOStatement {
      * Return the number of rows affected by the last SQL statement
      *
      * @return integer
-     *   The number of rows affected
+     *  The number of rows affected
      */
     public function rowCount() {
         return $this -> adapter -> rowCount();
@@ -141,13 +141,13 @@ class Statement extends \PDOStatement {
      * Set the default Fetch Mode for the Statement
      *
      * @param integer|optional $fetchStyle
-     *   The Fetch Mode
+     *  The Fetch Mode
      *
      * @param mixed|array|optional $params
-     *   Additional Parameters
+     *  Additional Parameters
      *
      * @return boolean
-     *   TRUE on success and FALSE otherwise
+     *  TRUE on success and FALSE otherwise
      */
     public function setFetchMode( $fetchStyle, $params = NULL ) {
         return $this -> adapter -> setFetchMode( $fetchStyle );
@@ -161,7 +161,7 @@ class Statement extends \PDOStatement {
      * This enables the statement to be executed again
      *
      * @return boolean
-     *   TRUE on success and FALSE otherwise
+     *  TRUE on success and FALSE otherwise
      */
     public function closeCursor() {
         return $this -> adapter -> closeCursor();

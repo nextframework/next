@@ -18,7 +18,7 @@ interface Cacheable {
      * Set Cache Backend
      *
      * @param Next\Cache\Backend\Backend $backend
-     *   Cache Backend
+     *  Cache Backend
      */
     public function setCacheBackend( Backend $backend );
 

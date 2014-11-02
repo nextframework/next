@@ -31,10 +31,10 @@ class Cookie extends Object implements Headers {
      * </code>
      *
      * @param string $data
-     *   Data to validate
+     *  Data to validate
      *
      * @return boolean
-     *   TRUE if valid and FALSE otherwise
+     *  TRUE if valid and FALSE otherwise
      *
      * @link http://en.wikipedia.org/wiki/HTTP_Cookie
      */

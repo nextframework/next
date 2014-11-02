@@ -14,14 +14,16 @@ use Next\DB\Query\Query;    # Query Renderer Interface
  */
 interface Renderer extends Query {
 
+    // CRUD-related methods
+
     /**
      * Render INSERT Statement
      *
      * @param string $table
-     *   Table name
+     *  Table name
      *
      * @param array $fields
-     *   Columns to be added in INSERT Statement
+     *  Columns to be added in INSERT Statement
      */
     public function insert( $table, array $fields );
 
@@ -29,10 +31,10 @@ interface Renderer extends Query {
      * Render UPDATE Statement
      *
      * @param string $table
-     *   Table name
+     *  Table name
      *
      * @param array $fields
-     *   Columns to be added in UPDATE Statement
+     *  Columns to be added in UPDATE Statement
      */
     public function update( $table, array $fields );
 
@@ -40,7 +42,7 @@ interface Renderer extends Query {
      * Render DELETE Statement
      *
      * @param string $table
-     *   Table Name
+     *  Table Name
      */
     public function delete( $table );
 
@@ -50,10 +52,10 @@ interface Renderer extends Query {
      * Render SELECT Statement
      *
      * @param string $columns
-     *   Columns to be included in SELECT Statement
+     *  Columns to be included in SELECT Statement
      *
      * @param string $tables
-     *   Tables from which data will be retrieved
+     *  Tables from which data will be retrieved
      */
     public function select( $columns, $tables );
 
@@ -61,100 +63,80 @@ interface Renderer extends Query {
      * Render SELECT Statement Columns
      *
      * @param string $column
-     *   Column name
+     *  Column name
      *
-     * @param string $alias
-     *   Optional Columns Aliases
+     * @param string|optional $alias
+     *  Optional Column Alias
      */
-    public function columns( $column, $alias );
+    public function columns( $column, $alias = NULL );
 
     /**
      * Render SELECT Statement FROM Clause
      *
      * @param string $alias
-     *   Table Alias
+     *  Table Alias
      *
      * @param string $table
-     *   Table Name
+     *  Table Name
      */
     public function from( $alias, $table );
 
     /**
-     * Render the DISTINCT Clause.
+     * Render the WHERE Clause
      *
-     * <p>This Clause is not rendered in the same way as the others.</p>
-     *
-     * <p>
-     *     Instead that we just replace an Internal Placeholder with
-     *     DISTINCT Keyword if dealing with this type of SELECT Statement,
-     *     or we remove the PlaceHolder itself, if don't
-     * </p>
-     *
-     * @param string $query
-     *   SQL Statement built so far
-     *
-     * @param boolean $isDistinct
-     *   Flag to define should be done: Add the keyword, or remove the Placeholder
+     * @param array $conditions
+     *  WHERE Conditions
      */
-    public function distinct( $query, $isDistinct = FALSE );
+    public function where( $conditions );
 
     /**
      * Render the HAVING Clause
      *
-     * @param array $having
-     *   HAVING Clauses
+     * @param array $conditions
+     *  HAVING Clauses
      */
-    public function having( array $having );
+    public function having( array $conditions );
 
     /**
      * Render the GROUP BY Clause
      *
-     * @param string $field
-     *   Field to group records
+     * @param array $fields
+     *  Fields to group records
      */
-    public function group( $field );
-
-    /**
-     * Render the WHERE Clause
-     *
-     * @param array $where
-     *   WHERE Clauses
-     */
-    public function where( array $where );
+    public function group( array $fields );
 
     /**
      * Render the ORDER BY Clause
      *
-     * @param array $data
-     *
-     *   <p>Information about ordenation:</p>
-     *
-     *   <p>
-     *       Keys are the fields which will lead the ordenation and
-     *       the Values the ordening directions: ASC or DESC
-     *   </p>
+     * @param array $fields
+     *  An associative array, where keys are the fields and values orientations
      */
-    public function order( array $data );
+    public function order( array $field );
 
     /**
      * Render the LIMIT Clause
      *
      * @param array $data
+     *  LIMIT Clause data.
      *
-     *   <p>Information about limitations:</p>
-     *
-     *   <p>
-     *       First index is the offset to start results
-     *       Second Index is the number of records to be returned
-     *   </p>
+     *  First index should be the number of records and the second index
+     *  the offset in which they start
      */
     public function limit( array $data );
 
     /**
      * Render the JOIN Clause
      *
-     * @param array $data
-     *  JOIN Data
+     * @param  string|array $table
+     *  - A string with the JOIN Table
+     *  - An associative single-index array for JOIN Table and its alias. E.g.:
+     *  <code>array( 'm' => 'members' )</code>
+     *
+     * @param  string $on
+     *  The ON Clause
+     *
+     * @param  string|optional $type
+     *  The JOIN Type. Defaults to INNER JOIN
      */
-    public function join( array $join );
+    public function join( $table, $on, $type = Query::INNER_JOIN );
 }

@@ -32,10 +32,10 @@ class HandlersException extends \Next\Components\Debug\Exception {
      * Unknown Session Handler
      *
      * @param string $handlerName
-     *   Desired Handler Name
+     *  Desired Handler Name
      *
      * @return Next\Session\Handlers\HandlersException
-     *   Exception for unknown handler
+     *  Exception for unknown handler
      */
     public static function unknownHandler( $handlerName ) {
 

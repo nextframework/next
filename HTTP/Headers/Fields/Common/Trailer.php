@@ -20,7 +20,7 @@ class Trailer extends AbstractField {
      * Get Header Field Validator
      *
      * @return Next\Validate\Validate
-     *   Associated Validator
+     *  Associated Validator
      */
     protected function getValidator() {
         return new \Next\Validate\HTTP\Headers\Common\Trailer;
@@ -30,7 +30,7 @@ class Trailer extends AbstractField {
      * Set Up Header Options
      *
      * @return array
-     *   Header Field Validation Options
+     *  Header Field Validation Options
      */
     public function setOptions() {
         return array( 'name' => 'Trailer' );

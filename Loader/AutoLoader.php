@@ -36,13 +36,13 @@ class AutoLoader {
      * Register a new AutoLoadable Object
      *
      * @param Next\Loader\AutoLoader\AutoLoadable $autoloader
-     *   The AutoLoader Object to be registered
+     *  The AutoLoader Object to be registered
      *
      * @return Next\AutoLoader
-     *   AutoLoader Instance (Fluent Interface)
+     *  AutoLoader Instance (Fluent Interface)
      *
      * @throws Next\LoaderException
-     *   Trying to register an already registred AutoLoadable Object
+     *  Trying to register an already registred AutoLoadable Object
      */
     public function registerAutoLoader( AutoLoadable $autoloader ) {
 
@@ -64,13 +64,13 @@ class AutoLoader {
      * Unregister an AutoLoadable Object
      *
      * @param Next\Loader\AutoLoader\AutoLoadable $autoloader
-     *   The AutoLoader Object to be registered
+     *  The AutoLoader Object to be registered
      *
      * @return Next\AutoLoader
-     *   AutoLoader Instance (Fluent Interface)
+     *  AutoLoader Instance (Fluent Interface)
      *
      * @throws Next\LoaderException
-     *   Trying to unregister a non registered AutoLoadable Object
+     *  Trying to unregister a non registered AutoLoadable Object
      */
     public function unregisterAutoLoader( AutoLoadable $autoloader ) {
 

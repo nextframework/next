@@ -27,14 +27,14 @@ class AcceptRanges extends Object implements Headers {
      * </code>
      *
      * @param string $data
-     *   Data to validate
+     *  Data to validate
      *
      * @return boolean
-     *   TRUE if valid and FALSE otherwise
+     *  TRUE if valid and FALSE otherwise
      *
      * @link
-     *   http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.5
-     *   RFC 2616 Section 14.5
+     *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.5
+     *  RFC 2616 Section 14.5
      */
     public function validate( $data ) {
         return ( strcasecmp( $data, 'none' ) == 0 || strcasecmp( $data, 'bytes' ) == 0 );

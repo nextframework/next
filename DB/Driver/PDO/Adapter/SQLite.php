@@ -21,11 +21,11 @@ class SQLite extends AbstractPDO {
      * Get SQLite Adapter DSN
      *
      * @return string
-     *   SQLite Adapter DSN used by PDO Connection
+     *  SQLite Adapter DSN used by PDO Connection
      *
      * @throws Next\DB\Driver\DriverException
-     *   Required <strong>Path</strong> or <strong>File</strong>
-     *   parameters was not set in Connection Parameters
+     *  Required <strong>Path</strong> or <strong>File</strong>
+     *  parameters was not set in Connection Parameters
      */
     protected function getDSN() {
 
@@ -45,7 +45,7 @@ class SQLite extends AbstractPDO {
      * Check for SQLite Adapter Requirements
      *
      * @throws Next\DB\Driver\DriverException
-     *   PDO_SQLITE Extension was not loaded
+     *  PDO_SQLITE Extension was not loaded
      */
     protected function checkRequirements() {
 
@@ -76,7 +76,7 @@ class SQLite extends AbstractPDO {
      *            the column's name instead of column's value
      *
      * @return Next\DB\Query\Renderer\Renderer
-     *   MySQL Renderer (yes! MySQL Renderer, read comment above)
+     *  MySQL Renderer (yes! MySQL Renderer, read comment above)
      */
     public function getRenderer() {
         return new \Next\DB\Query\Renderer\MySQL( '"' );

@@ -31,14 +31,14 @@ class Via extends Object implements Headers {
      * </code>
      *
      * @param string $data
-     *   Data to validate
+     *  Data to validate
      *
      * @return boolean
-     *   TRUE if valid and FALSE otherwise
+     *  TRUE if valid and FALSE otherwise
      *
      * @link
-     *   http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.45
-     *   RFC 2616 Section 14.45
+     *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.45
+     *  RFC 2616 Section 14.45
      */
     public function validate( $data ) {
 
@@ -47,15 +47,15 @@ class Via extends Object implements Headers {
             sprintf(
 
                 '/(?:
-                    (?:(?<protocol>%s)\/)?                  # Optional Protocol
-                       (?<version>%s)                       # Required Version
+                    (?:(?<protocol>%s)\/)?                    # Optional Protocol
+                       (?<version>%s)                         # Required Version
                   )\s*
 
                   (?<receiver>
-                      (?:<host>[^:]+)(?:<port>:[0-9]+)?|%s  # URL with optional Port or a pseudonym
+                      (?:<host>[^:]+)(?:<port>:[0-9]+)?|%s    # URL with optional Port or a pseudonym
                   )\s*
 
-                  (?<comment>.*)?                           # Comments are everything in the end of string
+                  (?<comment>.*)?                             # Comments are everything in the end of string
                 /x',
 
                 self::TOKEN, self::TOKEN, self::TOKEN

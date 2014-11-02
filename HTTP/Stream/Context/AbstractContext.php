@@ -32,7 +32,7 @@ abstract class AbstractContext implements Context {
      * Stream Context Constructor
      *
      * @param array|optional $options
-     *   Initial Context Options
+     *  Initial Context Options
      */
     public function __construct( array $options = array() ) {
 
@@ -54,10 +54,10 @@ abstract class AbstractContext implements Context {
      * Set more (or late) Stream Context Options
      *
      * @param array $options
-     *   Context Options
+     *  Context Options
      *
      * @return Next\HTTP\Stream\Context\Context
-     *   Stream Context Object (Fluent Interface)
+     *  Stream Context Object (Fluent Interface)
      */
     public function setOptions( array $options ) {
 
@@ -70,22 +70,22 @@ abstract class AbstractContext implements Context {
      * Get Context Options
      *
      * @param string|optional $option
-     *   Desired Context Option
+     *  Desired Context Option
      *
      * @param string|optional $wrapper
-     *   Optional Context Option Wrapper
+     *  Optional Context Option Wrapper
      *
      * @return array|boolean
      *
-     *   If <strong>$option</strong> is NOT null and we can't find a match
-     *   option FALSE is returned. Otherwise the desired option value
-     *   will.
+     *  If <strong>$option</strong> is NOT null and we can't find a match
+     *  option FALSE is returned. Otherwise the desired option value
+     *  will.
      *
-     *   If <strong>$option</strong> argument IS null, all the options defined will be
-     *   returned
+     *  If <strong>$option</strong> argument IS null, all the options defined will be
+     *  returned
      *
      *   <strong>$wrapper</strong> argument, if set, can restrict the search and thus avoid a
-     *   value to be found
+     *  value to be found
      */
     public function getOptions( $option = NULL, $wrapper = NULL ) {
 
@@ -114,7 +114,7 @@ abstract class AbstractContext implements Context {
      * Get Context Resource
      *
      * @return resource
-     *   Stream Context Resource
+     *  Stream Context Resource
      */
     public function getContext() {
 

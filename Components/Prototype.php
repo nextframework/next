@@ -29,16 +29,16 @@ abstract class Prototype implements Prototypical  {
      * Implement a new callable resource, prototyping it to Object
      *
      * @param string $name
-     *   Callable resource name. Should be unique
+     *  Callable resource name. Should be unique
      *
      * @param callable $callable
-     *   Callable resource
+     *  Callable resource
      *
      * @param array $args
-     *   Default arguments available to callable resource
+     *  Default arguments available to callable resource
      *
      * @return Next\Components\Prototype
-     *   Prototype Instance (Fluent Interface)
+     *  Prototype Instance (Fluent Interface)
      */
     public function implement( $name, $callable, $args = array() ) {
 
@@ -51,19 +51,19 @@ abstract class Prototype implements Prototypical  {
      * Invoke a prototyped resource from a caller context
      *
      * @param Next\Components\Object $caller
-     *   Caller Object
+     *  Caller Object
      *
      * @param string $method
-     *   Callable resource name
+     *  Callable resource name
      *
      * @param array $args
-     *   Calling Arguments
+     *  Calling Arguments
      *
      * @return Next\Components\Object
-     *   Caller Object updated
+     *  Caller Object updated
      *
      * @throws Next\Components\Debug\Exception
-     *   Called resource is not known as a prototype nor as a extended method
+     *  Called resource is not known as a prototype nor as a extended method
      */
     public function call( Object $caller, $method, array $args = array() ) {
 

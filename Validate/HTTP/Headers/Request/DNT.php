@@ -21,8 +21,8 @@ class DNT extends Object implements Headers {
      * <p>This is not a RFC header BUT is widely accepted just as one</p>
      *
      * <p>
-     *   It's almost the same as X-Do-Not-Track, but seems this is being
-     *   acceptable more and more by modern browsers
+     *  It's almost the same as X-Do-Not-Track, but seems this is being
+     *  acceptable more and more by modern browsers
      * </p>
      *
      * <p><strong>RFC Specification</strong></p>
@@ -32,19 +32,19 @@ class DNT extends Object implements Headers {
      * </code>
      *
      * @param string $data
-     *   Data to validate
+     *  Data to validate
      *
      * @return boolean
-     *   TRUE if valid and FALSE otherwise
+     *  TRUE if valid and FALSE otherwise
      *
      * @link
-     *   http://blog.sidstamm.com/2011/01/try-out-do-not-track-http-header.html
+     *  http://blog.sidstamm.com/2011/01/try-out-do-not-track-http-header.html
      *
      * @link
-     *   http://donottrack.us/
+     *  http://donottrack.us/
      *
      * @link
-     *   http://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Common_non-standard_request_headers
+     *  http://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Common_non-standard_request_headers
      */
     public function validate( $data ) {
 

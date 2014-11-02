@@ -18,13 +18,13 @@ final class Boolean extends AbstractTypes {
      * Check whether or not given value is acceptable by datatype class
      *
      * @param mixed $value
-     *   Value to set
+     *  Value to set
      *
      * @return boolean
-     *   TRUE if given value is of the type boolean or given value
-     *   is any other accepted boolean variants.
+     *  TRUE if given value is of the type boolean or given value
+     *  is any other accepted boolean variants.
      *
-     *   Return FALSE otherwise
+     *  Return FALSE otherwise
      */
     protected function accept( $value ) {
         return ( gettype( $value ) == 'boolean' || is_bool( $value ) );
@@ -34,7 +34,7 @@ final class Boolean extends AbstractTypes {
      * Prototype resources to object
      *
      * @param mixed|optional $value
-     *   An optional value to be used by prototyped resource
+     *  An optional value to be used by prototyped resource
      */
     protected function prototype( $b = NULL ) {
 

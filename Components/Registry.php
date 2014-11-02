@@ -40,7 +40,7 @@ class Registry {
      * Get Registry Instance
      *
      * @return Next\Components\Registry
-     *   Registry Instance
+     *  Registry Instance
      */
     public static function getInstance() {
 
@@ -56,17 +56,17 @@ class Registry {
      * Add/Set a Registry Entry value
      *
      * @param string $key
-     *   Registry Key
+     *  Registry Key
      *
      * @param mixed $value
-     *   Value to be stored
+     *  Value to be stored
      *
      * @return Next\Components\Registry
-     *   Registry Object (Fluent Interface)
+     *  Registry Object (Fluent Interface)
      */
     public function set( $key, $value ) {
 
-        $key   = trim( $key );
+        $key = trim( $key );
 
         if( ! empty( $key ) ) {
 
@@ -80,10 +80,10 @@ class Registry {
      * Get a Registry Entry value
      *
      * @param string $key
-     *   Registry Key
+     *  Registry Key
      *
      * @return mixed
-     *   Registry Entry
+     *  Registry Entry
      */
     public function get( $key ) {
 

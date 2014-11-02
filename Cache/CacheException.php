@@ -41,7 +41,7 @@ class CacheException extends \Next\Components\Debug\Exception {
      * Metadata Files could not be read by designed Cache Backend
      *
      * @return Next\Cache\CacheException
-     *   Exception for Metadata readbility failure
+     *  Exception for Metadata readbility failure
      */
     public static function noMetadata() {
 
@@ -60,7 +60,7 @@ class CacheException extends \Next\Components\Debug\Exception {
      * follows the expected structure
      *
      * @return Next\Cache\CacheException
-     *   Exception for Metadata integrity corruption
+     *  Exception for Metadata integrity corruption
      */
     public static function corruptedMetadata() {
 

@@ -2,233 +2,439 @@
 
 namespace Next\DB\Query;
 
-use Next\DB\Query\Renderer\Renderer;    # Query Renderer
-use Next\Components\Utils\ArrayUtils;   # Array Utils Class
 use Next\Components\Object;             # Object Class
+use Next\Components\Invoker;            # Invoker Class
 
-/**
- * Query Builder Class
- *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
- */
-class Builder extends Object implements Query {
+use Next\DB\Query\Renderer\Renderer;    # Query Renderer
+
+class Builder extends Object {
 
     /**
      * Query Renderer
      *
-     * @var Next\DB\Query\Renderer\Renderer $renderer
+     * @var Next\DB\Query\Renderer\Renderer
      */
-    protected $renderer;
+    private $renderer;
 
     /**
      * Built Query
      *
      * @var string $query
      */
-    protected static $query;
+    private $query;
 
     /**
-     * Placeholders Replacements
+     * Query Placeholders Replacements
      *
      * @var array $replacements
      */
-    public static $replacements = array();
+    private $replacements = array();
 
     /**
-     * SQL Statement Components
+     * Columns to be include in SELECT Statement
      *
-     * @var array $parts
+     * @var array $columns
      */
-    protected static $parts = array();
+    private $columns = array();
 
     /**
-     * Query Builder Constructor
+     * Tables to be searched
      *
-     * @param Next\DB\Renderer\Renderer $renderer
-     *   Query Renderer
+     * @var array $tables
+     */
+    private $tables = array();
+
+    /**
+     * DISTINCT Flag
+     *
+     * @var boolean $distinct
+     */
+    private $distinct = FALSE;
+
+    /**
+     * WHERE Clauses
+     *
+     * @var array $where
+     */
+    private $where = array();
+
+    /**
+     * JOIN Clauses
+     *
+     * @var array $joins
+     */
+    private $joins = array();
+
+    /**
+     * HAVING Clauses
+     *
+     * @var array $having
+     */
+    private $having = array();
+
+    /**
+     * GROUP BY Fields
+     *
+     * @var string $group
+     */
+    private $group;
+
+    /**
+     * ORDER BY Fields
+     *
+     * @var array $order
+     */
+    private $order = array();
+
+    /**
+     * LIMIT Clause
+     *
+     * @var array $limit
+     */
+    private $limit = array();
+
+    /**
+     * Table Select Constructor
+     *
+     * @param Next\DB\Query\Renderer $renderer
+     *  Query Renderer to be used
      */
     public function __construct( Renderer $renderer ) {
 
-        // Setting up Resources
+        parent::__construct();
 
-        $this -> renderer =& $renderer;
-
-        // Reset and Prepare SQL Parts Structure
-
-        $this -> reset();
-
-        // Extra Initialization
-
-        $this -> init();
+        $this -> renderer = $renderer;
     }
 
-    /**
-     * Additional Initialization. Must be overwritten
-     */
-    protected function init() {}
-
-    // Query Builder Methods
+    // CRUD-related methods
 
     /**
-     * Add WHERE Clause(s)
+     * Build an INSERT Statement
      *
-     * @param array|string $condition
-     *   WHERE Clause
+     * @param string $table
+     *  Table name
      *
-     * @param string|array|optional $value
-     *   Value for Clauses Placeholders (if any)
+     * @param array $fields
+     *  Columns to be added in INSERT Statement
      *
-     * @param boolean|optional $isMatchingClause
-     *
-     *   <p>If TRUE it will be an 'AND' WHERE Clause</p>
-     *
-     *   <p>If FALSE, it will be an 'OR' WHERE Clause</p>
-     *
-     * @return Next\DB\Query\Builder
-     *   Builder Instance (Fluent Interface)
+     * @return Next\DB\Table\Select
+     *  Table Select Object (Fluent Interface)
      */
-    public function where( $condition, $value = NULL, $isMatchingClause = TRUE ) {
+    public function insert( $table, array $fields ) {
 
-        // Registering Placeholders Replacement Values (if any)
+        $this -> query = $this -> renderer -> insert( $table, array_keys( $fields ) );
 
-        if( ! is_null( $value ) ) {
-
-            // If we have an array of values...
-
-            if( is_array( $value ) ) {
-
-                foreach( $value as $v ) {
-
-                    // ... all them will be considered as OR WHERE Clause...
-
-                    $this -> orWhere( $condition, $v );
-                }
-
-                // ... and the AND WHERE invoked will be ignored
-
-                return $this;
-            }
-
-            $this -> setReplacements( (array) $value, self::SQL_WHERE );
-        }
-
-        $condition = trim( $condition );
-
-        // Adding Clause to SQL Parts Property
-
-        self::$parts[ self::SQL_WHERE ][] = array(
-
-            $condition => ( $isMatchingClause ? self::SQL_AND : self::SQL_OR )
-        );
+        $this -> addReplacements( $fields );
 
         return $this;
     }
 
     /**
-     * Wrapper for OR WHERE Clause
+     * Render UPDATE Statement
+     *
+     * @param string $table
+     *  Table name
+     *
+     * @param array $fields
+     *  Columns to be added in UPDATE Statement
+     *
+     * @return Next\DB\Table\Select
+     *  Table Select Object (Fluent Interface)
+     */
+    public function update( $table, array $fields ) {
+
+        $this -> query = $this -> renderer -> update( $table, array_keys( $fields ) );
+
+        $this -> addReplacements( $fields );
+
+        return $this;
+    }
+
+    /**
+     * Build a DELETE Statement
+     *
+     * @param string $table
+     *  Table Name
+     *
+     * @return Next\DB\Table\Select
+     *  Table Select Object (Fluent Interface)
+     */
+    public function delete( $table ) {
+
+        $this -> query = $this -> renderer -> delete( $table );
+
+        return $this;
+    }
+
+    // Select-related Rendering Methods
+
+    /**
+     * Specify SELECT Statement Columns
+     *
+     * @param array|optional $columns
+     *  Columns to be included in SELECT Statement
+     *
+     * @return Next\DB\Table\Select
+     *  Table Select Object (Fluent Interface)
+     */
+    public function select( $columns = array() ) {
+
+        // Is the SELECT Column an single Expression?
+
+        if( $columns instanceof Expression ) {
+
+            $this -> columns = (array) $columns -> getExpression();
+
+            return $this;
+        }
+
+        $columns = (array) $columns;
+
+        /**
+         * @internal
+         *
+         * Fixing common mistakes in method arguments:
+         *
+         * - array()                        <empty array>
+         * - array( '*' )                   <single index array with a SQL wildcard
+         * - ''                             <an empty string>
+         * - array('')                      <single-index array with an empty string>
+         * - array( 'something' => '' )     <single-index associative array with an empty string>
+         * - array( 'something' => '*' )    <single-index associative array with a SQL wildcard>
+         */
+        $c   = $columns; // Need some shortening u.u'
+        $cnt = count( $columns );
+
+        if( $cnt == 0 || ( $cnt == 1 && ( reset( $c ) !== FALSE && ( $c[ key( $c ) ] == Query::WILDCARD || empty( $c[ key( $c ) ] ) ) ) ) ) {
+
+            $this -> columns = (array) Query::WILDCARD;
+
+            return $this;
+        }
+
+        /**
+         * @internal
+         *
+         * More fixes. This time some cleanup:
+         *
+         * - array( '          somefield' )
+         * - array( 'somefield', '', 'anotherfield' )
+         *
+         * Also, we'll get the Expression value, if any
+         */
+        $columns = array_filter(
+
+            array_map(
+
+                function( $column ) {
+                    return ( $column instanceof Expression ? $column : trim( $column ) );
+                },
+
+                $columns
+            )
+        );
+
+        /**
+         * Usage:
+         *
+         * <code>
+         *  array( 'username' => 'long_and_complex_field_for_username' )
+         * </code>
+         *
+         * Will become, after built the Statement:
+         *
+         * <code>
+         *  SELECT `long_and_complex_field_for_username` AS `username`
+         * </code>
+         *
+         * And your favorite Fetch Mode will use the Field Alias
+         * as index (or property)
+         */
+        foreach( $columns as $alias => $column ) {
+            $this -> columns[] = $this -> renderer -> columns( $column, $alias );
+        }
+
+        return $this;
+    }
+
+    /**
+     * Specify the columns to be searched
+     *
+     * @param array|optional $tables
+     *  One or more different tables to search
+     *
+     * @return Next\DB\Table\Select
+     *  Table Select Object (Fluent Interface)
+     */
+    public function from( $tables = array() ) {
+
+        /**
+         * Usage:
+         *
+         * <code>array( 'm' => 'members' )</code>
+         *
+         * Will become, after built the Statement:
+         *
+         * <code>SELECT fields FROM `members` m</code>
+         *
+         * If an alias is not defined as element index, it will not exist (obviously)
+         */
+        foreach( (array) $tables as $alias => $table ) {
+            $this -> tables[] = $this -> renderer -> from( $alias, $table );
+        }
+
+        /**
+         * @internal
+         * Assembling Query
+         * From this point all SQL is a Clause
+         */
+        $this -> query = $this -> renderer -> select( $this -> columns, $this -> tables, $this -> distinct );
+
+        return $this;
+    }
+
+    /**
+     * Specify a DISTINCT Clause
+     *
+     * @return Next\DB\Table\Select
+     *  Table Select Object (Fluent Interface)
+     */
+    public function distinct() {
+
+        $this -> distinct = TRUE;
+
+        return $this;
+    }
+
+    // Other Clauses
+
+    /**
+     * Add a WHERE Clause
      *
      * @param array|string $condition
-     *   WHERE Condition
+     *  WHERE Clause
      *
-     * @param string|array|optional $value
-     *   Value for Clause's Placeholders (if any)
+     * NOTE: In order to implicit maintainability, only the first index will be used.
+     * For multiple WHERE conditions, call the method again
      *
-     * @return Next\DB\Query\Builder
-     *   Builder Instance (Fluent Interface)
+     * @param array|optional $values
+     *  Value for Clause Placeholders, if any
+     *
+     * @param mixed|string|optional $type
+     *  The WHERE Clause condition type, 'AND' or 'OR'.
+     *
+     *  Defaults to 'AND'
+     *
+     * @return Next\DB\Table\Select
+     *  Table Select Object (Fluent Interface)
      */
-    public function orWhere( $condition, $value = NULL ) {
-        return $this -> where( $condition, $value, FALSE );
+    public function where( $condition, $values = array(), $type = Query::SQL_AND ) {
+
+        $this -> where[ $type ][] = ( is_array( $condition ) ? array_shift( $condition ) : $condition );
+
+        $this -> addReplacements( $values );
+
+        return $this;
+    }
+
+    /**
+     * Add a JOIN Clause
+     *
+     * @param string|array $table
+     *  - A string with the JOIN Table
+     *  - A single-index array with JOIN Table and its alias as key. E.g.:
+     *
+     *  <code>array( 'm' => 'members' )</code>
+     *
+     *  NOTE: In order to implicit maintainability, only the first index will be used.
+     *  For multiple JOINS, call the method again
+     *
+     * @param string $on
+     *  The ON Clause
+     *
+     * @param string|optional $type
+     *  The JOIN Type
+     *
+     *  The Query interface has three values of JOIN Types:
+     *  Query::INNER_JOIN, Query::LEFT_OUTER_JOIN and Query::RIGHT_OUTER_JOIN
+     *
+     *  However there are no constraints about what it's accepted here because there are numerous
+     *  valid aliases for this value
+     *
+     * @return Next\DB\Table\Select
+     *  Table Select Object (Fluent-Interface)
+     */
+    public function join( $table, $on, $type = Query::INNER_JOIN ) {
+
+        $table = ( is_array( $table ) ? array_slice( $table, 0, 1 ) : $table );
+
+        $this -> joins[] = $this -> renderer -> join( $table, $on, $type );
+
+        return $this;
+    }
+
+    /**
+     * Add a HAVING Clause
+     *
+     * @param array|string $condition
+     *  HAVING Clause
+     *
+     * NOTE: In order to implicit maintainability, only the first index will be used.
+     * For multiple HAVING conditions, call the method again
+     *
+     * @param array|optional $value
+     *  Value for Clause Placeholders, if any
+     *
+     * @param mixed|string|optional $type
+     *  The HAVING Clause condition type, 'AND' or 'OR'.
+     *
+     *  Defaults to 'AND'
+     *
+     * @return Next\DB\Table\Select
+     *  Table Select Object (Fluent Interface)
+     */
+    public function having( $condition, $values = array(), $type = Query::SQL_AND ) {
+
+        $this -> having[ $type ][] = ( is_array( $condition ) ? array_shift( $condition ) : $condition );
+
+        $this -> addReplacements( $values );
+
+        return $this;
+    }
+
+    /**
+     * Add a GROUP BY Clause
+     *
+     * @param string|array $fields
+     *  Fields to group results
+     *
+     * @return Next\DB\Table\Select
+     *  Table Select Object (Fluent Interface)
+     */
+    public function group( $fields ) {
+
+        $this -> group = array_filter( array_map( 'trim', (array) $fields ) );
+
+        return $this;
     }
 
     /**
      * Add ORDER BY Clause(s)
      *
      * @param string|array $field
-     *
-     *   <p>As string, field to lead the ordenation.</p>
-     *
-     *   <p>
-     *       As associative array, keys are the fields and values
-     *       ordenation types
-     *   </p>
+     *  - As a string, the field to order</p>
+     *  - As an associative array, keys are the fields and values order types
      *
      * @param string|optional $type
+     *  Orientation, if <strong>$field</strong> is not an array: ASC or DESC.
+     *  Defaults to ASC
      *
-     *   <p>Type of ordenation: ASC or DESC.</p>
-     *
-     *   <p>
-     *       If <strong>$field</strong> is an array, this value is not
-     *       immediately used
-     *   </p>
-     *
-     * @return Next\DB\Query\Builder
-     *   Builder Instance (Fluent Interface)
-     *
-     * @throws Next\DB\Query\QueryException
-     *   Ordenation field is empty or was considered an empty string
+     * @return Next\DB\Table\Select
+     *  Table Select Object (Fluent Interface)
      */
-    public function order( $field, $type = self::SQL_ORDER_ASC ) {
+    public function order( $field, $type = Query::ORDER_ASCENDING ) {
 
-        // Do we have multiple ORDER BY clause?
-
-        if( is_array( $field ) ) {
-
-            if( is_array( $type ) ) {
-
-                // Both arguments are arrays, let's equalize their lengths...
-
-                ArrayUtils::equalize( $field, $type );
-
-                // ... and combine to make recursion easier
-
-                $field = array_combine( $field, $type );
-            }
-
-            /**
-             * @internal
-             * Only first argument is array, so we expect it to be
-             * an associative pair/value as field to order => ordenation type
-             */
-            foreach( $field as $f => $t ) {
-
-                $this -> order( $f, $t );
-            }
-
-        } else {
-
-            // Ensuring we have a Field to lead the ordenation
-
-            $field = trim( (string) $field );
-
-            if( empty( $field ) ) {
-
-                throw QueryException::logic(
-
-                    'Field to order results must be set as non-empty string'
-                );
-            }
-
-            // Ensuring we have a ordening direction (even optional for most RDBMS)
-
-            $type = trim( (string) $type );
-
-            if( empty( $type ) ) {
-
-                $type = self::SQL_ORDER_ASC;
-            }
-
-            /**
-             * @internal
-             * ORDER BY Clause cannot be "prepared", at least not as a question
-             * mark placeholder, because for some reason PDO::prepare() will
-             * try to wrap the values (field and ordenation type) into quotes,
-             * invalidating this specific part of SQL Statement
-             */
-            self::$parts[ self::SQL_ORDER_BY ][ $field ] = $type;
-        }
+        $this -> order[] = ( is_array( $field ) ? $field : array( $field => $type ) );
 
         return $this;
     }
@@ -237,332 +443,105 @@ class Builder extends Object implements Query {
      * Add a LIMIT Clause, with or without an offset
      *
      * @param integer|optional $limit
-     *   Number of records to be returned
+     *  Number of records to be returned.
+     *  Defaults to 1 and it'll be forced to be greater than zero
      *
      * @param integer|optional $offset
-     *   Record to start
+     *  Record offset to start.
+     *  Defaults to 0 and it'll be forced to not be negative
      *
-     * @return Next\DB\Query\Builder
-     *   Builder Instance (Fluent Interface)
+     * @return Next\DB\Table\Select
+     *  Table Select Object (Fluent Interface)
      */
     public function limit( $limit = 1, $offset = 0 ) {
 
         $limit  = (int) $limit;
         $offset = (int) $offset;
 
-        $offset = ( $offset >= 0 ? $offset : 0 );
+        $this -> limit = array(
 
-        // Registering Placeholder Replacement Values
+            ( $offset >= 0 ? $offset : 0 ),
 
-        self::$parts[ self::SQL_LIMIT ] = array( $offset, ( $limit > 0 ? $limit : 1 ) );
-
-        return $this;
-    }
-
-    // Accessors
-
-    /**
-     * Reset Builder Data
-     *
-     * <p>Useful for consecutive operations (like in a loop)</p>
-     *
-     * @return Next\DB\Query\Builder
-     *   Builder Instance (Fluent Interface)
-     */
-    public function reset() {
-
-        // Reseting all Clauses Structure
-
-        self::$parts = array(
-
-            self::SQL_DISTINCT      => FALSE,
-            self::SQL_WHERE         => array(),
-            self::SQL_GROUP_BY      => FALSE,
-            self::SQL_ORDER_BY      => FALSE,
-            self::SQL_LIMIT         => NULL,
-            self::SQL_HAVING        => array(),
-            self::SQL_UNION         => NULL
+            ( $limit > 0 ? $limit : 1 )
         );
 
-        // Placeholders Replacements
-
-        self::$replacements = array(
-
-            self::SQL_WHERE     => array(),
-            self::SQL_HAVING    => array(),
-            self::SQL_GROUP_BY  => array()
-        );
-
-        // Built Query
-
-        self::$query = NULL;
-
         return $this;
-    }
-
-    /**
-     * Reset Part of Builder Data
-     *
-     * <p>Useful to fix user mistakes when a Table Manager is required</p>
-     *
-     * @param string $part
-     *   A specific part to reset
-     *
-     * @return Next\DB\Query\Builder
-     *   Builder Instance (Fluent Interface)
-     */
-    public function resetPart( $part ) {
-
-        if( array_key_exists( $part, self::$parts ) ) {
-
-            unset( self::$parts[ $part ] );
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set Query Component
-     *
-     * @param string $part
-     *   Part of SQL Builder to be retrieved
-     *
-     * @param string $value
-     *  SQL Part value
-     *
-     * @return Next\DB\Query\Builder
-     *   Builder Instance (Fluent Interface)
-     */
-    public function setPart( $part, $value ) {
-
-        self::$parts[ $part ] = $value;
-
-        return $this;
-    }
-
-    /**
-     * Get Query Component
-     *
-     * @param string $part
-     *   Part of SQL Builder to be retrieved
-     *
-     * @return mixed|NULL
-     *   Desired SQL Part if present and NULL otherwise
-     */
-    public function getPart( $part ) {
-        return ( array_key_exists( $part, self::$parts ) ? self::$parts[ $part ] : NULL );
-    }
-
-    /**
-     * Get all Query Components
-     *
-     * @return array
-     */
-    public function getParts() {
-        return self::$parts;
-    }
-
-    /**
-     * Get query
-     *
-     * @param string $query
-     *   Built Query, at moment of call
-     *
-     * @return string
-     *   Built query, at moment of call
-     */
-    public function getQuery() {
-        return self::$query;
-    }
-
-    /**
-     * Create a query from external context
-     *
-     * @param string $query
-     *   Query to create
-     *
-     * @return Next\DB\Query\Builder
-     *   Builder Instance (Fluent Interface)
-     */
-    public function createQuery( $query ) {
-
-        self::$query =& $query;
-
-        return $this;
-    }
-
-    /**
-     * Define Placeholders Replacements from external context
-     *
-     * @param array $replacements
-     *   Query Replacements
-     *
-     * @param string|optional $group
-     *   Group where store the replacements
-     *
-     * @return Next\DB\Query\Builder
-     *   Builder Instance (Fluent Interface)
-     */
-    public function setReplacements( array $replacements, $group = NULL ) {
-
-        if( ! is_null( $group ) ) {
-
-            self::$replacements[ $group ] = array_merge(
-                self::$replacements[ $group ], array_values( $replacements )
-            );
-
-        } else {
-
-            self::$replacements = array_merge(
-                self::$replacements, array_values( $replacements )
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-     * Get Placeholder Replacements
-     *
-     * @param string|optional $group
-     *  A specific group of replacements
-     *
-     * @return array
-     *   SQL Placeholders Replacements
-     */
-    public function getReplacements( $group = NULL, $raw = FALSE ) {
-
-        if( ! is_null( $group ) && array_key_exists( $group, self::$replacements ) ) {
-
-            $replacements = self::$replacements[ $group ];
-
-        } else {
-
-            $replacements = self::$replacements;
-        }
-
-        // Should we return the Replacements structure "as is"?
-
-        if( $raw ) {
-            return $replacements;
-        }
-
-        // Well, let's "unidimensionalize" (yeah, I invented this) it then
-
-        $r = array();
-
-        array_walk_recursive(
-
-            $replacements,
-
-            function( $current ) use( &$r ) {
-
-                $r[] =& $current;
-            }
-        );
-
-        return $r;
-    }
-
-    /**
-     * Get Renderer Object
-     *
-     * @return Next\DB\Query\Renderer\Renderer
-     */
-    public function getRenderer() {
-        return $this -> renderer;
     }
 
     /**
      * Assemble the Query
      *
      * @return string
-     *   Built Query
+     *  Built Query
      */
     public function assemble() {
 
-        // Assembling SQL Statement Parts, if needed
-
-            // DISTINCT Clause
-
-        if( array_key_exists( self::SQL_DISTINCT, self::$parts ) ) {
-
-            self::$query = $this -> renderer -> distinct(
-
-                self::$query, self::$parts[ self::SQL_DISTINCT ]
-            );
+        if( count( $this -> joins ) > 0 ) {
+            $this -> query .= implode( '', $this -> joins );
         }
 
-            // WHERE Clause
-
-        if( array_key_exists( self::SQL_WHERE, self::$parts ) ) {
-
-            $clauses  = $this -> renderer -> where(
-
-                self::$parts[ self::SQL_WHERE ]
-            );
+        if( count( $this -> where ) > 0 ) {
+            $this -> query .= $this -> renderer -> where( $this -> where );
         }
 
-        /**
-         * @internal
-         * GROUP BY Clause
-         *
-         * This is little different than the others because PDO::prepare() will
-         * try to wrap our question mark placeholder used to specify the grouping field
-         * in quotes, invalidating the SQL
-         */
-        if( array_key_exists( self::SQL_GROUP_BY, self::$parts ) ) {
-
-            if( self::$parts[ self::SQL_GROUP_BY ] !== FALSE ) {
-
-                $clauses .= $this -> renderer -> group(
-
-                    self::$parts[ self::SQL_GROUP_BY ]
-                );
-            }
+        if( count( $this -> group ) > 0 ) {
+            $this -> query .= $this -> renderer -> group( $this -> group );
         }
 
-            // HAVING Clause
-
-        if( array_key_exists( self::SQL_HAVING, self::$parts ) ) {
-
-            $clauses .= $this -> renderer -> having(
-
-                self::$parts[ self::SQL_HAVING ]
-            );
+        if( count( $this -> having ) > 0 ) {
+            $this -> query .= $this -> renderer -> having( $this -> having );
         }
 
-        // ORDER BY Clause
-
-        if( array_key_exists( self::SQL_ORDER_BY, self::$parts ) ) {
-
-            // Same consideration of GROUP BY
-
-            if( self::$parts[ self::SQL_ORDER_BY ] !== FALSE ) {
-
-                $clauses .= $this -> renderer -> order(
-
-                    self::$parts[ self::SQL_ORDER_BY ]
-                );
-            }
+        if( count( $this -> order ) > 0 ) {
+            $this -> query .= $this -> renderer -> order( $this -> order );
         }
 
-            // LIMIT Clause
-
-        if( array_key_exists( self::SQL_LIMIT, self::$parts ) ) {
-
-            // Same consideration of GROUP BY
-
-            if( self::$parts[ self::SQL_LIMIT ] !== NULL ) {
-
-                if( self::$parts[ self::SQL_LIMIT ] ) {
-                    $clauses .= $this -> renderer -> limit( self::$parts[ self::SQL_LIMIT ] );
-                }
-            }
+        if( count( $this -> limit ) > 0 ) {
+            $this -> query .= $this -> renderer -> limit( $this -> limit );
         }
 
-        // Removing the last blank space (for presentation purposes only) and building full SQL
+        return $this -> query;
+    }
 
-        return rtrim( sprintf( '%s %s', self::$query, $clauses ) );
+    // Accessors
+
+    /**
+     * Get built query
+     *
+     * @return string
+     *  Built query
+     */
+    public function getQuery() {
+        return $this -> query;
+    }
+
+    /**
+     * Get placeholders replacements
+     *
+     * @return array
+     *  Placeholders replacements
+     */
+    public function getReplacements() {
+        return $this -> replacements;
+    }
+
+    // Auxiliary Method
+
+    /**
+     * Add Placeholders Replacements
+     *
+     * @param mixed|array $placeholders
+     *  Query Placeholders Replacements
+     *
+     * @return Next\DB\Query\Builder
+     *  Query Builder Instance (Fluent Interface)
+     */
+    public function addReplacements( $replacements ) {
+
+        $this -> replacements = \Next\Components\Utils\ArrayUtils::union(
+            $this -> replacements, (array) $replacements
+        );
+
+        return $this;
     }
 }

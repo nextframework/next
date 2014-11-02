@@ -39,10 +39,10 @@ interface Backend {
      * Load Cached Data
      *
      * @param string $key
-     *   Cache Key
+     *  Cache Key
      *
      * @param boolean|optional $keepSerialized
-     *   Flag to condition if Cache Data will keep serialized or not
+     *  Flag to condition if Cache Data will keep serialized or not
      */
     public function load( $key, $keepSerialized = TRUE );
 
@@ -50,17 +50,17 @@ interface Backend {
      * Add new Data into Cache
      *
      * @param string $key
-     *   Cache Key
+     *  Cache Key
      *
      * @param mixed $data
-     *   Data to Cache
+     *  Data to Cache
      *
      * @param integer|optional $ttl
-     *   Optional Lifetime
+     *  Optional Lifetime
      *
      * @param boolean|optional $isTouching
-     *   Flag to condition when we're touching the Cache File in order to give it
-     *   an extra lifetime
+     *  Flag to condition when we're touching the Cache File in order to give it
+     *  an extra lifetime
      */
     public function add( $key, $data, $ttl = NULL, $isTouching = FALSE );
 
@@ -68,7 +68,7 @@ interface Backend {
      * Remove Data from Cache
      *
      * @param string $key
-     *   Cache Key
+     *  Cache Key
      */
     public function remove( $key );
 
@@ -76,7 +76,7 @@ interface Backend {
      * Test Cache Validity
      *
      * @param string $key
-     *   Cache Key
+     *  Cache Key
      */
     public function test( $key );
 
@@ -84,10 +84,10 @@ interface Backend {
      * Add more lifetime to Cached Data
      *
      * @param string $key
-     *   Cache Key
+     *  Cache Key
      *
      * @param integer $extra
-     *   Extra Lifetime
+     *  Extra Lifetime
      */
     public function touch( $key, $extra );
 
@@ -95,7 +95,7 @@ interface Backend {
      * Clean Cached Data
      *
      * @param integer|optional $mode
-     *   Cleaning Mode
+     *  Cleaning Mode
      */
     public function clean( $mode = self::CLEAN_ALL );
 }

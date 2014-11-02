@@ -18,10 +18,10 @@ interface Dispatcher {
      * Dispatches the Controller
      *
      * @param Next\Application\Application $application
-     *   Application to Configure
+     *  Application to Configure
      *
      * @param stdClass $data
-     *   Data to Configure Application
+     *  Data to Configure Application
      */
     public function dispatch( Application $application, \stdClass $data );
 }

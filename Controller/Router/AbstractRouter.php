@@ -114,7 +114,7 @@ abstract class AbstractRouter implements Parameterizable, Router {
      * Get match Controller
      *
      * @return string
-     *   Match Controller Class
+     *  Match Controller Class
      */
     public function getController() {
         return $this -> controller;
@@ -124,7 +124,7 @@ abstract class AbstractRouter implements Parameterizable, Router {
      * Get match Action
      *
      * @return string
-     *   Match Action Method
+     *  Match Action Method
      */
     public function getAction() {
         return $this -> action;
@@ -136,7 +136,7 @@ abstract class AbstractRouter implements Parameterizable, Router {
      * Get Router Options
      *
      * @return Next\Components\Parameter
-     *   Parameter Object with merged options
+     *  Parameter Object with merged options
      */
     public function getOptions() {
         return $this -> options;
@@ -155,13 +155,13 @@ abstract class AbstractRouter implements Parameterizable, Router {
      * Lookup for Required Params in URL
      *
      * @param array $params
-     *   Array of Params to validate
+     *  Array of Params to validate
      *
      * @param string $uri
-     *   Request URI to be checked against
+     *  Request URI to be checked against
      *
      * @param array|optional $queryData
-     *   Manually set GET parameters to be considered as validatable arguments too
+     *  Manually set GET parameters to be considered as validatable arguments too
      */
     abstract protected function lookup( array $params, $uri, array $queryData = array() );
 
@@ -171,10 +171,10 @@ abstract class AbstractRouter implements Parameterizable, Router {
      * Also check if they are valid in a list of valid values, if defined
      *
      * @param array $params
-     *   Route Params
+     *  Route Params
      *
      * @param string $URI
-     *   Route URI
+     *  Route URI
      */
     abstract protected function validate( array $params, $URI );
 
@@ -182,10 +182,10 @@ abstract class AbstractRouter implements Parameterizable, Router {
      * Process Dynamic Params
      *
      * @param array $params
-     *   Array of Params to parse
+     *  Array of Params to parse
      *
      * @param string $URI
-     *   Request URI to be checked against
+     *  Request URI to be checked against
      */
     abstract protected function process( array $params, $URI );
 }
