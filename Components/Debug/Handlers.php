@@ -79,7 +79,7 @@ class Handlers {
             return self::error( 2, $e -> getMessage(), $e -> getFile(), $e -> getLine() );
         }
 
-        $code = 406; // Default Code NOT ACCEPTABLE
+        $code = 500; // Default Code NOT ACCEPTABLE
 
         if( method_exists( $e, 'getResponseCode' ) ) {
             $code = $e -> getResponseCode();
@@ -101,7 +101,7 @@ class Handlers {
      */
     public static function production( \Exception $e ) {
 
-        $code = 406; // Default Code NOT ACCEPTABLE
+        $code = 500; // Default Code NOT ACCEPTABLE
 
         if( method_exists( $e, 'getResponseCode' ) ) {
             $code = $e -> getResponseCode();
@@ -152,7 +152,7 @@ class Handlers {
 
             'Next\Components\Debug\Handlers\Controllers\ErrorController', 'error',
 
-            array( 'e' => new ErrorException( $message, $severity, $file, $line ) ), 406
+            array( 'e' => new ErrorException( $message, $severity, $file, $line ) ), 500
         );
     }
 

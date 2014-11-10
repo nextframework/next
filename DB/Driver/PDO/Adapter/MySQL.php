@@ -20,7 +20,7 @@ class MySQL extends AbstractPDO {
     /**
      * MySQL Driver extra initialization
      */
-    protected function init() {
+    protected function configure() {
 
         $this -> connection -> setAttribute( \PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, TRUE );
 

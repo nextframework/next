@@ -2,8 +2,10 @@
 
 namespace Next\Validate;
 
+use Next\Components\Object;    # Object Class
+
 /**
- * Cache Exception Class
+ * Validate Exception Class
  *
  * @author        Bruno Augusto
  *
@@ -18,4 +20,40 @@ class ValidateException extends \Next\Components\Debug\Exception {
      * @var array $range
      */
     protected $range = array( 0x0000082B, 0x0000085D );
+
+    /**
+     * Invalid Chain Validator
+     *
+     * @var integer
+     */
+    const INVALID_CHAIN_VALIDATOR    = 0x0000082B;
+
+    /**
+     * Invalid Chain Validator
+     *
+     * Given Object is not a valid Validator because it doesn't
+     * implements neither Next\Validate\Validate and/or
+     * Next\Components\Interfaces\Informational interfaces
+     *
+     * @param Next\Components\Object $object
+     *  Object used as Validator
+     *
+     * @return Next\Validate\ValidateException
+     *  Exception for Invalid Validators
+     */
+    public static function invalidChainValidator( Object $object ) {
+
+        return new self(
+
+            '<strong>%s</strong> is not a valid Validator for the Chain
+
+            <br /><br />
+
+            In a Chain, Validators must implement both Validator and Informational interfaces',
+
+            self::INVALID_CHAIN_VALIDATOR,
+
+            (string) $object
+        );
+    }
 }

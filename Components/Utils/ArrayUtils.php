@@ -198,11 +198,11 @@ class ArrayUtils {
      *
      * @param boolean|optional $strict
      *  Different of native in_array(), the strict flag here distinguishes
-     *  two different strings and not two different types of data
+     *  two different strings and not only two different types of data
      *
      * @return boolean
-     *  TRUE if given needle is present in given haystack, even
-     *  multidimensionally. FALSE otherwise.
+     *  TRUE if given needle is present in given haystack, even if
+     *  multidimensional. FALSE otherwise.
      */
     public static function in( $needle, array $haystack, $strict = FALSE ) {
 
@@ -216,40 +216,30 @@ class ArrayUtils {
 
                 if( is_string( $item ) && is_string( $needle ) ) {
 
-                    if( strcasecmp( $item, $needle ) == 0 ) {
-                        return TRUE;
-                    }
+                    return ( strcasecmp( $item, $needle ) == 0 );
 
                 } elseif( is_object( $item ) && method_exists( $item, '__toString' ) ) {
 
                     // Objects
 
-                    if( strcasecmp( (string) $item, $needle ) == 0 ) {
-                        return TRUE;
-                    }
+                    return ( strcasecmp( (string) $item, $needle ) == 0 );
 
                 } elseif( is_array( $item ) ) {
 
                     // Arrays
 
-                    if( serialize( $item ) == serialize( $needle ) ) {
-                        return TRUE;
-                    }
+                    return ( serialize( $item ) == serialize( $needle ) );
 
                 } else {
 
                     // Everything else
 
-                    if( $item == $needle ) {
-                        return TRUE;
-                    }
+                    return( $item == $needle );
                 }
 
             } else {
 
-                if( $item === $needle ) {
-                    return TRUE;
-                }
+                return ( $item === $needle );
             }
         }
 
@@ -336,5 +326,23 @@ class ArrayUtils {
      */
     public static function lastKey( array $stack ) {
         return key( array_slice( $stack, -1, 1, TRUE ) );
+    }
+
+    /**
+     * Transpose a multidimensional array
+     *
+     * @param  array $array
+     *   Multidimensional array to transpose
+     *
+     * @return array
+     *  Transpose multidimensional array
+     *
+     * @see http://stackoverflow.com/a/3423692/753531
+     */
+    public static function transpose( array $array ) {
+
+        array_unshift( $array, NULL );
+
+        return call_user_func_array( 'array_map', $array );
     }
 }

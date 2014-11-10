@@ -55,6 +55,27 @@ abstract class AbstractTable extends Object implements Table {
         $properties = $this -> getClass()
                             -> getProperties( \ReflectionProperty::IS_PROTECTED );
 
+        // Filtering properties
+
+        $properties = array_filter(
+
+            $properties,
+
+            function( \ReflectionProperty $property ) {
+
+                return (
+
+                    ( $property -> class !== 'Next\Components\Object' ) &&
+
+                    ( $property -> class !== 'Next\Components\Context' ) &&
+
+                    ( $property -> class !== 'Next\Components\Prototype' ) && // EXPERIMENTAL
+
+                    ( substr( $property -> name, 0, 1 ) !== '_' )
+                );
+            }
+        );
+
         $fields = array();
 
         // Building Fields Structure
@@ -74,7 +95,7 @@ abstract class AbstractTable extends Object implements Table {
 
                 // Filtering properties in according to conditions mentioned
 
-                if( ! is_null( $value ) && substr( $name, 0, 1 ) !== '_' ) {
+                if( ! is_null( $value ) ) {
 
                     $fields[ $name ] = $value;
                 }

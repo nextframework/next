@@ -3,10 +3,12 @@
 namespace Next\HTTP;
 
 use Next\HTTP\Response\ResponseException;          # Response Exception
+
 use Next\HTTP\Headers\Fields\FieldsException;      # Headers Fields Exception Class
+
 use Next\Components\Object;                        # Object Class
 use Next\Components\Invoker;                       # Invoker Class
-use Next\HTTP\Request;                             # Request Class
+
 use Next\HTTP\Headers\Fields\Response\Location;    # Location Header Field
 use Next\HTTP\Headers\Fields\Raw;                  # Raw Data Header Field
 use Next\HTTP\Headers\Fields\Generic;              # Generic Data Header Field
@@ -719,7 +721,7 @@ class Response extends Object {
          */
         if( empty( $data ) || ob_get_length() ) {
 
-            if( defined( 'TURBO_MODE' ) && TURBO_MODE === FALSE ) {
+            if( defined( 'TURBO_MODE' ) && ! TURBO_MODE === TRUE ) {
 
                 if( function_exists( 'apache_response_headers' ) ) {
 
@@ -765,7 +767,7 @@ class Response extends Object {
             $this -> appendBody( $data );
 
             if( count( $metaData ) != 0 &&
-                    ( defined( 'TURBO_MODE' ) && TURBO_MODE === FALSE ) ) {
+                    ( defined( 'TURBO_MODE' ) && ! TURBO_MODE === TRUE ) ) {
 
                 $this -> addResponseData( $metaData );
             }
@@ -1089,20 +1091,16 @@ class Response extends Object {
 
         if( is_int( $header ) && in_array( $header, array_keys( $this -> messages ) ) ) {
 
-           try {
+            $message = sprintf(
 
-                $this -> headers -> addHeader(
+                'HTTP/%s %d %s', $schemaVersion, $header,
 
-                    new Raw(
+                $this -> messages[ $header ]
+            );
 
-                        sprintf(
+            try {
 
-                            'HTTP/%s %d %s', $schemaVersion, $header,
-
-                            $this -> messages[ $header ]
-                        )
-                    )
-                );
+                $this -> headers -> addHeader( new Raw( $message ) );
 
            } catch( FieldsException $e ) {}
 
@@ -1117,8 +1115,6 @@ class Response extends Object {
 
         return $this;
     }
-
-    // Accessors
 
         // Response Body-related Methods
 

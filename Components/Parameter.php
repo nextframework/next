@@ -3,7 +3,6 @@
 namespace Next\Components;
 
 use Next\Components\Debug\Exception;      # Exception Class
-use Next\Components\Object;               # Object Class
 
 /**
  * Parameter Class
@@ -13,52 +12,54 @@ use Next\Components\Object;               # Object Class
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class Parameter extends Object implements \Countable {
+class Parameter implements \Countable {
 
+    /**
+     * Object Parameters
+     *
+     * @var stdClass|Next\Components\Parameter $parameters
+     */
     private $parameters;
 
     /**
      * Parameter Object Constructor
      *
-     * @param mixed $common
-     *
-     *  Common Options
+     *  - Common Options
      *
      *  Usually defined in abstract classes these options will be available
      *  for all its children
      *
-     * @param mixed|optional $custom
-     *
-     *  children Options
+     *  - Children Options
      *
      *  Defined in concrete classes these options will affect individually
      *  the working mode of each class.
      *
      *  These options can sometimes overwrite Common Options too.
      *
-     * @param mixed|optional $user
-     *
-     *  User Options
+     *  - User Options
      *
      *  Defined in class constructor, when instantiating the object, allow
      *  user to change one or all of the options.
      */
-    public function __construct( $common, $custom = NULL, $user = NULL ) {
+    public function __construct() {
 
-        parent::__construct();
+        list( $common, $custom, $user ) = func_get_args() + array( NULL, NULL, NULL );
 
-        $this -> parameters = new \stdClass;
+        if( $common instanceof Parameter ) {
 
-        // Building Options (by merging them)
+            $this -> parameters = $common;
 
-        $this -> merge( $common );
+        } else {
 
-        if( ! is_null( $custom ) ) {
-            $this -> merge( $custom );
-        }
+            $this -> parameters = new \stdClass;
 
-        if( ! is_null( $user ) ) {
-            $this -> merge( $user );
+            // Building Options (by merging them)
+
+            if( ! is_null( $common ) ) $this -> merge( $common );
+
+            if( ! is_null( $custom ) ) $this -> merge( $custom );
+
+            if( ! is_null( $user ) ) $this -> merge( $user );
         }
     }
 
@@ -82,8 +83,6 @@ class Parameter extends Object implements \Countable {
      *
      *       <li>Next\Components\Object object</li>
      *
-     *       <li>Next\Components\Parameter Object</li>
-     *
      *   </ul>
      *
      * @throws Next\Components\Debug\Exception
@@ -94,12 +93,9 @@ class Parameter extends Object implements \Countable {
 
         // Converting, if needed
 
-        if( is_array( $param ) ) {
+        if( is_array( $param ) ) $param = Object::map( $param );
 
-            $param = parent::map( $param );
-        }
-
-        if( $param instanceof Object || $param instanceof Parameter || $param instanceof \stdClass ) {
+        if( $param instanceof Object || $param instanceof \stdClass ) {
 
             // Merging...
 

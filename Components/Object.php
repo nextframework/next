@@ -2,7 +2,9 @@
 
 namespace Next\Components;
 
-use Next\Components\Interfaces\Contextualizable;      # Contextualizable Interface
+use Next\Components\Interfaces\Contextualizable;    # Contextualizable Interface
+use Next\Components\Interfaces\Informational;       # Informational Interface
+use Next\Components\Interfaces\Parameterizable;     # Informational Interface
 
 /**
  * Next Object Class
@@ -12,7 +14,7 @@ use Next\Components\Interfaces\Contextualizable;      # Contextualizable Interfa
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class Object extends Prototype implements Contextualizable {
+class Object extends Prototype implements Contextualizable, Informational, Parameterizable {
 
     /**
      * Context Object
@@ -22,11 +24,45 @@ class Object extends Prototype implements Contextualizable {
     private $context;
 
     /**
-     * Object Constructor
+     * Success Message
+     *
+     * @var string $successMessage
      */
-    public function __construct() {
+    protected $successMessage;
+
+    /**
+     * Error Message
+     *
+     * @var string $errorMessage
+     */
+    protected $errorMessage;
+
+    /**
+     * Object Parameters
+     *
+     * @var Next\Components\Parameter $options
+     */
+    protected $options;
+
+    /**
+     * Object Constructor
+     *
+     * @param mixed|optional $defaultOptions
+     *  Child class default options
+     */
+    public function __construct( $defaultOptions = NULL, $options = NULL ) {
+
         $this -> context = new Context;
+
+        $this -> options = new Parameter( $defaultOptions, $this -> setOptions(), $options );
+
+        $this -> init();
     }
+
+    /**
+     * Additional initialization. Must be overwritten
+     */
+    protected function init() {}
 
     /**
      * Map given array to stdClass Object recursively
@@ -110,6 +146,45 @@ class Object extends Prototype implements Contextualizable {
          return $this -> context -> getCallables();
     }
 
+    // Informational Interfaces Methods Implementation
+
+    /**
+     * Get success message
+     *
+     * @return string
+     *  Success Message
+     */
+    public function getSuccessMessage() {
+        return $this -> successMessage;
+    }
+
+    /**
+     * Get error message
+     *
+     * @return string
+     *  Error Message
+     */
+    public function getErrorMessage() {
+        return $this -> errorMessage;
+    }
+
+    // Parameterizable Methods Interfaces
+
+    /**
+     * Get Class Options
+     */
+    public function getOptions() {
+        return $this -> options;
+    }
+
+    /**
+     * Set Class Options
+     * It's not really implemented because not all child classes have something to be configured
+     */
+    public function setOptions() {
+        return array();
+    }
+
     // OverLoading
 
     /**
@@ -188,7 +263,26 @@ class Object extends Prototype implements Contextualizable {
         }
     }
 
+    /**
+     * Allow retrieval of properties from extended Objects in this Object context
+     *
+     * IMPORTANT!
+     *
+     * In order to be considered a property of an extended context,
+     * properties must be prefixed with an underscore, even if they don't have one in their original classes
+     *
+     * @param string $property
+     *  Property trying to be retrieved
+     *
+     * @throws Next\Components\ComponentsException
+     *  Object Constructor was overwritten without invoking it through
+     *  parent context instead of using the Next\Components\Object::init()
+     */
     public function __get( $property ) {
+
+        if( is_null( $this -> context ) ) {
+            throw ComponentsException::constructorOverwritten( $property, $this, 'property' );
+        }
 
         // Only properties prefixed with an underscore will be considered for extended context
 

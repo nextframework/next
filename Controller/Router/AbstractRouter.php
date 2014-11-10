@@ -2,8 +2,7 @@
 
 namespace Next\Controller\Router;
 
-use Next\Components\Interfaces\Parameterizable;    # Parameterizable Interface
-use Next\Components\Parameter;                     # Parameter Class
+use Next\Components\Object;    # Object Class
 
 /**
  * Controller Router Class
@@ -13,7 +12,14 @@ use Next\Components\Parameter;                     # Parameter Class
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-abstract class AbstractRouter implements Parameterizable, Router {
+abstract class AbstractRouter extends Object implements Router {
+
+    /**
+     * Default Options
+     *
+     * @var array $defaultOptions
+     */
+    private $defaultOptions = array();
 
     /**
      * Dynamic GET Params
@@ -21,22 +27,6 @@ abstract class AbstractRouter implements Parameterizable, Router {
      * @var array $params
      */
     protected $params = array();
-
-    /**
-     * Default Options
-     *
-     * Must be overwritten
-     *
-     * @var array $defaultOptions
-     */
-    private $defaultOptions = array();
-
-    /**
-     * Routers Options
-     *
-     * @var Next\Components\Parameter $options
-     */
-    protected $options;
 
     /**
      * Match Controller
@@ -56,59 +46,23 @@ abstract class AbstractRouter implements Parameterizable, Router {
      * Router Constructor
      *
      * @param mixed|optional $options
-     *
-     *   <br />
-     *
-     *   <p>List of Options to affect Routers. Acceptable values are:</p>
-     *
-     *   <p>
-     *
-     *       <ul>
-     *
-     *           <li>Associative and multidimensional array</li>
-     *
-     *           <li>
-     *
-     *               An {@link http://php.net/manual/en/reserved.classes.php stdClass Object}
-     *
-     *           </li>
-     *
-     *           <li>A well formed Parameter Object</li>
-     *
-     *       </ul>
-     *
-     *   </p>
-     *
-     *   <p>There are no Common Options defined so far.</p>
-     *
-     *   <p>
-     *       All the arguments taken in consideration are defined in
-     *       (and by) concrete classes
-     *   </p>
+     *  Router User Options
      *
      * @see Next\Components\Parameter
      */
     public function __construct( $options = NULL ) {
-
-        // Setting Up Options Object
-
-        $this -> options = new Parameter( $this -> defaultOptions, $this -> setOptions(), $options );
-
-        // Calling the Connector, which could be to a Database, a File Stream, a XML...
-
-        $this -> connect();
-
-        // Extra Initialization
-
-        $this -> init();
+        parent::__construct( $this -> defaultOptions, $options );
     }
 
-    /**
-     * Additional Initialization. Must be overwritten
-     */
-    protected function init() {}
-
     // Accessors
+
+    /**
+     * Additional Initialization
+     * Calls the Router Connector, which could be to a Database, a File Stream, a XML...
+     */
+    protected function init() {
+        $this -> connect();
+    }
 
     /**
      * Get match Controller

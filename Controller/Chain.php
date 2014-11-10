@@ -31,7 +31,7 @@ class Chain extends AbstractCollection {
      *  TRUE if given Object is acceptable by Controllers Collection and FALSE otherwise
      *
      * @throws Next\Controller\ControllerException
-     *  Given application is not acceptable in the Controller Chain
+     *  Given Controller is not acceptable in the Controller Chain
      */
     public function accept( Object $object ) {
 

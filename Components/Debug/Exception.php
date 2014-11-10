@@ -2,9 +2,6 @@
 
 namespace Next\Components\Debug;
 
-use Next\Components\Decorators\Chain;                # Decorators Chain Class
-use Next\Components\Decorators\LinkifyDecorator;     # Linkify Decorator
-
 /**
  * Exception Class
  *
@@ -232,25 +229,6 @@ class Exception extends \Exception {
      *  Translated Exception Message
      */
     private function _getMessage( $message ) {
-
-        $decoratorsChain = new Chain;
-
-        $decoratorsChain -> add( new LinkifyDecorator( $message ) );
-
-        iterator_apply(
-
-            $decoratorsChain -> getIterator(),
-
-            function( \Iterator $decorator ) use ( &$message ) {
-
-                $message = $decorator -> current() -> decorate() -> getResource();
-
-                return TRUE;
-            },
-
-            array( $decoratorsChain -> getIterator() )
-        );
-
         return vsprintf( $message, $this -> replacements );
     }
 

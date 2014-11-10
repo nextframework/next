@@ -46,9 +46,11 @@ class Standard extends AbstractRouter {
      */
     protected function init() {
 
+        parent::init();
+
         // Extending SQLITE Custom Resources
 
-        $this -> extend();
+        $this -> createFunction();
     }
 
     /**
@@ -482,7 +484,7 @@ class Standard extends AbstractRouter {
      *  Current Database Connection Adapter doesn't have the
      *  sqliteCreateFunction() method
      */
-    private function extend() {
+    private function createFunction() {
 
         if( ! method_exists( $this -> dbh, 'sqliteCreateFunction' ) ) {
 

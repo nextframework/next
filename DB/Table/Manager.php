@@ -240,6 +240,16 @@ class Manager extends Object {
         return $this;
     }
 
+    /**
+     * Reset the Table Manager by returning a new instance of it
+     *
+     * @return Next\DB\Table\Manager
+     *  Table Manager Object
+     */
+    public function reset() {
+        return new Manager( $this -> driver, $this -> table );
+    }
+
     // Accessors
 
     /**

@@ -34,7 +34,14 @@ class Request extends Object {
     const GET             = 'GET';
 
     /**
-     * POST Methods
+     * PATCH Method
+     *
+     * @var string
+     */
+    const PATCH           = 'PATCH';
+
+    /**
+     * POST Method
      *
      * @var string
      */
@@ -53,6 +60,20 @@ class Request extends Object {
      * @var string
      */
     const DELETE          = 'DELETE';
+
+   /**
+     * HEAD Method
+     *
+     * @var string
+     */
+    const HEAD            = 'HEAD';
+
+   /**
+     * OPTIONS Method
+     *
+     * @var string
+     */
+    const OPTIONS         = 'OPTIONS';
 
     /**
      * HTTP Scheme
@@ -741,6 +762,36 @@ class Request extends Object {
         return $this -> getData( $_ENV, $key );
     }
 
+    /**
+     * Wrapper Method for Data Retrieve
+     *
+     * @param array $source
+     *  Data Source, superglobal or class property
+     *
+     * @param string|optional $key
+     *  Desired Param
+     *
+     * @return mixed
+     *
+     *   <p>
+     *       If <strong>$key</strong> is equal to NULL, all Data Source
+     *       will be returned
+     *   </p>
+     *
+     *   <p>
+     *       If </strong>$key is NOT NULL AND given key exists in
+     *       Source Data array it will be returned
+     *   </p>
+     *
+     *   <p>Otherwise, returns NULL</p>
+     */
+    public function getData( array $source, $key = NULL ) {
+
+        if( is_null( $key ) ) return $source;
+
+        return array_key_exists( $key, $source ) ? $source[ $key ] : NULL;
+    }
+
     // Execution Flow-related Methods
 
     /**
@@ -882,41 +933,6 @@ class Request extends Object {
      */
     public function getAdapter() {
         return $this -> adapter;
-    }
-
-    // Auxiliary Methods
-
-    /**
-     * Wrapper Method for Data Retrievement
-     *
-     * @param array $source
-     *  Data Source, superglobal or class property
-     *
-     * @param string|optional $key
-     *  Desired Param
-     *
-     * @return mixed
-     *
-     *   <p>
-     *       If <strong>$key</strong> is equal to NULL, all Data Source
-     *       will be returned
-     *   </p>
-     *
-     *   <p>
-     *       If </strong>$key is NOT NULL AND given key exists in
-     *       Source Data array it will be returned
-     *   </p>
-     *
-     *   <p>Otherwise, returns NULL</p>
-     */
-    private function getData( array $source, $key = NULL ) {
-
-        if( is_null( $key ) ) {
-
-            return $source;
-        }
-
-        return array_key_exists( $key, $source ) ? $source[ $key ] : NULL;
     }
 
     // Auxiliary Methods

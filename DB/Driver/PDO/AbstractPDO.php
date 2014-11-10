@@ -69,7 +69,7 @@ abstract class AbstractPDO extends AbstractDriver {
 
             // Adapter Extra Initialization
 
-            $this -> init();
+            $this -> configure();
 
         } catch( \PDOException $e ) {
 
@@ -200,7 +200,7 @@ abstract class AbstractPDO extends AbstractDriver {
      *     initialization
      * </p>
      */
-    protected function init() {}
+    protected function configure() {}
 
     /**
      * Check for Connection Driver Requirements

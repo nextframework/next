@@ -62,6 +62,39 @@ class Tools {
     }
 
     /**
+     * Formats given file size to be more human readable, by converting bytes
+     * to greater units and adding the proper acronym
+     *
+     * @param  integer $size
+     *   File szie to format
+     *
+     * @return string
+     *  File size formatted
+     */
+    public static function readableFilesize( $size ) {
+
+        $units = array( 'B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+        $power = $size > 0 ? floor( log( $size, 1024 ) ) : 0;
+
+        return number_format( $size / pow( 1024, $power ), 2, '.', ',' ) . ' ' . $units[ $power ];
+    }
+
+    /**
+     * Get file extension
+     *
+     * @param  string $file
+     *  File to retrieve extension
+     *
+     * @return string|NULL
+     *  - File extension, if given file has at least one
+     *  - An empty string, if given file has a malformed extension
+     *  - NULL if given file has no extension
+     */
+    public static function getFileExtension( $file ) {
+        return pathinfo( $file, PATHINFO_EXTENSION );
+    }
+
+    /**
      * Delete file(s) and/or folder(s)
      *
      * <p>

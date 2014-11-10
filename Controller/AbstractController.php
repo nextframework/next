@@ -57,8 +57,6 @@ abstract class AbstractController extends Object implements Controller {
      */
     final public function __construct( Application $application = NULL ) {
 
-        parent::__construct();
-
         // If we an Application (dispatching process), let's handle it
 
         if( ! is_null( $application ) ) {
@@ -75,16 +73,11 @@ abstract class AbstractController extends Object implements Controller {
 
             $this -> view -> assign( $application -> getRequest() -> getQuery() );
 
-            // Executing Extra Initialization Routines
+            // Constructing Parent, which executes additional initialization routines
 
-            $this -> init();
+            parent::__construct();
         }
     }
-
-    /**
-     * Additional Initialization. Must be overwritten
-     */
-    protected function init() {}
 
     // Accessors
 

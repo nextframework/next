@@ -880,9 +880,9 @@ class Standard extends Object implements View {
      */
     private function findFile( $file = NULL ) {
 
-        // Do we have a Default Template? So let's use it!
+        // If we don't have a file, let's use the Default Template, if any
 
-        $file = ( ! empty( $this -> _defaultTemplate ) ? $this -> _defaultTemplate : $file );
+        $file = ( ! empty( $file ) ? $file : $this -> _defaultTemplate );
 
         // Cleaning dots and slashes around Template View Filename
 

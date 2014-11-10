@@ -3,11 +3,15 @@
 namespace Next\HTTP\Headers;
 
 use Next\HTTP\Headers\Fields\FieldsException;          # Header Fields Exception Class
+
 use Next\HTTP\Headers\Fields\Field;                    # Header Interface
+
 use Next\Components\Object;                            # Object Class
 use Next\Components\Invoker;                           # Invoker Class
 use Next\Components\Iterator\Lists;                    # Lists Class
+
 use Next\HTTP\Headers\Fields\Generic;                  # Generic Header Field Class
+use Next\HTTP\Headers\Fields\Raw;                      # Raw Header Field Class
 
 /**
  * HTTP Headers Management Class
@@ -370,9 +374,9 @@ abstract class AbstractHeaders extends Object {
 
                 $current = $iterator -> current();
 
-                // Generic Headers are a little different
+                // Generic and Raw Headers are built "as is"
 
-                if( $current instanceof Generic ) {
+                if( $current instanceof Generic || $current instanceof Raw ) {
 
                     $headerString .= sprintf( "%s\r\n", $current -> getValue() );
 

@@ -14,7 +14,7 @@ use Next\Components\Parameter;                     # Parameter Class
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-abstract class AbstractDriver extends Object implements Parameterizable, Driver {
+abstract class AbstractDriver extends Object implements Driver {
 
     /**
      * Connection Adapter Default Options
@@ -29,13 +29,6 @@ abstract class AbstractDriver extends Object implements Parameterizable, Driver 
     );
 
     /**
-     * Connection Adapter Options
-     *
-     * @var Next\Components\Parameter $options
-     */
-    protected $options;
-
-    /**
      * Connection Object
      *
      * @var mixed $connection
@@ -43,90 +36,22 @@ abstract class AbstractDriver extends Object implements Parameterizable, Driver 
     protected $connection;
 
     /**
-     * Connection Driver Constructor
+     * Connection Driver COnstructor
      *
      * @param mixed|optional $options
-     *
-     *   <br />
-     *
-     *   <p>
-     *       List of Options to affect Database Drivers. Acceptable values are:
-     *   </p>
-     *
-     *   <p>
-     *
-     *       <ul>
-     *
-     *           <li>Associative and multidimensional array</li>
-     *
-     *           <li>
-     *
-     *               An {@link http://php.net/manual/en/reserved.classes.php stdClass Object}
-     *
-     *           </li>
-     *
-     *           <li>A well formed Parameter Object</li>
-     *
-     *       </ul>
-     *
-     *   </p>
-     *
-     *   <p>The arguments taken in consideration are:</p>
-     *
-     *   <p>
-     *
-     *       <ul>
-     *
-     *           <li>
-     *
-     *               <p><strong>host</strong></p>
-     *
-     *               <p>The Database Host for connection</p>
-     *
-     *               <p>Default Value: <strong>localhost</strong></p>
-     *
-     *           </li>
-     *
-     *           <li>
-     *
-     *               <p><strong>username</strong></p>
-     *
-     *               <p>The Database User for connection</p>
-     *
-     *               <p>Default Value: <strong>root</strong>
-     *
-     *           </li>
-     *
-     *           <li>
-     *
-     *               <p><strong>password</strong></p>
-     *
-     *               <p>The Password used for connection</p>
-     *
-     *               <p>Default Value: <em><empty></em></p>
-     *
-     *           </li>
-     *
-     *       </ul>
-     *
-     *   </p>
-     *
-     *   <p>
-     *       These are the arguments common to almost all Connection Drivers.
-     *   </p>
-     *
-     *   <p>
-     *       Other arguments taken in consideration are defined in (and by)
-     *       concrete classes
-     *   </p>
+     *  Driver User Options
      *
      * @see Next\Components\Parameter
      */
     public function __construct( $options = NULL ) {
+        parent::__construct( $this -> defaultOptions, $options );
+    }
 
-        // Setup Adapter Options
-
-        $this -> options = new Parameter( $this -> defaultOptions, $options );
+    /**
+     * Additional Initialization
+     * Checks Driver requirements and Driver overall integrity
+     */
+    protected function init() {
 
         // Check Requirements
 
@@ -135,10 +60,6 @@ abstract class AbstractDriver extends Object implements Parameterizable, Driver 
         // Check Adapter Integrity
 
         $this -> checkIntegrity();
-
-        // Connecting
-
-        //$this -> connect();
     }
 
     // Accessors
@@ -191,11 +112,11 @@ abstract class AbstractDriver extends Object implements Parameterizable, Driver 
     // Abstract Methods Definition
 
     /**
-     * Connection Adapter Extra initialization
+     * Connection Adapter Configuration
      *
      * It's abstract because every driver must provide extensibility for its adapters
      */
-    abstract protected function init();
+    abstract protected function configure();
 
     /**
      * Check for Driver-specific Requirements
