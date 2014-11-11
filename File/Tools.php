@@ -150,7 +150,7 @@ class Tools {
 
             // Set full permission to target file...
 
-            chmod( $path, 0777 );
+            //chmod( $path, 0777 );
 
             // ... and trying to remove it
 

@@ -29,6 +29,20 @@ class UploadException extends \Next\Components\Debug\Exception {
     const INVALID_CHAIN_POST_PROCESSOR    = 0x00000396;
 
     /**
+     * Nothing to Upload
+     *
+     * @var integer
+     */
+    const NOTHING_TO_UPLOAD               = 0x00000397;
+
+    /**
+     * Exceeded number of concurrent files
+     *
+     * @var integer
+     */
+    const EXCEEDED_CONCURRENT             = 0x00000398;
+
+    /**
      * Invalid Chain Post-Processor
      *
      * Given Object is not a valid Post-Processor because it doesn't
@@ -55,5 +69,25 @@ class UploadException extends \Next\Components\Debug\Exception {
 
             (string) $object
         );
+    }
+
+    /**
+     * Nothing to Upload
+     *
+     * @return Next\File\Upload\UploadException
+     *  Exception for when there is nothing to upload
+     */
+    public static function nothingToUpload() {
+        return new self( 'Nothing to upload' , self::NOTHING_TO_UPLOAD );
+    }
+
+    /**
+     * Exceeded number of concurrent files
+     *
+     * @return Next\File\Upload\UploadException
+     *  Exception for when the number of concurrent files were exceeded
+     */
+    public static function concurrentFilesLimit() {
+        return new self( 'Exceeded number of concurrent files' , self::EXCEEDED_CONCURRENT );
     }
 }

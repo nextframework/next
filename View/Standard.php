@@ -1004,10 +1004,7 @@ class Standard extends Object implements View {
          * - 'Controller' Keyword
          * - Controller ClassName
          */
-
-        // Using substr() and strpos() instead of basename() due differences produced between Windows and Linux
-
-        $controllerBasename = substr( $controller, (int) strrpos( $controller, '\\' ) + 1 );
+        $controllerBasename = implode( '', array_slice( explode( '\\', $controller ) , -1 ) );
 
         $subpath = str_replace(
 

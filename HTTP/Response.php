@@ -9,6 +9,8 @@ use Next\HTTP\Headers\Fields\FieldsException;      # Headers Fields Exception Cl
 use Next\Components\Object;                        # Object Class
 use Next\Components\Invoker;                       # Invoker Class
 
+use Next\Components\Utils\ArrayUtils;              # Array Utils Class
+
 use Next\HTTP\Headers\Fields\Response\Location;    # Location Header Field
 use Next\HTTP\Headers\Fields\Raw;                  # Raw Data Header Field
 use Next\HTTP\Headers\Fields\Generic;              # Generic Data Header Field
@@ -834,6 +836,30 @@ class Response extends Object {
         // Fixing XHTML end tag position
 
         $this -> body = preg_replace( '/\s*>/m', '>', $this -> body );
+
+        // Removing extra spaces after an element string and sending its closing tag to the next line
+
+        $this -> body = preg_replace_callback( '/^(\s+)(\w+)\s*<(.*?)>$/m',
+
+            function( $matches ) {
+
+                /**
+                 * Inserting the reduced indentation level for the closing tag
+                 * in replacements array
+                 */
+                ArrayUtils::insert(
+
+                    array( 3 => str_repeat( ' ', ( strlen( $matches[1] ) - 4 ) ) ),
+
+                    $matches
+                );
+
+                return vsprintf( "%s%s\n%s<%s>", array_slice( $matches, 1, 4 ) );
+
+            },
+
+            $this -> body
+        );
 
         // Should we return the Response...
 

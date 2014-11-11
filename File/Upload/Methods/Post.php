@@ -2,6 +2,8 @@
 
 namespace Next\File\Upload\Methods;
 
+use Next\File\Upload\UploadException;    # Upload Exception Class
+
 use Next\Components\Utils\ArrayUtils;    # Array Utils Class
 use Next\File\Tools;                     # File Tools Class
 
@@ -32,14 +34,6 @@ class Post extends AbstractMethod {
 
         // Throwable Errors
 
-        'nothingToUpload'         => 'Nothing to upload',
-        'concurrentFilesLimit'    => 'Exceeded number of concurrent files',
-
-        // Upload Handler Errors
-
-        'maxFileSize'             => 'Maximum file size exceeded',
-        'invalidFileExtension'    => 'Invalid file extension',
-        'invalidFileType'         => 'Invalid file type',
         'uploadFailure'           => 'Upload failed'
     );
 
@@ -71,7 +65,7 @@ class Post extends AbstractMethod {
         $options = $this -> handler -> getOptions();
 
         if( ! array_key_exists( $options -> name, $_FILES ) ) {
-            throw new \Exception( $this -> errorMessages['nothingToUpload'] );
+            throw UploadException::nothingToUpload();
         }
 
         $files = $_FILES[ $options -> name ];
@@ -90,7 +84,7 @@ class Post extends AbstractMethod {
         // JavaScript-based File Uploads usually ignores this
 
         if( count( $files ) > $options -> maxConcurrentFiles ) {
-            throw new \Exception( $this -> errorMessages['concurrentFilesLimit'] );
+            throw UploadException::concurrentFilesLimit();
         }
 
         foreach( $files as $file ) {
@@ -114,7 +108,7 @@ class Post extends AbstractMethod {
 
                 $this -> failed = array(
 
-                    'name' => $name, 'type' => 0,
+                    'name' => $name, 'size' => Tools::readableFilesize( $size ), 'type' => $type,
 
                     'reason' => $this -> errorMessages[ $errOffset ],
                 );
@@ -146,7 +140,11 @@ class Post extends AbstractMethod {
      */
     protected function proccess( $file, $size, $type, $temp ) {
 
+        // Fixing common problems
+
         $this -> fix( $file, $size, $type, $temp );
+
+        $readableFilesize = Tools::readableFilesize( $size );
 
         // Validating Uploaded File
 
@@ -156,7 +154,7 @@ class Post extends AbstractMethod {
 
             $this -> failed[] = array(
 
-                'name' => $file, 'size' => Tools::readableFilesize( $size ), 'type' => 1,
+                'name' => $file, 'size' => $readableFileSize, 'type' => $type,
 
                 'reason' => $validation -> getErrorMessage()
             );
@@ -170,13 +168,15 @@ class Post extends AbstractMethod {
 
         if( move_uploaded_file( $temp, $uploadFile ) ) {
 
+            // Performing tasks after the file is effectively uploaded
+
             $postProcess = $this -> postProcessors -> process( $uploadFile );
 
             if( $postProcess !== TRUE ) {
 
                 $this -> failed[] = array(
 
-                    'name' => $file, 'size' => Tools::readableFilesize( $size ), 'type' => 1,
+                    'name' => $file, 'size' => $readableFilesize, 'type' => $type,
 
                     'reason' => $postProcess -> getErrorMessage()
                 );
@@ -185,14 +185,17 @@ class Post extends AbstractMethod {
 
             } else {
 
-                $this -> succeed[] = array( 'name' => $file, 'type' => $type, 'size' => Tools::readableFilesize( $size ) );
+                $this -> succeed[] = array(
+
+                    'name' => $file, 'type' => $type, 'size' => $readableFilesize
+                );
             }
 
         } else {
 
             $this -> failed[] = array(
 
-                'name' => $file, 'size' => Tools::readableFilesize( $size ), 'type' => 1,
+                'name' => $file, 'size' => $readableFilesize, 'type' => $type,
 
                 'reason' => $this -> errorMessages['uploadFailure']
             );
