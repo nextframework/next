@@ -50,34 +50,7 @@ abstract class AbstractDataGateway extends Object implements DataGateway {
 
         $this -> setSource( $source );
 
-        // Additional Initialization
-
-        $this -> init();
-    }
-
-    /**
-     * Additional Initialization. Must be overwritten
-     */
-    protected function init() {}
-
-    // Data Gateway-related Methods
-
-    /**
-     * Delete a Record from Table
-     *
-     * @return Next\DB\Table\Manager
-     *  Table Manager Object (Fluent Interface)
-     */
-    public function delete() {
-
-        /**
-         * @internal
-         * DELETE Statement is much more simple.
-         *
-         * We don't need nothing else than the bridge itself
-         * All the conditionals will be kept automatically
-         */
-        return $this -> manager -> delete();
+        parent::__construct();
     }
 
     // Countable Interface Method Implementation

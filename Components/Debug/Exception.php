@@ -91,7 +91,7 @@ class Exception extends \Exception {
      *
      * @var integer $responseCode
      */
-    private $responseCode = 200;
+    private $responseCode = 500;
 
     /**
      * Exception Constructor
@@ -107,7 +107,7 @@ class Exception extends \Exception {
         // Listing Additional Exception Components
 
         list( $code, $replacements, $responseCode ) =
-            $args + array( self::UNKNOWN, array(), 200 );
+            $args + array( self::UNKNOWN, array(), 500 );
 
         // Checking Exception Components...
 

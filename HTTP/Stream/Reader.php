@@ -107,14 +107,7 @@ class Reader extends Object implements Reader\Reader {
             );
         }
 
-        $read = fgets( $this -> adapter -> getStream(), $length );
-
-        if( $read === FALSE ) {
-
-            throw ReaderException::readFailure();
-        }
-
-        return $read;
+        return fgets( $this -> adapter -> getStream(), $length );
     }
 
     /**

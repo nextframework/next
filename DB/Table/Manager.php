@@ -9,6 +9,7 @@ use Next\Components\Invoker;                    # Invoker Class
 use Next\DB\Driver\Driver;                      # Connection Driver Interface
 use Next\DB\Query\Query;                        # Query Interface
 use Next\DB\Query\Builder;                      # Query Builder Class
+use Next\DB\Entity\Repositories;                # Repositories Collection Class
 use Next\DB\Table\Row, Next\DB\Table\RowSet;    # Row and RowSet Classes
 
 /**
@@ -43,6 +44,13 @@ class Manager extends Object {
     private $builder;
 
     /**
+     * Entities Repositories
+     *
+     * @var Next\DB\Entity\Repositories
+     */
+    private $repositories;
+
+    /**
      * Data Source
      *
      * An associative array where the keys are Table Columns and
@@ -58,10 +66,11 @@ class Manager extends Object {
      * @param Next\DB\Driver\Driver $driver
      *  Connection Driver
      *
-     * @param Next\DB\Table\Table $table
-     *  Table Object
+     * @param Next\DB\Table\Table|optional $table
+     *  An optional Table Object. Required for most of CRUD operations,
+     *  optional for Entity Managers (assuming they inject their own)
      */
-    public function __construct( Driver $driver, Table $table ) {
+    public function __construct( Driver $driver, Table $table = NULL ) {
 
         parent::__construct();
 
@@ -73,6 +82,8 @@ class Manager extends Object {
 
         $this -> builder = new Builder( $driver -> getRenderer() );
 
+        $this -> repositories = new Repositories;
+
         /**
          * @internal Data Source
          *
@@ -82,7 +93,7 @@ class Manager extends Object {
          * work with Row/RowSet Fields computed from the difference between
          * original fields and modified fields
          */
-        $this -> source = $table -> getFields();
+        if( ! is_null( $table ) ) $this -> source = array_filter( $table -> getFields() );
 
         // Extend Object Context to QueryBuilder Class
 
@@ -116,7 +127,12 @@ class Manager extends Object {
      * @see Next\DB\Driver\Driver::lastInsertId()
      */
     public function rowCount() {
-        return $this -> execute() -> rowCount();
+
+        $rowCount = $this -> execute() -> rowCount();
+
+        $this -> flush();
+
+        return $rowCount;
     }
 
     /**
@@ -134,7 +150,12 @@ class Manager extends Object {
      * @see Next\DB\Statement\Statement::fetch()
      */
     public function fetch( $fetchStyle = NULL ) {
-        return new RowSet( $this, array( $this -> execute() -> fetch( $fetchStyle ) ) );
+
+        $rowset = new RowSet( $this, array( $this -> execute() -> fetch( $fetchStyle ) ) );
+
+        $this -> flush();
+
+        return $rowset;
     }
 
     /**
@@ -143,13 +164,18 @@ class Manager extends Object {
      * @param string|integer|optional $fetchStyle
      *  The Fetch Mode, accordingly to chosen Driver
      *
-     * @return Next\DB\Table\Row|Next\DB\Table\RowSet
+     * @return Next\DB\Table\RowSet
      *  RowSet Object with fetched data, if any
      *
      * @see Next\DB\Statement\Statement::fetchAll()
      */
     public function fetchAll( $fetchStyle = NULL ) {
-        return new RowSet( $this, $this -> execute() -> fetchAll( $fetchStyle ) );
+
+        $rowset = new RowSet( $this, $this -> execute() -> fetchAll( $fetchStyle ) );
+
+        $this -> flush();
+
+        return $rowset;
     }
 
     // CRUD-related Methods
@@ -241,16 +267,93 @@ class Manager extends Object {
     }
 
     /**
-     * Reset the Table Manager by returning a new instance of it
+     * Resets the Table Manager by returning a new instance of it
      *
      * @return Next\DB\Table\Manager
-     *  Table Manager Object
+     *  Table Manager Object (Fluent-Interface)
      */
     public function reset() {
         return new Manager( $this -> driver, $this -> table );
     }
 
-    // Accessors
+    /**
+     * Flushes Table Manager previously used informations, preparing it for another round
+     *
+     * @return Next\DB\Table\Manager
+     *  Table Manager Object (Fluent-Interface)
+     */
+    public function flush() {
+
+        // Reset Query Builder Parts
+
+        $this -> builder -> reset();
+
+        return $this;
+    }
+
+    /**
+     * Set Table Object after the Manager Object is built
+     *
+     * @param next\DB\Table\Table $table
+     *  Table Object to replace the old one, if any
+     *
+     * @return  Next\DB\Table\Manager
+     *  Table Manager Object (Fluent-Interface)
+     */
+    public function setTable( Table $table ) {
+
+        $this -> table = $table;
+
+        return $this;
+    }
+
+    // Entity Repositories-related Methods
+
+    /**
+     * Add an Entity Repository
+     *
+     * @param string $repository
+     *  Entity Repository to add
+     *
+     * @return  Next\DB\Table\Manager
+     *  Table Manager Object (Fluent-Interface)
+     */
+    public function addRepository( $repository ) {
+
+        $this -> repositories -> addRepository( new Manager( $this -> driver ), $repository );
+
+        return $this;
+    }
+
+    /**
+     * Get an Entity Repository
+     *
+     * @param  string $repository
+     *  Entity Repository to retrieve
+     *
+     * @return Next\DB\Entity\Repository
+     *  Entity Repository
+     */
+    public function getRepository( $repository ) {
+
+        $repositoryInstance = $this -> repositories -> getRepository( $repository );
+
+        if( is_null( $repository ) ) {
+            throw TableException::repositoryNotFound( $repository );
+        }
+
+        return $repositoryInstance;
+    }
+
+    /**
+     * Get Entities Repository Collection
+     *
+     * @return Next\DB\Entity\Repositories
+     *  Entities Repositories
+     */
+    public function getRepositories() {
+        return $this -> repositories;
+    }
 
     /**
      * Get associated Table Object

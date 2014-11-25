@@ -36,6 +36,21 @@ class RowSet extends AbstractDataGateway implements \Iterator {
         return $count;
     }
 
+    /**
+     * Deletes one or more records
+     *
+     * @return integer
+     *  Total number of deleted records
+     */
+    public function delete()  {
+
+        $count = 0;
+
+        foreach( $this -> source as $records ) $count += $records -> delete() -> rowCount();
+
+        return $count;
+    }
+
     // Method Overwriting
 
     /**

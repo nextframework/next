@@ -20,7 +20,7 @@ class Post extends AbstractMethod {
      */
     private $errorMessages = array(
 
-        'UNKNOWN'               => 'Unknown upload error',
+        'UNKNOWN'                 => 'Unknown upload error',
 
         // PHP File Upload Errors
 
@@ -154,7 +154,7 @@ class Post extends AbstractMethod {
 
             $this -> failed[] = array(
 
-                'name' => $file, 'size' => $readableFileSize, 'type' => $type,
+                'name' => $file, 'size' => $readableFilesize, 'type' => $type,
 
                 'reason' => $validation -> getErrorMessage()
             );

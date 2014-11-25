@@ -171,7 +171,7 @@ class Builder extends Object {
     /**
      * Specify SELECT Statement Columns
      *
-     * @param array|optional $columns
+     * @param Next\DB\Query\Expression|string|array|optional $columns
      *  Columns to be included in SELECT Statement
      *
      * @return Next\DB\Table\Select
@@ -541,6 +541,38 @@ class Builder extends Object {
         $this -> replacements = \Next\Components\Utils\ArrayUtils::union(
             $this -> replacements, (array) $replacements
         );
+
+        return $this;
+    }
+
+    /**
+     * Resets the Query Builder preparing it for another (possible) statement
+     *
+     * Although all the property types can be predefined while defining them, by having such feature
+     * we can flush them after used, which doesn't occur within this class scope
+     *
+     * @return Next\Query\Builder
+     *  Query Builder Object (Fluent-Interface)
+     *
+     * @see Next\DB\Table\Manager::flush()
+     */
+    public function reset() {
+
+        $this -> query = NULL;
+        $this -> replacements = array();
+
+        $this -> columns = array();
+        $this -> tables = array();
+
+        $this -> distinct = FALSE;
+
+        $this -> where = array();
+        $this -> joins = array();
+        $this -> having = array();
+
+        $this -> group = NULL;
+        $this -> order = array();
+        $this -> limit = array();
 
         return $this;
     }

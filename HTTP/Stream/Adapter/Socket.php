@@ -20,70 +20,186 @@ class Socket extends AbstractAdapter {
     /**
      * Read-only
      *
-     * <p>Place the file pointer at the beginning of the file</p>
+     * <p>
+     *     Open the stream for reading, placing the pointer at the beginning
+     *     of the file
+     * </p>
      *
      * @var string
      */
-    const READ                   = 'rb';
+    const READ                   =   'rb';
 
     /**
      * Read and Write
      *
-     * <p>Place the file pointer at the beginning of the file</p>
+     * <p>
+     *     Open the stream for reading and writing, placing the pointer at
+     *     the beginning of the file
+     * </p>
      *
      * @var string
      */
-    const READ_WRITE             = 'r+b';
+    const READ_WRITE                = 'r+b';
 
     /**
      * Write-only
      *
      * <p>
-     *     Place the file pointer at the beginning of the file
-     *     and truncate the file to zero length.
+     *     Open the stream for writing, placing the pointer at the beginning
+     *     of the file and truncating the file to zero length.
      * </p>
      *
      * <p>If the file does not exist, attempt to create it</p>
      *
      * @var string
      */
-    const TRUNCATE_WRITE         = 'wb';
+    const TRUNCATE_WRITE            = 'wb';
 
     /**
      * Read and Write
      *
      * <p>
-     *     Place the file pointer at the beginning of the file
-     *     and truncate the file to zero length.
+     *     Open the stream for reading and writing, placing the pointer at
+     *     the beginning of the file and truncating the file to zero length.
      * </p>
      *
      * <p>If the file does not exist, attempt to create it</p>
      *
      * @var string
      */
-    const TRUNCATE_READ_WRITE    = 'w+b';
+    const TRUNCATE_READ_WRITE       = 'w+b';
 
     /**
-     * Write-only
+     * Append Write-only
      *
-     * <p>Place the file pointer at the end of the file.</p>
+     * <p>
+     *     Open the stream for writing, placing the pointer at the end
+     *     of the file and truncating the file to zero length.
+     * </p>
      *
      * <p>If the file does not exist, attempt to create it</p>
      *
      * @var string
      */
-    const APPEND_WRITE           = 'ab';
+    const APPEND_WRITE              = 'ab';
 
     /**
-     * Read and Write
+     * Append Read and Write
      *
-     * <p>Place the file pointer at the end of the file</p>
+     * <p>
+     *     Open the stream for writing, placing the pointer at the end
+     *     of the file and truncating the file to zero length.
+     * </p>
      *
      * <p>If the file does not exist, attempt to create it</p>
      *
      * @var string
      */
-    const APPEND_READ_WRITE      = 'a+b';
+    const APPEND_READ_WRITE         = 'a+b';
+
+    /**
+     * Exclusive Read
+     *
+     * <p>
+     *     Create and open the stream for writing only, placing the pointer in
+     *     the beginning of file
+     * </p>
+     *
+     * <p>
+     *     If the file does not exist doesn't try to create it but the opening
+     *     routine returns FALSE em emits an E_WARNING error
+     * </p>
+     *
+     * @var string
+     */
+    const EXCLUSIVE_WRITE           = 'xb';
+
+    /**
+     * Exclusive Read and Write
+     *
+     * <p>
+     *     Create and open the stream for writing only, placing the pointer in
+     *     the beginning of file
+     * </p>
+     *
+     * <p>
+     *     If the file does not exist doesn't try to create it but the opening
+     *     routine returns FALSE em emits an E_WARNING error
+     * </p>
+     *
+     * @var string
+     */
+    const EXCLUSIVE_READ_WRITE      = 'x+b';
+
+    /**
+     * Conditional Read
+     *
+     * <p>
+     *     The same as WRITE ONLY, but the file is not truncated nor any error
+     *     is raised if the file already exists (opposed to EXCLUSIVE)
+     * </p>
+     *
+     * <p>
+     *     Useful for advisory locks before attempt to modify the file.
+     *
+     *     E.g: A simplified but equivalent implementation of
+     *     Next\HTTP\Stream\Writer::write() that prevents a zero-length data to
+     *     be written, warning the user about possible data loss.
+     *
+     *     <code>
+     *
+     *         function write( $string, $length = NULL ) {
+     *
+     *             $handler = fopen( './file.txt', 'w' );
+     *
+     *             if( $length !== NULL ) {
+     *
+     *                 if( (int) $length === 0 ) {
+     *                     throw new Exception(
+     *                         'Using zero-length when writing data, will result in a blank file/empty stream'
+     *                     );
+     *                 }
+     *
+     *                 $bytes = fwrite( $handler, $string, $length );
+     *
+     *             } else {
+     *
+     *                 $bytes = fwrite( $handler, $string );
+     *             }
+     *
+     *             return $bytes;
+     *         }
+     *
+     *         try {
+     *
+     *             var_dump( write( 'some text', 0 ) );
+     *
+     *         } catch( Exception $e ) {
+     *
+     *             echo $e -> getMessage();
+     *         }
+     *
+     *     </code>
+     *
+     * Because of the WRITE mode (w) the code above will output the Exception
+     * message, but the file named <strong>file.txt</strong> will already be emptied
+     * not because of fwrite(), but because of fopen() already truncated the file
+     *
+     * By using the "c" or "c+" mode (see below), this does not happen.
+     */
+    const CONDITIONAL_WRITE         = 'cb';
+
+    /**
+     * Conditional Read and Write
+     *
+     * <p>
+     *     The same as READ and WRITE (w+), but the file is not truncated nor any error
+     *     is raised if the file already exists (opposed to EXCLUSIVE)
+     * </p>
+     *
+     * @var string
+     */
+    const CONDITIONAL_READ_WRITE    = 'c+b';
 
     /**
      * Opening Mode
@@ -441,9 +557,32 @@ class Socket extends AbstractAdapter {
             case self::APPEND_WRITE:
             case self::APPEND_READ_WRITE:
 
+            case self::CONDITIONAL_WRITE:
+            case self::CONDITIONAL_READ_WRITE:
+
                 if( $info -> isFile() && ! $info -> isWritable() ) {
 
                     throw AdapterException::unableToWrite( $this -> filename );
+
+                } else {
+
+                    $path = new \SplFileInfo( $info -> getPath() );
+
+                    if( ! $path -> isWritable() ) {
+                        throw AdapterException::unableToWrite( $this -> filename );
+                    }
+                }
+
+            break;
+
+            case self::EXCLUSIVE_WRITE:
+            case self::EXCLUSIVE_READ_WRITE:
+
+                // File already exists
+
+                if( $info -> isFile() ) {
+
+                    throw AdapterException::unableToExclusivelyWrite( $this -> filename );
 
                 } else {
 

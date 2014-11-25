@@ -27,28 +27,35 @@ class TableException extends \Next\Components\Debug\Exception {
      *
      * @var integer
      */
-    const NOTHING_TO_INSERT = 0x00000396;
+    const NOTHING_TO_INSERT       = 0x00000396;
 
     /**
      * Nothing to Update
      *
      * @var integer
      */
-    const NOTHING_TO_UPDATE = 0x00000397;
+    const NOTHING_TO_UPDATE       = 0x00000397;
 
     /**
      * Statement Preparing
      *
      * @var integer
      */
-    const PREPARE = 0x00000398;
+    const PREPARE                 = 0x00000398;
 
     /**
      * Statement Executing
      *
      * @var integer
      */
-    const EXECUTE = 0x00000399;
+    const EXECUTE                 = 0x00000399;
+
+    /**
+     * Entity Repository not Found
+     *
+     * @var integer
+     */
+    const REPOSITORY_NOT_FOUND    = 0x0000039A;
 
     // Exception Messages
 
@@ -98,5 +105,24 @@ class TableException extends \Next\Components\Debug\Exception {
      */
     public static function execute( StatementException $e ) {
         return new self( $e -> getMessage(), self::EXECUTE );
+    }
+
+    /**
+     * Entity Repository not found
+     *
+     * @param string $repository
+     *  Repository trying to be retrieved
+     *
+     * @return Next\DB\Table\TableException
+     *  Repository not Found
+     */
+    public static function repositoryNotFound( $repository ) {
+
+        return new self(
+
+            'Repository <strong>%s</strong> could not be found',
+
+            self::REPOSITORY_NOT_FOUND, array( $repository )
+        );
     }
 }

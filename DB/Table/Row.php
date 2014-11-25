@@ -19,6 +19,8 @@ class Row extends AbstractDataGateway {
      */
     private $storage;
 
+    private $knownColumns = array();
+
     /**
      * Additional Initialization
      */
@@ -30,6 +32,10 @@ class Row extends AbstractDataGateway {
 
             (array) $this -> source, \ArrayObject::ARRAY_AS_PROPS
         );
+
+        // Listing Table Columns for update and delete processes
+
+        $this -> knownColumns = array_intersect_key( (array) $this -> source, $this -> manager -> getTable() -> getFields() );
     }
 
     // Method Overwriting
@@ -45,17 +51,62 @@ class Row extends AbstractDataGateway {
     }
 
     /**
-     * Updates one or more records
+     * Updates the record
      *
      * @return Next\DB\Table\Manager
      *  Table Manager Object
      */
     public function update() {
 
-        $this -> manager -> setSource( array_diff( (array) $this -> storage, (array) $this -> source ) )
-                         -> update();
+        // Listing updated fields
+
+        $source = array_diff( (array) $this -> storage, (array) $this -> source );
+
+        /**
+         * @internal
+         *
+         * Listing table columns allow in order to build the UPDATE conditions only
+         * with fields present in the table being updated, discarding, for example,
+         * joined aliased fields
+         */
+        $known = array_diff_key( $this -> knownColumns, $source );
+
+        // Starting UPDATE Statement
+
+        $this -> manager -> setSource( $source ) -> update();
+
+        /**
+         * @internal
+         *
+         * The new WHERE Clauses will be all Table columns that are not
+         * being modified by this update
+         */
+        foreach( array_keys( $known ) as $column ) {
+            $this -> manager -> where( sprintf( '%1$s = :%1$s', $column ), $known );
+        }
 
         return $this -> manager;
+    }
+
+    /**
+     * Deletes the record
+     *
+     * @return Next\DB\Table\Manager
+     *  Table Manager Object
+     */
+    public function delete() {
+
+        /**
+         * @internal
+         *
+         * Different of an UPDATE, for DELETE Statements all Table columns
+         * can be used as condition
+         */
+        foreach( array_keys( $this -> knownColumns ) as $column ) {
+            $this -> manager -> where( sprintf( '%1$s = :%1$s', $column ), $this -> knownColumns );
+        }
+
+        return $this -> manager -> delete();
     }
 
     /**

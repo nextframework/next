@@ -47,6 +47,13 @@ class AdapterException extends \Next\Components\Debug\Exception {
      */
     const UNABLE_TO_WRITE         = 0x000004FE;
 
+    /**
+     * Unable to Exclusive Write  on Stream
+     *
+     * @var integer
+     */
+    const UNABLE_TO_WRITE_EXCLUSIVE    = 0x000004FF;
+
     // Unable to Tell (no kidding :P)
 
     /**
@@ -54,7 +61,7 @@ class AdapterException extends \Next\Components\Debug\Exception {
      *
      * @var integer
      */
-    const UNABLE_TO_TELL          = 0x000004FF;
+    const UNABLE_TO_TELL          = 0x00000500;
 
     // Unable to Seek
 
@@ -63,7 +70,7 @@ class AdapterException extends \Next\Components\Debug\Exception {
      *
      * @var integer
      */
-    const UNABLE_TO_SEEK          = 0x00000500;
+    const UNABLE_TO_SEEK          = 0x00000501;
 
     // Exception Messages
 
@@ -135,7 +142,7 @@ class AdapterException extends \Next\Components\Debug\Exception {
     /**
      * Unable to Write on Stream
      *
-     * @note Write on Stream is ifferent from Write Data on Stream
+     * @note Write on Stream is different from Write Data on Stream
      *
      * @param string $filename
      *  File being opened
@@ -150,6 +157,29 @@ class AdapterException extends \Next\Components\Debug\Exception {
             'File <strong>%s</strong> or its Parent Directory is not writable',
 
             self::UNABLE_TO_WRITE,
+
+            $filename
+        );
+    }
+
+    /**
+     * Unable to Write Exclusively on Stream
+     *
+     * @note Write on Stream is different from Write Data on Stream
+     *
+     * @param string $filename
+     *  File being opened
+     *
+     * @return Next\HTTP\Stream\Writer\WriterException
+     *  Exception for Stream exclusive writability failure
+     */
+    public static function unableToExclusivelyWrite( $filename ) {
+
+        return new self(
+
+            'File <strong>%s</strong> already exists and cannot be opened for exclusive writing',
+
+            self::UNABLE_TO_WRITE_EXCLUSIVE,
 
             $filename
         );

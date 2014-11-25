@@ -49,8 +49,8 @@ abstract class AbstractTable extends Object implements Table {
          * @internal
          * Listing Properties
          *
-         * To be included in the list, properties must be protected, not NULL
-         * and must not start with an underscore
+         * To be included in the list, properties must be protected and
+         * must not start with an underscore
          */
         $properties = $this -> getClass()
                             -> getProperties( \ReflectionProperty::IS_PROTECTED );
@@ -90,15 +90,7 @@ abstract class AbstractTable extends Object implements Table {
 
                 $property -> setAccessible( TRUE );
 
-                $name  = $property -> getName();
-                $value = $property -> getValue( $context );
-
-                // Filtering properties in according to conditions mentioned
-
-                if( ! is_null( $value ) ) {
-
-                    $fields[ $name ] = $value;
-                }
+                $fields[ $property -> getName() ] = $property -> getValue( $context );
             }
         );
 

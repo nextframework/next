@@ -218,9 +218,12 @@ class Handlers {
                     /**
                      * @internal
                      * If we can't send the Response, there is a
-                     * Internal Server Error
+                     * Internal Server Error, but it'll only be sent if we're still
+                     * able to send headers, which is not the case of very specific scenarios,
+                     * when the current buffer length cannot determined and thus, cleansed.
+                     * Otherwise, this would cause an infinite loop
                      */
-                    self::response( 500 );
+                    if( Response::canSendHeaders() ) self::response( 500 );
                 }
 
             } catch( ApplicationException $e ) {
@@ -228,7 +231,18 @@ class Handlers {
                 echo $e -> getMessage();
             }
 
-        } catch( \Next\Components\Debug $e ) {
+        } catch( ResponseException $e ) {
+
+            /**
+             * This ResponseException is the result of a ResponseException being caught,
+             * triggering Handlers::error() to send an Internal Server Error status code
+             * when any header has already been sent but the output buffer could not be
+             * cleansed during Handler registration because its length could not be retrieved
+             *
+             * And by silencing this here we avoid the echo below to be called
+             */
+
+        } catch( \Next\Components\Debug\Exception $e ) {
 
             // If fail here, you're in serious troubles XD
 
