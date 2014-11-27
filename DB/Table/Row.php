@@ -60,7 +60,7 @@ class Row extends AbstractDataGateway {
 
         // Listing updated fields
 
-        $source = array_diff( (array) $this -> storage, (array) $this -> source );
+        $source = array_diff_assoc( (array) $this -> storage, (array) $this -> source );
 
         /**
          * @internal
@@ -85,6 +85,7 @@ class Row extends AbstractDataGateway {
             $this -> manager -> where( sprintf( '%1$s = :%1$s', $column ), $known );
         }
 
+        //var_dump( $this -> source, $this -> storage, $source, $this -> knownColumns, $known, $this -> manager -> assemble(), $this -> manager -> getReplacements() );exit;
         return $this -> manager;
     }
 

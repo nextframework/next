@@ -2,7 +2,6 @@
 
 namespace Next\Controller\Dispatcher;
 
-use Next\Controller\ControllerException;    # Controller Exception Class
 use Next\View\ViewException;                # View Exception Class
 use Next\Application\Application;           # Application Interface
 use Next\Components\Debug\Handlers;         # Exceptions Handlers
@@ -55,37 +54,6 @@ class Standard extends AbstractDispatcher {
         } catch( \ReflectionException $e ) {
 
             throw DispatcherException::reflection( $e );
-
-        } catch( ControllerException $e ) {
-
-            /**
-             * @internal
-             * ControllerException's came from Application's Controllers
-             * and, as part of Standardization Concept, should be thrown when
-             * something is wrong
-             *
-             * E.g.: Database Query results in FALSE instead of a Recordset Object
-             *
-             * Doesn't matter the level of DEVELOPMENT MODE Constant, we'll
-             * try to create a Template Variable and virtually re-send the Response,
-             * by re-rendering the View
-             *
-             * Now, in Template View, a special variable will be available with
-             * Exception Message
-             *
-             * If the assignment or rendering fails, the Production Handler
-             * will be used as fallback
-             */
-            try {
-
-                $application -> getView()
-                             -> assign( '__EXCEPTION__', $e -> getMessage() )
-                             -> render();
-
-            } catch( ViewException $e ) {
-
-                Handlers::production( $e );
-            }
 
         } catch( ViewException $e ) {
 

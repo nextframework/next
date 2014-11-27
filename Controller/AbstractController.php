@@ -164,8 +164,6 @@ abstract class AbstractController extends Object implements Controller {
 
         } catch( RequestException $e ) {
 
-            // Standardizing Exception
-
             throw ControllerException::paramNotFound($e);
         }
     }
@@ -204,8 +202,6 @@ abstract class AbstractController extends Object implements Controller {
             $this -> view -> $param = $value;
 
         } catch( ViewException $e ) {
-
-            // Standardizing Exception
 
             throw ControllerException::assignmentFailure( $e );
         }
@@ -246,8 +242,6 @@ abstract class AbstractController extends Object implements Controller {
             unset( $this -> view -> $param );
 
         } catch( ViewException $e ) {
-
-            // Standardizing Exception
 
             throw ControllerException::removalFailure( $e );
         }

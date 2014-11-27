@@ -630,8 +630,7 @@ class Standard extends Object implements View {
              *
              * - It shouldn't, which means Next\View\View::disableRender() was called
              *
-             * - Any kind of output was already sent, like a debugging purposes
-             *  var_dump() or even a ControllerException which was caught
+             * - Any kind of output was already sent, like a debugging purposes var_dump()
              */
             if( ! $this -> _shouldRender || ob_get_length() != 0 ) {
                 return $response;
