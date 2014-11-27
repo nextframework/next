@@ -345,4 +345,33 @@ class ArrayUtils {
 
         return call_user_func_array( 'array_map', $array );
     }
+
+    /**
+     * Filters input array entries equal to FALSE but, differently from default
+     * behavior of native array_filter() function, if defined, zeros will not be
+     * considered as FALSE, and thus they'll not be removed from given array
+     *
+     * Defaults to TRUE, zeros are allowed
+     *
+     * @param  array   $array
+     *  Array to filter
+     *
+     * @param  boolean|optional $allowZeros
+     *  Define whether or not zeros will be allowed in filtered array. If FALSE,
+     *  array_filter() with its default behavior will be used. Otherwise, we'll use
+     *  strlen() as callback.
+     *
+     * Defaults to TRUE, zeros are allowed.
+     *
+     * @return array
+     *  Input array filtered
+     *
+     * @see http://php.net/manual/en/function.array-filter.php#111091
+     */
+    public static function filter( array $array, $allowZeros = TRUE ) {
+
+        if( $allowZeros === FALSE ) return array_filter( $array );
+
+        return array_filter( $array, 'strlen' );
+    }
 }

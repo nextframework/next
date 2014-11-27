@@ -2,6 +2,8 @@
 
 namespace Next\DB\Table;
 
+use Next\Components\Utils\ArrayUtils;    #Array Utils Class
+
 /**
  * Table Row Class
  *
@@ -19,6 +21,11 @@ class Row extends AbstractDataGateway {
      */
     private $storage;
 
+    /**
+     * List of known columns, listed from associated Table Object
+     *
+     * @var array
+     */
     private $knownColumns = array();
 
     /**
@@ -35,7 +42,12 @@ class Row extends AbstractDataGateway {
 
         // Listing Table Columns for update and delete processes
 
-        $this -> knownColumns = array_intersect_key( (array) $this -> source, $this -> manager -> getTable() -> getFields() );
+        $this -> knownColumns = array_intersect_key(
+
+            (array) $this -> source,
+
+            $this -> manager -> getTable() -> getFields()
+        );
     }
 
     // Method Overwriting
@@ -85,7 +97,6 @@ class Row extends AbstractDataGateway {
             $this -> manager -> where( sprintf( '%1$s = :%1$s', $column ), $known );
         }
 
-        //var_dump( $this -> source, $this -> storage, $source, $this -> knownColumns, $known, $this -> manager -> assemble(), $this -> manager -> getReplacements() );exit;
         return $this -> manager;
     }
 
@@ -97,6 +108,8 @@ class Row extends AbstractDataGateway {
      */
     public function delete() {
 
+        $known = ArrayUtils::filter( $this -> knownColumns );
+
         /**
          * @internal
          *
@@ -104,7 +117,10 @@ class Row extends AbstractDataGateway {
          * can be used as condition
          */
         foreach( array_keys( $this -> knownColumns ) as $column ) {
-            $this -> manager -> where( sprintf( '%1$s = :%1$s', $column ), $this -> knownColumns );
+
+            if( ! is_null( $this -> knownColumns[ $column ] ) ) {
+                $this -> manager -> where( sprintf( '%1$s = :%1$s', $column ), $known );
+            }
         }
 
         return $this -> manager -> delete();
