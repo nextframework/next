@@ -81,7 +81,7 @@ class Row extends AbstractDataGateway {
          * with fields present in the table being updated, discarding, for example,
          * joined aliased fields
          */
-        $known = array_diff_key( $this -> knownColumns, $source );
+        $known = array_diff_key( ArrayUtils::filter( $this -> knownColumns ), $source );
 
         // Starting UPDATE Statement
 
