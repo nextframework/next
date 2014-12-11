@@ -86,7 +86,7 @@ abstract class AbstractDataGateway extends Object implements DataGateway {
      *  Data Source
      */
     public function getSource() {
-        return $this -> source;
+        return ( count( $this -> source ) == 1 ? $this -> source[ 0 ] : $this -> source );
     }
 
     /**

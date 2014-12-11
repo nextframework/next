@@ -137,6 +137,26 @@ class Repository extends Object {
         return $this -> manager -> fetchAll();
     }
 
+    /**
+     * Finds one Entity in the Repository that matches a set of criteria
+     *
+     * It's an acting interface alias for Repository::findBy()
+     *
+     * @param  array  $criteria
+     *  One or more criteria to condition the Entity
+     *
+     * @param  string|array|optional  $order
+     *  One or more fields to order the Entity in the resultset
+     *
+     * @return Next\DB\Table\RowSet
+     *  RowSet Object with fetched data, if any
+     *
+     * @see Next\DB\Entity\Repository::findBy()
+     */
+    public function findOneBy( array $criteria, $order = NULL ) {
+        return $this -> findBy( $criteria, $order, 1 );
+    }
+
     // Auxiliary Methods
 
     /**

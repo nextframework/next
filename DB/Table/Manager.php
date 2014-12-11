@@ -101,6 +101,16 @@ class Manager extends Object {
     }
 
     /**
+     * Cleanup available Repositories when Table Manager is cloned
+     *
+     * @return void
+     */
+    public function __clone() {
+
+        $this -> repositories = new Repositories;
+    }
+
+    /**
      * Set Data Source
      *
      * @param array $source
@@ -303,6 +313,8 @@ class Manager extends Object {
     public function setTable( Table $table ) {
 
         $this -> table = $table;
+
+        $this -> source = array_filter( $table -> getFields() );
 
         return $this;
     }

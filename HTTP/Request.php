@@ -61,19 +61,33 @@ class Request extends Object {
      */
     const DELETE          = 'DELETE';
 
-   /**
+    /**
      * HEAD Method
      *
      * @var string
      */
     const HEAD            = 'HEAD';
 
-   /**
+    /**
      * OPTIONS Method
      *
      * @var string
      */
     const OPTIONS         = 'OPTIONS';
+
+    /**
+     * CONNECT Method
+     *
+     * @var string
+     */
+    const CONNECT         = 'CONNECT';
+
+    /**
+     * TRACE Method
+     *
+     * @var string
+     */
+    const TRACE           = 'TRACE';
 
     /**
      * HTTP Scheme
@@ -505,6 +519,96 @@ class Request extends Object {
     }
 
     /**
+     * Is this a GET method request?
+     *
+     * @return bool
+     *  TRUE if current Request is a GET Request and FALSE otherwise
+     */
+    public function isGet() {
+        return ( $this -> method === self::GET );
+    }
+
+    /**
+     * Is this a PATCH method request?
+     *
+     * @return bool
+     *  TRUE if current Request is a PATCH Request and FALSE otherwise
+     */
+    public function isPatch() {
+        return ( $this -> method === self::PATCH );
+    }
+
+    /**
+     * Is this a POST method request?
+     *
+     * @return bool
+     *  TRUE if current Request is a POST Request and FALSE otherwise
+     */
+    public function isPost() {
+        return ( $this -> method === self::POST );
+    }
+
+    /**
+     * Is this a PUT method request?
+     *
+     * @return bool
+     *  TRUE if current Request is a PUT Request and FALSE otherwise
+     */
+    public function isPut() {
+        return ( $this -> method === self::PUT );
+    }
+
+    /**
+     * Is this a DELETE method request?
+     *
+     * @return bool
+     *  TRUE if current Request is a DELETE Request and FALSE otherwise
+     */
+    public function isDelete() {
+        return ( $this -> method === self::DELETE );
+    }
+
+    /**
+     * Is this a HEAD method request?
+     *
+     * @return bool
+     *  TRUE if current Request is a HEAD Request and FALSE otherwise
+     */
+    public function isHead() {
+        return ( $this -> method === self::HEAD );
+    }
+
+    /**
+     * Is this an OPTIONS method request?
+     *
+     * @return bool
+     *  TRUE if current Request is an OPTIONS Request and FALSE otherwise
+     */
+    public function isOptions() {
+        return ( $this -> method === self::OPTIONS );
+    }
+
+    /**
+     * Is this a CONNECT method request?
+     *
+     * @return bool
+     *  TRUE if current Request is a CONNECT Request and FALSE otherwise
+     */
+    public function isConnect() {
+        return ( $this -> method === self::CONNECT );
+    }
+
+    /**
+     * Is this a TRACE method request?
+     *
+     * @return bool
+     *  TRUE if current Request is a TRACE Request and FALSE otherwise
+     */
+    public function isTrace() {
+        return ( $this -> method === self::TRACE );
+    }
+
+    /**
      * Check if we're dealing with an AJAX Request
      *
      * @return boolean
@@ -742,24 +846,42 @@ class Request extends Object {
      * Get Environment Data
      *
      * @param string|optional $key
-     *  Desired ENV Param
+     *  Desired environment variable
      *
      * @return mixed
      *
      *  <p>
-     *      If <strong>$key</strong> is equal to NULL, all the
-     *      Environment (ENV) Data will be returned
+     *      If directive <a href="http://us.php.net/manual/en/ini.core.php#ini.variables-order">variables_order</a>
+     *      has the "E" indicator, the data will be retrieved from $_ENV superglobal.
      *  </p>
      *
      *  <p>
-     *      If <strong>$key</strong> is NOT NULL AND given key exists
-     *      in Environment (ENV) Data array it will be returned
+     *      In this case, if <strong>$key</strong> is not specified, all Environment
+     *      Variables available will be returned
      *  </p>
      *
-     *  <p>Otherwise, returns FALSE</p>
+     *  <p>
+     *     If <strong>$key</strong> is defined and it exists among Environment Variables,
+     *     if any, it will be returned. Otherwise, NULL is returned.
+     *  </p>
+     *
+     *  <p>
+     *      But, if this directive doesn't have the "E" indicator -OR- if for some
+     *      reason, the ini_get() function doesn't exist (likely because it has
+     *      been disabled for pseudo-security reasons) the getenv() function will
+     *      be used instead, and thus, if the variable doesn't exist, FALSE is returned
+     *  </p>
      */
     public function getEnv( $key = NULL ) {
-        return $this -> getData( $_ENV, $key );
+
+        if( function_exists( 'ini_get' ) ) {
+
+            if( strpos( 'E', ini_get( 'variables_order' ) !== FALSE ) ) {
+                return $this -> getData( $_ENV, $key );
+            }
+        }
+
+        return getenv( $key );
     }
 
     /**
