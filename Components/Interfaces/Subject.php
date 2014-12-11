@@ -1,6 +1,6 @@
 <?php
 
-namespace Next\Components\Observer;
+namespace Next\Components\Interfaces;
 
 /**
  * Subject Interface

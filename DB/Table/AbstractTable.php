@@ -111,7 +111,19 @@ abstract class AbstractTable extends Object implements Table {
      *  Field Value
      */
     public function __set( $field, $value ) {
-
         $this -> {$field} = $value;
+    }
+
+    /**
+     * Get field value
+     *
+     * @param string $field
+     *  Table Field
+     *
+     * @param mixed $value
+     *  Field Value
+     */
+    public function __get( $field ) {
+        return ( isset( $this -> {$field} ) ? $this -> {$field} : NULL );
     }
 }
