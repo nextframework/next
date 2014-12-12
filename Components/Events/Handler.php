@@ -32,6 +32,13 @@ class Handler extends Object implements Subject {
     private $event;
 
     /**
+     * Handled Listeners
+     *
+     * @var array $handled
+     */
+    public $handled;
+
+    /**
      * Events Handler Constructor
      *
      * @param Next\Components\Events\Event|optional $event
@@ -103,6 +110,8 @@ class Handler extends Object implements Subject {
 
                 $listener -> setEvent( $this -> event ) -> update( $this, array_slice( func_get_args(), 1 ) );
 
+                $this -> handled[] = $name;
+
             } catch( \ReflectionException $e ) {
 
                 throw EventsException::listenerExecutionError( $name, $this -> event -> getName(), $e );
@@ -110,6 +119,25 @@ class Handler extends Object implements Subject {
         }
 
         return $this;
+    }
+
+    /**
+     * Return whether or not something has been handled
+     *
+     * @param  string|optional  $name
+     *  An optional Event Listener
+     *
+     * @return boolean
+     *  If <strong>$name</strong> argument is provided, it'll return TRUE if that
+     *  Event Listener in particular has been handled and FALSE otherwise.
+     *
+     *  Otherwise, TRUE will be returned if anything has been handled and FALSE otherwise.
+     */
+    public function isHandled( $name = NULL ) {
+
+        if( is_null( $name ) ) return ( count( $this -> handled ) != 0 );
+
+        return in_array( $name, $this -> handled );
     }
 
     // Accessors
