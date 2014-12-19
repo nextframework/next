@@ -843,15 +843,15 @@ class Response extends Object {
 
             function( $matches ) {
 
+                $indentSize = ( strlen( $matches[1] ) - 4 );
+                $indentSize = ( $indentSize < 0 ? 0 : $indentSize );
+
                 /**
                  * Inserting the reduced indentation level for the closing tag
                  * in replacements array
                  */
                 ArrayUtils::insert(
-
-                    array( 3 => str_repeat( ' ', ( strlen( $matches[1] ) - 4 ) ) ),
-
-                    $matches
+                    array( 3 => str_repeat( ' ', $indentSize ) ), $matches
                 );
 
                 return vsprintf( "%s%s\n%s<%s>", array_slice( $matches, 1, 4 ) );
@@ -1379,7 +1379,6 @@ class Response extends Object {
     }
 
     public function __toString() {
-
-        $this -> send(); return '';
+        return $this -> body;
     }
 }

@@ -94,6 +94,14 @@ class Exception extends \Exception {
     private $responseCode = 500;
 
     /**
+     * An optional callback to associate with the Exception thrown
+     * as complement of Error Standardization Concept
+     *
+     * @var callable|optional
+     */
+    private $callback;
+
+    /**
      * Exception Constructor
      */
     public function __construct() {
@@ -106,8 +114,8 @@ class Exception extends \Exception {
 
         // Listing Additional Exception Components
 
-        list( $code, $replacements, $responseCode ) =
-            $args + array( self::UNKNOWN, array(), 500 );
+        list( $code, $replacements, $responseCode, $callback ) =
+            $args + array( self::UNKNOWN, array(), 500, array() );
 
         // Checking Exception Components...
 
@@ -118,6 +126,8 @@ class Exception extends \Exception {
         $this -> replacements = (array) $replacements;
 
         $this -> responseCode = $responseCode;
+
+        $this -> callback     = (array) $callback;
 
         // Constructing the Exception
 
@@ -192,6 +202,16 @@ class Exception extends \Exception {
      */
     public function getResponseCode() {
         return $this -> responseCode;
+    }
+
+    /**
+     * Get associated Exception callback
+     *
+     * @return callable|void
+     *  Exception Callback, if provided
+     */
+    public function getCallback() {
+        return $this -> callback;
     }
 
     // OverLoading

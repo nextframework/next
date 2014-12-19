@@ -2,6 +2,8 @@
 
 namespace Next\Controller\Dispatcher;
 
+use Next\Components\Debug\Exception;        # Exception Class
+use Next\Controller\ControllerException;    # Controller Exception
 use Next\View\ViewException;                # View Exception Class
 use Next\Application\Application;           # Application Interface
 use Next\Components\Debug\Handlers;         # Exceptions Handlers
@@ -35,6 +37,8 @@ class Standard extends AbstractDispatcher {
      */
     public function dispatch( Application $application, \stdClass $data ) {
 
+        $response = $application -> getResponse();
+
         try {
 
             $this -> setDispatched( TRUE );
@@ -49,11 +53,69 @@ class Standard extends AbstractDispatcher {
 
             $reflector -> invoke( new $data -> class( $application ) );
 
-            return $application -> getResponse();
+            return $response;
 
         } catch( \ReflectionException $e ) {
 
             throw DispatcherException::reflection( $e );
+
+        } catch( ControllerException $e ) {
+
+            /**
+             * @internal
+             * ControllerException come from Application Controllers
+             * and, as part of Error Standardization Concept, should be thrown when
+             * something is wrong
+             *
+             * E.g.: Database Query results in FALSE instead of a Rowset Object
+             *
+             * Doesn't matter the level of DEVELOPMENT MODE Constant, we'll
+             * try to create a Template Variable and virtually re-send the Response,
+             * by invoking a callback previously associated to ControllerException object
+             *
+             * Now, in Template View, a special variable named __EXCEPTION__ will
+             * be available with Exception Message just like if it was assigned
+             * from Controller context
+             *
+             * If the assignment or rendering fails (unlikely), the Production Handler
+             * will be used as fallback
+             */
+            try {
+
+                $response -> addHeader( $e -> getResponseCode() );
+
+            } catch( FieldsException $e ) {}
+
+            try {
+
+                $application -> getView() -> assign( '__EXCEPTION__', $e -> getMessage() );
+
+                $callback = $e -> getCallback();
+
+                if( is_callable( $callback ) ) {
+                    return call_user_func( $callback );
+                }
+
+                switch( count( $callback ) ) {
+
+                    case 1:  call_user_func( $callback[ 0 ] ); break;
+                    case 2:  call_user_func( $callback[ 0 ], $callback[ 1 ] ); break;
+                    default:
+
+                        if( ! is_callable( $callback[ 0 ] ) ) {
+                            Handlers::development( new Exception( 'Exception callbacks must be callable' ) );
+                        }
+
+                        call_user_func_array( $callback[ 0 ], array_slice( $callback, 1 ) );
+
+                    break;
+                }
+
+                return $response;
+
+            } catch( ViewException $e ) {
+                Handlers::production( $e );
+            }
 
         } catch( ViewException $e ) {
 

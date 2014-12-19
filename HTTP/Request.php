@@ -942,7 +942,7 @@ class Request extends Object {
 
             $this -> adapter = new Socket(
 
-                $this -> uri, 'r',
+                $this -> getURL(), 'r',
 
                 new SocketContext(
 

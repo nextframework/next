@@ -14,7 +14,34 @@ use Next\Components\Events\Listener;                # Event Listener Class
 
 use Next\DB\Table\Manager;                          # Table Manager Class
 
-class Plugin extends Object {
+abstract class Plugin extends Object {
+
+    /**
+     * Plugins API File
+     *
+     * Although more complex Plugins may require a more defined workflow, they
+     * should be able to be managed somehow, externally.
+     *
+     * And in order to simplify this probable "Plugins Manager", the Plugin class
+     * provides a fixed name for the classes that come to extend this one.
+     *
+     * This is not required by any means, though. And the developer must consult
+     * any documentations available for this possible "Plugins Manager",
+     * accordingly to the target application
+     *
+     * @var string
+     */
+    const API  = 'API.php';
+
+    /**
+     * Plugins Exceptions FIle
+     *
+     * The same consideration as above, but this refers to the file where
+     * the Exception messages raised bt the Plugin *may* reside
+     *
+     * @var string
+     */
+    const EXCEPTIONS = 'APIException.php';
 
     /**
      * Event Handler Object
@@ -61,9 +88,44 @@ class Plugin extends Object {
     /**
      * Flag to condition whether the Plugin is running in Development Mode
      *
+     * While running in Development Mode the Plugin may require manual data to
+     * be informed while in Production it doesn't need because they may come
+     * from external sources
+     *
      * @var boolean $developmentMode
      */
     protected $developmentMode = FALSE;
+
+    /**
+     * If the Plugin has routes to be dispatched, in order to minimize routing
+     * conflicts, all of them *should* be prefixed with a custom string definable
+     * through this property
+     *
+     * It should be something as unique as possible, like a vendor name
+     *
+     * @var string|optional $routesBaseURI
+     */
+    protected $routesBaseURI;
+
+    /**
+     * Flag to condition whether the Plugin is configurable
+     *
+     * @var boolean $configurable
+     */
+    protected $configurable = FALSE;
+
+    /**
+     * If the Plugin can be configured -AND- has a dedicated routed page
+     * to do so, the "Plugin Manager" *may* use this string defined in this
+     * property in order to build a richer GUI
+     *
+     * Note, however, that this will not create the route automatically and
+     * it should be prefixed with Next\Components\Plugin::$routesBaseURI
+     * for the same reason as any other route
+     *
+     * @var string $configurationRoute
+     */
+    protected $configurationRoute = 'settings';
 
     /**
      * Plugin Constructor
@@ -144,22 +206,40 @@ class Plugin extends Object {
     public function onAfterDeactivate( array $args = array() ) {}
 
     /**
-     * Routines to be performed before the Plugin can be modified.
+     * Routines to be performed before the Plugin can be deleted
+     * E.g: Before it's removed from the physical disk
+     *
+     * @param array|optional $args
+     *  Additional arguments for execution
+     */
+    public function onBeforeRemove( array $args = array() ) {}
+
+    /**
+     * Routines to be performed after the Plugin can be deleted.
+     * E.g: After it's removed from the physical disk
+     *
+     * @param array|optional $args
+     *  Additional arguments for execution
+     */
+    public function onAfterRemove( array $args = array() ) {}
+
+    /**
+     * Routines to be performed before the Plugin can be edited.
      * E.g: Before its data is updated in a database
      *
      * @param array|optional $args
      *  Additional arguments for execution
      */
-    public function onBeforeModify( array $args = array() ) {}
+    public function onBeforeEdit( array $args = array() ) {}
 
     /**
-     * Routines to be performed after the Plugin can be modified.
+     * Routines to be performed after the Plugin can be edited.
      * E.g: After its data is updated in a database
      *
      * @param array|optional $args
      *  Additional arguments for execution
      */
-    public function onAfterModify( array $args = array() ) {}
+    public function onAfterEdit( array $args = array() ) {}
 
     /**
      * Routines to be performed before the Plugin is executed.
@@ -212,6 +292,36 @@ class Plugin extends Object {
     public function test( array $args = array() ) {}
 
     // Accessors
+
+    /**
+     * Returns whether or not the Plugin *may* be configurable
+     *
+     * @return boolean
+     *   Whether the Plugin is configurable
+     */
+    public function isConfigurable() {
+        return (boolean) $this -> configurable;
+    }
+
+    /**
+     * Returns the base URI defined by Plugin in case it has routes to be dispatched
+     *
+     * @return boolean
+     *   Routes base URI
+     */
+    public function getRoutesBaseURI() {
+        return $this -> routesBaseURI;
+    }
+
+    /**
+     * Returns the special configuration route defined
+     *
+     * @return string
+     *   Configuration route
+     */
+    public function getConfigurationRoute() {
+        return $this -> configurationRoute;
+    }
 
     /**
      * Get Event Handler Event Object

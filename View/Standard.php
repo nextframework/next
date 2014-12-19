@@ -571,6 +571,29 @@ class Standard extends Object implements View {
         return $this;
     }
 
+    /**
+     * Get all assigned Template Variables
+     *
+     * @return array
+     *  Template Variabled
+     */
+    public function getVars() {
+        return $this -> _tplVars;
+    }
+
+    /**
+     * Get an specific Template Variable assigned
+     *
+     * @param  string $tplVar
+     *  The Template Variable
+     *
+     * @return mixed
+     *  The Template Variable assigned if found. NULL otherwise
+     */
+    public function getVar( $tplVar ) {
+        return ( array_key_exists( $tplVar, $this -> _tplVars ) ? $this -> _tplVars[ $tplVar ] : NULL );
+    }
+
     // Page renderer
 
     /**

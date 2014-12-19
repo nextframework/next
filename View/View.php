@@ -257,6 +257,19 @@ interface View {
      */
     public function assign( $tplVar, $value = NULL );
 
+    /**
+     * Get all assigned Template Variables
+     */
+    public function getVars();
+
+    /**
+     * Get an specific Template Variable assigned
+     *
+     * @param  string $tplVar
+     *  The Template Variable
+     */
+    public function getVar( $tplVar );
+
     // Page renderer
 
     /**

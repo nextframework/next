@@ -62,6 +62,80 @@ class Tools {
     }
 
     /**
+     * Truncates a string at specified length without breaking words
+     *
+     * @param string $string
+     *  The string to truncate
+     *
+     * @param integer $length
+     *  The expected length after truncated
+     *
+     * @param  string|optional $when
+     *   Conditions to where the string will be truncated. It can be:
+     *
+     *   - after     => The string will be truncated in first space
+     *                  after the length defined
+     *   - before    => The string will be truncated in first space
+     *                  before the length defined
+     *   - center    => The string defined as separator will be interpolated
+     *                  as close as possible to the middle of string
+     *
+     * @param  string|optional $delimiter
+     *  The delimiter string, appended in the end of truncated string if
+     *  <strong>$when</strong> is 'after' or 'before' and interpolated if
+     *  <strong>$when</strong> is 'center'
+     *
+     * @return string
+     *  Truncated string
+     */
+    public static function truncate( $string, $length, $when = 'before', $delimiter = '(...)' ) {
+
+        if( strlen( $string ) <= $length ) return $string;
+
+        if( $when == 'before' ) {
+            return substr( $string, 0, strrpos( substr( $string, 0, $length ), ' ' ) ) . $delimiter;
+        }
+
+        if( $when == 'after' ) {
+            return substr( $string, 0, ( strpos( substr( $string, $length ),' ' ) + $length ) ) . $delimiter;
+        }
+
+        if( $when == 'center' ) {
+
+            $delimiter = sprintf( ' %s ', trim( $delimiter ) );
+
+            $len = (int) ( ( $length - strlen( $delimiter ) ) / 2 );
+
+            // Separate the output from wordwrap() into an array of lines
+
+            $segments = explode( "\n", wordwrap( $string, $len ) ) ;
+
+            /**
+             * Last element's length is less than half $len, append
+             * words from the second-last element
+             */
+            $end = end( $segments );
+
+            /**
+             * Add words from the second-last line until the end is at least
+             * half as long as $length
+             */
+            if( strlen( $end ) <= ( $length / 2 ) && count( $segments ) > 2 ) {
+
+                $prev = explode( ' ', prev( $segments ) );
+
+                while( strlen( $end ) <= ( $length / 2 ) ) {
+                    $end = sprintf( '%s %s', array_pop( $prev ), $end );
+                }
+            }
+
+            return reset( $segments ) . $delimiter . trim( $end );
+        }
+
+        return FALSE;
+    }
+
+    /**
      * Formats given file size to be more human readable, by converting bytes
      * to greater units and adding the proper acronym
      *
