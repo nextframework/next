@@ -43,7 +43,8 @@ class ViewException extends \Next\Components\Debug\Exception {
     const INVALID_SPEC          =    0x0000085F;
 
     /**
-     * Invalid Template Variable Name
+     * Template Variable name is invalid because it was
+     * blacklisted as it's in use by View Engine
      *
      * @var integer
      */
@@ -118,6 +119,13 @@ class ViewException extends \Next\Components\Debug\Exception {
      * @var integer
      */
     const MISSING_FILE          =    0x0000086A;
+
+    /**
+     * Unknown Helper
+     *
+     * @var integer
+     */
+    const UNKNOWN_HELPER        =    0x0000086B;
 
     // Exception Messages
 
@@ -206,7 +214,8 @@ class ViewException extends \Next\Components\Debug\Exception {
 
         return new self(
 
-            'The name <strong>%s</strong> is a Reserved Template Variable Name',
+            'The name <strong>%s</strong> is a Reserved Template Variable name
+            or it has a View Helper associated to it',
 
             self::FORBIDDEN_VARIABLE,
 
@@ -411,6 +420,25 @@ class ViewException extends \Next\Components\Debug\Exception {
             'Unable to find a Template View for <strong>%s</strong>',
 
             self::MISSING_FILE, $file
+        );
+    }
+
+    /**
+     * Unknown View Helper
+     *
+     * @param string $helper
+     *  Helper trying to be used
+     *
+     * @return Next\View\ViewException
+     *  Exception for unknown View Helper
+     */
+    public static function unknownHelper( $helper ) {
+
+        return new self(
+
+            'Unknown View Helper <strong>%s</strong>',
+
+            self::UNKNOWN_HELPER, $helper
         );
     }
 }

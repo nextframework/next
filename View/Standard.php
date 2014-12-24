@@ -2,12 +2,16 @@
 
 namespace Next\View;
 
-use Next\View\ViewException;                # View Exception Class
-use Next\DB\Table\DataGatewayException;     # Data Gateway Exception Class
-use Next\Application\Application;           # Application Interface
 use Next\Components\Object;                 # Object Class
-use Next\View\CompositeQueue;               # Composite View Queue
+use Next\Application\Application;           # Application Interface
+
 use Next\File\Tools;                        # File Tools
+
+use Next\DB\Table\DataGatewayException;     # Data Gateway Exception Class
+
+use Next\View\ViewException;                # View Exception Class
+use Next\View\CompositeQueue;               # Composite View Queue
+use Next\View\Helper\Helper;                # View Helper Interface
 
 /**
  * Standard View Engine Class
@@ -56,6 +60,17 @@ class Standard extends Object implements View {
     private $_priority = 0;
 
     /**
+     * View Helpers
+     *
+     * @var array $_helpers
+     */
+    private $_helpers = array(
+
+        'route' => 'Next\View\Helper\Route',
+        'session' => 'Next\View\Helper\Session'
+    );
+
+    /**
      * Template Variables
      *
      * @var array $_tplVars
@@ -74,6 +89,7 @@ class Standard extends Object implements View {
         '_application',
         '_queue',
         '_priority',
+        '_helpers',
         '_tplVars',
         '_forbiddenTplVars',
         '_defaultVariableBehavior',
@@ -224,7 +240,7 @@ class Standard extends Object implements View {
         return $this;
     }
 
-    // Composite Vuews-related Methods
+    // Composite Views-related Methods
 
     /**
      * Add a new Composite View to be rendered
@@ -304,6 +320,24 @@ class Standard extends Object implements View {
      */
     public function getCompositeQueue() {
         return $this -> _queue;
+    }
+
+    // View Helper-related Method
+
+    /**
+     * Register a new Template View Helper
+     *
+     * @param  Next\View\Helper\Helper $helper
+     *  Template View Helper
+     *
+     * @return Next\View\View
+     *  View Object (Fluent Interface)
+     */
+    public function registerHelper( Helper $helper ) {
+
+        $this -> _helpers[ $helper -> getHelperName() ] = $helper;
+
+        return $this;
     }
 
     // Views File-related Methods
@@ -552,7 +586,10 @@ class Standard extends Object implements View {
         } else {
 
             if( in_array( $tplVar, $this -> _forbiddenTplVars ) ) {
+                throw ViewException::forbiddenVariable( $tplVar );
+            }
 
+            if( array_key_exists( $tplVar, $this -> _helpers ) ) {
                 throw ViewException::forbiddenVariable( $tplVar );
             }
 
@@ -881,6 +918,33 @@ class Standard extends Object implements View {
 
             echo $this -> _tplVars[ $tplVar ];
         }
+    }
+
+    /**
+     * Allow View Helpers to be called in this Object context
+     *
+     * @param string $helper
+     *  The View Helper
+     *
+     * @param array|optional $args
+     *  Variable list of arguments to the helper
+     *
+     * @return mixed|boolean
+     *  Return what the helper returns or FALSE if a ReflectionException
+     *  is caught in Next\Components\Context::call()
+     *
+     * @throws Next\View\ViewException
+     *  Thrown if View Helper cannot be recognized among registered ones
+     */
+    public function __call( $helper, array $args = array() ) {
+
+        if( ! array_key_exists( $helper, $this -> _helpers ) ) {
+            throw ViewException::unknownHelper( $helper );
+        }
+
+        $helper = $this -> _helpers[ $helper ];
+
+        return ( is_string( $helper ) ? call_user_func_array( new $helper, $args ) : $helper );
     }
 
     // Auxiliary Methods

@@ -66,7 +66,7 @@ class Manager {
      */
     private function __construct() {
 
-        $this -> handlers = new Session\Handlers( $this );
+        $this -> handlers = new Handlers( $this );
     }
 
     /**
@@ -90,7 +90,7 @@ class Manager {
                 throw SessionException::alreadyInitiated();
             }
 
-            self::$instance = new Session;
+            self::$instance = new Manager;
 
             $handler = self::$instance -> handlers -> getHandler();
 

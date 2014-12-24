@@ -321,4 +321,42 @@ class Tools {
 
         return TRUE;
     }
+
+    /**
+     * Copy files and folders recursively
+     *
+     * @param  string $source
+     *  Path to the source file
+     *
+     * @param  string $destination
+     *  Destination path
+     *
+     * @return void
+     */
+    public static function copy( $source, $destination ) {
+
+        $directory = opendir( $source );
+
+        if( ! is_dir( $destination ) ) mkdir( $destination );
+
+        while( FALSE !== ( $file = readdir( $directory ) ) ) {
+
+            $from = sprintf( '%s/%s', $source, $file );
+            $to   = sprintf( '%s/%s', $destination, $file );
+
+            if( ( $file != '.' ) && ( $file != '..' ) ) {
+
+                if( is_dir( $from ) ) {
+
+                    $this -> copy( $from, $to );
+
+                } else {
+
+                    copy( $source . '/' . $file, $to );
+                }
+            }
+        }
+
+        closedir( $directory );
+    }
 }

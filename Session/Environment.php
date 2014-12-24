@@ -305,7 +305,7 @@ class Environment extends Object {
      */
     public function __isset( $name ) {
 
-        if( $this -> isDestroyed() ) {
+        if( ! $this -> isDestroyed() ) {
             return array_key_exists( (string) $name, $_SESSION[ $this -> environment ] );
         }
     }
@@ -363,8 +363,15 @@ class Environment extends Object {
 
         $this -> environment =& $environment;
 
-        // Initialize Session Environment
+        // Initialize Session Environment if not initialized yet
 
-        $this -> unsetAll();
+        try{
+
+            if( $this -> isDestroyed() ) $this -> unsetAll();
+
+        } catch( EnvironmentException $e ) {
+
+            $this -> unsetAll();
+        }
     }
 }

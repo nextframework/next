@@ -257,7 +257,11 @@ class Standard extends AbstractRouter {
          * be considered as validatable arguments too
          */
         if( count( $queryData ) != 0 ) {
-            $params = array_merge( $params, array_keys( $queryData ) );
+
+            foreach( $queryData as $key => $value ) {
+
+                $params[] = array( 'name' => $key );
+            }
         }
 
         array_walk(

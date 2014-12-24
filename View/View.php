@@ -2,6 +2,8 @@
 
 namespace Next\View;
 
+use Next\View\Helper\Helper;    # View Helper Interface
+
 /**
  * View Interface
  *
@@ -132,6 +134,16 @@ interface View {
      * Get Composite Views Queue Object
      */
     public function getCompositeQueue();
+
+    // View Helper-related Methods
+
+    /**
+     * Register a new Template View Helper
+     *
+     * @param  Next\View\Helper\Helper $helper
+     *  Template View Helper
+     */
+    public function registerHelper( Helper $helper );
 
     // Views File-related Methods
 

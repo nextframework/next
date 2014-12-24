@@ -88,32 +88,10 @@ class Standard extends AbstractDispatcher {
 
             try {
 
-                $application -> getView() -> assign( '__EXCEPTION__', $e -> getMessage() );
-
-                $callback = $e -> getCallback();
-
-                if( is_callable( $callback ) ) {
-                    return call_user_func( $callback );
-                }
-
-                switch( count( $callback ) ) {
-
-                    case 1:  call_user_func( $callback[ 0 ] ); break;
-                    case 2:  call_user_func( $callback[ 0 ], $callback[ 1 ] ); break;
-                    default:
-
-                        if( ! is_callable( $callback[ 0 ] ) ) {
-                            Handlers::development( new Exception( 'Exception callbacks must be callable' ) );
-                        }
-
-                        call_user_func_array( $callback[ 0 ], array_slice( $callback, 1 ) );
-
-                    break;
-                }
-
-                return $response;
+                return $this -> handleExceptionCallback( $application, $e );
 
             } catch( ViewException $e ) {
+
                 Handlers::production( $e );
             }
 
@@ -136,6 +114,62 @@ class Standard extends AbstractDispatcher {
             }
 
             Handlers::development( $e );
+        }
+    }
+
+    // Auxiliary Methods
+
+    /**
+     * Handles a dispatchable Exception Callback
+     *
+     * @param  Next\Application\Application $application
+     *  Application Object being dispatched
+     *
+     * @param  Next\Components\Debug\Exception $e
+     *  Exception thrown
+     *
+     * @return void
+     */
+    private function handleExceptionCallback( Application $application, Exception $e ) {
+
+        try {
+
+            $application -> getView() -> assign( '__EXCEPTION__', $e -> getMessage() );
+
+            $callback = $e -> getCallback();
+
+            if( is_callable( $callback ) ) {
+                return call_user_func( $callback );
+            }
+
+            switch( count( $callback ) ) {
+
+                case 1:  call_user_func( $callback[ 0 ] ); break;
+                case 2:  call_user_func( $callback[ 0 ], $callback[ 1 ] ); break;
+                default:
+
+                    if( ! is_callable( $callback[ 0 ] ) ) {
+                        Handlers::development( new Exception( 'Exception callbacks must be callable' ) );
+                    }
+
+                    call_user_func_array( $callback[ 0 ], array_slice( $callback, 1 ) );
+
+                break;
+            }
+
+        } catch( ControllerException $e ) {
+
+            /**
+             * @internal
+             * If a ControllerException is caught here we handle any nested
+             * ControllerException existing within the process
+             *
+             * This allows, for example, an Standardized Error that occurs in a
+             * specific action of dispatched Application be virtually redirected
+             * to the previous action page without need to repeat all the code
+             * related to this page
+             */
+            return $this -> handleExceptionCallback( $application, $e );
         }
     }
 }

@@ -242,7 +242,7 @@ class Handlers {
              * And by silencing this here we avoid the echo below to be called
              */
 
-        } catch( \Next\Components\Debug\Exception $e ) {
+        } catch( Exception $e ) {
 
             // If fail here, you're in serious troubles XD
 
