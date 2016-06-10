@@ -258,7 +258,7 @@ class Socket extends AbstractAdapter {
 
             $this -> checkPermissions();
 
-            // Note: We are using the error supression just because we want ONLY our Exception
+            // Note: We are using the error suppression just because we want ONLY our Exception
 
             $this -> stream = @fopen(
 
@@ -334,6 +334,23 @@ class Socket extends AbstractAdapter {
             }
 
             return $tell;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * Get the size of Stream
+     *
+     * @return integer|boolean
+     *  Returns the length of the Stream if it's valid and FALSE otherwise
+     *
+     * @see Next\HTTP\Stream\Adapter\Adapter::valid()
+     */
+    public function size() {
+
+        if( $this -> valid() ) {
+            return strlen( stream_get_contents( $this -> stream ) );
         }
 
         return FALSE;

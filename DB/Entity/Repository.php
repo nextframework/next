@@ -117,8 +117,8 @@ class Repository extends Object {
 
         // WHERE Conditions
 
-        foreach( array_keys( $criteria ) as $column ) {
-            $this -> manager -> where( sprintf( '%1$s = :%1$s', $column ), $criteria );
+        foreach( $criteria as $condition => $replacement ) {
+            $this -> manager -> where( $condition, $replacement );
         }
 
         // ORDER Clause(s)

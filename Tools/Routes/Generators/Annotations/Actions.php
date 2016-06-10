@@ -1,8 +1,9 @@
 <?php
 
-namespace Next\Tools\RoutesGenerator\Annotations;
+namespace Next\Tools\Routes\Generators\Annotations;
 
-use Next\Tools\RoutesGenerator\RoutesGeneratorException;
+use Next\Tools\Routes\Generators\GeneratorsException;    # Routes Generators Exception Class
+use Next\Components\Utils\ArrayUtils;                    # Array Utils Class
 
 /**
  * Routes Generator: Actions Annotations Analyzer
@@ -57,6 +58,9 @@ class Actions extends \FilterIterator implements Annotations {
      *
      * @return array
      *  Found annotations
+     *
+     * @throws Next\Tools\Routes\Generators\GeneratorsException
+     *  Route argument has less than 2 Components (a Name and a Type)
      */
     public function getAnnotations() {
 
@@ -78,7 +82,7 @@ class Actions extends \FilterIterator implements Annotations {
 
                 if( count( $temp )  < 2 ) {
 
-                    throw RoutesGeneratorException::malformedArguments(
+                    throw GeneratorsException::malformedArguments(
 
                         array( $current -> class, $current -> name )
                     );
@@ -86,7 +90,7 @@ class Actions extends \FilterIterator implements Annotations {
 
                 // Equalizing argument definitions with structure labels
 
-                \Next\Components\Utils\ArrayUtils::equalize( $temp, $labels );
+                ArrayUtils::equalize( $temp, $labels );
 
                 // Cleaning and preparing argument data structure
 
@@ -148,9 +152,9 @@ class Actions extends \FilterIterator implements Annotations {
 
         $method = $this -> getInnerIterator() -> current();
 
-        return ( ( $method -> isPublic() && $method -> isFinal() ) &&         # Visibility and Extensibility
-                 ( substr( $method -> name, 0, 2 ) !== '__' )      &&         # Constructor, Destructor and other Magicals
-                 ( strpos( $method -> class, self::FRAMEWORK ) === FALSE )    # Framework Methods (not always final)
+        return ( ( $method -> isPublic() && $method -> isFinal() ) &&
+                 ( substr( $method -> name, 0, 2 ) !== '__' )      &&
+                 ( strpos( $method -> class, self::FRAMEWORK ) === FALSE )
                );
     }
 

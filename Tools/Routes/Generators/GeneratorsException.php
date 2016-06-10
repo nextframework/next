@@ -1,9 +1,9 @@
 <?php
 
-namespace Next\Tools\RoutesGenerator;
+namespace Next\Tools\Routes\Generators;
 
 /**
- * Cache Exception Class
+ * Routes Generators Exception Class
  *
  * @author        Bruno Augusto
  *
@@ -79,10 +79,12 @@ class RoutesGeneratorException extends \Next\Components\Debug\Exception {
 
         return new self(
 
-            '<h1>No Routes Found</h1><br />
+            '<h1>No Routes Found</h1>
 
-            An Action Method must have at least one Route defined<br /><br />
-            Class: %s<br /><br />
+            An Action Method must have at least one Route defined
+
+            Class: %s
+
             Method: %s',
 
             self::NO_ROUTES,
@@ -105,11 +107,14 @@ class RoutesGeneratorException extends \Next\Components\Debug\Exception {
 
         return new self(
 
-            '<h1>Invalid Route</h1><br />
+            '<h1>Invalid Route</h1>
 
-            Routes must be composed of at least two components: Request method and URI Route!<br /><br />
-            Route: %s<br /><br />
-            Class: %s<br /><br />
+            Routes must be composed of at least two components: Request method and URI Route!
+
+            Route: %s
+
+            Class: %s
+
             Method: %s',
 
             self::INVALID_ROUTE,
@@ -131,11 +136,15 @@ class RoutesGeneratorException extends \Next\Components\Debug\Exception {
 
         return new self(
 
-            '<h1>Invalid Route</h1><br />
+            '<h1>Invalid Route</h1>
 
-            Routes defined as a single slash cannot have params, as a hierarchy logic should be followed!<br /><br />
-            Route: %s<br /><br />
-            Class: %s<br /><br />
+            Routes defined as a single slash cannot have params, as a
+            hierarchy logic should be followed!
+
+            Route: %s
+
+            Class: %s
+
             Method: %s',
 
             self::MALFORMED_ROUTE,
@@ -157,11 +166,14 @@ class RoutesGeneratorException extends \Next\Components\Debug\Exception {
 
         return new self(
 
-            '<h1>Duplicated Route</h1><br />
+            '<h1>Duplicated Route</h1>
 
-            <strong>Request Method:</strong> %s<br /><br />
-            <strong>Route:</strong> %s<br /><br />
-            <strong>Class:</strong> %s<br /><br />
+            <strong>Request Method:</strong> %s
+
+            <strong>Route:</strong> %s
+
+            <strong>Class:</strong> %s
+
             <strong>Method:</strong> %s',
 
             self::DUPLICATED_ROUTE,
@@ -184,40 +196,15 @@ class RoutesGeneratorException extends \Next\Components\Debug\Exception {
 
         return new self(
 
-            '<h1>Invalid Route Arguments</h1><br />
+            '<h1>Invalid Route Arguments</h1>
 
-            Routes Arguments must be composed of at least two components: Argument Name and Type<br /><br />
-            Class: %s<br /><br />
+            Routes Arguments must be composed of at least two components: Argument Name and Type
+
+            Class: %s
+
             Method: %s',
 
             self::INVALID_ARGS,
-
-            $args
-        );
-    }
-
-    /**
-     * Something is going wrong when trying to record found Routes
-     *
-     * @param array $args
-     *  Variable list of arguments to build final message
-     *
-     * @return Next\Tools\RoutesGenerator\RoutesGeneratorException
-     *  Exception for Routes writability failure
-     */
-    public static function recordingFailure( array $args ) {
-
-        return new self(
-
-            '<h1>Route Recording Failure</h1><br />
-
-            <strong>Route:</strong> %s<br /><br />
-            <strong>Class:</strong> %s<br /><br />
-            <strong>Method:</strong> %s<br /><br />
-
-            <strong>Reason:</strong> %s',
-
-            self::RECORD_FAILURE,
 
             $args
         );

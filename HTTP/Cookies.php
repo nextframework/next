@@ -2,10 +2,10 @@
 
 namespace Next\HTTP;
 
-use Next\HTTP\Headers\Fields\FieldsException;         # Header Fields Exception Class
-use Next\Components\Object;                           # Object Class
-use Next\Components\Iterator\Lists;                   # Lists Class
-use Next\HTTP\Headers\Fields\Request\Cookie;          # HTTP Cookie Header Class
+use Next\HTTP\Headers\Fields\FieldsException;   # Header Fields Exception Class
+use Next\Components\Object;                     # Object Class
+use Next\Components\Collections\Lists;          # Lists Class
+use Next\HTTP\Headers\Fields\Request\Cookie;    # HTTP Cookie Header Class
 
 /**
  * HTTP Cookies Management Class
@@ -20,7 +20,7 @@ class Cookies extends Object {
     /**
      * Registered Cookies
      *
-     * @var Next\Components\Iterator\Lists $cookies
+     * @var Next\Components\Collections\Lists $cookies
      */
     private $cookies;
 
@@ -118,7 +118,7 @@ class Cookies extends Object {
      * @param boolean $asString
      *  If TRUE, instead a Collection, a string of all the cookies will be returned
      *
-     * @return Next\Components\Iterator\Lists|Next\HTTP\Headers\Fields\Request\Cookie
+     * @return Next\Components\Collections\Lists|Next\HTTP\Headers\Fields\Request\Cookie
      *
      *   <p>
      *     If <strong>$asString</strong> is set to FALSE, the Cookies

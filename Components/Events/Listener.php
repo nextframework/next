@@ -2,9 +2,6 @@
 
 namespace Next\Components\Events;
 
-use Next\Components\Interfaces\Observer;    # Observer Interface
-use Next\Components\Interfaces\Subject;     # Observer Subject Interface
-
 use Next\Components\Object;                 # Object Class
 
 /**
@@ -15,14 +12,7 @@ use Next\Components\Object;                 # Object Class
  * @copyright     Copyright (c) 2014 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class Listener extends Object implements Observer {
-
-    /**
-     * The Event Object
-     *
-     * @var Next\Components\Events\Event $event
-     */
-    protected $event;
+class Listener extends Object {
 
     /**
      * Listener callback
@@ -35,38 +25,32 @@ class Listener extends Object implements Observer {
      * Listener Constructor
      *
      * @param callable $callback
-     *  A callable resource for Next\Components\Interfaces\Observer::update()
-     *  implementation in Next\Components\Events\Listener::update()
+     *  A callable resource for when an Event has been handled,
+     *  much like Next\Components\Interfaces\Observer::update()
+     *
+     * @throws Next\Components\Events\EventsException
+     *  Thrown if provided callback is not callable
+     *
+     * @see Next\Components\Interfaces\Observer::update()
      */
     public function __construct( $callback ) {
 
         parent::__construct();
 
+        if( ! is_callable( $callback ) ) {
+            throw EventsException::invalidCallback();
+        }
+
         $this -> callback = $callback;
-    }
-
-    /**
-     * Set the Event Object
-     *
-     * @param Next\Components\Events\Event $event
-     *  The Event Object
-     */
-    public function setEvent( Event $event ) {
-
-        $this -> event = $event;
-
-        return $this;
     }
 
     /**
      * Receives update from Subject
      *
-     * @param Next\Components\Interfaces\Subject $subject
-     *  The Subject notifying the observer of an update
+     * @param Next\Components\Events\event $event
+     *  The Event being listened
      */
-    public function update( Subject $subject ) {
-
-        $reflector = new \ReflectionFunction( $this -> callback );
+    public function update( Event $event ) {
 
         $args = func_get_args();
 
@@ -74,6 +58,26 @@ class Listener extends Object implements Observer {
 
         array_shift( $args );
 
-        return $reflector -> invokeArgs( array_merge( array( $this -> event ), array_shift( $args ) ) );
+        if( is_array( $this -> callback ) ) {
+
+            $reflector = new \ReflectionMethod(
+                $this -> callback[ 0 ], $this -> callback[ 1 ]
+            );
+
+            return $reflector -> invokeArgs(
+
+                $this -> callback[ 0 ],
+
+                array_merge( array( $event ), array_shift( $args ) )
+            );
+
+        } else {
+
+            $reflector = new \ReflectionFunction( $this -> callback );
+
+            return $reflector -> invokeArgs(
+                array_merge( array( $event ), array_shift( $args ) )
+            );
+        }
     }
 }

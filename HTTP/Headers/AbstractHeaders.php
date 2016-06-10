@@ -2,16 +2,16 @@
 
 namespace Next\HTTP\Headers;
 
-use Next\HTTP\Headers\Fields\FieldsException;          # Header Fields Exception Class
+use Next\HTTP\Headers\Fields\FieldsException;    # Header Fields Exception Class
 
-use Next\HTTP\Headers\Fields\Field;                    # Header Interface
+use Next\HTTP\Headers\Fields\Field;              # Header Interface
 
-use Next\Components\Object;                            # Object Class
-use Next\Components\Invoker;                           # Invoker Class
-use Next\Components\Iterator\Lists;                    # Lists Class
+use Next\Components\Object;                      # Object Class
+use Next\Components\Invoker;                     # Invoker Class
+use Next\Components\Collections\Lists;           # Lists Class
 
-use Next\HTTP\Headers\Fields\Generic;                  # Generic Header Field Class
-use Next\HTTP\Headers\Fields\Raw;                      # Raw Header Field Class
+use Next\HTTP\Headers\Fields\Generic;            # Generic Header Field Class
+use Next\HTTP\Headers\Fields\Raw;                # Raw Header Field Class
 
 /**
  * HTTP Headers Management Class
@@ -33,7 +33,7 @@ abstract class AbstractHeaders extends Object {
     /**
      * Headers List
      *
-     * @var Next\Components\Iterator\Lists $headers
+     * @var Next\Components\Collections\Lists $headers
      */
     private $headers;
 
@@ -333,7 +333,7 @@ abstract class AbstractHeaders extends Object {
      * @param boolean $asString
      *  If TRUE, instead a Collection, a string of all the headers will be returned
      *
-     * @return Next\Components\Iterator\Lists|string|void
+     * @return Next\Components\Collections\Lists|string|void
      *
      *   <p>
      *       If <strong>$asString</strong> is set to FALSE, the Headers

@@ -2,8 +2,8 @@
 
 namespace Next\View;
 
-use Next\Components\Object;            # Object Class
-use Next\Components\Iterator\Lists;    # Lists Collection Class
+use Next\Components\Object;               # Object Class
+use Next\Components\Collections\Lists;    # Lists Collection Class
 
 /**
  * Composite View Class

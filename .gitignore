@@ -1,2 +1,4 @@
-.git
-/.project
+*.sublime-project
+*.sublime-workspace
+
+.project

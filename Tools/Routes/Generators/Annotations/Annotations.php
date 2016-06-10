@@ -1,6 +1,6 @@
 <?php
 
-namespace Next\Tools\RoutesGenerator\Annotations;
+namespace Next\Tools\Routes\Generators\Annotations;
 
 /**
  * Annotations Routes Generator: Annotations Interface

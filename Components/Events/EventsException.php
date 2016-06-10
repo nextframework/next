@@ -20,142 +20,86 @@ class EventsException extends \Next\Components\Debug\Exception {
     protected $range = array( 0x00000231, 0x00000263 );
 
     /**
-     * Disallowed method usage
-     *
-     * @var integer
-     */
-    const DISALLOWED_METHOD_USAGE    = 0x00000231;
-
-    /**
      * Unknown Listener
      *
      * @var integer
      */
-    const UNKNOWN_LISTENER           = 0x00000232;
+    const UNKNOWN_LISTENER           = 0x00000231;
 
     /**
      * Listener execution error
      *
      * @var integer
      */
-    const LISTENER_EXECUTION_ERROR   = 0x00000233;
+    const LISTENER_EXECUTION_ERROR   = 0x00000232;
 
     /**
-     * Disallowed method usage
+     * Invalid Listener Callback
      *
-     * The Event Handler deal with Observers that act as Listeners which requires
-     * an Event Name to be triggered as designed by Mediator Design Pattern, and
-     * Next\Components\Interfaces\Subject::notify() doesn't allow this
-     *
-     * @param string|optional $reason
-     *  An optional reason in case of more specific forbiddance
-     *
-     * @return Next\Components\Events\EventsException
-     *  Disallowed method usage
+     * @var integer
      */
-    public static function disallowedMethodUsage( $reason = NULL ) {
-
-        return new self(
-
-            '<p>
-                The Event Handler deal with Observers acting as Listeners which requires an Event Name to trigger
-            </p>
-
-            %s',
-
-            self::DISALLOWED_METHOD_USAGE, $reason
-        );
-    }
-
-    /**
-     * Disallowed manual Event Listener attaching
-     *
-     * An extension of Next\Components\Events\Event::disallowedMethodUsage()
-     * with a specific reason referring to Next\Components\Events\Handler::attach()
-     *
-     * @return Next\Components\Events\EventsException
-     *  Disallowed manual Event Listener attaching
-     */
-    public static function disallowedManualListenerAttaching() {
-
-        return self::disallowedMethodUsage(
-
-            '<p>
-                Event Listeners cannot be added through implementation of
-                <em>Next\Components\Interfaces\Subject::attach()</em>
-            </p>
-
-            <p>
-                Use <em>Next\Components\Events\Handler::addListener()</em> instead
-            </p>'
-        );
-    }
-
-    /**
-     * Disallowed manual Event Listener detaching
-     *
-     * An extension of Next\Components\Events\Event::disallowedMethodUsage()
-     * with a specific reason referring to Next\Components\Events\Handler::attach()
-     *
-     * @return Next\Components\Events\EventsException
-     *  Disallowed manual Event Listener detaching
-     */
-    public static function disallowedManualListenerDetaching() {
-
-        return self::disallowedMethodUsage(
-
-            '<p>
-                Event Listeners cannot be removed through implementation of
-                <em>Next\Components\Interfaces\Subject::detach()</em>
-            </p>
-
-            <p>
-                Use <em>Next\Components\Events\Handler::removeListener()</em> instead
-            </p>'
-        );
-    }
+    const INVALID_LISTENER_CALLBACK  = 0x00000233;
 
     /**
      * Unknown Event Listener
      *
-     * @param string $listener
-     *  Listener trying to be handled
+     * @param string $name
+     *  Event Listener trigger reference
      *
      * @return Next\Components\Events\EventsException
      *  Unknown Event Listener
      */
-    public static function unknownListener( $listener ) {
-        return new self( 'Unknown Event Listener <strong>%s</strong>', self::UNKNOWN_LISTENER, $listener );
+    public static function unknownListener( $name ) {
+
+        return new self(
+
+            'Unknown Event Listener referenced by trigger name <strong>%s</strong>',
+
+            self::UNKNOWN_LISTENER, $name
+        );
     }
 
     /**
      * Event Listener Execution Error
      *
-     * @param  string $listener
-     *  Event Listener name
+     * @param string $name
+     *  Event Listener trigger reference
      *
-     * @param  string $event
+     * @param string $event
      *  Event name
      *
-     * @param  \ReflectionException $e
+     * @param \ReflectionException $e
      *  ReflectionException caught while trying to execute the Listener
      *
      * @return Next\Components\Events\EventsException
      *  Event Listener Execution Error
      */
-    public static function listenerExecutionError( $listener, $event, \ReflectionException $e ) {
+    public static function listenerExecutionError( $name, $event, \ReflectionException $e ) {
 
         return new self(
 
-            '<p>
-                Event Listener <strong>%s</strong> of Event <strong>%s</strong> could not be executed
-            </p>
+            'Event Listener <strong>%s</strong> of Event <strong>%s</strong>
+            could not be executed
 
-            <p>
-                The following error was returned: %s
-            </p>',
+            The following error was returned: %s',
 
-            self::LISTENER_EXECUTION_ERROR, array( $listener, $event, $e -> getMessage() )
+            self::LISTENER_EXECUTION_ERROR, array( $name, $event, $e -> getMessage() )
+        );
+    }
+
+    /**
+     * Invalid Listener Callback
+     *
+     * @return Next\Components\Events\EventsException
+     *  Invalid Listener Callback error
+     */
+    public static function invalidCallback() {
+
+        return new self(
+
+            'The callback defined for Event Listener is not callable',
+
+            self::INVALID_LISTENER_CALLBACK
         );
     }
 }

@@ -41,8 +41,10 @@ class Event extends Object {
         $this -> name = ( ! is_null( $name ) ? $name : 'Next' );
     }
 
+    // Event bubbling-related methods
+
     /**
-     * Returns whether or nnot further Event Listeners should be triggered.
+     * Returns whether or not further Event Listeners should be triggered.
      *
      * @return bool
      *   Whether propagation was already stopped for this event
@@ -82,6 +84,8 @@ class Event extends Object {
     public function stopPropagation() {
         $this -> propagationStopped = TRUE;
     }
+
+    // Accessors
 
     /**
      * Returns the Event name

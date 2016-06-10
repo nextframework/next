@@ -45,8 +45,8 @@ abstract class AbstractRouter extends Object implements Router {
     /**
      * Router Constructor
      *
-     * @param mixed|optional $options
-     *  Router User Options
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Configuration Options for Router Strategy
      *
      * @see Next\Components\Parameter
      */
@@ -96,7 +96,7 @@ abstract class AbstractRouter extends Object implements Router {
         return $this -> options;
     }
 
-    // Abtsrcat Methods Definition
+    // Abstract Methods Definition
 
     /**
      * Establishes a Connection

@@ -2,7 +2,6 @@
 
 namespace Next\HTTP\Stream;
 
-use Next\HTTP\Stream\Adapter\AdapterException;    # HTTP Stream AdapterException Class
 use Next\HTTP\Stream\Writer\WriterException;      # HTTP Stream Writer Exception Class
 use Next\HTTP\Stream\Adapter\Adapter;             # HTTP Stream Adapter Interface
 use Next\Components\Object;                       # Object Class
@@ -32,14 +31,7 @@ class Writer extends Object implements Writer\Writer {
      */
     public function __construct( Adapter $adapter ) {
 
-        try {
-
-            $adapter -> isOpened();
-
-        } catch( AdapterException $e ) {
-
-            $adapter -> open();
-        }
+        $adapter -> open();
 
         $this -> adapter =& $adapter;
     }

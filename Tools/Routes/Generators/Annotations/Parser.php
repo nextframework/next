@@ -1,12 +1,12 @@
 <?php
 
-namespace Next\Tools\RoutesGenerator\Annotations;
+namespace Next\Tools\Routes\Generators\Annotations;
 
-use Next\Tools\RoutesGenerator\RoutesGeneratorException;    # Router Generator Exception Class
-use Next\Components\Utils\ArrayUtils;                       # Array Utils Class
+use Next\Tools\Routes\Generators\GeneratorsException;    # Routes Generators Exception Class
+use Next\Components\Utils\ArrayUtils;                    # Array Utils Class
 
 /**
- * Annotation Routes Generator: Annotations Parser
+ * Routes Generator: Annotations Parser
  *
  * @author        Bruno Augusto
  *
@@ -89,14 +89,14 @@ class Parser {
      * @param string $method
      *  Method to whom belongs the Route(s)
      *
-     * @throws Next\Tools\RoutesGenerator\RoutesGeneratorException
+     * @throws Next\Tools\Routes\Generators\GeneratorsException
      *  Route has less than 2 Components (a Request Method and a Route)
      *
-     * @throws Next\Tools\RoutesGenerator\RoutesGeneratorException
+     * @throws Next\Tools\Routes\Generators\GeneratorsException
      *  Routes defined as single slash (usually for homepages) DO have
      *  arguments (hierarchy concept)
      *
-     * @throws Next\Tools\RoutesGenerator\RoutesGeneratorException
+     * @throws Next\Tools\Routes\Generators\GeneratorsException
      *  There is another Route with exactly the same definition, including
      *  the Request Method
      */
@@ -110,7 +110,7 @@ class Parser {
 
             if( count( $components ) < 2 ) {
 
-                throw RoutesGeneratorException::invalidRouteStructure(
+                throw GeneratorsException::invalidRouteStructure(
 
                     array( $route, basename( $controller ), $method )
                 );
@@ -147,10 +147,14 @@ class Parser {
 
                 /**
                  * @internal
-                 * If we have a well designed structure, let's add RegExp Delim Captures Token too
+                 * If we have a well designed structure, let's add
+                 * RegExp Delim Captures Token too
                  *
-                 * Routes pointing to a single slash do not have this token due hierarchical logic
-                 * These kind of Routes cannot even have any params, except the one reserved for Localization
+                 * Routes pointing to a single slash do not have this
+                 * token due hierarchical logic
+                 *
+                 * These kind of Routes cannot even have any params,
+                 * except the one reserved for Localization
                  */
                 $URI .= self::DELIM_CAPTURE_TOKEN;
 
@@ -160,7 +164,7 @@ class Parser {
 
                 if( count( $args ) != 0 ) {
 
-                    throw RoutesGeneratorException::malformedRoute(
+                    throw GeneratorsException::malformedRoute(
 
                         array( $URI, basename( $controller ), $method )
                     );
@@ -194,7 +198,7 @@ class Parser {
 
                     // Yeah! We have a Duplicate
 
-                    throw RoutesGeneratorException::duplicatedRoute(
+                    throw GeneratorsException::duplicatedRoute(
 
                         array( $requestMethod, $URI, basename( $controller ), $method )
                     );
@@ -209,10 +213,9 @@ class Parser {
                 'route'            => $URI,
 
                 'params'           => array(
-
-                                          'required' => $required,
-                                          'optional' => $optional
-                                      ),
+                    'required' => $required,
+                    'optional' => $optional
+                ),
             );
         }
     }

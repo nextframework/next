@@ -140,7 +140,7 @@ class RowSet extends AbstractDataGateway implements \Iterator {
     public function __get( $offset ) {
 
         if( count( $this ) > 1 ) {
-            throw DataGatewayException::accessViolation();
+            //throw DataGatewayException::accessViolation();
         }
 
         return $this -> source[ 0 ] -> {$offset};
@@ -164,7 +164,7 @@ class RowSet extends AbstractDataGateway implements \Iterator {
     public function __set( $offset, $value ) {
 
         if( count( $this ) > 1 ) {
-            throw DataGatewayException::accessViolation();
+            //throw DataGatewayException::accessViolation();
         }
 
         $this -> source[ 0 ] -> {$offset} = $value;

@@ -2,8 +2,8 @@
 
 namespace Next\Components\Decorators;
 
-use Next\Components\Object;           # Object Class
-use Next\Components\Iterator\Set;     # Collection Set Class
+use Next\Components\Object;              # Object Class
+use Next\Components\Collections\Set;     # Collection Set Class
 
 class Chain extends Set {
 

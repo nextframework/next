@@ -129,6 +129,10 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      */
     final public function extend( Invoker $invoker, $methods = NULL, $properties = NULL ) {
 
+        if( is_null( $this -> context ) ) {
+            throw ComponentsException::extendedContextFailure( $this );
+        }
+
         $this -> context -> extend( $invoker, $methods, $properties );
 
         return $this;
@@ -212,7 +216,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
     public function __call( $method, array $args = array() ) {
 
         if( is_null( $this -> context ) ) {
-            throw ComponentsException::constructorOverwritten( $method, $this, 'method' );
+            throw ComponentsException::extendedContextFailure( $method, $this );
         }
 
         // Trying to call as an extended method
@@ -238,7 +242,8 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      * IMPORTANT!
      *
      * In order to be considered a property of an extended context,
-     * properties must be prefixed with an underscore, even if they don't have one in their original classes
+     * properties must be prefixed with an underscore, even if they don't
+     * have one in their original classes
      *
      * @param string $property
      *  Property trying to be changed
@@ -253,7 +258,10 @@ class Object extends Prototype implements Contextualizable, Informational, Param
     public function __set( $property, $value ) {
 
         if( is_null( $this -> context ) ) {
-            throw ComponentsException::constructorOverwritten( $property, $this, 'property' );
+
+            throw ComponentsException::overloadedPropertyUpdateFailure(
+                $property, $this
+            );
         }
 
         // Only properties prefixed with an underscore will be considered for extended context
@@ -269,7 +277,8 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      * IMPORTANT!
      *
      * In order to be considered a property of an extended context,
-     * properties must be prefixed with an underscore, even if they don't have one in their original classes
+     * properties must be prefixed with an underscore, even if they
+     * don't have one in their original classes
      *
      * @param string $property
      *  Property trying to be retrieved
@@ -281,7 +290,10 @@ class Object extends Prototype implements Contextualizable, Informational, Param
     public function __get( $property ) {
 
         if( is_null( $this -> context ) ) {
-            throw ComponentsException::constructorOverwritten( $property, $this, 'property' );
+
+            throw ComponentsException::overloadedPropertyReadingFailure(
+                $property, $this
+            );
         }
 
         // Only properties prefixed with an underscore will be considered for extended context

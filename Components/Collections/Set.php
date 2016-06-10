@@ -1,6 +1,6 @@
 <?php
 
-namespace Next\Components\Iterator;
+namespace Next\Components\Collections;
 
 use Next\Components\Object;    # Object Class
 

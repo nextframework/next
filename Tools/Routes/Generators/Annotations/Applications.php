@@ -1,6 +1,6 @@
 <?php
 
-namespace Next\Tools\RoutesGenerator\Annotations;
+namespace Next\Tools\Routes\Generators\Annotations;
 
 use Next\Application\Application as ApplicationInterface;    # Applications Interface
 use Next\Components\Object;                                  # Object Class

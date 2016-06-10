@@ -24,21 +24,28 @@ class RouterException extends \Next\Components\Debug\Exception {
      *
      * @var integer
      */
-    const DB_NOT_EXISTS             = 0x00000165;
+    const CONNECTION_FAILED         = 0x00000165;
+
+    /**
+     * Data read failure
+     *
+     * @var integer
+     */
+    const DATA_READ_FAILURE         = 0x00000166;
 
     /**
      * Missing Required Parameter
      *
      * @var integer
      */
-    const MISSING_REQUIRED_PARAM    = 0x00000166;
+    const MISSING_REQUIRED_PARAM    = 0x00000167;
 
     /**
      * Invalid Required Parameter
      *
      * @var integer
      */
-    const INVALID_REQUIRED_PARAM    = 0x00000167;
+    const INVALID_REQUIRED_PARAM    = 0x00000168;
 
     // Exception Messages
 
@@ -51,15 +58,42 @@ class RouterException extends \Next\Components\Debug\Exception {
      * @param string $message
      *  Message to be thrown
      *
+     * @param integer $code
+     *  Exception Code
+
      * @param array|optional $args
      *  Variable list of argument to build final message
      *
      * @return Next\Controller\Router\RouterException
      *  Exception for Connection failure
      */
-    public static function connectionFailure( $message, array $args = array() ) {
+    public static function connectionFailure( $message, $code, array $args = array() ) {
+        return new self( $message, $code, $args );
+    }
 
-        return new self( $message, self::DB_NOT_EXISTS, $args );
+    /**
+     * Data Read Failure
+     *
+     * Something went wrong while reading Routing data
+     * from wherever they came from (SQLite Database, PHP File...)
+     *
+     * Usually it serves as a way to rethrow an Exception raised
+     * by reader classes
+     *
+     * @param string $message
+     *  Message to be thrown
+     *
+     * @param integer $code
+     *  Exception Code
+     *
+     * @param array|optional $args
+     *  Variable list of argument to build final message
+     *
+     * @return Next\Controller\Router\RouterException
+     *  Exception for data reading failure
+     */
+    public static function dataReadingFailure( $message, $code, array $args = array() ) {
+        return new self( $message, $code, $args );
     }
 
     /**

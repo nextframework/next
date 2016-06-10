@@ -15,7 +15,7 @@ namespace Next\Components\Interfaces;
 interface Observer {
 
     /**
-     * Receive update from Subject
+     * Receives update from Subject
      *
      * @param Next\Components\Interfaces\Subject $subject
      *  The Subject notifying the observer of an update

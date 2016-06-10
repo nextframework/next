@@ -2,10 +2,8 @@
 
 namespace Next\Components\Events;
 
-use Next\Components\Interfaces\Observer;    # Observer Interface
-use Next\Components\Interfaces\Subject;     # Observer Subject Interface
-
-use Next\Components\Object;                 # Object Class
+use Next\Components\Object;               # Object Class
+use Next\Components\Collections\Lists;    # Collection Lists Class
 
 /**
  * Event Handler Class
@@ -15,28 +13,28 @@ use Next\Components\Object;                 # Object Class
  * @copyright     Copyright (c) 2014 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class Handler extends Object implements Subject {
+class Handler extends Object {
 
     /**
-     * Event Listeners (Observers)
+     * Event Listeners
      *
      * @var array $listeners
      */
-    private $listeners = array();
+    protected $listeners = array();
 
     /**
      * The Event Object
      *
      * @var Next\Components\Events\Event $event
      */
-    private $event;
+    protected $event;
 
     /**
-     * Handled Listeners
+     * Event Listener handled results
      *
-     * @var array $handled
+     * @var array $results
      */
-    public $handled;
+    protected $results = array();
 
     /**
      * Events Handler Constructor
@@ -54,47 +52,64 @@ class Handler extends Object implements Subject {
     /**
      * Attach a new Event Listener Object
      *
-     * @param Next\Components\Events\Listener $observer
-     *  Observer to be attached as Event Listener
+     * @param Next\Components\Events\Listener $listener
+     *  Event Listener to be handled within the Event
      *
      * @return Next\Components\Events\Handler
      *   Events Handler Object (Fluent Interface)
-     *
-     * @see Next\Components\Events\Handler::attach()
      */
     public function addListener( $name, Listener $listener ) {
-        return $this -> attach( $listener, $name );
+
+        $this -> listeners[ $name ][] = $listener;
+
+        return $this;
     }
 
     /**
      * Removes an Event Listener
      *
      * @param string $name
-     *  Event Listener name to be searched and removed
+     *  Event Listener trigger reference, through which it'll be searched and removed
      *
      * @return Next\Components\Events\Handler
      *   Events Handler Object (Fluent Interface)
      *
-     * @see Next\Components\Events\Handler::detach()
+     * @throws Next\Components\Events\EvenstException
+     *  Thrown if given Listener, as referenced by its trigger name, doesn't exist
      */
     public function removeListener( $name ) {
-        return $this -> detach( new Listener, $name );
+
+        if( ! array_key_exists( $name, $this -> listeners ) ) {
+            throw EventsException::unknownListener( $name );
+        }
+
+        unset( $this -> listeners[ $name ] );
+
+        return $this;
     }
 
     /**
      * Event Listener handling
      *
-     * @param string $name
-     *  Event Listener name
+     * Additionally to the trigger name an unlimited number of arguments
+     * may be passed to the Listener.
      *
-     * @param  Next\Components\Events\Event|optional $event
-     *  An optional Event Object
+     * This possible list is not explicitly documented in order
+     * to not create an unused variable just for the documentation
+     *
+     * @param string $name
+     *  Event Listener trigger name
      *
      * @return Next\Components\Events\Handler
      *   Events Handler Object (Fluent Interface)
      *
      * @throws Next\Components\Events\EventsException
-     *  Thrown if Event Listener cannot be find among added Event Listeners
+     *  Throw if given Event Listener, as referenced by
+     *  the trigger name, doesn't exist
+     *
+     * @throws Next\Components\Events\EventsException
+     *  Thrown if given Listener, as referenced by its trigger name,
+     *  could not be handled, raising a ReflectionException
      */
     public function handle( $name ) {
 
@@ -108,42 +123,34 @@ class Handler extends Object implements Subject {
 
             try {
 
-                $listener -> setEvent( $this -> event ) -> update( $this, array_slice( func_get_args(), 1 ) );
+                $result = $listener -> update(
+                    $this -> event, array_slice( func_get_args(), 1 )
+                );
 
-                $this -> handled[] = $name;
+                if( ! array_key_exists( $name, $this -> results ) ) {
+                    $this -> results[ $name ] = new Lists;
+                }
+
+                $this -> results[ $name ] -> add( $result );
 
             } catch( \ReflectionException $e ) {
 
-                throw EventsException::listenerExecutionError( $name, $this -> event -> getName(), $e );
+                throw EventsException::listenerExecutionError(
+                    $name, $this -> event -> getName(), $e
+                );
             }
         }
 
         return $this;
     }
 
-    /**
-     * Return whether or not something has been handled
-     *
-     * @param  string|optional  $name
-     *  An optional Event Listener
-     *
-     * @return boolean
-     *  If <strong>$name</strong> argument is provided, it'll return TRUE if that
-     *  Event Listener in particular has been handled and FALSE otherwise.
-     *
-     *  Otherwise, TRUE will be returned if anything has been handled and FALSE otherwise.
-     */
-    public function isHandled( $name = NULL ) {
-
-        if( is_null( $name ) ) return ( count( $this -> handled ) != 0 );
-
-        return in_array( $name, $this -> handled );
-    }
-
     // Accessors
 
     /**
-     * Get Event Handler Event Object
+     * Get Event Handler Object
+     *
+     * Allow an automatically assigned Event (empty constructor) to
+     * have its propagation directives manipulated
      *
      * @return Next\Components\Events\Event
      *  The Event Object
@@ -152,85 +159,25 @@ class Handler extends Object implements Subject {
         return $this -> event;
     }
 
-    // Subject Interface Methods Implementation
-
     /**
-     * Attach a new Observer to this Subject
+     * Get results of Event Listeners handled
      *
-     * @param Next\Components\Interfaces\Observer $observer
-     *  Observer to be attached as Event Listener
+     * @param string $name
+     *  An optional Event Listener trigger name to filter to a specific Collection
      *
-     * @return Next\Components\Events\Handler
-     *   Events Handler Object (Fluent Interface)
+     * @return array|Next\Components\Collections\Lists
+     *  If <strong$name</strong> is provided and matches to a Collection
+     *  of handled Listeners the Collection, as instance of
+     *  Next\Components\Collections\Lists will be returned
      *
-     * @throws Next\Components\Events\EventsException
-     *  Thrown if directly accessing the interface method instead of through
-     *  Next\Components\Events\Handler::addListener(), case in which the second
-     *  argument, part of Mediator Design Pattern, might not be set because it's
-     *  not explicitly signed by this interface method
-     *
-     * @see Next\Components\Events\Handler::addListener()
+     * Otherwise an array with all handled results will instead
      */
-    public function attach( Observer $observer ) {
+    public function getHandledResults( $name = NULL ) {
 
-        if( count( func_get_args() ) != 2 ) {
-            throw EventsException::disallowedManualListenerAttaching();
+        if( array_key_exists( $name, $this -> results ) ) {
+            return $this -> results[ $name ];
         }
 
-        $this -> listeners[ func_get_arg( 1 ) ][] = $observer;
-
-        return $this;
-    }
-
-    /**
-     * Detach an Observer from this Subject
-     *
-     * @param Next\Components\Interfaces\Observer $observer
-     *  Observer to be detached from Subject
-     *
-     * @return Next\Components\Events\Handler
-     *   Events Handler Object (Fluent Interface)
-     *
-     * @throws Next\Components\Events\EventsException
-     *  Thrown if directly accessing the interface method instead of through
-     *  Next\Components\Events\Handler::removeListener(), case in which the second
-     *  argument, part of Mediator Design Pattern, might not be set because it's
-     *  not explicitly signed by this interface method
-     *
-     * @throws Next\Components\Events\EventsException
-     *  Thrown if Event Name, coming from first argument of
-     *  Next\Components\Events\Handler::removeHandler() cannot be find among added
-     *  Event Listeners
-     *
-     * @see Next\Components\Events\Handler::removeListener()
-     */
-    public function detach( Observer $observer ) {
-
-        if( count( func_get_args() ) != 2 ) {
-            throw EventsException::disallowedManualListenerDettaching();
-        }
-
-        $listener = func_get_arg( 1 );
-
-        if( ! array_key_exists( $listener, $this -> listeners ) ) {
-            throw EventsException::unknownListener( $listener );
-        }
-
-        unset( $this -> listeners[ $listener ] );
-
-        return $this;
-    }
-
-    /**
-     * Notify all attached Observers about Subject changes
-     *
-     * @throws Next\Components\Debug\Exception
-     *  Always thrown because Event Handler deal with Observers that act as
-     *  Listeners which requires an Event Name to be triggered as designed
-     *  by Mediator Design Pattern, and Next\Components\Interfaces\Subject::notify()
-     *  doesn't allow this
-     */
-    public function notify() {
-        throw EventsException::disallowedMethodUsage();
+        return $this -> result;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Next\Tools\RoutesGenerator\Annotations;
+namespace Next\Tools\Routes\Generators\Writer\SQLite;
 
 /**
  * Annotations Routes Generator: Annotations Table Class

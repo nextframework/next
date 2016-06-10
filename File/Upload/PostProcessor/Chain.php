@@ -2,10 +2,10 @@
 
 namespace Next\File\Upload\PostProcessor;
 
-use Next\Components\Interfaces\Informational;      # Informational Interface
+use Next\Components\Interfaces\Informational;          # Informational Interface
 
-use Next\Components\Object;                         # Object Class
-use Next\Components\Iterator\AbstractCollection;    # Abstract Collection Class
+use Next\Components\Object;                            # Object Class
+use Next\Components\Collections\AbstractCollection;    # Abstract Collection Class
 
 /**
  * Post-Processor Chain

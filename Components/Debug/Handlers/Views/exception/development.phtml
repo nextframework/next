@@ -106,10 +106,25 @@ p.label {
     </p>
 
     <p>
-        <strong>Message:</strong> <?php echo utf8_encode( $this -> e -> getMessage() ); ?>
+        <strong>Message:</strong>
     </p>
 
+    <?php
+
+    echo utf8_encode( implode( "\n\n", array_map(
+
+        function( $line ) {
+
+            return sprintf( '<p>%s</p>', trim( $line ) );
+        },
+
+        array_filter( explode( "\n\n", $this -> e -> getMessage() ) )
+    ) ) );
+
+    ?>
+
     <?php if( $this -> e -> getCode() != 0 ) : ?>
+
     <p>
         <strong>Code:</strong>
 

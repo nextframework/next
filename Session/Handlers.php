@@ -2,9 +2,9 @@
 
 namespace Next\Session;
 
-use Next\Session\Handlers\HandlersException;          # Session Handlers Exception Class
-use Next\Session\Handlers\Handler;                    # Session Handlers Interface
-use Next\Components\Iterator\Set;                     # Set Iterator Class
+use Next\Session\Handlers\HandlersException;    # Session Handlers Exception Class
+use Next\Session\Handlers\Handler;              # Session Handlers Interface
+use Next\Components\Collections\Set;            # Set Iterator Class
 
 /**
  * Session Handlers Class
@@ -19,7 +19,7 @@ class Handlers {
     /**
      * Handlers Set
      *
-     * @var Next\Components\Iterator\Set $handlers
+     * @var Next\Components\Collections\Set $handlers
      */
     private $handlers;
 

@@ -35,6 +35,11 @@ interface Adapter extends \SeekableIterator {
     public function tell();
 
     /**
+     * Get the size of Stream
+     */
+    public function size();
+
+    /**
      * Check if Stream was opened, by testing its Resource
      */
     public function isOpened();

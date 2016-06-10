@@ -2,7 +2,6 @@
 
 namespace Next\HTTP\Stream;
 
-use Next\HTTP\Stream\Adapter\AdapterException;    # HTTP Stream AdapterException Class
 use Next\HTTP\Stream\Reader\ReaderException;      # HTTP Stream Reader Exception Class
 use Next\HTTP\Stream\Adapter\Adapter;             # HTTP Stream Adapter Interface
 use Next\Components\Object;                       # Object Class
@@ -32,14 +31,7 @@ class Reader extends Object implements Reader\Reader {
      */
     public function __construct( Adapter $adapter ) {
 
-        try {
-
-            $adapter -> isOpened();
-
-        } catch( AdapterException $e ) {
-
-            $adapter -> open();
-        }
+        $adapter -> open();
 
         $this -> adapter =& $adapter;
     }
