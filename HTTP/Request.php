@@ -374,7 +374,7 @@ class Request extends Object {
         //$uri = trim( str_ireplace( $this -> basepath, '', $this -> uri ), '/' );
         $uri = preg_replace(
 
-            sprintf( '/%s/i', $this -> basepath ), '', $this -> uri, 1
+            sprintf( '#%s#i', $this -> basepath ), '', $this -> uri, 1
         );
 
         $uri = trim( $uri, '/' );
@@ -431,7 +431,7 @@ class Request extends Object {
 
                 strtolower( self::SCHEME_HTTP ), $_SERVER['HTTP_HOST'],
 
-                ( ! $this -> isCli() ? $this -> basepath : NULL )
+                $this -> basepath
             );
         }
     }

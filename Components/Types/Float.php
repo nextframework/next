@@ -24,6 +24,6 @@ final class Float extends Number {
      *  TRUE if given value is of the type integer and FALSE otherwise
      */
     protected function accept( $value ) {
-        return ( gettype( $value ) != 'integer' );
+        return ( is_float( $value ) && ! is_int( $value ) );
     }
 }

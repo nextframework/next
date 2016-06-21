@@ -157,6 +157,20 @@ class Repository extends Object {
         return $this -> findBy( $criteria, $order, 1 );
     }
 
+    // Accessors
+
+    /**
+     * Get Entity Table associated with the Entity Manager
+     *
+     * @return Next\DB\Table\Table
+     *  Entity Table
+     *
+     * @see Next\DB\Table\Manager::getTable()
+     */
+    public function getTable() {
+        return $this -> manager -> getTable();
+    }
+
     // Auxiliary Methods
 
     /**

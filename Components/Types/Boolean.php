@@ -27,23 +27,24 @@ final class Boolean extends AbstractTypes {
      *  Return FALSE otherwise
      */
     protected function accept( $value ) {
-        return ( gettype( $value ) == 'boolean' || is_bool( $value ) );
+        return is_bool( $value );
     }
 
     /**
      * Prototype resources to object
      *
-     * @param mixed|optional $value
-     *  An optional value to be used by prototyped resource
+     * @return void
      */
-    protected function prototype( $b = NULL ) {
+    protected function prototype() {
+
+        $value = $this -> value;
 
         $this -> implement(
 
             'compare',
 
-            function( $b2 ) use( $b ) {
-                return ( (bool) $b === (bool) $b2 );
+            function( $b ) use( $value ) {
+                return ( (bool) $value === (bool) $b );
             }
         );
     }

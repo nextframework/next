@@ -2,6 +2,8 @@
 
 namespace Next\Components\Types;
 
+use Next\Components\Types\String\AlphaID;
+
 /**
  * String Datatype Class
  *
@@ -24,39 +26,33 @@ final class String extends AbstractTypes {
      *  TRUE if given value is of the type string and FALSE otherwise
      */
     protected function accept( $value ) {
-        return gettype( $value ) == 'string';
+        return is_string( $value );
     }
 
     /**
      * Prototype resources to object
      *
-     * @param mixed|optional $value
-     *  An optional value to be used by prototyped resource
+     * @return void
      */
-    protected function prototype( $s = NULL ) {
+    protected function prototype() {
 
-        // All prototypes require a value
-
-        if( is_null( $s ) ) {
-            return;
-        }
-
-        $this -> implement( 'compare',        'strcmp',         $s )
-              -> implement( 'caseCompare',    'strcasecmp',     $s )
-              -> implement( 'explode',        'explode',        array( 1 => $s ) )
-              -> implement( 'find',           'strstr',         $s )
-              -> implement( 'lowerFirst',     'lcfirst',        $s )
-              -> implement( 'pad',            'str_pad',        $s )
-              -> implement( 'repeat',         'str_repeat',     $s )
-              -> implement( 'replace',        'str_replace',    array( 2 => $s ) )
-              -> implement( 'reverseFind',    'strrpos',        $s )
-              -> implement( 'shuffle',        'str_shuffle',    $s )
-              -> implement( 'striptags',      'strip_tags',     $s )
-              -> implement( 'substr',         'substr',         $s )
-              -> implement( 'toLower',        'strtolower',     $s )
-              -> implement( 'toUpper',        'strtoupper',     $s )
-              -> implement( 'trim',           'trim',           $s )
-              -> implement( 'upperFirst',     'ucfirst',        $s )
-              -> implement( 'upperWords',     'ucwords',        $s );
+        $this -> implement( 'compare',        'strcmp'          )
+              -> implement( 'caseCompare',    'strcasecmp'      )
+              -> implement( 'explode',        'explode',        array( 1 => $this -> value ) )
+              -> implement( 'find',           'strstr'          )
+              -> implement( 'lowerFirst',     'lcfirst'         )
+              -> implement( 'pad',            'str_pad'         )
+              -> implement( 'repeat',         'str_repeat'      )
+              -> implement( 'replace',        'str_replace',    array( 2 => $this -> value ) )
+              -> implement( 'reverseFind',    'strrpos'         )
+              -> implement( 'shuffle',        'str_shuffle'     )
+              -> implement( 'striptags',      'strip_tags'      )
+              -> implement( 'substr',         'substr'          )
+              -> implement( 'toLower',        'strtolower'      )
+              -> implement( 'toUpper',        'strtoupper'      )
+              -> implement( 'trim',           'trim'            )
+              -> implement( 'upperFirst',     'ucfirst'         )
+              -> implement( 'upperWords',     'ucwords'         )
+              -> implement( 'alphaID',        new AlphaID,      $this -> value );
     }
 }

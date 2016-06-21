@@ -2,8 +2,9 @@
 
 namespace Next\Components;
 
-use Next\Components\Interfaces\Prototypical;          # Prototypical Interface
-use Next\Components\Utils\ArrayUtils;                 # ArrayUtils Class
+use Next\Components\Interfaces\Prototypical;    # Prototypical Interface
+use Next\Components\Interfaces\Prototyped;      # Prototyped Interface
+use Next\Components\Utils\ArrayUtils;           # ArrayUtils Class
 
 /**
  * Prototype Class
@@ -82,19 +83,27 @@ abstract class Prototype implements Prototypical  {
                 $args =& self::$prototypes[ $method ][ 1 ];
             }
 
-            $result = call_user_func_array(
+            if( self::$prototypes[ $method ][ 0 ] instanceof Prototyped ) {
 
-                self::$prototypes[ $method ][ 0 ], $args
-            );
+                $result = self::$prototypes[ $method ][ 0 ] -> prototype( $args );
+
+            } else {
+
+                $result = call_user_func_array(
+
+                    self::$prototypes[ $method ][ 0 ], $args
+                );
+            }
 
             /**
              * @internal
              *
-             * If operation results in an Object, let's return it
+             * If operation results in an Object or in a scalar,
+             * let's return it as is
              *
              * This ensures operations of one type can return a different type
              */
-            if( $result instanceof Object ) {
+            if( $result instanceof Object || ! is_scalar( $result ) ) {
                 return $result;
             }
 

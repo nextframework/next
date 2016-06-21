@@ -28,10 +28,34 @@ class Repositories extends Object {
      */
     public function addRepository( Manager $manager, $repository ) {
 
-        $reflector = new \ReflectionClass( $repository );
+        try {
 
-        if( $reflector -> isSubclassOf( 'Next\DB\Entity\Repository' ) ) {
-            $this -> repositories[ $reflector -> getShortName() ] = $reflector -> newInstance( $manager );
+            $reflector = new \ReflectionClass( $repository );
+
+            if( ! $reflector -> isSubclassOf( 'Next\DB\Entity\Repository' ) ) {
+                throw EntityException::invalidRepository( $repository );
+            }
+
+            $this -> repositories[ $reflector -> getShortName() ] =
+                $reflector -> newInstance( $manager );
+
+        } catch( \ReflectionException $e ) {
+
+            /**
+             * @internal
+             *
+             * Because PHP's ReflectionClass doesn't take imported namespaces
+             * as valid arguments for ReflectionClass::isSubclassOf(), the attempt
+             * of creating a valid ReflectionClass object must be
+             * properly handled within a try...catch() block because if this
+             * ReflectionException is not caught here, it'll, eventually, be
+             * handled by the Framework itself in Next\Controller\Front::dispatch()
+             *
+             * However, because that handling has a different purpose,
+             * Repository Classes that can't be found would return a not-so-useful
+             * Response, making it difficult to debug
+             */
+            throw EntityException::repositoryNotExists( $repository );
         }
 
         return $this;

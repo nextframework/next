@@ -123,31 +123,22 @@ class RowSet extends AbstractDataGateway implements \Iterator {
      */
 
     /**
-     * Return the value at the specified offset
+     * Return the value at the specified offset of the first Next\DB\Table\Row
      *
      * @param mixed $offset
      *  Offset to retrieve value from
      *
      * @return mixed
-     *  The value at the specified offset, if exists and FALSE id doesn't
+     *  The value at the specified offset, if exists and FALSE otherwise
      *
-     * @link http://php.net/manual/en/arrayobject.offsetget.php
-     *  ArrayObject::offsetGet()
-     *
-     * @throws Next\DB\Table\DataGatewayException
-     *  Thrown if trying to access a Row when the RowSet has more than just one Row
+     * @see Next\DB\Table\Row::__get()
      */
     public function __get( $offset ) {
-
-        if( count( $this ) > 1 ) {
-            //throw DataGatewayException::accessViolation();
-        }
-
         return $this -> source[ 0 ] -> {$offset};
     }
 
     /**
-     * Set a new value at specified offset
+     * Set a new value at specified offset of the first Next\DB\Table\Row
      *
      * @param mixed $offset
      *  Offset to set
@@ -155,18 +146,25 @@ class RowSet extends AbstractDataGateway implements \Iterator {
      * @param mixed $value
      *  New value
      *
-     * @link http://php.net/manual/en/arrayobject.offsetset.php
-     *  ArrayObject::offsetSet()
-     *
-     * @throws Next\DB\Table\DataGatewayException
-     *  Thrown if trying to access a Row when the RowSet has more than just one Row
+     * @see Next\DB\Table\Row::__set()
      */
     public function __set( $offset, $value ) {
-
-        if( count( $this ) > 1 ) {
-            //throw DataGatewayException::accessViolation();
-        }
-
         $this -> source[ 0 ] -> {$offset} = $value;
+    }
+
+    /**
+     * Checks whether or not the desired offset is set
+     * in the first Next\DB\Table\Row
+     *
+     * @param  mixed|integer|string  $offset
+     *  Offset to search for
+     *
+     * @return boolean
+     *  TRUE if desired offset exists and FALSE otherwise
+     *
+     * @see Next\DB\Table\Row::__isset()
+     */
+    public function __isset( $offset ) {
+        return isset( $this -> source[ 0 ] -> {$offset} );
     }
 }

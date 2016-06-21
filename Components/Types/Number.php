@@ -25,56 +25,48 @@ class Number extends AbstractTypes {
      *  an integer or a floating point number, and FALSE otherwise
      */
     protected function accept( $value ) {
-
-        $type = gettype( $value );
-
-        return ( $type == 'integer' || $type == 'double' );
+        return ( is_int( $value ) || is_float( $value ) );
     }
 
     /**
      * Prototype resources to object
      *
-     * @param mixed|optional $value
-     *  An optional value to be used by prototyped resource
+     * @return void
      */
-    protected function prototype( $n = NULL ) {
+    protected function prototype() {
 
-        // Prototypes which don't need value
+        $this -> implement( 'max',        'max'           )
+              -> implement( 'min',        'min'           )
+              -> implement( 'pow',        'pow'           )
+              -> implement( 'rand',       'mt_rand'       )
+              -> implement( 'ceil',       'ceil'          )
+              -> implement( 'modulus',    'fmod'          )
+              -> implement( 'floor',      'floor'         )
+              -> implement( 'format',     'number_format' )
+              -> implement( 'round',      'round'         );
 
-        $this -> implement( 'max',        'max' )
-              -> implement( 'min',        'min' )
-              -> implement( 'modulus',    'fmod',    $n )
-              -> implement( 'pow',        'pow' )
-              -> implement( 'rand',       'mt_rand' );
+        $value = $this -> value;
 
-        if( ! is_null( $n ) ) {
+        $this -> implement(
 
-            $this -> implement( 'ceil',       'ceil',             $n )
-                  -> implement( 'floor',      'floor',            $n )
-                  -> implement( 'format',     'number_format',    $n )
-                  -> implement( 'round',      'round',            $n );
+            'compare',
 
-            $this -> implement(
+            function( $n ) use( $value ) {
 
-                'compare',
+                if( $value === $n ) return 0;
 
-                function( $n2 ) use( $n ) {
+                return ( $value < $n ? -1 : 1 );
+            }
+        );
 
-                    if( $n === $n2 ) return 0;
+        $this -> implement(
 
-                    return ( $n < $n2 ? -1 : 1 );
-                }
-            );
+            'format',
 
-            $this -> implement(
+            function( $prec = 0, $dec = '.', $ts = ',' ) use( $value ) {
 
-                'format',
-
-                function( $prec = 0, $dec = '.', $ts = ',' ) use( $n ) {
-
-                    return new String( number_format( $n, $prec, $dec, $ts ) );
-                }
-            );
-        }
+                return new String( number_format( $value, $prec, $dec, $ts ) );
+            }
+        );
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Next\Components\Types;
 
+use Next\Components\Types\Integer\AlphaID;
+
 /**
  * Integer Datatype Class
  *
@@ -24,31 +26,31 @@ final class Integer extends Number {
      *  TRUE if given value is of the type integer and FALSE otherwise
      */
     protected function accept( $value ) {
-        return ( gettype( $value ) != 'double' );
+        return ( is_int( $value ) && ! is_float( $value ) );
     }
 
     /**
      * Prototype resources to object
      *
-     * @param mixed|optional $value
-     *  An optional value to be used by prototyped resource
+     * @return void
      */
-    protected function prototype( $i = NULL ) {
+    protected function prototype() {
 
         // Copying parent's prototypes
 
-        parent::prototype( $i );
+        parent::prototype();
 
-        if( ! is_null( $i ) ) {
+        $value = $this -> value;
 
-            $this -> implement(
+        $this -> implement(
 
-                'convert',
+            'convert',
 
-                function( $from, $to ) use( $i ) {
-                    return new String( base_convert( $i, $from, $to ) );
-                }
-            );
-        }
+            function( $from, $to ) use( $value ) {
+                return new String( base_convert( $value, $from, $to ) );
+            }
+        );
+
+        $this -> implement( 'alphaID', new AlphaID, $this -> value );
     }
 }

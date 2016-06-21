@@ -45,6 +45,17 @@ abstract class AbstractRenderer extends Object implements Renderer {
      * @see Next\File\Tools::quote()
      */
     public function quote( $string ) {
+
+        // Do we have a full database definition (e.g. db.table)?
+
+        if( strpos( $string, '.' ) !== FALSE ) {
+
+            $string = implode(
+                        sprintf( '%1$s.%1$s', $this -> quoteIdentifier ),
+                        explode( '.', $string )
+                      );
+        }
+
         return File::quote( $string, $this -> quoteIdentifier );
     }
 

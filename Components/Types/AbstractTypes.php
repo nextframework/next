@@ -24,36 +24,25 @@ abstract class AbstractTypes extends Object implements Type {
     /**
      * Datatype Constructor
      *
-     * @param mixed|optional $value
-     *  Value to set
+     * @param mixed|Next\Components\Types\Type $value
+     *  Value to build the Type object, be it raw or another Type Object
      *
      * @throws InvalidArgumentException
-     *  Given argument ois not acceptable by concrete datatype class
+     *  Given argument is not acceptable by concrete datatype class
+     *
+     * @see Next\Components\Types\AbstractTypes::set()
      */
-    public function __construct( $value = NULL ) {
+    public function __construct( $value ) {
 
         parent::__construct();
 
-        // If a value was defined...
+        $this -> set(
+            ( $value instanceof Type ? $value -> get() : $value )
+        );
 
-        if( ! is_null( $value ) ) {
+        // Prototyping
 
-            // ... let's cCheck its acceptance before set
-
-            if( $this -> accept( $value ) === FALSE ) {
-
-                throw new \InvalidArgumentException(
-
-                    'Argument is not a ' . $this
-                );
-            }
-        }
-
-        // Prototyping (even without value)...
-
-        $this -> prototype( $value );
-
-        $this -> value =& $value;
+        $this -> prototype();
     }
 
     // Accessors
@@ -65,10 +54,24 @@ abstract class AbstractTypes extends Object implements Type {
      *  Value to set
      *
      * @return Next\Components\Interfaces\Type
-     *  A new object with new value
+     *  Type Object (Fluent-Interface)
+     *
+     * @throws InvalidArgumentException
+     *  Given argument is not acceptable by concrete datatype class
      */
     public function set( $value ) {
-        return new static( $value );
+
+        if( $this -> accept( $value ) === FALSE ) {
+
+            throw new \InvalidArgumentException(
+
+                'Argument is not a ' . $this
+            );
+        }
+
+        $this -> value = $value;
+
+        return $this;
     }
 
     /**
@@ -93,9 +96,6 @@ abstract class AbstractTypes extends Object implements Type {
 
     /**
      * Prototype resources to object
-     *
-     * @param mixed|optional $value
-     *  An optional value to be used by prototyped resource
      */
-    abstract protected function prototype( $value = NULL );
+    abstract protected function prototype();
 }

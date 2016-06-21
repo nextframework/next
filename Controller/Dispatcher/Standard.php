@@ -100,7 +100,7 @@ class Standard extends AbstractDispatcher {
             /**
              * @internal
              * Catching ViewException grants a nice view for any sort of
-             * errors triggered by Next View Class, specially when they come from Magic Methods
+             * errors triggered by Next\View Class, specially when they come from Magic Methods
              * which is directly related to Template Variables usage.
              *
              * And by forcing a Development Handler we warn lazy

@@ -367,6 +367,8 @@ class Manager extends Object {
         return $this -> repositories;
     }
 
+    // Accessors
+
     /**
      * Get associated Table Object
      *
@@ -395,6 +397,16 @@ class Manager extends Object {
      */
     public function getDriver() {
         return $this -> driver;
+    }
+
+    /**
+     * Get Query Builder
+     *
+     * @return Next\DB\Query\Builder
+     *  Query Builder
+     */
+    public function getBuilder() {
+        return $this -> builder;
     }
 
     // Auxiliary Methods
