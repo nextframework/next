@@ -2,7 +2,7 @@
 
 namespace  Next\Components\Types\String;
 
-use Next\Components\Interfaces\Prototyped;    # Prototyped Interfac
+use Next\Components\Interfaces\Prototyped;    # Prototyped Interface
 
 use Next\Components\Types\Integer;            # Integer Object Class
 use Next\Components\Types\String;             # String Object Class
