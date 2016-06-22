@@ -9,25 +9,41 @@ use Next\Components\Types\String;
 
 class AlphaID implements Prototyped {
 
+    /**
+     * Decoding Character Set
+     *
+     * @var string
+     */
+    const SET = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
     // Prototyped Interface Method Implementation
 
     /**
-     * ReceivesPrototypes a custom, and maybe complex, routine to one of
-     * the available types by proxying, treating and handling
+     * Prototypes the AlphaID routine by proxying, treating and handling
      * the mixed arguments received
      *
      * @return Next\Components\Types\Integer
      *  An Integer Object with the decoded value
      *
+     * @return Next\Components\Types\Integer
+     *  An Integer Object with the AlphaID decoding results
+     *
      * @throws InvalidArgumentException
      *  Thrown if, after treated, the first argument, the number to be
-     *  encoded by Next\ComponentszTypes\Integer\AlphaID::encode()
+     *  decoded by Next\Components\Types\String\AlphaID::decode()
      *  is not present
+     *
+     * @throws InvalidArgumentException
+     *  Thrown if the alternative character set is not a string
+     *
+     * @see Next\Components\Types\String\AlphaID::decode()
      */
     public function prototype() {
 
-        list( $string, $pad, $passkey ) =
-            func_get_arg( 0 ) + array( '', FALSE, NULL );
+        list( $string, $index ) =
+            func_get_arg( 0 ) + array( '', self::SET );
+
+        if( $string instanceof String ) $string = $string -> get();
 
         if( empty( $string ) ) {
 
@@ -36,91 +52,46 @@ class AlphaID implements Prototyped {
             );
         }
 
-        return $this -> decode( $string, $pad, $passkey );
+        if( ! is_string( $index ) ) {
+            throw new \InvalidArgumentException( 'The Decoding sequence must be a string' );
+        }
+
+        return $this -> decode( $string, $index );
     }
 
     /**
      * The AlphaID Decryption routine
      *
-     * @author       Kevin van Zonneveld <kevin@vanzonneveld.net>
-     * @author       Simon Franz
-     * @author       Deadfish
-     * @author       SK83RJOSH
-     * @copyright    2008 Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-     * @license      http://www.opensource.org/licenses/bsd-license.php New BSD Licence
-     * @link         http://kvz.io/blog/2009/06/10/create-short-ids-with-php-like-youtube-or-tinyurl/
+     * @author    "poops"
+     * @link      https://github.com/poops/php-classes/blob/master/AlphaId.php
      *
      * @param  string|Next\Components\Types\String  $input
      *  The string to be decoded or a String Object to get string from
      *
-     * @param  boolean $pad
-     *  Specifies the number of minimum characters the original
-     *  integer has been encoded with
+     * @param  string $index
+     *  An alternative set of characters to perform the encoding process
      *
-     * @param  string  $passkey
-     *  The encryption password used to encoded the original integer
-     *
-     * @return Next\Components\Types\Integer
-     *  An Integer Object with the decoded value
+     * @return integer
+     *  The input string decoded back to its integer value
      */
-    private function decode( $input, $pad = FALSE, $passkey = NULL )  {
+    private function decode( $input, $index ) {
 
-        $output   =   '';
-        $index    = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $base     = strlen( $index );
+        $base   = strlen( $index );
+        $output = 0;
+        $length = strlen( $input ) - 1;
 
-        if( $passkey !== NULL ) {
+        for( $i = 0; $i <= $length; $i++ ) {
 
-            /**
-             * @internal
-             *
-             * Although this function's purpose is to just make the
-             * ID short - and not so much secure,
-             * with this patch by Simon Franz (http://blog.snaky.org/)
-             * you can optionally supply a password to make it harder
-             * to calculate the corresponding numeric ID
-             */
-            for( $n = 0; $n < strlen( $index ); $n++ ) {
-                $i[] = substr( $index, $n, 1 );
-            }
+            $bcpow   =  bcpow( $base, $length - $i );
 
-            $hash = hash( 'sha256', $passkey );
-
-            if( strlen( $hash ) < strlen( $index ) ) {
-                $hash = hash( 'sha512', $passkey );
-            }
-
-            for( $n = 0; $n < strlen( $index ); $n++ ) {
-                $p[] =  substr( $hash, $n, 1 );
-            }
-
-            array_multisort( $p, SORT_DESC, $i );
-
-            $index = implode( $i );
+            $output += strpos( $index, substr( $input, $i, 1 ) ) * $bcpow;
         }
 
-        if( $input instanceof String ) $input = $input -> get();
+        $output -= pow( $base, 4 );
 
-        // Decoding
+        $output = sprintf( '%F', $output );
+        $output = substr( $output, 0, strpos( $output, '.' ) );
 
-        $length = ( strlen( $input ) - 1 );
-
-        for( $t = $length; $t >= 0; $t-- ) {
-
-            $bcp    = bcpow( $base, ( $length - $t ) );
-
-            $output = $output + strpos( $index, substr( $input, $t, 1 ) ) * $bcp;
-        }
-
-        // Padding Up (or down)
-
-        if( is_numeric( $pad ) ) {
-
-            $pad--;
-
-            if( $pad > 0 ) $output -= pow( $base, $pad );
-        }
-
-        return new Integer( $output );
+        return (int) $output;
     }
 }
