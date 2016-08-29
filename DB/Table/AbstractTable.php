@@ -21,11 +21,18 @@ abstract class AbstractTable extends Object implements Table {
      */
     protected $_table;
 
+    /**
+     * Primary Key Column
+     *
+     * @var string $_primary
+     */
+    protected $_primary;
+
     // Interface Methods Implementation
 
     /**
      * Get Table Name
-     *
+     * @TODO: Rename this to getTableName() and replace the rest of occurrences
      * @return string
      *  Table Name
      */
@@ -34,12 +41,22 @@ abstract class AbstractTable extends Object implements Table {
     }
 
     /**
+     * Get Primary Key
+     *
+     * @return string
+     *  Primary Key Column
+     */
+    public function getPrimaryKey() {
+         return $this -> _primary;
+    }
+
+    /**
      * List Table Fields
      *
      * @return array
      *  Modified Table Fields
      */
-    public function getFields() {
+    public function getFields( $ignorePrefixed = TRUE ) {
 
         // Saving Entity Context in order to use it inside Closure Scope
 
@@ -52,8 +69,9 @@ abstract class AbstractTable extends Object implements Table {
          * To be included in the list, properties must be protected and
          * must not start with an underscore
          */
-        $properties = $this -> getClass()
-                            -> getProperties( \ReflectionProperty::IS_PROTECTED );
+        $properties = $this -> getClass() -> getProperties(
+            \ReflectionProperty::IS_PROTECTED
+        );
 
         // Filtering properties
 
@@ -61,18 +79,19 @@ abstract class AbstractTable extends Object implements Table {
 
             $properties,
 
-            function( \ReflectionProperty $property ) {
+            function( \ReflectionProperty $property ) use( $ignorePrefixed ) {
 
-                return (
+                $shouldReturn = TRUE;
 
-                    ( $property -> class !== 'Next\Components\Object' ) &&
+                if( $property -> class == 'Next\Components\Object' )    $shouldReturn = FALSE;
+                if( $property -> class == 'Next\Components\Context' )   $shouldReturn = FALSE;
+                if( $property -> class == 'Next\Components\Prototype' ) $shouldReturn = FALSE;
 
-                    ( $property -> class !== 'Next\Components\Context' ) &&
+                if( $ignorePrefixed && substr( $property -> name, 0, 1 ) == '_' ) {
+                    $shouldReturn = FALSE;
+                }
 
-                    ( $property -> class !== 'Next\Components\Prototype' ) && // EXPERIMENTAL
-
-                    ( substr( $property -> name, 0, 1 ) !== '_' )
-                );
+                return $shouldReturn;
             }
         );
 
@@ -95,6 +114,72 @@ abstract class AbstractTable extends Object implements Table {
         );
 
         return $fields;
+    }
+
+    // ArrayAccess Methods Implementation
+
+    /**
+     * Checks whether or not a Table Column exists
+     *
+     * @param  mixed|string|integer $column
+     *  Table Column to look for
+     *
+     * @return boolean
+     *  TRUE if given column exists and FALSE otherwise
+     */
+    public function offsetExists( $column ) {
+        return property_exists( $this, $column );
+    }
+
+    /**
+     * Returns the value of given Table Column
+     *
+     * @param  mixed|string|integer $column
+     *  Table Column to look for
+     *
+     * @return mixed
+     *  Data stored in given Table Column
+     */
+    public function offsetGet( $column ) {
+        return $this -> {$column};
+    }
+
+    /**
+     * Assigns a value to a Table Column
+     *
+     * @param  mixed|string|integer $column
+     *  Table Column to assign data to
+     *
+     * @param mixed $value
+     *  Data do assign
+     *
+     * @return void
+     */
+    public function offsetSet( $column, $value ) {
+
+        /*$cross = sprintf( '_%s', $column );
+
+        if( property_exists( $this, $cross ) ) {
+
+            $this -> {$cross} = $value;
+
+        } else {*/
+            $this -> {$column} = $value;
+        //}
+    }
+
+    /**
+     * Empties the contents of given Table Column
+     *
+     * Note: This, obviously, won't destroy the property
+     *
+     * @param  mixed|string|integer $column
+     *  Table Column to be emptied
+     *
+     * @return void
+     */
+    public function offsetUnset( $offset ) {
+        $this -> {$field} = NULL;
     }
 
     // Overloading

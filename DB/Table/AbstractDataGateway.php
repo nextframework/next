@@ -2,8 +2,10 @@
 
 namespace Next\DB\Table;
 
-use Next\DB\Query\Query;          # Query Interface
-use Next\Components\Object;       # Object Class
+use Next\DB\Query\Query;                 # Query Interface
+
+use Next\Components\Object;              # Object Class
+use Next\Components\Utils\ArrayUtils;    # ArrayUtils Class
 
 /**
  * DataGateway Abstract Class
@@ -38,7 +40,7 @@ abstract class AbstractDataGateway extends Object implements DataGateway {
      *  Table Manager Object
      *
      * @param mixed $source
-     *  Source Data to populate the Row/Rowset
+     *  Source Data to populate the Rowset
      *
      * @see Next\DB\Table\AbstractDataGateway::setSource()
      */

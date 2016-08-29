@@ -32,6 +32,14 @@ interface DataGateway extends \Countable {
     public function getSource();
 
     /**
+     * Get a copy of Data Source as array
+     *
+     * @return array
+     *  Data Source as array
+     */
+    public function getArrayCopy();
+
+    /**
      * Get Table Manager
      */
     public function getManager();

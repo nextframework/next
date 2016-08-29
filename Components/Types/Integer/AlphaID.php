@@ -24,13 +24,6 @@ class AlphaID implements Prototyped {
      */
     const SET = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-    /**
-     * Encoding Character Set
-     *
-     * @var string
-     */
-    const SET = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
     // Prototyped Interface Method Implementation
 
     /**

@@ -210,22 +210,30 @@ class MySQL extends AbstractRenderer {
 
         $clause = NULL;
 
-        array_walk(
+        if( array_key_exists( self::SQL_AND, $conditions ) ) {
 
-            $conditions,
+            $this -> quoteColumns( $conditions[ self::SQL_AND ] );
 
-            function( $condition, $type ) use( &$clause ) {
+            $clause .= implode( sprintf( ' %s ', self::SQL_AND ), $conditions[ self::SQL_AND ] );
+        }
 
-                if( count( $condition ) == 1 && ! is_null( $clause ) ) {
+        if( array_key_exists( self::SQL_OR, $conditions ) ) {
 
-                    $clause .= sprintf( ' %s %s', $type, implode( $type, $condition ) );
-
-                } else {
-
-                    $clause .= implode( sprintf( ' %s ', $type ), $condition );
-                }
+            /**
+             * @internal
+             *
+             * Before rendering the 'OR Clauses' we check again if 'AND Clauses' exists
+             * However, instead of a code duplication, here, this servers to connect
+             * both types of Clauses in one single statement
+             */
+            if( array_key_exists( self::SQL_AND, $conditions ) ) {
+                $clause .= sprintf( ' %s ', self::SQL_AND );
             }
-        );
+
+            $this -> quoteColumns( $conditions[ self::SQL_OR ] );
+
+            $clause .= implode( sprintf( ' %s ', self::SQL_OR ), $conditions[ self::SQL_OR ] );
+        }
 
         return sprintf( ' %s %s', self::WHERE, $clause );
     }
@@ -317,22 +325,15 @@ class MySQL extends AbstractRenderer {
 
         $clause = array();
 
-        $orientation = self::ORDER_ASCENDING;   # Default orientation
+        foreach( $fields as $field ) {
 
-        array_walk_recursive(
+            $column = $this -> quote( key( $field ) );
 
-            $fields,
+            $clause[] = vsprintf(
 
-            function( $value, $key ) use( &$clause, $orientation ) {
-
-                $clause[] = vsprintf(
-
-                    '%s %s',
-
-                    ( is_int( $key ) ? array( $value, $orientation ) : array( $key, $value ) )
-                );
-            }
-        );
+                '%s %s', array( $column, current( $field ) )
+            );
+        }
 
         return sprintf( ' %s %s', self::ORDER_BY, implode( ', ', $clause ) );
     }
@@ -350,6 +351,39 @@ class MySQL extends AbstractRenderer {
      *  LIMIT Clause
      */
     public function limit( array $data ) {
-        return sprintf( ' %s %s, %s ', self::LIMIT, $data[ 0 ], $data[ 1 ] );
+        return rtrim( sprintf( ' %s %s, %s ', self::LIMIT, $data[ 0 ], $data[ 1 ] ) );
+    }
+
+    // Auxiliary Methods
+
+    /**
+     * Quotes the column name when they're in the same string as the
+     * expression operator and the predicate, such as WHERE or JOIN Clauses
+     *
+     * @param  array  &$columns
+     *  Statements in which to search the columns to quote
+     *
+     * @return void
+     */
+    private function quoteColumns( array &$columns ) {
+
+        foreach( $columns as $type => $condition ) {
+
+            preg_match(
+
+                '#(?<column>(\w+\.)?\w+)\s*(?<expression>OR|XOR|AND|NOT|IS|IN|BETWEEN|SOUNDS|LIKE|REGEXP|DIV|MOD|\||\&|\!|\=|\>|\<|\+|\-|\*|\/|\%|\^)\s*(?<predicate>.*)#',
+
+                $condition, $matches
+            );
+
+            $columns[ $type ] = sprintf(
+
+                '%s %s %s',
+
+                $this -> quote( $matches['column'] ),
+
+                $matches['expression'], $matches['predicate']
+            );
+        }
     }
 }

@@ -360,7 +360,7 @@ class Request extends Object {
      * @return string
      *  The Request URI
      */
-    public function getRequestUri( $stripBasePath = TRUE ) {
+    public function getRequestURI( $stripBasePath = TRUE ) {
 
         $scheme = parse_url( $this -> uri, PHP_URL_SCHEME );
 
@@ -394,7 +394,7 @@ class Request extends Object {
 
         if( is_null( $scheme ) ) {
 
-            $rUri = $this -> getRequestUri();
+            $rUri = $this -> getRequestURI();
 
             return sprintf(
 

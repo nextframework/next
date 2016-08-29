@@ -10,7 +10,7 @@ use Next\DB\Driver\Driver;                      # Connection Driver Interface
 use Next\DB\Query\Query;                        # Query Interface
 use Next\DB\Query\Builder;                      # Query Builder Class
 use Next\DB\Entity\Repositories;                # Repositories Collection Class
-use Next\DB\Table\Row, Next\DB\Table\RowSet;    # Row and RowSet Classes
+use Next\DB\Table\RowSet;                       # RowSet Class
 
 /**
  * Table Manager Class
@@ -90,7 +90,7 @@ class Manager extends Object {
          * By default Table Manager will work with original Table Fields.
          *
          * When a UPDATE Statement is executed, however, the Manager will
-         * work with Row/RowSet Fields computed from the difference between
+         * work with RowSet Fields computed from the difference between
          * original fields and modified fields
          */
         if( ! is_null( $table ) ) $this -> source = array_filter( $table -> getFields() );
@@ -148,8 +148,8 @@ class Manager extends Object {
     /**
      * Fetch the next row from a result set
      *
-     * This method is a mere formality since you shouldn't get a Row outside
-     * a RowSet
+     * This method is a mere formality since records shouldn't
+     * be used outside a RowSet
      *
      * @param string|integer|optional $fetchStyle
      *  The Fetch Mode, accordingly to chosen Driver

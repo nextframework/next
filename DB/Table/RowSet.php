@@ -2,6 +2,8 @@
 
 namespace Next\DB\Table;
 
+use Next\Components\Utils\ArrayUtils;
+
 /**
  * Table RowSet Class
  *
@@ -56,17 +58,34 @@ class RowSet extends AbstractDataGateway implements \Iterator {
     /**
      * Set Data Source from different sources
      *
-     * @param mixed|array $source
+     * @param mixed|array|object $source
      *  Source Data
      *
-     * @return array
-     *  Input array with its values mapped as an instance of Next\DB\Table\Row
+     * @return void
      */
     protected function setSource( $source ) {
 
-        foreach( $source as $offset => $data ) {
-            if( $data !== FALSE ) $this -> source[ $offset ] = new Row( $this -> manager, $data );
+        foreach( $source as $data ) {
+
+            $table = $this -> manager -> getTable() -> getClass() -> newInstance();
+
+            foreach( $data as $column => $value ) $table -> {$column} = $value;
+
+            $this -> source[] = $table;
         }
+    }
+
+    /**
+     * Get a copy of Data Source as array
+     *
+     * @return array
+     *  Data Source as array
+     */
+    public function getArrayCopy() {
+
+        $source = ( count( $this -> source ) == 1 ? $this -> source[ 0 ] : $this -> source );
+
+        return ArrayUtils::map( $source );
     }
 
     // Iterator Interface Methods Implementation
@@ -119,52 +138,97 @@ class RowSet extends AbstractDataGateway implements \Iterator {
      * @internal
      * Overloading
      *
-     * Allow direct Row manipulation when there is only one Row in the RowSet
+     * Allows direct manipulation of records when the RowSet has only one entry
      */
 
     /**
-     * Return the value at the specified offset of the first Next\DB\Table\Row
+     * Return the value of a column of the first Next\DB\Table\Table defined as source
      *
-     * @param mixed $offset
-     *  Offset to retrieve value from
+     * @param mixed|string $column
+     *  Column to be retrieved
      *
-     * @return mixed
-     *  The value at the specified offset, if exists and FALSE otherwise
+     * @return mixed|void
+     *  The column value, if exists and "nothing" otherwise
      *
-     * @see Next\DB\Table\Row::__get()
+     * @throws Next\DB\Table\DataGatewayException
+     *  Throw if trying to access data of a Next\DB\Table\Table column
+     *  from a RowSet with multiple records
+     *
+     * @see Next\DB\Table\Table::offsetExists()
+     * @see Next\DB\Table\Table::offsetGet()
      */
-    public function __get( $offset ) {
-        return $this -> source[ 0 ] -> {$offset};
+    public function __get( $column ) {
+
+        $length = count( $this -> source );
+
+        if( $length ==  0 ) return;
+
+        if( $length > 1 ) {
+            throw DataGatewayException::accessViolation();
+        }
+
+        if( isset( $this -> source[ 0 ][ $column ] ) ) {
+            return $this -> source[ 0 ][ $column ];
+        }
     }
 
     /**
-     * Set a new value at specified offset of the first Next\DB\Table\Row
+     * Sets a new value for a column of the first
+     * Next\DB\Table\Table defined as source
      *
-     * @param mixed $offset
-     *  Offset to set
+     * If the column doesn't exist, it will be created in runtime
+     *
+     * @param mixed|string $column
+     *  Column to modify
      *
      * @param mixed $value
      *  New value
      *
-     * @see Next\DB\Table\Row::__set()
+     * @return void
+     *
+     * @throws Next\DB\Table\DataGatewayException
+     *  Throw if trying to modify data of a Next\DB\Table\Table
+     *  from a RowSet with multiple records
+     *
+     * @see Next\DB\Table\Table::offsetExists()
+     * @see Next\DB\Table\Table::offsetSet()
      */
-    public function __set( $offset, $value ) {
-        $this -> source[ 0 ] -> {$offset} = $value;
+    public function __set( $column, $value ) {
+
+        if( count( $this -> source ) > 1 ) {
+            throw DataGatewayException::accessViolation();
+        }
+
+        $this -> source[ 0 ] -> {$column} = $value;
     }
 
     /**
-     * Checks whether or not the desired offset is set
-     * in the first Next\DB\Table\Row
+     * Checks whether or not a column exists the first
+     * Next\DB\Table\Table defined as source
      *
-     * @param  mixed|integer|string  $offset
-     *  Offset to search for
+     * @param  mixed|string  $column
+     *  Column to check
      *
      * @return boolean
-     *  TRUE if desired offset exists and FALSE otherwise
+     *  TRUE if desired column exists and FALSE otherwise
+     *  If there's nothing defined as source, FALSE is also returned
      *
-     * @see Next\DB\Table\Row::__isset()
+     * @throws Next\DB\Table\DataGatewayException
+     *  Throw if trying to test data of a Next\DB\Table\Table
+     *  from a RowSet with multiple records
+     *
+     * @see Next\DB\Table\Table::offsetExists()
      */
-    public function __isset( $offset ) {
-        return isset( $this -> source[ 0 ] -> {$offset} );
+    public function __isset( $column ) {
+
+        $length = count( $this -> source );
+
+        if( $length ==  0 ) return FALSE;
+
+        if( $length > 1 ) {
+            throw DataGatewayException::accessViolation();
+        }
+
+        return isset( $this -> source[ 0 ] -> {$column} );
     }
 }

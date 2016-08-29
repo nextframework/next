@@ -7,6 +7,8 @@ use Next\Components\Invoker;            # Invoker Class
 
 use Next\DB\Query\Renderer\Renderer;    # Query Renderer
 
+use Next\DB\Table\Manager;                # Table Manager Object
+
 class Builder extends Object {
 
     /**
@@ -15,6 +17,17 @@ class Builder extends Object {
      * @var Next\DB\Query\Renderer\Renderer
      */
     private $renderer;
+
+    /**
+     * Table Manager Object
+     * Injected through Extended Context from Next\DB\Table\Manager::__construct()
+     *
+     * @var Next\DB\Table\Manager
+     *
+     * @see Next\DB\Table\Manager::__construct()
+     * @see Next\Components\Context::extend()
+     */
+    protected $_manager;
 
     /**
      * Built Query
@@ -104,6 +117,7 @@ class Builder extends Object {
         parent::__construct();
 
         $this -> renderer = $renderer;
+        //$this -> manager  = $manager;
     }
 
     // CRUD-related methods
@@ -235,6 +249,37 @@ class Builder extends Object {
         );
 
         /**
+         * @internal
+         *
+         * Adding Primary Key Column to the list
+         *
+         * If we have a Next\DB\Table\Table defined and its Primary Key Column
+         * has been filled defined, we'll search for its value in the column
+         * list built so far
+         *
+         * We'll also search for a possible table alias name, usually
+         * x.column, being 'x' the first letter of the model
+         *
+         * If none of these nor the Query Renderer Wildcard can be found,
+         * we'll prepend a full column name to the list, using the same
+         * rule used for searching
+         */
+        $table = $this -> _manager -> getTable();
+
+        if( $table !== NULL ) {
+
+            $primary = $table -> getPrimaryKey();
+
+            $fullColumnName = sprintf(
+                '%s.%s', substr( $table -> getTable(), 0, 1 ), $primary
+            );
+
+            if( array_search( Query::WILDCARD, $columns ) === FALSE ) {
+                array_unshift( $columns, $fullColumnName );
+            }
+        }
+
+        /**
          * Usage:
          *
          * <code>
@@ -268,6 +313,29 @@ class Builder extends Object {
      */
     public function from( $tables = array() ) {
 
+        $tablename = $this -> _manager -> getTable() -> getTable();
+
+        /**
+         * @internal
+         *
+         * If only one table was informed, as string, it's not possible
+         * to defined an alias and because the PRIMARY KEY, if properly defined
+         * in Next\DB\Table\Table, is automatically added, we need to enforce the
+         * alias used in here
+         *
+         * The same rules apply: The alias will be first character of the
+         * Next\DB\Table\Table
+         */
+        if( ! is_array( $tables ) ) {
+
+            if( strpos( $this -> columns[ 0 ], '.' ) !== FALSE ) {
+
+                $tables = array(
+                    strtolower( substr( $tablename, 0, 1 ) ) => $tables
+                );
+            }
+        }
+
         /**
          * Usage:
          *
@@ -280,6 +348,26 @@ class Builder extends Object {
          * If an alias is not defined as element index, it will not exist (obviously)
          */
         foreach( (array) $tables as $alias => $table ) {
+
+            /**
+             * @internal
+             * If we have multiple tables listed we'll compare the table name
+             * coming from Next\DB\Table\Table::getTablename(), against the
+             * tables included for the statement
+             *
+             * If found without a string alias, we'll enforce it to match the
+             * automatically added PRIMARY KEY
+             *
+             * The same rules apply: The alias will be first character of the
+             * Next\DB\Table\Table
+             */
+            if( $pos = strpos( $table, $tablename ) !== FALSE ) {
+
+                if( ! is_string( $alias ) ) {
+                    $alias = strtolower( substr( $tablename, 0, 1 ) );
+                }
+            }
+
             $this -> tables[] = $this -> renderer -> from( $alias, $table );
         }
 
@@ -288,7 +376,9 @@ class Builder extends Object {
          * Assembling Query
          * From this point all SQL is a Clause
          */
-        $this -> query = $this -> renderer -> select( $this -> columns, $this -> tables, $this -> distinct );
+        $this -> query = $this -> renderer -> select(
+            $this -> columns, $this -> tables, $this -> distinct
+        );
 
         return $this;
     }

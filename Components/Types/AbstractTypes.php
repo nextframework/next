@@ -17,14 +17,14 @@ abstract class AbstractTypes extends Object implements Type {
     /**
      * Type Value
      *
-     * @var mixed $value
+     * @var mixed $_value
      */
-    protected $value;
+    protected $_value;
 
     /**
      * Datatype Constructor
      *
-     * @param mixed|Next\Components\Types\Type $value
+     * @param mixed|Next\Components\Types\Type|optional $value
      *  Value to build the Type object, be it raw or another Type Object
      *
      * @throws InvalidArgumentException
@@ -32,13 +32,16 @@ abstract class AbstractTypes extends Object implements Type {
      *
      * @see Next\Components\Types\AbstractTypes::set()
      */
-    public function __construct( $value ) {
+    public function __construct( $value = NULL ) {
 
         parent::__construct();
 
-        $this -> set(
-            ( $value instanceof Type ? $value -> get() : $value )
-        );
+        if( $value !== NULL ) {
+
+            $this -> set(
+                ( $value instanceof Type ? $value -> get() : $value )
+            );
+        }
 
         // Prototyping
 
@@ -69,7 +72,7 @@ abstract class AbstractTypes extends Object implements Type {
             );
         }
 
-        $this -> value = $value;
+        $this -> _value = $value;
 
         return $this;
     }
@@ -81,7 +84,7 @@ abstract class AbstractTypes extends Object implements Type {
      *  Object value
      */
     public function get() {
-        return $this -> value;
+        return $this -> _value;
     }
 
     // Abstract Methods Definition
@@ -98,4 +101,24 @@ abstract class AbstractTypes extends Object implements Type {
      * Prototype resources to object
      */
     abstract protected function prototype();
+
+    // Overloading
+
+    /**
+     * Return the Next\Components\Types\Type value, regardless
+     * the desired property name
+     *
+     * This allows the Object value to be read without invoking the accessor
+     * method -AND- through any character length, which comes in handy with
+     * strict line length standards
+     *
+     * @param  mixed|string $property
+     *  Property to be retrieved. Not used!
+     *
+     * @return mixed
+     *  Object value
+     */
+    public function __get( $property ) {
+        return $this -> _value;
+    }
 }

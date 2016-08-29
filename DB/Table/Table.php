@@ -10,7 +10,7 @@ namespace Next\DB\Table;
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-interface Table {
+interface Table extends \ArrayAccess {
 
     /**
      * Get Table Name

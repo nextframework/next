@@ -80,7 +80,7 @@ abstract class Prototype implements Prototypical  {
 
                 // Nothing to Merge? OK!
 
-                $args =& self::$prototypes[ $method ][ 1 ];
+                $args = self::$prototypes[ $method ][ 1 ];
             }
 
             if( self::$prototypes[ $method ][ 0 ] instanceof Prototyped ) {
@@ -109,7 +109,7 @@ abstract class Prototype implements Prototypical  {
 
             // Otherwise let's update caller Object
 
-            return $caller -> set( $result );
+            return new $caller( $result );
         }
 
         throw \Next\Components\Debug\Exception::wrongUse(

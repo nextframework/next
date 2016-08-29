@@ -45,13 +45,13 @@ class Context implements Contextualizable {
      */
     function extend( Invoker $invoker, $methods = NULL, $properties = NULL ) {
 
-        $caller = $invoker -> getCaller() -> getClass() -> getName();
-        $callee = $invoker -> getCallee();
+        $caller = $invoker -> getCaller();
+        $callee = $invoker -> getCallee() -> getClass();
 
         // Methods
 
         if( is_null( $methods ) ) {
-            $methods = $callee -> getClass() -> getMethods( \ReflectionMethod::IS_PUBLIC );
+            $methods = $callee -> getMethods( \ReflectionMethod::IS_PUBLIC );
         }
 
         // Restricting access to methods of some classes to avoid infinite loops
@@ -65,16 +65,32 @@ class Context implements Contextualizable {
         // Properties
 
         if( is_null( $properties ) ) {
-            $properties = $callee -> getClass() -> getProperties( \ReflectionProperty::IS_PROTECTED );
+            $properties = $callee -> getProperties( \ReflectionProperty::IS_PROTECTED );
         }
 
         $properties = array_filter( $properties, array( $this, 'filter' ) );
 
         $properties = array_map( array( $this, 'simplify' ), $properties );
 
+        // Injecting Caller Object into Callee
+
+        try {
+
+            $property = $callee -> getproperty( sprintf( '_%s', strtolower( $caller ) ) );
+
+            $property -> setAccessible( TRUE );
+
+            $property -> setValue( $invoker -> getCallee(), $caller );
+
+        } catch( \ReflectionException $e ) {
+            // Silenced because we'll only inject if the property exist
+        }
+
         // Building Context Structure
 
-        $this -> callables[ $caller ][] = array( &$callee, $methods, $properties );
+        $this -> callables[ $caller -> getClass() -> getName() ][] = array(
+            $invoker -> getCallee(), $methods, $properties
+        );
 
         return $this;
     }

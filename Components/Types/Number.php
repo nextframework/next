@@ -35,38 +35,51 @@ class Number extends AbstractTypes {
      */
     protected function prototype() {
 
-        $this -> implement( 'max',        'max'           )
-              -> implement( 'min',        'min'           )
-              -> implement( 'pow',        'pow'           )
-              -> implement( 'rand',       'mt_rand'       )
-              -> implement( 'ceil',       'ceil'          )
-              -> implement( 'modulus',    'fmod'          )
-              -> implement( 'floor',      'floor'         )
-              -> implement( 'format',     'number_format' )
-              -> implement( 'round',      'round'         );
+        // Prototypes that doesn't require an initial base value to work with
 
-        $value = $this -> value;
+        $this -> implement( 'max',  'max'     )
+              -> implement( 'min',  'min'     )
+              -> implement( 'pow',  'pow'     )
+              -> implement( 'rand', 'mt_rand' );
 
-        $this -> implement(
+        // Prototypes that requires a value to work with
 
-            'compare',
+        if( $this -> _value !== NULL ) {
 
-            function( $n ) use( $value ) {
+            // Native Functions
 
-                if( $value === $n ) return 0;
+            $this -> implement( 'rand',       'mt_rand'       )
+                  -> implement( 'ceil',       'ceil'          )
+                  -> implement( 'modulus',    'fmod'          )
+                  -> implement( 'floor',      'floor'         )
+                  -> implement( 'format',     'number_format' )
+                  -> implement( 'round',      'round'         );
 
-                return ( $value < $n ? -1 : 1 );
-            }
-        );
+            $value = $this -> _value;
 
-        $this -> implement(
+            // Custom Functions
 
-            'format',
+            $this -> implement(
 
-            function( $prec = 0, $dec = '.', $ts = ',' ) use( $value ) {
+                'compare',
 
-                return new String( number_format( $value, $prec, $dec, $ts ) );
-            }
-        );
+                function( $n ) use( $value ) {
+
+                    if( $value === $n ) return 0;
+
+                    return ( $value < $n ? -1 : 1 );
+                }
+            );
+
+            $this -> implement(
+
+                'format',
+
+                function( $prec = 0, $dec = '.', $ts = ',' ) use( $value ) {
+
+                    return new String( number_format( $value, $prec, $dec, $ts ) );
+                }
+            );
+        }
     }
 }

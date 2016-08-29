@@ -38,12 +38,16 @@ class Environment extends Object {
      *
      * @param string $environment
      *  Environment name to be registered
+     *
+     * @param boolean|optional $initializing
+     *  Defines whether or not the Session Environment is under initialization,
+     *  which will create the required structured under $_SESSION
      */
-    public function __construct( $environment ) {
+    public function __construct( $environment, $initializing = FALSE ) {
 
         // Registering Session Environment
 
-        $this -> registerEnvironment( $environment );
+        $this -> registerEnvironment( $environment, $initializing );
     }
 
     /**
@@ -349,10 +353,14 @@ class Environment extends Object {
      * @param string $environment
      *  Environment name to be registered
      *
+     * @param boolean|optional $initializing
+     * Defines whether or not the Session Environment is under initializing,
+     *  which will create the required structured under $_SESSION
+     *
      * @throws Next\Session\Environment\EnvironmentException
      *  Environment name starts with a number
      */
-    private function registerEnvironment( $environment ) {
+    private function registerEnvironment( $environment, $initializing = FALSE ) {
 
         if( preg_match( '#(^[0-9])#i', $environment ) ) {
 
@@ -365,13 +373,16 @@ class Environment extends Object {
 
         // Initialize Session Environment if not initialized yet
 
-        try{
+        if( $initializing == TRUE ) {
 
-            if( $this -> isDestroyed() ) $this -> unsetAll();
+            try{
 
-        } catch( EnvironmentException $e ) {
+                if( $this -> isDestroyed() ) $this -> unsetAll();
 
-            $this -> unsetAll();
+            } catch( EnvironmentException $e ) {
+
+                $this -> unsetAll();
+            }
         }
     }
 }

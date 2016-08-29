@@ -147,6 +147,8 @@ abstract class AbstractCollection extends Object
             // Locating Object index by Hash
 
             /**
+             * @internal
+             *
              * Since all objects *should* extend the Object class, even if
              * Object::getHash() is overwritten with a different implementation,
              * all Objects within a Collection will, probably, have the same
@@ -212,8 +214,7 @@ abstract class AbstractCollection extends Object
 
         if( empty( $this -> collection ) ) return;
 
-        $count = count( $this -> collection );
-        $order = range( 1, $count );
+        $order = range( 1, count( $this -> collection ) );
 
         shuffle( $order );
 
@@ -236,6 +237,7 @@ abstract class AbstractCollection extends Object
      *
      * @return Next\Components\Object
      *  First Object added to Collection, if Collection has any elements
+     *  Or the Collection Object as of Fluent Interface, if Collection is empty
      *
      * @see Next\Components\Collections\AbstractCollection::shuffle()
      * @see Next\Components\Collections\AbstractCollection::remove()
@@ -244,7 +246,7 @@ abstract class AbstractCollection extends Object
 
         // Nothing to shift
 
-        if( empty( $this -> collection ) ) return;
+        if( empty( $this -> collection ) ) return $this;
 
         reset( $this -> collection );
         reset( $this -> references );
@@ -252,7 +254,7 @@ abstract class AbstractCollection extends Object
         $object = current( $this -> collection );
 
         if( $shift !== FALSE ) {
-            $this -> remove( 0 );
+            $this -> remove( $object );
         }
 
         return $object;
@@ -272,6 +274,7 @@ abstract class AbstractCollection extends Object
      *
      * @return Next\Components\Object
      *  Last Object added to Collection, if Collection has any elements
+     *  Or the Collection Object as of Fluent Interface, if Collection is empty
      *
      * @see Next\Components\Collections\AbstractCollection::shuffle()
      * @see Next\Components\Collections\AbstractCollection::remove()
@@ -280,17 +283,17 @@ abstract class AbstractCollection extends Object
 
         // Nothing to pop
 
-        if( empty( $this -> collection ) ) return;
+        if( empty( $this -> collection ) ) return $this;
 
         end( $this -> collection );
         end( $this -> references );
 
-        $index = key( $this -> collection );
+        $offset = key( $this -> collection );
 
-        $object = $this -> collection[ $index ];
+        $object = $this -> collection[ $offset ];
 
         if( $pop !== FALSE ) {
-            $this -> remove( $index );
+            $this -> remove( $offset );
         }
 
         return $object;
@@ -400,10 +403,10 @@ abstract class AbstractCollection extends Object
      * Serializes Collection
      *
      * @return string
-     *  The string representation fo Collection
+     *  The string representation of Collection
      */
     public function serialize() {
-        return serialize( $this -> collection );
+        return serialize( array( $this -> collection, $this -> references, $this -> iterator ) );
     }
 
     /**
@@ -412,13 +415,14 @@ abstract class AbstractCollection extends Object
      * @param string $serialized
      *  String representation of an Object
      *
-     * @return Next\Components\Collection\AbstractCollection
-     *  Collection Object (Fluent Interface)
+     * @return void
      */
     public function unserialize( $serialized ) {
 
-        $this -> collection = unserialize( $serialized );
+        $data = unserialize( $serialized );
 
-        return $this;
+        $this -> collection = $data[ 0 ];
+        $this -> references = $data[ 1 ];
+        $this -> iterator   = $data[ 2 ];
     }
 }

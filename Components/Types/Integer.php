@@ -40,17 +40,26 @@ final class Integer extends Number {
 
         parent::prototype();
 
-        $value = $this -> value;
+        // Prototypes that requires a value to work with
 
-        $this -> implement(
+        if( $this -> _value !== NULL ) {
 
-            'convert',
+            // Custom Functions
 
-            function( $from, $to ) use( $value ) {
-                return new String( base_convert( $value, $from, $to ) );
-            }
-        );
+            $value = $this -> _value;
 
-        $this -> implement( 'alphaID', new AlphaID, $this -> value );
+            $this -> implement(
+
+                'convert',
+
+                function( $from, $to ) use( $value ) {
+                    return new String( base_convert( $value, $from, $to ) );
+                }
+            );
+
+            // Custom Prototypes
+
+            $this -> implement( 'alphaID', new AlphaID, $this -> value );
+        }
     }
 }

@@ -37,15 +37,22 @@ final class Boolean extends AbstractTypes {
      */
     protected function prototype() {
 
-        $value = $this -> value;
+        // Prototypes that requires a value to work with
 
-        $this -> implement(
+        if( $this -> _value !== NULL ) {
 
-            'compare',
+            // Custom Functions
 
-            function( $b ) use( $value ) {
-                return ( (bool) $value === (bool) $b );
-            }
-        );
+            $value = $this -> _value;
+
+            $this -> implement(
+
+                'compare',
+
+                function( $b ) use( $value ) {
+                    return ( (bool) $value === (bool) $b );
+                }
+            );
+        }
     }
 }

@@ -29,16 +29,16 @@ class DataGatewayException extends \Next\Components\Debug\Exception {
     // Exception Messages
 
     /**
-     * Trying to access a Row object directly when the RowSet has multiple Rows
+     * Trying to access a Row object directly when the RowSet has multiple records
      *
      * @return Next\DB\Table\TableException
-     *  Exception when a Row object is accessed in a multiple Rows RowSet
+     *  Exception when a RowSet object is accessed while having multiple records
      */
     public static function accessViolation() {
 
         return new self(
 
-            'Direct manipulation of a Row is allowed only when the RowSet has one single Row',
+            'Direct manipulation of a RowSet is allowed only when it has only one record',
 
             self::ACCESS_VIOLATION
         );

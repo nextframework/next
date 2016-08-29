@@ -24,13 +24,6 @@ class AlphaID implements Prototyped {
      */
     const SET = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-    /**
-     * Decoding Character Set
-     *
-     * @var string
-     */
-    const SET = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
     // Prototyped Interface Method Implementation
 
     /**
@@ -39,9 +32,6 @@ class AlphaID implements Prototyped {
      *
      * @return Next\Components\Types\Integer
      *  An Integer Object with the decoded value
-     *
-     * @return Next\Components\Types\Integer
-     *  An Integer Object with the AlphaID decoding results
      *
      * @throws InvalidArgumentException
      *  Thrown if, after treated, the first argument, the number to be
@@ -71,7 +61,7 @@ class AlphaID implements Prototyped {
             throw new \InvalidArgumentException( 'The Decoding sequence must be a string' );
         }
 
-        return $this -> decode( $string, $index );
+        return new Integer( $this -> decode( $string, $index ) );
     }
 
     /**

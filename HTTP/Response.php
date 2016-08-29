@@ -360,11 +360,11 @@ class Response extends Object {
     const UNORDERED_COLLECTION                    = 425; //  Internet Draft
 
     /**
-     * UPGRADE_RREQUIRED
+     * UPGRADE_REQUIRED
      *
      * @var integer
      */
-    const UPGRADE_RREQUIRED                       = 426; //  RFC 2817
+    const UPGRADE_REQUIRED                        = 426; //  RFC 2817
 
     /**
      * PRECONDITION_REQUIRED
@@ -374,11 +374,11 @@ class Response extends Object {
     const PRECONDITION_REQUIRED                   = 428; //  RFC 6585
 
     /**
-     * TOO_MANU_REQUESTS
+     * TOO_MANY_REQUESTS
      *
      * @var integer
      */
-    const TOO_MANU_REQUESTS                       = 429; //  RFC 6585
+    const TOO_MANY_REQUESTS                       = 429; //  RFC 6585
 
     /**
      * REQUEST_HEADER_FIELDS_TOO_LARGE
@@ -617,9 +617,9 @@ class Response extends Object {
         self::LOCKED                                  => 'Locked',
         self::FAILED_DEPENDENCY                       => 'Failed Dependency',
         self::UNORDERED_COLLECTION                    => 'Unordered Collection',
-        self::UPGRADE_RREQUIRED                       => 'Upgrade Required',
+        self::UPGRADE_REQUIRED                        => 'Upgrade Required',
         self::PRECONDITION_REQUIRED                   => 'Precondition Required',
-        self::TOO_MANU_REQUESTS                       => 'Too Many Requests',
+        self::TOO_MANY_REQUESTS                       => 'Too Many Requests',
         self::REQUEST_HEADER_FIELDS_TOO_LARGE         => 'Request Header Fields Too Large',
         self::NO_RESPONSE                             => 'No Response',
         self::RETRY_WITH                              => 'Retry With',
@@ -899,14 +899,27 @@ class Response extends Object {
      * @param string $url
      *  URL to be Redirected
      *
+     * @param boolean $raw
+     *  Defines whether or not the value of <strong>$url</strong
+     *  will be used as defined
+     *  When FALSE (default), the current full URL minus the current
+     *  Request URI will be prepended to given URL
+     *
      * @throws Next\HTTP\Response\ResponseException
      *  Any header was already sent
      */
-    public function redirect( $url ) {
+    public function redirect( $url, $raw = FALSE ) {
 
         self::canSendHeaders();
 
         $url = (string) $url;
+
+        if( ! (bool) $raw ) {
+
+            $request = new Request;
+
+            $url = str_replace( $request -> getRequestURI(), '', $request -> getURL() ) . $url;
+        }
 
         try {
 
@@ -1378,7 +1391,13 @@ class Response extends Object {
         }
     }
 
+    /**
+     * Get Response Body
+     *
+     * @return string
+     *  The Response Body
+     */
     public function __toString() {
-        return $this -> body;
+        return (string) $this -> body;
     }
 }
