@@ -38,9 +38,9 @@ abstract class AbstractRouter extends Object implements Router {
     /**
      * Match Action
      *
-     * @var string $action
+     * @var string $method
      */
-    protected $action;
+    protected $method;
 
     /**
      * Router Constructor
@@ -75,13 +75,13 @@ abstract class AbstractRouter extends Object implements Router {
     }
 
     /**
-     * Get match Action
+     * Get match Action Method
      *
      * @return string
      *  Match Action Method
      */
-    public function getAction() {
-        return $this -> action;
+    public function getMethod() {
+        return $this -> method;
     }
 
     // Parameterizable Interface Methods Implementation

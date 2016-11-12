@@ -789,9 +789,7 @@ class Standard extends Object implements View {
      */
     public function __isset( $tplVar ) {
 
-        if( substr( $tplVar, 0, 1 ) == '_' &&
-                $tplVar != self::CONTROLLER_EXCEPTION ) {
-
+        if( $tplVar[ 0 ] == '_' && $tplVar[ 1 ] != '_' ) {
             throw ViewException::unnecessaryTest();
         }
 

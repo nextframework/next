@@ -2,9 +2,25 @@
 
 namespace Next\DB\Entity;
 
-use Next\Components\Object;               # Object Class
-use Next\DB\Table\Manager;
+use Next\Components\Object;    # Object Class
+use Next\DB\Table\Manager;     # Entities Manager Class
 
+/**
+ * Entities Repository Collection Class
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2016 Next Studios
+ *
+ * @package      Next
+ * @subpackage   DB\Entity
+ *
+ * @uses         ReflectionClass,
+ *               ReflectionException,
+ *               Next\Components\Object,
+ *               Next\DB\Table\Manager
+ *               Next\DB\Entity\EntityException
+ */
 class Repositories extends Object {
 
     /**
@@ -17,16 +33,19 @@ class Repositories extends Object {
     /**
      * Add a new Entity Repository
      *
-     * @param Next\DB\Table\Manager $manager
-     *  Table Manager Object
+     * @param string|object  $repository
+     *  Repository classname or object
      *
-     * @param string  $repository
-     *  Repository classname
+     * @param string|optional  $alias
+     *  An optional alias for the Repository
+     *
+     * @param Next\DB\Table\Manager $manager
+     *  Entity Manager Object
      *
      * @return Next\DB\Entity\Repositories
      *  Repositories Object (Fluent-Interface)
      */
-    public function addRepository( Manager $manager, $repository ) {
+    public function addRepository( $repository, $alias = NULL, Manager $manager ) {
 
         try {
 
@@ -36,8 +55,9 @@ class Repositories extends Object {
                 throw EntityException::invalidRepository( $repository );
             }
 
-            $this -> repositories[ $reflector -> getShortName() ] =
-                $reflector -> newInstance( $manager );
+            $alias = ( ! is_null( $alias ) ? trim( $alias ) : $reflector -> getShortName() );
+
+            $this -> repositories[ $alias ] = $reflector -> newInstance( $manager );
 
         } catch( \ReflectionException $e ) {
 
@@ -65,10 +85,13 @@ class Repositories extends Object {
      * Get an Entity Repository
      *
      * @param  string $repository
-     *  Entity Repository to retrieve
+     *  Entity Repository to retrieve, be it the full classpath or its alias directly
      *
-     * @return Next\DB\Entity\Repository|NULL
-     *  The Entity Repository Object if found and NULL otherwise
+     * @return Next\DB\Entity\Repository
+     *  The Entity Repository Object
+     *
+     * @throws Next\DB\Entity\EntityException
+     *  Thrown if Repository Object doesn't exist
      */
     public function getRepository( $repository ) {
 
@@ -76,6 +99,10 @@ class Repositories extends Object {
             $repository = implode( '', array_slice( explode( '\\', $repository ), -1 ) );
         }
 
-        return ( array_key_exists( $repository, $this -> repositories ) ? $this -> repositories[ $repository ] : NULL );
+        if( ! array_key_exists( $repository, $this -> repositories ) ) {
+            throw EntityException::repositoryNotExists( $repository );
+        }
+
+        return $this -> repositories[ $repository ];
     }
 }

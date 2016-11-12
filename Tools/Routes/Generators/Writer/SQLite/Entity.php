@@ -2,15 +2,26 @@
 
 namespace Next\Tools\Routes\Generators\Writer\SQLite;
 
+use Next\DB\Table\AbstractTable;
+
 /**
- * Annotations Routes Generator: Annotations Table Class
+ * Annotations Routes Generator: SQLite Annotations Entity Class
  *
  * @author        Bruno Augusto
  *
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ *
+ * @uses          Next\DB\Table\AbstractTable
  */
-class Table extends \Next\DB\Table\AbstractTable {
+class Entity extends AbstractTable {
+
+    /**
+     * Primary Key Column
+     *
+     * @var string $_primary
+     */
+    protected $_primary = 'routeID';
 
     /**
      * Table Name
@@ -18,13 +29,6 @@ class Table extends \Next\DB\Table\AbstractTable {
      * @var string $_table
      */
     protected $_table = 'routes';
-
-    /**
-     * Route ID
-     *
-     * @var integer $routeID
-     */
-    protected $routeID;
 
     /**
      * Request Method (GET, POST...)
@@ -43,9 +47,9 @@ class Table extends \Next\DB\Table\AbstractTable {
     /**
      * Controller Class
      *
-     * @var string $class
+     * @var string $controller
      */
-    protected $class;
+    protected $controller;
 
     /**
      * Controller Action Method

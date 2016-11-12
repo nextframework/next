@@ -28,26 +28,63 @@ abstract class AbstractTable extends Object implements Table {
      */
     protected $_primary;
 
+    /**
+     * Table Constructor
+     *
+     * Checks for the presence of model PRIMARY KEY and thus aborting if missing
+     *
+     * @throws Next\DB\Table\TableException
+     *  Thrown if the PRIMARY KEY column NAME is missing from Entity
+     */
+    public function __construct() {
+
+        parent::__construct();
+
+        if( is_null( $this -> _primary ) ) {
+            throw TableException::missingPrimaryKey( $this );
+        }
+
+        // Creating the PRIMARY KEY Column in runtime
+
+        $this -> {$this -> _primary} = NULL;
+    }
+
     // Interface Methods Implementation
 
     /**
      * Get Table Name
-     * @TODO: Rename this to getTableName() and replace the rest of occurrences
+     *
      * @return string
      *  Table Name
      */
-    public function getTable() {
+    public function getTableName() {
         return ( ! is_null( $this -> _table ) ? $this -> _table : strtolower( $this ) );
     }
 
     /**
      * Get Primary Key
      *
-     * @return string
-     *  Primary Key Column
+     * @return integer
+     *  Primary Key Column COLUMN
      */
     public function getPrimaryKey() {
          return $this -> _primary;
+    }
+
+    /**
+     * Set PRIMARY KEY value
+     *
+     * @param integer|mixed $pk
+     *  PRIMARY KEY value
+     *
+     * @return Next\SB\Table\Table
+     *  Table Object (Fluent Interface)
+     */
+    public function setPrimaryKey( $pk ) {
+
+        $this -> {$this -> _primary} = (integer) $pk;
+
+        return $this;
     }
 
     /**
@@ -70,10 +107,8 @@ abstract class AbstractTable extends Object implements Table {
          * must not start with an underscore
          */
         $properties = $this -> getClass() -> getProperties(
-            \ReflectionProperty::IS_PROTECTED
+            \ReflectionProperty::IS_PUBLIC + \ReflectionProperty::IS_PROTECTED
         );
-
-        // Filtering properties
 
         $properties = array_filter(
 
@@ -156,16 +191,7 @@ abstract class AbstractTable extends Object implements Table {
      * @return void
      */
     public function offsetSet( $column, $value ) {
-
-        /*$cross = sprintf( '_%s', $column );
-
-        if( property_exists( $this, $cross ) ) {
-
-            $this -> {$cross} = $value;
-
-        } else {*/
-            $this -> {$column} = $value;
-        //}
+        $this -> {$column} = $value;
     }
 
     /**

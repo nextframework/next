@@ -31,7 +31,7 @@ interface Router extends Parameterizable {
     public function getController() ;
 
     /**
-     * Get match Action
+     * Get match Action Method
      */
-    public function getAction();
+    public function getMethod();
 }

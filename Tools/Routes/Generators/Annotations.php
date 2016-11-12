@@ -31,6 +31,9 @@ class Annotations extends AbstractGenerator {
             $annotations = new Annotations\Applications( $applications );
             $annotations = $annotations -> getAnnotations();
 
+            $domain = $annotations -> offsetGet( 'domain' );
+            $annotations -> offsetUnset( 'domain' ); // Not elegant, but...
+
             $path = $annotations -> offsetGet( 'path');
             $annotations -> offsetUnset( 'path');   // Not elegant, but ...
 
@@ -40,7 +43,7 @@ class Annotations extends AbstractGenerator {
 
                 foreach( $annotations as $method => $data ) {
 
-                    if( count( $data ['routes'] ) == 0 ) {
+                    if( count( $data['routes'] ) == 0 ) {
                         throw GeneratorsException::noRoutes( array( $classname, $method ) );
                     }
 
@@ -48,7 +51,7 @@ class Annotations extends AbstractGenerator {
 
                     $foundAnnotations = new Annotations\Parser(
 
-                        $data['routes'], $data['args'], $classname, $method, $path
+                        $data['routes'], $data['args'], $classname, $method, $domain, $path
                     );
 
                     // ... and building final structure

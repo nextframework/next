@@ -148,6 +148,13 @@ class Request extends Object {
     private $adapter;
 
     /**
+     * Request Host
+     *
+     * @var string $host
+     */
+    protected $host;
+
+    /**
      * Request URI
      *
      * @var string $uri
@@ -239,8 +246,9 @@ class Request extends Object {
 
         //---------------------------
 
-        list( $mixed, $method ) =
-            func_get_args() + array( $_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD'] );
+        list( $mixed, $host, $method ) =
+            func_get_args() +
+            array( $_SERVER['REQUEST_URI'], $_SERVER['HTTP_HOST'], $_SERVER['REQUEST_METHOD'] );
 
         // Setting Up Basic Informations
 
@@ -260,6 +268,10 @@ class Request extends Object {
 
             $this -> uri =& $mixed;
         }
+
+            // Request Host
+
+        $this -> host = $host;
 
             // Request Method
 
@@ -323,7 +335,15 @@ class Request extends Object {
         }
     }
 
-    // Pre Request-related Methods
+    /**
+     * Get Host
+     *
+     * @return string
+     *  Request Host
+     */
+    public function getHost() {
+        return $this -> host;
+    }
 
     /**
      * Set BasePath
@@ -385,10 +405,14 @@ class Request extends Object {
     /**
      * Get Full URL
      *
+     * @param boolean|optional $includeSchema
+     *  Defines whether or not the HTTP Schema, if available, will be included
+     *  or not in the final string. Defaults to TRUE
+     *
      * @return string
      *  The full URL
      */
-    public function getURL() {
+    public function getURL( $includeSchema = TRUE ) {
 
         $scheme = parse_url( $this -> uri, PHP_URL_SCHEME );
 
@@ -396,15 +420,14 @@ class Request extends Object {
 
             $rUri = $this -> getRequestURI();
 
-            return sprintf(
-
-                '%s/%s',
-
-                $this -> getBaseUrl(), ( $rUri != '/' ? $rUri : NULL )
+            $url = sprintf(
+                '%s/%s', $this -> getBaseUrl(), ( $rUri != '/' ? $rUri : NULL )
             );
+
+            return ( $includeSchema !== FALSE ? $url : preg_replace( '#^https?:\/\/#', '', $url ) );
         }
 
-        return $this -> uri;
+        return preg_replace( '#^https?:\/\/#', '', $this -> uri );
     }
 
     /**
@@ -434,6 +457,16 @@ class Request extends Object {
                 $this -> basepath
             );
         }
+    }
+
+    /**
+     * Get Request Referrer
+     *
+     * @return string
+     *  The Request Referrer coming from $_SERVER
+     */
+    public function getReferrer() {
+        return $_SERVER['HTTP_REFERER'];
     }
 
     /**
@@ -503,8 +536,6 @@ class Request extends Object {
 
         return NULL;
     }
-
-    // Post Request-related Methods
 
     /**
      * Get Request Method

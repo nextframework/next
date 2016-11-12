@@ -56,11 +56,17 @@ class SQLite extends Standard {
 
         $request = $application -> getRequest();
 
-        $URI     = $request -> getRequestUri();
+        $URI = $request -> getURL( FALSE );
+
+        // Removing trailing slash if on slash (/) route
+
+        if( $request -> getRequestURI() == '/' ) {
+            $URI = rtrim( $URI, '/' );
+        }
 
         // Searching the Request in Routes Database
 
-        $stmt = $this -> dbh -> prepare( 'SELECT `requestMethod`, `class`, `method`,
+        $stmt = $this -> dbh -> prepare( 'SELECT `requestMethod`, `controller`, `method`,
                                                  `requiredParams`, `optionalParams`
                                             FROM `routes`
                                                 WHERE `application` = ? AND
@@ -89,9 +95,9 @@ class SQLite extends Standard {
              * Setting Up Found Controller and its action to be used in View,
              * as part of findFilebySpec() method
              */
-            $this -> controller =& $data -> class;
+            $this -> controller =& $data -> controller;
 
-            $this -> action     =& $data -> method;
+            $this -> method     =& $data -> method;
 
             // Analyzing Params
 

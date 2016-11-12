@@ -59,12 +59,11 @@ class Applications implements Annotations {
 
         $data = new \ArrayIterator;
 
-        /*$domains = $this -> matchDomainAnnotations( $this -> application );
+        // Finding Domain Modifier
 
-        if( count( $domains ) > 0 ) {
+        $domain = $this -> matchDomainAnnotations( $this -> application );
 
-            $data -> offsetSet( 'Domains', $domains );
-        }*/
+        $data -> offsetSet( 'domain', ( count( $domain ) > 0 ? $domain : NULL ) );
 
         // Finding Path Modifier
 
@@ -82,19 +81,19 @@ class Applications implements Annotations {
 
             function( \Iterator $iterator ) use( &$data ) {
 
-                $action = new Actions(
+                // Thankfully we can reuse the variable name because of different scope  ^_^
 
-                    new \ArrayIterator(
-                        $iterator -> current() -> getClass() -> getMethods()
-                    )
-                );
+                $actions = new Actions( $iterator -> current() -> getClass() );
 
-                $data -> offsetSet(
+                if( $actions -> current() instanceof \ReflectionMethod ) {
 
-                    $action -> current() -> class,
+                    $data -> offsetSet(
 
-                    $action -> getAnnotations()
-                );
+                        $actions -> current() -> class,
+
+                        $actions -> getAnnotations()
+                    );
+                }
 
                 return TRUE;
             },
@@ -127,7 +126,9 @@ class Applications implements Annotations {
             preg_split('/[\n\r]+/', $application -> getClass() -> getDocComment() )
         );
 
-        return preg_replace( sprintf( '/.*?%s\s*/', self::DOMAIN_PREFIX ), '', $domains );
+        $domains = preg_replace( sprintf( '/.*?%s\s*/', self::DOMAIN_PREFIX ), '', $domains );
+
+        return array_shift( $domains );
     }
 
     /**

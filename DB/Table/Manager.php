@@ -161,7 +161,9 @@ class Manager extends Object {
      */
     public function fetch( $fetchStyle = NULL ) {
 
-        $rowset = new RowSet( $this, array( $this -> execute() -> fetch( $fetchStyle ) ) );
+        $data = $this -> execute() -> fetch( $fetchStyle );
+
+        $rowset = new RowSet( $this, ( $data !== FALSE ? array( $data ) : array() ) );
 
         $this -> flush();
 
@@ -181,7 +183,9 @@ class Manager extends Object {
      */
     public function fetchAll( $fetchStyle = NULL ) {
 
-        $rowset = new RowSet( $this, $this -> execute() -> fetchAll( $fetchStyle ) );
+        $data = $this -> execute() -> fetchAll( $fetchStyle );
+
+        $rowset = new RowSet( $this, ( $data !== FALSE ? $data : array() ) );
 
         $this -> flush();
 
@@ -228,7 +232,7 @@ class Manager extends Object {
             throw TableException::nothingToInsert();
         }
 
-        $this -> builder -> insert( $this -> table -> getTable(), $this -> source );
+        $this -> builder -> insert( $this -> table -> getTableName(), $this -> source );
 
         // Executing and returning the Last Insert ID...
 
@@ -254,7 +258,7 @@ class Manager extends Object {
             throw TableException::nothingToUpdate();
         }
 
-        $this -> builder -> update( $this -> table -> getTable(), $this -> source );
+        $this -> builder -> update( $this -> table -> getTableName(), $this -> source );
 
         // Registering Placeholders Replacements
 
@@ -271,7 +275,7 @@ class Manager extends Object {
      */
     public function delete() {
 
-        $this -> builder -> delete( $this -> table -> getTable() );
+        $this -> builder -> delete( $this -> table -> getTableName() );
 
         return $this;
     }
@@ -316,6 +320,10 @@ class Manager extends Object {
 
         $this -> source = array_filter( $table -> getFields() );
 
+        // Flushing any possible assembled query
+
+        $this -> flush();
+
         return $this;
     }
 
@@ -327,12 +335,17 @@ class Manager extends Object {
      * @param string $repository
      *  Entity Repository to add
      *
+     * @param string|optional $alias
+     *  An optional alias for the Repository
+     *
      * @return  Next\DB\Table\Manager
      *  Table Manager Object (Fluent-Interface)
      */
-    public function addRepository( $repository ) {
+    public function addRepository( $repository, $alias = NULL ) {
 
-        $this -> repositories -> addRepository( new Manager( $this -> driver ), $repository );
+        $this -> repositories -> addRepository(
+            $repository, $alias, new Manager( $this -> driver )
+        );
 
         return $this;
     }
@@ -345,16 +358,12 @@ class Manager extends Object {
      *
      * @return Next\DB\Entity\Repository
      *  Entity Repository
+     *
+     * @throws Next\DB|Entity\EntityException
+     *  Thrown if Repository Object doesn't exist
      */
     public function getRepository( $repository ) {
-
-        $repositoryInstance = $this -> repositories -> getRepository( $repository );
-
-        if( is_null( $repository ) ) {
-            throw TableException::repositoryNotFound( $repository );
-        }
-
-        return $repositoryInstance;
+        return $this -> repositories -> getRepository( $repository );
     }
 
     /**
@@ -368,6 +377,16 @@ class Manager extends Object {
     }
 
     // Accessors
+
+    /**
+     * Get assembled query
+     *
+     * @return string
+     *  Assembled query
+     */
+    public function getQuery() {
+        return $this -> assemble();
+    }
 
     /**
      * Get associated Table Object

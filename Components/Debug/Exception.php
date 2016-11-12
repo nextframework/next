@@ -87,7 +87,7 @@ class Exception extends \Exception {
     private $replacements = array();
 
     /**
-     * HTTP Response Code
+     * Default HTTP Response Code
      *
      * @var integer $responseCode
      */

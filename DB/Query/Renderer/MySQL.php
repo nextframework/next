@@ -158,13 +158,20 @@ class MySQL extends AbstractRenderer {
      */
     public function columns( $column, $alias = NULL ) {
 
-        if( $column instanceof Expression ) {
-            $column = $column -> getExpression();
-        }
+        // Do we have an Expression?
 
-        elseif( strpos( $column, '.' ) === FALSE ) {
+        if( $column instanceof Expression ) {
+
+            $column = $column -> getExpression();
+
+        } else {
+
+            // No? Then let's quote the Columns
+
             $column = $this -> quote( $column );
         }
+
+        // Quoting aliases, if any
 
         if( ( is_string( $alias ) && ! is_numeric( $alias ) ) ) {
             $column .= sprintf( ' %s %s', self::ALIAS, $this -> quote( $alias ) );
@@ -369,20 +376,37 @@ class MySQL extends AbstractRenderer {
 
         foreach( $columns as $type => $condition ) {
 
-            preg_match(
+            preg_match_all(
 
-                '#(?<column>(\w+\.)?\w+)\s*(?<expression>OR|XOR|AND|NOT|IS|IN|BETWEEN|SOUNDS|LIKE|REGEXP|DIV|MOD|\||\&|\!|\=|\>|\<|\+|\-|\*|\/|\%|\^)\s*(?<predicate>.*)#',
+                '#(?<column>(\w+\.)?\w+)\s*(?<expression>OR|XOR|AND|NOT|IS|IN|BETWEEN|SOUNDS|LIKE|REGEXP|DIV|MOD|\||\&|\!|\=|\>|\<|\+|\-|\*|\/|\%|\^)#',
 
                 $condition, $matches
             );
 
-            $columns[ $type ] = sprintf(
+            $columns[ $type ] = str_replace(
 
-                '%s %s %s',
+                $matches['column'],
 
-                $this -> quote( $matches['column'] ),
+                array_map( array( $this, 'quote' ), $matches['column'] ),
 
-                $matches['expression'], $matches['predicate']
+                $condition
+            );
+
+            /**
+             * @internal
+             *
+             * If named placeholders are being used and, for some reason,
+             * the placeholder name matches the column name the quoting above
+             * would produce something like:
+             *
+             * <code>`column` = :`column`</code>
+             *
+             * Which must be undone otherwise the Statement Class used may not
+             * recognize the value after the '=' as a placeholder
+             */
+            $columns[ $type ] = preg_replace(
+
+                sprintf( '#(:%1$s(.*?))%1$s#', $this -> quoteIdentifier ), ':$2', $columns[ $type ]
             );
         }
     }

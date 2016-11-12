@@ -896,11 +896,11 @@ class Response extends Object {
     /**
      * Send a Redirect Header
      *
-     * @param string $url
+     * @param string $to
      *  URL to be Redirected
      *
      * @param boolean $raw
-     *  Defines whether or not the value of <strong>$url</strong
+     *  Defines whether or not the value of <strong>$to</strong
      *  will be used as defined
      *  When FALSE (default), the current full URL minus the current
      *  Request URI will be prepended to given URL
@@ -908,17 +908,30 @@ class Response extends Object {
      * @throws Next\HTTP\Response\ResponseException
      *  Any header was already sent
      */
-    public function redirect( $url, $raw = FALSE ) {
+    public function redirect( $to, $raw = FALSE ) {
 
         self::canSendHeaders();
 
-        $url = (string) $url;
+        $to = (string) $to;
+
+        /**
+         * @internal
+         * By default, $url used for Absolute URLs is the same
+         * of the informed destination...
+         */
+        $url = $to;
 
         if( ! (bool) $raw ) {
 
             $request = new Request;
 
-            $url = str_replace( $request -> getRequestURI(), '', $request -> getURL() ) . $url;
+            // ... but we change it if we're dealing with a Relative URI
+
+            $url = str_replace( $request -> getRequestURI(), '', $request -> getURL() );
+
+            // No double slashes
+
+            if( $to != '/' ) $url .= $to;
         }
 
         try {
@@ -936,7 +949,7 @@ class Response extends Object {
 
             $this -> headers -> addHeader(
 
-                new Raw( sprintf( 'Location: %s', $url ) )
+                new Raw( sprintf( 'Location: %s', $to ) )
             );
         }
 

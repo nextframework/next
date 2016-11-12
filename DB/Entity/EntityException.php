@@ -20,54 +20,34 @@ class EntityException extends \Next\Components\Debug\Exception {
     protected $range = array( 0x00000330, 0x00000362 );
 
     /**
-     * Nothing to Update
-     *
-     * @var integer
-     */
-    const NO_TABLE_OBJECT       = 0x00000330;
-
-    /**
      * Invalid Repository
      *
      * @var integer
      */
-    const INVALID_REPOSITORY      = 0x00000331;
+    const INVALID_REPOSITORY      = 0x00000330;
 
     /**
      * Repository not exist
      *
      * @var integer
      */
-    const REPOSITORY_NOT_EXISTS    = 0x00000332;
-
-    // Exception Messages
+    const REPOSITORY_NOT_EXISTS    = 0x00000331;
 
     /**
-     * No Table Object defined
+     * Missing Entity Manager
      *
-     * @return Next\DB\Entity\EntityException
-     *  No Table Object was defined
+     * @var integer
      */
-    public static function noTableObject() {
+    const NO_ENTITY_MANAGER         = 0x00000332;
 
-        return new self(
+    /**
+     * No Entity
+     *
+     * @var integer
+     */
+    const NO_ENTITY                = 0x00000333;
 
-            'No Table Object defined!
-
-            <p>
-                If you\'re using an Entity Repository, remember to call
-                <em>Next\DB\Table\Manager::setTable()</em> in <em>Next\DB\Entity\Repository::init()</em>
-                (inherited from <em>Next\Components\Object</em>) or by cautiously overwriting its Constructor.
-            </p>
-
-            <p>
-                If you\'re NOT using an Entity Repository, remember to provide a
-                valid Table Object as second argument of <em>Next\DB\Table\Manager</em>.
-            </p>',
-
-            self::NO_TABLE_OBJECT
-        );
-    }
+    // Exception Messages
 
     /**
      * Invalid Repository Class
@@ -86,7 +66,7 @@ class EntityException extends \Next\Components\Debug\Exception {
 
             All Repository Classes must be an instance of Next\\DB\Entity\Repository',
 
-            self::INVALID_REPOSITORY, $repositoryClass
+            self::INVALID_REPOSITORY, array( $repositoryClass )
         );
     }
 
@@ -105,7 +85,27 @@ class EntityException extends \Next\Components\Debug\Exception {
 
             'Repository Class <strong>%s</strong> doesn\'t exist',
 
-            self::REPOSITORY_NOT_EXISTS, $repositoryClass
+            self::REPOSITORY_NOT_EXISTS, array( $repositoryClass )
         );
+    }
+
+    /**
+     * Missing Entity Manager
+     *
+     * @return  Next\DB\Entity\EntityException
+     *  Missing Entity Manager
+     */
+    public function noEntityManager() {
+        return self( 'Missing Entity Manager', self::NO_ENTITY_MANAGER );
+    }
+
+    /**
+     * No Entity
+     *
+     * @return Next\DB\Entity\EntityException
+     *  No Entity defined
+     */
+    public static function noEntity() {
+        return new self( 'Missing Entity', self::NO_ENTITY );
     }
 }

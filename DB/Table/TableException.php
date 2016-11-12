@@ -23,41 +23,67 @@ class TableException extends \Next\Components\Debug\Exception {
     protected $range = array( 0x00000396, 0x000003C8 );
 
     /**
-     * Nothing to Update
+     * Missing PRIMARY KEY
      *
      * @var integer
      */
-    const NOTHING_TO_INSERT       = 0x00000396;
+    const MISSING_PK              = 0x00000396;
 
     /**
      * Nothing to Update
      *
      * @var integer
      */
-    const NOTHING_TO_UPDATE       = 0x00000397;
+    const NOTHING_TO_INSERT       = 0x00000397;
+
+    /**
+     * Nothing to Update
+     *
+     * @var integer
+     */
+    const NOTHING_TO_UPDATE       = 0x00000398;
 
     /**
      * Statement Preparing
      *
      * @var integer
      */
-    const PREPARE                 = 0x00000398;
+    const PREPARE                 = 0x00000399;
 
     /**
      * Statement Executing
      *
      * @var integer
      */
-    const EXECUTE                 = 0x00000399;
+    const EXECUTE                 = 0x0000039A;
 
     /**
-     * Entity Repository not Found
+     * General violations on data access (or manipulation)
      *
      * @var integer
      */
-    const REPOSITORY_NOT_FOUND    = 0x0000039A;
+    const ACCESS_VIOLATION        = 0X0000039B;
 
     // Exception Messages
+
+    /**
+     * Missing PRIMARY KEY definition
+     *
+     * @param string $table
+     *  Table name
+     *
+     * @return Next\DB\Table\TableException
+     *  Exception to when the PRIMARY KEY column has not been defined in Table Class
+     */
+    public static function missingPrimaryKey( $table ) {
+
+        return new self(
+
+            'PRIMARY KEY has not been defined for Table Class <strong>%s</strong> (<em>%s</em>)',
+
+            self::MISSING_PK, array( (string) $table, $table -> getClass() -> getName() )
+        );
+    }
 
     /**
      * Unable to insert new record
@@ -108,21 +134,18 @@ class TableException extends \Next\Components\Debug\Exception {
     }
 
     /**
-     * Entity Repository not found
-     *
-     * @param string $repository
-     *  Repository trying to be retrieved
+     * Data Access Violation
      *
      * @return Next\DB\Table\TableException
-     *  Repository not Found
+     *  Data Access Violation Exception
      */
-    public static function repositoryNotFound( $repository ) {
+    public static function accessViolation() {
 
         return new self(
 
-            'Repository <strong>%s</strong> could not be found',
+            'Data must not be directly manipulated',
 
-            self::REPOSITORY_NOT_FOUND, array( $repository )
+            self::ACCESS_VIOLATION
         );
     }
 }
