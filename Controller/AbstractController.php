@@ -21,9 +21,23 @@ abstract class AbstractController extends Object implements Controller {
     /**
      * Application Object
      *
-     * @var Next\Application\Application $_application
+     * @var Next\Application\Application $application
      */
-    protected $_application;
+    protected $application;
+
+    /**
+     * Request Object
+     *
+     * @var Next\HTTP\Request $request
+     */
+    protected $request;
+
+    /**
+     * Response Object
+     *
+     * @var Next\HTTP\Response $response
+     */
+    protected $response;
 
     /**
      * View Engine
@@ -41,7 +55,7 @@ abstract class AbstractController extends Object implements Controller {
      * </p>
      *
      * <p>
-     *     An Application is NOT passed only in concrete classes extending
+     *     An Application is not passed ONLY in concrete classes extending
      *     Next\Application\AbstractApplication, when building
      *     Application Chain
      * </p>
@@ -57,13 +71,16 @@ abstract class AbstractController extends Object implements Controller {
      */
     final public function __construct( Application $application = NULL ) {
 
-        // If we an Application (dispatching process), let's handle it
+        // If we have an Application (dispatching process), let's handle it
 
         if( ! is_null( $application ) ) {
 
-            // Request Object
+            $this -> application = $application;
 
-            $this -> _application =& $application;
+            // Request and Response Objects
+
+            $this -> request  = $application -> getRequest();
+            $this -> response = $application -> getResponse();
 
             // Application's View Engine
 
@@ -88,7 +105,7 @@ abstract class AbstractController extends Object implements Controller {
      *  Request Object
      */
     public function getRequest() {
-        return $this -> _application -> getRequest();
+        return $this -> request;
     }
 
     /**
@@ -98,7 +115,18 @@ abstract class AbstractController extends Object implements Controller {
      *  Response Object
      */
     public function getResponse() {
-        return $this -> _application -> getResponse();
+        return $this -> response;
+    }
+
+    /**
+     * Get Application Object
+     *
+     * @return Next\Application\Application|NULL
+     *  Application Object if child classes have been fully constructed passing
+     *  an Object to the Class Constructor and NULL otherwise
+     */
+    public function getApplication() {
+        return $this -> application;
     }
 
     // OverLoading
@@ -129,7 +157,7 @@ abstract class AbstractController extends Object implements Controller {
 
         try {
 
-            return ( $this -> _application -> getRequest() -> getQuery( $param ) !== FALSE );
+            return ( $this -> request -> getQuery( $param ) !== FALSE );
 
         } catch( RequestException $e ) {
 
@@ -160,7 +188,7 @@ abstract class AbstractController extends Object implements Controller {
 
         try {
 
-            return $this -> _application -> getRequest() -> getQuery( $param );
+            return $this -> request -> getQuery( $param );
 
         } catch( RequestException $e ) {
 

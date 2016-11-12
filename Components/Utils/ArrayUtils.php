@@ -104,7 +104,33 @@ class ArrayUtils {
     public static function map( $param ) {
 
         if( is_object( $param ) ) {
-            $param = get_object_vars( $param );
+
+            /**
+             * @internal
+             *
+             * Saving object instance to use it later when retrieving properties
+             * without being overwritten when array_map() pass over
+             */
+            $object = $param;
+
+            $reflector = new \ReflectionObject( $object );
+
+            $properties = $reflector -> getProperties(
+                \ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED
+            );
+
+            $param = array();
+
+            foreach( $properties as $property ) {
+
+                // Ignoring Framework's Properties
+
+                if( preg_match( '/^Next\\\\*/', $property -> class ) != 0 ) continue;
+
+                $property -> setAccessible( TRUE );
+
+                $param[ $property -> getName() ] = $property -> getValue( $object );
+            }
         }
 
         if( is_array( $param ) ) {

@@ -265,7 +265,7 @@ class Environment extends Object {
 
             $name = (string) $name;
 
-            if( ! array_key_exists( $name, $_SESSION[ $this -> environment ] ) ) {
+            if( ! array_key_exists( $name, (array) $_SESSION[ $this -> environment ] ) ) {
 
                 throw EnvironmentException::undefinedIndex( $name, $this -> environment );
             }
@@ -310,7 +310,7 @@ class Environment extends Object {
     public function __isset( $name ) {
 
         if( ! $this -> isDestroyed() ) {
-            return array_key_exists( (string) $name, $_SESSION[ $this -> environment ] );
+            return array_key_exists( (string) $name, (array) $_SESSION[ $this -> environment ] );
         }
     }
 
@@ -334,7 +334,7 @@ class Environment extends Object {
 
             $name = (string) $name;
 
-            if( ! array_key_exists( $name, $_SESSION[ $this -> environment ] ) ) {
+            if( ! array_key_exists( $name, (array) $_SESSION[ $this -> environment ] ) ) {
                 throw EnvironmentException::undefinedIndex( $name, $this -> environment );
             }
 

@@ -2,10 +2,12 @@
 
 namespace Next\Tools\Routes\Generators\Writer;
 
-use Next\DB\Statement\StatementException;      # SQL Statement Exception Class
-use Next\Tools\Routes\RoutesException;         # Routes Generator Exception Class
+use Next\Tools\Routes\Generators\Writer\OutputWriterException;    # Output Writer Exception Class
+use Next\DB\Table\TableException;                                 # Table Exception Class
 
-use Next\DB\Table\Manager;                     # Table Manager
+use Next\DB\Driver\PDO\Adapter\SQLite as Adapter;                 # PDO SQLite Adapter
+
+use Next\DB\Table\Manager;                                        # Table Manager
 
 /**
  * Routes Generator Tool: SQLite Output Writer
@@ -14,15 +16,21 @@ use Next\DB\Table\Manager;                     # Table Manager
  *
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ *
+ * @uses          Next\DB\Driver\PDO\Adapter\SQLite,
+ *                Next\Tools\Routes\Generators\Writer\SQLite\Entity,
+ *                Next\Tools\Routes\Generators\Writer\OutputWriterException
+ *                Next\DB\Table\TableException,
+ *                Next\DB\Table\Manager
  */
 class SQLite extends AbstractWriter {
 
     /**
-     * Table Manager Object
+     * Entity Manager
      *
      * @var Next\DB\Table\Manager $manager
      */
-    private $manager;
+    protected $manager;
 
     /**
      * Additional Initialization
@@ -32,14 +40,10 @@ class SQLite extends AbstractWriter {
      */
     protected function init() {
 
+        // Entity Manager
+
         $this -> manager = new Manager(
-
-            new \Next\DB\Driver\PDO\Adapter\SQLite(
-
-                array( 'dbPath' => $this -> options -> dbPath )
-            ),
-
-            new SQLite\Table
+            new Adapter( array( 'dbPath' => $this -> options -> dbPath ) )
         );
     }
 
@@ -69,7 +73,7 @@ class SQLite extends AbstractWriter {
      *  Number of records processed
      *
      * @throws Next\Tools\Routes\Generators\Writer\OutputWriterException
-     *  Unable to record route, as a rethrowing of a
+     *  Unable to record route, as a re-throwing of a
      *  Next\DB\Statement\StatementException caught
      */
     public function save( array $data ) {
@@ -82,47 +86,39 @@ class SQLite extends AbstractWriter {
 
             foreach( $controllersData as $controller => $actionsData ) {
 
-                foreach( $actionsData as $action => $data ) {
+                foreach( $actionsData as $method => $data ) {
 
                     foreach( $data as $d ) {
 
-                        // Cleaning Information of Previous Iteration
-
-                        $this -> manager -> reset();
-
-                        // Adding new
-
-                        $this -> manager -> setSource(
-
-                            array(
-
-                                'requestMethod'    => $d['requestMethod'],
-                                'application'      => $application,
-                                'class'            => $controller,
-                                'method'           => $action,
-                                'URI'              => $d['route'],
-                                'requiredParams'   => serialize( $d['params']['required'] ),
-                                'optionalParams'   => serialize( $d['params']['optional'] )
-                            )
-                        );
-
-                        // Inserting...
-
                         try {
 
-                            $this -> manager -> insert();
+                            // Building Route Entity
+
+                            $entity = new SQLite\Entity;
+
+                            $entity -> requestMethod  = $d['requestMethod'];
+                            $entity -> application    = $application;
+                            $entity -> controller     = $controller;
+                            $entity -> method         = $method;
+                            $entity -> URI            = $d['route'];
+                            $entity -> requiredParams = serialize( $d['params']['required'] );
+                            $entity -> optionalParams = serialize( $d['params']['optional'] );
+
+                            // Recording
+
+                            $this -> manager -> setTable( $entity ) -> insert();
 
                             // Increment Counter
 
                             $records += 1;
 
-                        } catch( StatementException $e ) {
+                        } catch( TableException $e ) {
 
                             // Re-throw as RoutesDatabaseException
 
                             throw OutputWriterException::recordingFailure(
 
-                                array( $d['route'], $controller, $action, $e -> getMessage() )
+                                array( $d['route'], $controller, $method, $e -> getMessage() )
                             );
                         }
                     }
@@ -139,6 +135,6 @@ class SQLite extends AbstractWriter {
      * @return void
      */
     public function reset() {
-        $this -> manager -> delete() -> rowCount();
+        $this -> manager -> setTable( new SQLite\Entity ) -> delete() -> rowCount();
     }
 }

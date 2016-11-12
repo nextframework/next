@@ -91,7 +91,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      *  Reflector instance of Object
      */
     public function getClass() {
-        return new \ReflectionClass( get_class( $this ) );
+        return new \ReflectionObject( $this );
     }
 
     /**

@@ -53,12 +53,15 @@ class Parser {
      * @param string $method
      *  Method to whom belongs the Route(s)
      *
-     * @param string $basepath
-     *  Routes Basepath, prepended to every route
+     * @param string|optional
+     *  Route Domain, prepended to every route
+     *
+     * @param string|optional $basepath
+     *  Routes Basepath, appended to every route
      */
-    public function __construct( array $routes, array $args, $controller, $method, $basepath = '' ) {
+    public function __construct( array $routes, array $args, $controller, $method, $domain = '', $basepath = '' ) {
 
-        $this -> parseRoutes( $routes, $args, $controller, $method, $basepath );
+        $this -> parseRoutes( $routes, $args, $controller, $method, $domain, $basepath );
     }
 
     // Accessors
@@ -89,6 +92,12 @@ class Parser {
      * @param string $method
      *  Method to whom belongs the Route(s)
      *
+     * @param string $domain
+     *  Domain to whom belongs the Route(s)
+     *
+     * @param string basepath
+     *  Path to whom belongs the Route(s)
+     *
      * @throws Next\Tools\Routes\Generators\GeneratorsException
      *  Route has less than 2 Components (a Request Method and a Route)
      *
@@ -100,7 +109,7 @@ class Parser {
      *  There is another Route with exactly the same definition, including
      *  the Request Method
      */
-    private function parseRoutes( $routes, array $args, $controller, $method, $basepath ) {
+    private function parseRoutes( $routes, array $args, $controller, $method, $domain, $basepath ) {
 
         foreach( $routes as $route ) {
 
@@ -124,51 +133,54 @@ class Parser {
 
             $URI = trim( array_shift( $components ) );
 
-            // Parsing, fixing and complementing them
-
-                /**
-                 * @internal
-                 * If defined URI is NOT a single slash, no trailing slash for it
-                 * But add a RegExp Border instead
-                 */
-
-            if( $URI != '/' ) {
-
-                // Prepending Routes Basepath if present
-
-                if( empty( $basepath ) ) {
-
-                    $URI = sprintf( '%s\b', trim( $URI, '/' ) );
-
-                } else {
-
-                    $URI = sprintf( '%s/%s\b', trim( $basepath, '/' ), trim( $URI, '/' ) );
-                }
-
-                /**
-                 * @internal
-                 * If we have a well designed structure, let's add
-                 * RegExp Delim Captures Token too
-                 *
-                 * Routes pointing to a single slash do not have this
-                 * token due hierarchical logic
-                 *
-                 * These kind of Routes cannot even have any params,
-                 * except the one reserved for Localization
-                 */
-                $URI .= self::DELIM_CAPTURE_TOKEN;
-
-            } else {
+            /**
+             * @internal
+             *
+             * Routes pointing to a single slash can't have any params other
+             * than the reserved for Localization token due hierarchical logic
+             */
+            if( $URI =='/' && count( $args ) > 0 ) {
 
                 // Let's ensure single slash Routes have no params
 
-                if( count( $args ) != 0 ) {
+                throw GeneratorsException::malformedRoute(
 
-                    throw GeneratorsException::malformedRoute(
+                    array( $URI, basename( $controller ), $method )
+                );
+            }
 
-                        array( $URI, basename( $controller ), $method )
-                    );
-                }
+            /**
+             * @internal
+             * Now that we have well designed structure, let's add
+             * RegExp Delim Capture Token too
+             */
+            if( $URI != '/' ) {
+                $URI .= self::DELIM_CAPTURE_TOKEN;
+            }
+
+            /**
+             * @internal
+             * If defined URI is NOT a single slash, let's add a RegEXp border to it
+             */
+            if( $URI != '/' ) $URI .= '\b';
+
+            // Parsing, fixing and complementing them
+
+                // Appending Routes Basepath if present
+
+            if( empty( $basepath ) ) {
+
+                $URI = sprintf( '%s', ( $URI != '/' ? trim( $URI, '/' ) : $URI ) );
+
+            } else {
+
+                $URI = sprintf( '%s/%s', trim( $basepath, '/' ), trim( $URI, '/' ) );
+            }
+
+                // Adding Domain
+
+            if( ! empty( $domain ) ) {
+                $URI = trim( sprintf( '%s/%s', $domain, $URI ), '/' );
             }
 
             // Let's parse Required and Optional Params

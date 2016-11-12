@@ -37,6 +37,13 @@ class Actions extends \FilterIterator implements Annotations {
     const ARGS_PREFIX     =    '!Argument';
 
     /**
+     * Reflection Object with Controllers to get Methods from
+     *
+     * @var ReflectionClass $reflector
+     */
+    protected $reflector;
+
+    /**
      * Controller Actions Annotations Constructor
      *
      * @param Iterator $iterator
@@ -44,9 +51,11 @@ class Actions extends \FilterIterator implements Annotations {
      *
      * @see https://bugs.php.net/bug.php?id=52560
      */
-    public function __construct( \Iterator $iterator ) {
+    public function __construct( \ReflectionClass $reflector ) {
 
-        parent::__construct( $iterator );
+        $this -> reflector = $reflector;
+
+        parent::__construct( new \ArrayIterator( $reflector -> getMethods() ) );
 
         $this -> rewind();
     }
@@ -106,7 +115,7 @@ class Actions extends \FilterIterator implements Annotations {
                     $temp
                 );
 
-                $args[] = array_combine( $labels, $temp) ;
+                $args[] = array_combine( $labels, $temp );
             }
 
             // Saving Data
@@ -154,7 +163,21 @@ class Actions extends \FilterIterator implements Annotations {
 
         return ( ( $method -> isPublic() && $method -> isFinal() ) &&
                  ( substr( $method -> name, 0, 2 ) !== '__' )      &&
-                 ( strpos( $method -> class, self::FRAMEWORK ) === FALSE )
+                 ( strpos( $method -> class, self::FRAMEWORK ) === FALSE ) &&
+
+                 /**
+                  * @internal
+                  *
+                  * This is not a user-defined rule!
+                  *
+                  * This condition ensures that we're listing only methods of
+                  * the class being reflected instead of all its parent altogether
+                  *
+                  * This grants the ability to have a hierarchical structure of
+                  * small Controllers one descending to another, not in the
+                  * Object Orientation way, but instead more like a skeleton structure
+                  */
+                 ( $method -> class === $this -> reflector -> getName() )
                );
     }
 

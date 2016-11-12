@@ -122,7 +122,7 @@ abstract class AbstractCollection extends Object
     /**
      * Removes an Object from Collection
      *
-     * @param mixed|integer|string $reference
+     * @param mixed|integer|string|Next\Components\Object $reference
      *  Offset to remove
      *
      * @return Next\Components\Collection\AbstractCollection
@@ -130,55 +130,9 @@ abstract class AbstractCollection extends Object
      */
     public function remove( $reference ) {
 
-        // Nothing to remove
-
-        if( empty( $this -> collection ) ) return;
-
-        $index = -1;
-
-        // Removing straight by element index
-
-        if( is_int( $reference ) ) {
-
-            $index = $reference;
-
-        } else {
-
-            // Locating Object index by Hash
-
-            /**
-             * @internal
-             *
-             * Since all objects *should* extend the Object class, even if
-             * Object::getHash() is overwritten with a different implementation,
-             * all Objects within a Collection will, probably, have the same
-             * hash strategy adopted, so we can use this premise to compute
-             * the size of the hash string of all Objects stored
-             */
-            $first = $this -> shift();
-
-            if( $first === NULL ) return $index;
-
-            if( strlen( $reference ) == strlen( $first -> getHash() ) ) {
-
-                // Trying to find a hash in References Table
-
-                $index = ArrayUtils::search(
-                    $this -> references, $reference, 'hash'
-                );
-
-            } else {
-
-                // Locating Object index by name
-
-                $index = ArrayUtils::search(
-                    $this -> references, $reference, 'name'
-                );
-            }
-        }
+        $index = $this -> find( $reference );
 
         if( $index !== FALSE && $index != -1 && array_key_exists( $index, $this -> collection ) ) {
-
             unset( $this -> collection[ $index ], $this -> references[ $index ] );
         }
 
@@ -188,18 +142,25 @@ abstract class AbstractCollection extends Object
     /**
      * Check if an Objects exists
      *
-     * @param mixed|string|Next\Components\Object $element
+     * @param mixed|integer|string|Next\Components\Object $reference
      *  An Object object or the name of an Object to check if
      *  it's present in Collection
      *
      * @return boolean
      *  TRUE if given Object is already present in Collection and FALSE otherwise
      */
-    public function contains( $element ) {
+    public function contains( $reference ) {
 
-        $element = ( $element instanceof Object ? $element -> getHash() : (string) $element );
+        /**
+         * @internal
+         * Differently of Lists::find() that accepts integers as
+         * possible reference (direct offset), here, such type is prohibited
+         * as we're testing if an Object (or a reference to it) exists in the
+         * Collection, instead of trying to find one for manipulation
+         */
+        if( is_int( $reference ) ) return -1;
 
-        return ( ArrayUtils::search( $this -> references, $element ) != -1 );
+        return ( $this -> find( $reference ) != -1 );
     }
 
     /**
@@ -297,6 +258,46 @@ abstract class AbstractCollection extends Object
         }
 
         return $object;
+    }
+
+    /**
+     * Finds an Object offset inside the Collection
+     *
+     * @param  mixed|string|integer|Next\Components\Object $reference
+     *  A reference to search for.
+     *  It can be a string, an integer or an Next\Components\Object object
+     *
+     * @return boolean|integer
+     *  It return -1 if Collection is empty or if the reference couldn't be found within it
+     *  It returns FALSE if the searching process fails
+     *
+     * @see Next\Components\Utils\ArrayUtils::search()
+     */
+    public function find( $reference ) {
+
+        if( empty( $this -> collection ) ) return -1;
+
+        // If an Object object is informed, let's search by hash
+
+        if( $reference instanceof Object ) {
+
+            $hash = $reference -> getHash();
+
+            return array_key_exists( $hash, $this -> references ) ? $this -> references[ $hash ] : -1;
+        }
+
+        /**
+         * @internal
+         * If an integer (not a numeric string) greater than or equal
+         * to zero is informed, let's use it "as is"
+         */
+        if( is_int( $reference ) && $reference >= 0 ) return $reference;
+
+        // Otherwise, let's search by name
+
+        return ArrayUtils::search(
+            $this -> references, (string) $reference, 'name'
+        );
     }
 
     // Accessors

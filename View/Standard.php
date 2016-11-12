@@ -789,9 +789,7 @@ class Standard extends Object implements View {
      */
     public function __isset( $tplVar ) {
 
-        if( substr( $tplVar, 0, 1 ) == '_' &&
-                $tplVar != self::CONTROLLER_EXCEPTION ) {
-
+        if( $tplVar[ 0 ] == '_' && $tplVar[ 1 ] != '_' ) {
             throw ViewException::unnecessaryTest();
         }
 
@@ -1068,7 +1066,7 @@ class Standard extends Object implements View {
      *
      * @see
      *  Next\Controller\Router\Router::getController()
-     *  Next\Controller\Router\Router::getAction()
+     *  Next\Controller\Router\Router::getMethod()
      */
     private function findFileBySpec() {
 
@@ -1078,7 +1076,7 @@ class Standard extends Object implements View {
 
         $controller     = $this -> _application -> getRouter() -> getController();
 
-        $action         = $this -> _application -> getRouter() -> getAction();
+        $action         = $this -> _application -> getRouter() -> getMethod();
 
         /**
          * @internal

@@ -51,9 +51,9 @@ abstract class AbstractRenderer extends Object implements Renderer {
         if( strpos( $string, '.' ) !== FALSE ) {
 
             $string = implode(
-                        sprintf( '%1$s.%1$s', $this -> quoteIdentifier ),
-                        explode( '.', $string )
-                      );
+                sprintf( '%1$s.%1$s', $this -> quoteIdentifier ),
+                explode( '.', $string )
+            );
         }
 
         return File::quote( $string, $this -> quoteIdentifier );

@@ -46,7 +46,13 @@ class Standard extends AbstractRouter {
 
         $request = $application -> getRequest();
 
-        $URI     = $request -> getRequestUri();
+        $URI = $request -> getURL( FALSE );
+
+        // Removing trailing slash if on slash (/) route
+
+        if( $request -> getRequestURI() == '/' ) {
+            $URI = rtrim( $URI, '/' );
+        }
 
         // Including PHP file
 
@@ -72,7 +78,7 @@ class Standard extends AbstractRouter {
                      * - Have its route RegExp match the Request URI of current Request
                      */
                     return ( $route['application']   == $application -> getClass() -> getName() &&
-                           ( $route['requestMethod'] ==     $request -> getRequestmethod()      &&
+                           ( $route['requestMethod'] ==          $request -> getRequestMethod() &&
                              preg_match( sprintf( '@^%s$@i', $route['URI'] ), $URI ) != 0 ) );
                 }
             );
@@ -96,9 +102,9 @@ class Standard extends AbstractRouter {
              * Setting Up Found Controller and its action to be used in View,
              * as part of findFilebySpec() method
              */
-            $this -> controller =& $data -> class;
+            $this -> controller =& $data -> controller;
 
-            $this -> action     =& $data -> method;
+            $this -> method     =& $data -> method;
 
             // Analyzing Params
 

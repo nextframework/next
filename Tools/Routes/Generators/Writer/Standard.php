@@ -56,7 +56,7 @@ class Standard extends AbstractWriter {
 
             foreach( $controllersData as $controller => $actionsData ) {
 
-                foreach( $actionsData as $action => $data ) {
+                foreach( $actionsData as $method => $data ) {
 
                     foreach( $data as $d ) {
 
@@ -64,8 +64,8 @@ class Standard extends AbstractWriter {
 
                             'requestMethod'    => $d['requestMethod'],
                             'application'      => $application,
-                            'class'            => $controller,
-                            'method'           => $action,
+                            'controller'       => $controller,
+                            'method'           => $method,
                             'URI'              => $d['route'],
                             'requiredParams'   => serialize( $d['params']['required'] ),
                             'optionalParams'   => serialize( $d['params']['optional'] )
@@ -113,7 +113,7 @@ class Standard extends AbstractWriter {
 
             throw OutputWriterException::recordingFailure(
 
-                array( $d['route'], $controller, $action, $e -> getMessage() )
+                array( $d['route'], $controller, $method, $e -> getMessage() )
             );
 
         } catch( AdapterException $e ) {
@@ -122,7 +122,7 @@ class Standard extends AbstractWriter {
 
             throw OutputWriterException::recordingFailure(
 
-                array( $d['route'], $controller, $action, $e -> getMessage() )
+                array( $d['route'], $controller, $method, $e -> getMessage() )
             );
         }
 

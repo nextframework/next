@@ -7,6 +7,7 @@ use Next\Controller\ControllerException;    # Controller Exception
 use Next\View\ViewException;                # View Exception Class
 use Next\Application\Application;           # Application Interface
 use Next\Components\Debug\Handlers;         # Exceptions Handlers
+use Next\HTTP\Response;                     # HTTP Response Class
 
 /**
  * Standard Controller Dispatcher Class
@@ -49,9 +50,9 @@ class Standard extends AbstractDispatcher {
 
             // Calling Action from Controller at defined Application
 
-            $reflector = new \ReflectionMethod( $data -> class, $data -> method );
+            $reflector = new \ReflectionMethod( $data -> controller, $data -> method );
 
-            $reflector -> invoke( new $data -> class( $application ) );
+            $reflector -> invoke( new $data -> controller( $application ) );
 
             return $response;
 
@@ -77,6 +78,10 @@ class Standard extends AbstractDispatcher {
              * be available with Exception Message just like if it was assigned
              * from Controller context
              *
+             * If the caught Exception is not a severe error, like a query
+             * returning no results, instead of the __EXCEPTION__, a template variable
+             * named __INFO__ will be created
+             *
              * If the assignment or rendering fails (unlikely), the Production Handler
              * will be used as fallback
              */
@@ -100,11 +105,12 @@ class Standard extends AbstractDispatcher {
             /**
              * @internal
              * Catching ViewException grants a nice view for any sort of
-             * errors triggered by Next\View Class, specially when they come from Magic Methods
-             * which is directly related to Template Variables usage.
+             * errors triggered by Next\View\View concrete classes, specially
+             * when they come from Magic Methods which is directly related
+             * to Template Variables usage.
              *
-             * And by forcing a Development Handler we warn lazy
-             * programmers they are doing the wrong thing, like trying to hide the error ^^
+             * And by forcing a Development Handler we warn lazy programmers
+             * they are doing the wrong thing, like trying to hide the error ^_^
              */
             if( ob_get_length() ) {
 
@@ -134,7 +140,29 @@ class Standard extends AbstractDispatcher {
 
         try {
 
-            $application -> getView() -> assign( '__EXCEPTION__', $e -> getMessage() );
+            /**
+             * @internal
+             *
+             * List of non-error HTTP Codes
+             *
+             * @var $codes array
+             */
+            $codes = array(
+
+                Response::OK, Response::CREATED, Response::ACCEPTED,
+                Response::NO_CONTENT, Response::PARTIAL_CONTENT, Response::NOT_MODIFIED
+            );
+
+            $view = $application -> getView();
+
+            if( in_array( $e -> getResponseCode(), $codes ) ) {
+
+                $view -> assign( '__INFO__', $e -> getMessage() );
+
+            } else {
+
+                $view -> assign( '__EXCEPTION__', $e -> getMessage() );
+            }
 
             $callback = $e -> getCallback();
 
@@ -144,12 +172,18 @@ class Standard extends AbstractDispatcher {
 
             switch( count( $callback ) ) {
 
+                case 0:
+                    // No callback, do nothing
+                break;
                 case 1:  call_user_func( $callback[ 0 ] ); break;
                 case 2:  call_user_func( $callback[ 0 ], $callback[ 1 ] ); break;
                 default:
 
                     if( ! is_callable( $callback[ 0 ] ) ) {
-                        Handlers::development( new Exception( 'Exception callbacks must be callable' ) );
+
+                        Handlers::development(
+                            new Exception( 'Exception callbacks must be callable' )
+                        );
                     }
 
                     call_user_func_array( $callback[ 0 ], array_slice( $callback, 1 ) );
@@ -168,8 +202,31 @@ class Standard extends AbstractDispatcher {
              * specific action of dispatched Application be virtually redirected
              * to the previous action page without need to repeat all the code
              * related to this page
+             *
+             * Note that this won't do any magic and handle a ControllerException
+             * thrown in a method that's being accessed through a previously handled
+             * ControllerException (callback).
+             *
+             * This WILL end up being a infinite recursion
              */
             return $this -> handleExceptionCallback( $application, $e );
+
+        } catch( ViewException $e ) {
+
+            /**
+             * @internal
+             * Same rules for when a ViewException is triggered during the
+             * dispatching process, except here a ViewException is thrown
+             * while handling any ControllerException thrown
+             */
+            if( ob_get_length() ) {
+
+                // We want ONLY the Exception Template
+
+                ob_end_clean();
+            }
+
+            Handlers::development( $e );
         }
     }
 }

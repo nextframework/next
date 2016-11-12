@@ -39,6 +39,6 @@ class Expression extends Object {
      *  SQL Expression
      */
     public function getExpression() {
-        return $this -> expression;
+        return sprintf( '( %s )', $this -> expression );
     }
 }

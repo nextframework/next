@@ -7,8 +7,24 @@ use Next\DB\Query\Query;        # Query Interface
 use Next\Components\Object;     # Object Class
 use Next\Components\Invoker;    # Invoker Class
 
-use Next\DB\Table\Manager;      # Table Manager Class
+use Next\DB\Table\Manager;      # Entities Manager Class
 
+/**
+ * Entity Repository Base Class
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2016 Next Studios
+ *
+ * @package      Next
+ * @subpackage   DB\Entity
+ *
+ * @uses         Next\DB\Query\Query,
+ *               Next\Components\Object,
+ *               Next\Components\Invoker,
+ *               Next\DB\Table\Manager
+ *               Next\DB\Entity\EntityException
+ */
 class Repository extends Object {
 
     /**
@@ -29,30 +45,38 @@ class Repository extends Object {
     /**
      * Entity Repository Constructor
      *
-     * @param Next\DB\Table\Manager $manager
-     *  Table Manager
+     * <p>
+     *     If an Entity Manager Object is provided, the Entity Repository will
+     *     be configured.
+     * </p>
+     *
+     * @param Next\DB\Table\Manager|optional $manager
+     *  Entity Manager
      */
-    public function __construct( Manager $manager ) {
+    public function __construct( Manager $manager = NULL ) {
 
-        $this -> manager = $manager;
+        if( ! is_null( $manager ) ) {
 
-        /**
-         * @internal
-         * Invoking the parent constructor must occur after set the property above
-         * in order to trigger Object::init() from child classes which may change
-         * the Table Object used by Manager
-         */
-        parent::__construct();
+            $this -> manager = $manager;
 
-        // And this integrity checking ensures a Table Object was set
+            /**
+             * @internal
+             * Invoking the parent constructor must occur after set the property above
+             * in order to trigger Object::init() from child classes which may change
+             * the Table Object used by Manager
+             */
+            parent::__construct();
 
-        $this -> checkIntegrity();
+            // And this integrity checking ensures a Table Object was set
 
-        $this -> table   = $this -> manager -> getTable() -> getTable();
+            $this -> checkIntegrity();
 
-        // Extend Object Context to Entity Manager
+            $this -> table = $this -> manager -> getTable() -> getTableName();
 
-        $this -> extend( new Invoker( $this, $this -> manager ) );
+            // Extend Object Context to Entity Manager
+
+            $this -> extend( new Invoker( $this, $this -> manager ) );
+        }
     }
 
     /**
@@ -64,9 +88,16 @@ class Repository extends Object {
      * @return Next\DB\Table\RowSet
      *  RowSet Object with Entity data, if any
      *
+     * @throws Next\DB\Entity\EntityException
+     *  Throw if trying to use resources from Entity Manager without having one
+     *
      * @see Next\DB\Statement\Statement::fetch()
      */
     public function find( array $id ) {
+
+        if( is_null( $this -> manager ) ) {
+            throw EntityException::noEntityManager();
+        }
 
         $this -> manager -> select()
                          -> from( array( $this -> table ) )
@@ -84,9 +115,16 @@ class Repository extends Object {
      * @return Next\DB\Table\RowSet
      *  RowSet Object with fetched data, if any
      *
+     * @throws Next\DB\Entity\EntityException
+     *  Throw if trying to use resources from Entity Manager without having one
+     *
      * @see Next\DB\Statement\Statement::fetchAll()
      */
     public function findAll( $columns = Query::WILDCARD ) {
+
+        if( is_null( $this -> manager ) ) {
+            throw EntityException::noEntityManager();
+        }
 
         $this -> manager -> select( $columns ) -> from( $this -> table );
 
@@ -109,9 +147,16 @@ class Repository extends Object {
      * @return Next\DB\Table\RowSet
      *  RowSet Object with fetched data, if any
      *
+     * @throws Next\DB\Entity\EntityException
+     *  Throw if trying to use resources from Entity Manager without having one
+     *
      * @see Next\DB\Statement\Statement::fetchAll()
      */
     public function findBy( array $criteria, $order = NULL, $limit = NULL ) {
+
+        if( is_null( $this -> manager ) ) {
+            throw EntityException::noEntityManager();
+        }
 
         $this -> manager -> select() -> from( $this -> table );
 
@@ -151,6 +196,9 @@ class Repository extends Object {
      * @return Next\DB\Table\RowSet
      *  RowSet Object with fetched data, if any
      *
+     * @throws Next\DB\Entity\EntityException
+     *  Throw if trying to use resources from Entity Manager without having one
+     *
      * @see Next\DB\Entity\Repository::findBy()
      */
     public function findOneBy( array $criteria, $order = NULL ) {
@@ -160,14 +208,33 @@ class Repository extends Object {
     // Accessors
 
     /**
-     * Get Entity Table associated with the Entity Manager
+     * Get Entity Manager used with the Entity Repository
+     *
+     * @return Next\DB\Table\Manager
+     *  Table Manager
+     */
+    public function getManager() {
+        return $this -> manager;
+    }
+
+    /**
+     * Get Entity Table associated to the Entity Manager used
+     * with Entity Repository
      *
      * @return Next\DB\Table\Table
      *  Entity Table
      *
+     * @throws Next\DB\Entity\EntityException
+     *  Throw if trying to use resources from Entity Manager without having one
+     *
      * @see Next\DB\Table\Manager::getTable()
      */
     public function getTable() {
+
+        if( is_null( $this -> manager ) ) {
+            throw EntityException::noEntityManager();
+        }
+
         return $this -> manager -> getTable();
     }
 
@@ -184,7 +251,7 @@ class Repository extends Object {
     private function checkIntegrity() {
 
         if( is_null( $this -> manager -> getTable() ) ) {
-            throw EntityException::noTableObject();
+            throw EntityException::noEntity();
         }
     }
 }

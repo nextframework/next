@@ -26,7 +26,7 @@ class Manager {
      *
      * @staticvar string $ID
      */
-    private static $ID;
+    private static $ID = 'PHPSESSID';
 
     /**
      * Session Name
@@ -72,6 +72,13 @@ class Manager {
     /**
      * Session Object Starter
      *
+     * @param string|optional $name
+     *  Optional Session Name
+     *
+     * @param string|optional $id
+     *  Optional Session ID.
+     *  Mostly used by custom Session Handlers
+     *
      * @return Session
      *  Session Instance
      *
@@ -79,7 +86,7 @@ class Manager {
      *  Session has been already initialized, through a manually
      *  called session_start()
      */
-    public static function start() {
+    public static function start( $name = NULL, $ID = NULL ) {
 
         if( NULL === self::$instance ) {
 
@@ -116,7 +123,7 @@ class Manager {
 
             // Effectivelly Initializes the Session
 
-            self::$instance -> init();
+            self::$instance -> init( $name, $ID );
         }
 
         return self::$instance;
@@ -135,14 +142,15 @@ class Manager {
      * @throws Next\Session\SessionException
      *  session_start() failed, returning FALSE
      */
-    public function init( $name = NULL, $id = NULL ) {
+    public function init( $name = NULL, $ID = NULL ) {
 
-        // Do we have a custom Session Name?
+        // Setting Up Session Name
 
-        if( ! is_null( $name ) ) {
+        self::setSessionName( empty( $name ) ? self::$name : $name );
 
-            self::setSessionName( $name );
-        }
+        // Setting up Session ID
+
+        self::setSessionID( empty( $ID ) ? self::$ID : $ID );
 
         // Initializing the Session
 
@@ -151,13 +159,6 @@ class Manager {
         if( ! $test ) {
 
             throw SessionException::initializationFailure();
-        }
-
-        // Do we have another Session ID to use?
-
-        if( ! is_null( $id ) ) {
-
-            self::setSessionID( $id );
         }
     }
 
@@ -198,9 +199,9 @@ class Manager {
 
         $this -> savePath = NULL;
 
-        // Destroying Session
+        // Removes Session Data (again >.<)
 
-        session_destroy();
+        session_unset();
     }
 
     /**

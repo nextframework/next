@@ -117,7 +117,6 @@ class Builder extends Object {
         parent::__construct();
 
         $this -> renderer = $renderer;
-        //$this -> manager  = $manager;
     }
 
     // CRUD-related methods
@@ -249,37 +248,6 @@ class Builder extends Object {
         );
 
         /**
-         * @internal
-         *
-         * Adding Primary Key Column to the list
-         *
-         * If we have a Next\DB\Table\Table defined and its Primary Key Column
-         * has been filled defined, we'll search for its value in the column
-         * list built so far
-         *
-         * We'll also search for a possible table alias name, usually
-         * x.column, being 'x' the first letter of the model
-         *
-         * If none of these nor the Query Renderer Wildcard can be found,
-         * we'll prepend a full column name to the list, using the same
-         * rule used for searching
-         */
-        $table = $this -> _manager -> getTable();
-
-        if( $table !== NULL ) {
-
-            $primary = $table -> getPrimaryKey();
-
-            $fullColumnName = sprintf(
-                '%s.%s', substr( $table -> getTable(), 0, 1 ), $primary
-            );
-
-            if( array_search( Query::WILDCARD, $columns ) === FALSE ) {
-                array_unshift( $columns, $fullColumnName );
-            }
-        }
-
-        /**
          * Usage:
          *
          * <code>
@@ -313,7 +281,7 @@ class Builder extends Object {
      */
     public function from( $tables = array() ) {
 
-        $tablename = $this -> _manager -> getTable() -> getTable();
+        $tablename = $this -> _manager -> getTable() -> getTableName();
 
         /**
          * @internal
@@ -665,5 +633,15 @@ class Builder extends Object {
         $this -> limit = array();
 
         return $this;
+    }
+
+    /**
+     * Get Entity Manager
+     *
+     * @return Next\DB\Table\Manager
+     *  Entity Manager
+     */
+    public function getManager() {
+        return $this -> _manager;
     }
 }

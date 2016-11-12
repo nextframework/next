@@ -12,7 +12,7 @@ use Next\Components\Utils\ArrayUtils;
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class RowSet extends AbstractDataGateway implements \Iterator {
+class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
 
     /**
      * Iterator Offset
@@ -33,7 +33,22 @@ class RowSet extends AbstractDataGateway implements \Iterator {
 
         $count = 0;
 
-        foreach( $this -> source as $records ) $count += $records -> update() -> rowCount();
+        foreach( $this -> source as $records ) {
+
+            // Adding updated model as Table Manager Source
+
+            $this -> manager -> setTable( $records );
+
+            // Adding WHERE Clause based on PRIMARY KEY
+
+            $primary = $records -> getPrimaryKey();
+
+            $this -> manager -> where(
+                sprintf( '%1$s = :%1$s', $primary ), array( $primary => $records -> {$primary} )
+            );
+
+            $count += $this -> manager -> update() -> rowCount();
+        }
 
         return $count;
     }
@@ -48,7 +63,18 @@ class RowSet extends AbstractDataGateway implements \Iterator {
 
         $count = 0;
 
-        foreach( $this -> source as $records ) $count += $records -> delete() -> rowCount();
+        foreach( $this -> source as $records ) {
+
+            // Adding WHERE Clause based on PRIMARY KEY
+
+            $primary = $records -> getPrimaryKey();
+
+            $this -> manager -> where(
+                sprintf( '%1$s = :%1$s', $primary ), array( $primary => $records -> {$primary} )
+            );
+
+            $count += $this -> manager -> delete() -> rowCount();
+        }
 
         return $count;
     }
@@ -69,23 +95,22 @@ class RowSet extends AbstractDataGateway implements \Iterator {
 
             $table = $this -> manager -> getTable() -> getClass() -> newInstance();
 
-            foreach( $data as $column => $value ) $table -> {$column} = $value;
+            /**
+             * @internal
+             *
+             * Adding PRIMARY KEY value
+             *
+             * The value used will be the first value among all fetched data
+             * because, usually, the PRIMARY KEY is listed first
+             */
+            $table -> setPrimaryKey(
+                current( array_slice( (array) $data, 0, 1, TRUE ) )
+            );
+
+            foreach( (array) $data as $column => $value ) $table -> {$column} = $value;
 
             $this -> source[] = $table;
         }
-    }
-
-    /**
-     * Get a copy of Data Source as array
-     *
-     * @return array
-     *  Data Source as array
-     */
-    public function getArrayCopy() {
-
-        $source = ( count( $this -> source ) == 1 ? $this -> source[ 0 ] : $this -> source );
-
-        return ArrayUtils::map( $source );
     }
 
     // Iterator Interface Methods Implementation
@@ -132,6 +157,63 @@ class RowSet extends AbstractDataGateway implements \Iterator {
      */
     public function valid() {
         return array_key_exists( $this -> offset, $this -> source );
+    }
+
+    // ArrayAccess Interface Methods Implementation
+
+    /**
+     * Checks whether or not an offset exists within the RowSet Data Source
+     *
+     * @param  mixed|string|integer $offset
+     *  Offset to search
+     *
+     * @return boolean
+     *  TRUE if given offset exists and FALSE otherwise
+     */
+    public function offsetExists( $offset ) {
+        return ( $this -> source[ $offset ] !== FALSE );
+    }
+
+    /**
+     * Returns the value stored at given offset in the RowSet Data Source
+     *
+     * @param  mixed|string|integer $offset
+     *  Offset to retrieve data from
+     *
+     * @return mixed|boolean
+     *  Data stored at given offset if it exists and FALSE otherwise
+     */
+    public function offsetGet( $offset ) {
+        return $this -> source[ $offset ];
+    }
+
+    /**
+     * Assign a value to the specified offset in the RowSet Data Source
+     *
+     * @param  mixed|string|integer $offset
+     *  Offset where new data will be stored
+     *
+     * @param mixed $data
+     *  Data to add
+     *
+     * @throws Next\DB\Table\TableException
+     *  Always thrown as RowSet Data must not be added manually
+     */
+    public function offsetSet( $offset, $data ) {
+        throw TableException::accessViolation();
+    }
+
+    /**
+     * Removes an Object from RowSet Data Source at given offset
+     *
+     * @param  mixed|string|integer $offset
+     *  Offset to unset
+     *
+     * @throws Next\DB\Table\TableException
+     *  Always thrown as RowSet Data must not be added manually
+     */
+    public function offsetUnset( $offset ) {
+        throw TableException::accessViolation();
     }
 
     /**

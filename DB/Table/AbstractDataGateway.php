@@ -55,6 +55,16 @@ abstract class AbstractDataGateway extends Object implements DataGateway {
         parent::__construct();
     }
 
+    /**
+     * Get a copy of Data Source as array
+     *
+     * @return array
+     *  Data Source as array
+     */
+    public function getArrayCopy() {
+        return ArrayUtils::map( $this -> source );
+    }
+
     // Countable Interface Method Implementation
 
     /**
@@ -74,10 +84,10 @@ abstract class AbstractDataGateway extends Object implements DataGateway {
      *
      * @param mixed|array $source
      *  Source Data
+     *
+     * @abstract
      */
-    protected function setSource( $source ) {
-        $this -> source = $source;
-    }
+    abstract protected function setSource( $source );
 
     // Accessors
 

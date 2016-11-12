@@ -13,12 +13,25 @@ namespace Next\DB\Table;
 interface Table extends \ArrayAccess {
 
     /**
-     * Get Table Name
+     * Get Entity Name
      */
-    public function getTable();
+    public function getTableName();
 
     /**
-     * List Table Fields
+     * Get Primary Key COLUMN
+     */
+    public function getPrimaryKey();
+
+    /**
+     * Set PRIMARY KEY value
+     *
+     * @param integer|mixed $pk
+     *  PRIMARY KEY value
+     */
+    public function setPrimaryKey( $pk );
+
+    /**
+     * List Entity Fields
      */
     public function getFields();
 }

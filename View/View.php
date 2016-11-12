@@ -74,13 +74,6 @@ interface View {
     const SUBPATH                        = ':subpath';
 
     /**
-     * Controller Exception Keyword
-     *
-     * @var string
-     */
-    const CONTROLLER_EXCEPTION           = '__EXCEPTION__';
-
-    /**
      * Reset View to its defaults
      *
      * User defined Template Variables are removed leaving only the
