@@ -27,8 +27,13 @@ abstract class AbstractStatement extends Object implements Statement {
      *
      * @param Next\DB\Driver\Driver $driver
      *  Connection Driver
+     *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for each Statement Adapter
      */
-    public function __construct( Driver $driver ) {
+    public function __construct( Driver $driver, $options = NULL ) {
+
+        parent::__construct( $options );
 
         $this -> driver =& $driver;
     }

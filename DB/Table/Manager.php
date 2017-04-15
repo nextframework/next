@@ -69,10 +69,13 @@ class Manager extends Object {
      * @param Next\DB\Table\Table|optional $table
      *  An optional Table Object. Required for most of CRUD operations,
      *  optional for Entity Managers (assuming they inject their own)
+     *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for the Table Manager
      */
-    public function __construct( Driver $driver, Table $table = NULL ) {
+    public function __construct( Driver $driver, Table $table = NULL, $options = NULL ) {
 
-        parent::__construct();
+        parent::__construct( $options );
 
         // Setting Up resources
 
@@ -161,7 +164,7 @@ class Manager extends Object {
      */
     public function fetch( $fetchStyle = NULL ) {
 
-        $data = $this -> execute() -> fetch( $fetchStyle );
+        $data = $this -> execute() -> fetch( $fetchStyle, array_slice( func_get_args(), 1 ) );
 
         $rowset = new RowSet( $this, ( $data !== FALSE ? array( $data ) : array() ) );
 
@@ -173,17 +176,18 @@ class Manager extends Object {
     /**
      * Return an array containing all of the result set rows
      *
-     * @param string|integer|optional $fetchStyle
+     * @param string|integer|optional $style
      *  The Fetch Mode, accordingly to chosen Driver
+     *  Not directly used (documentation only)
      *
      * @return Next\DB\Table\RowSet
      *  RowSet Object with fetched data, if any
      *
      * @see Next\DB\Statement\Statement::fetchAll()
      */
-    public function fetchAll( $fetchStyle = NULL ) {
+    public function fetchAll( $style = NULL ) {
 
-        $data = $this -> execute() -> fetchAll( $fetchStyle );
+        $data = $this -> execute() -> fetchAll( func_get_args() );
 
         $rowset = new RowSet( $this, ( $data !== FALSE ? $data : array() ) );
 

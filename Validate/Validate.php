@@ -13,10 +13,7 @@ namespace Next\Validate;
 interface Validate {
 
     /**
-     * Validates given Character Set
-     *
-     * @param array|string $data
-     *  Data to Validate
+     * Validates given data
      */
-    public function validate( $data );
+    public function validate();
 }

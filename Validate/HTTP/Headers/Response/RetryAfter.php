@@ -44,9 +44,6 @@ class RetryAfter extends Object implements Headers {
      *                    | "Sep" | "Oct" | "Nov" | "Dec"
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -54,7 +51,9 @@ class RetryAfter extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.37
      *  RFC 2616 Section 14.37
      */
-    public function validate( $data ) {
+    public function validate() {
+
+        $data = $this -> options -> value;
 
         // Trying to validate as HTTP-date
 

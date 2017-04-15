@@ -31,9 +31,6 @@ class Expect extends Object implements Headers {
      *        expect-params =  ";" token [ "=" ( token | quoted-string ) ]
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -41,9 +38,9 @@ class Expect extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.20
      *  RFC 2616 Section 14.20
      */
-    public function validate( $data ) {
+    public function validate() {
 
-        // Insufficient information
+        // Insufficient informations
 
         return TRUE;
     }

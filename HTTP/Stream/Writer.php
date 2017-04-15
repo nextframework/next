@@ -28,8 +28,13 @@ class Writer extends Object implements Writer\Writer {
      *
      * @param Next\HTTP\Stream\Adapter\Adapter $adapter
      *  Stream Adapter where data will be written
+     *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for the HTTP Stream Writer
      */
-    public function __construct( Adapter $adapter ) {
+    public function __construct( Adapter $adapter, $options = NULL ) {
+
+        parent::__construct( $options );
 
         $adapter -> open();
 

@@ -55,9 +55,6 @@ class Warning extends Object implements Headers {
      *                    | "Sep" | "Oct" | "Nov" | "Dec"
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -65,7 +62,9 @@ class Warning extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.46
      *  RFC 2616 Section 14.46
      */
-    public function validate( $data ) {
+    public function validate() {
+
+        $data = this -> options -> value;
 
         preg_match(
 

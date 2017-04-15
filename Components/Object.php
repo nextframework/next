@@ -17,25 +17,39 @@ use Next\Components\Interfaces\Parameterizable;     # Informational Interface
 class Object extends Prototype implements Contextualizable, Informational, Parameterizable {
 
     /**
+     * Default Options. Must be overwritten
+     *
+     * @var array $defaultOptions
+     */
+    protected $defaultOptions = array();
+
+    /**
+     * Success Message
+     *
+     * @var mixed|string $_success
+     */
+    protected $_success;
+
+    /**
+     * Error Message
+     *
+     * @var mixed|string $_error
+     */
+    protected $_error;
+
+    /**
+     * Informational Message
+     *
+     * @var mixed|string $_info
+     */
+    protected $_info;
+
+    /**
      * Context Object
      *
      * @var Next\Components\Context $context
      */
     private $context;
-
-    /**
-     * Success Message
-     *
-     * @var string $successMessage
-     */
-    protected $successMessage;
-
-    /**
-     * Error Message
-     *
-     * @var string $errorMessage
-     */
-    protected $errorMessage;
 
     /**
      * Object Parameters
@@ -50,11 +64,11 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      * @param mixed|optional $defaultOptions
      *  Child class default options
      */
-    public function __construct( $defaultOptions = NULL, $options = NULL ) {
+    public function __construct( $options = NULL ) {
 
         $this -> context = new Context;
 
-        $this -> options = new Parameter( $defaultOptions, $this -> setOptions(), $options );
+        $this -> options = new Parameter( $this -> defaultOptions, $this -> setOptions(), $options );
 
         $this -> init();
     }
@@ -159,7 +173,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      *  Success Message
      */
     public function getSuccessMessage() {
-        return $this -> successMessage;
+        return $this -> _success;
     }
 
     /**
@@ -169,7 +183,17 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      *  Error Message
      */
     public function getErrorMessage() {
-        return $this -> errorMessage;
+        return $this -> _error;
+    }
+
+    /**
+     * Get informational message
+     *
+     * @return string
+     *  Informational Message
+     */
+    public function getInformationalMessage() {
+        return $this -> _info;
     }
 
     // Parameterizable Methods Interfaces
@@ -185,9 +209,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      * Set Class Options
      * It's not really implemented because not all child classes have something to be configured
      */
-    public function setOptions() {
-        return array();
-    }
+    public function setOptions( $options = array() ) {}
 
     // OverLoading
 

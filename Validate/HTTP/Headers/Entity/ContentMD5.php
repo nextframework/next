@@ -25,9 +25,6 @@ class ContentMD5 extends Object implements Headers {
      *        md5-digest   = <base64 of 128 bit MD5 digest as per RFC 1864>
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -35,9 +32,9 @@ class ContentMD5 extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.15
      *  RFC 2616 Section 14.15
      */
-    public function validate( $data ) {
+    public function validate() {
 
-        preg_match( '/^(?<hash>[a-zA-Z0-9\+\=\/]+)$/', $data, $match );
+        preg_match( '/^(?<hash>[a-zA-Z0-9\+\=\/]+)$/', $this -> options -> value, $match );
 
         return ( count( $match ) != 0 && strlen( base64_decode( $match['hash'] ) ) == 32 );
     }

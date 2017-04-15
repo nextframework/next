@@ -24,9 +24,6 @@ class Server extends Object implements Headers {
      *        Server = "Server" ":" 1*( product | comment )
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -34,10 +31,13 @@ class Server extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.38
      *  RFC 2616 Section 14.38
      */
-    public function validate( $data ) {
+    public function validate() {
 
-        // Impossible to validate due uncertain number of different servers around the world
-
+        /**
+         * @internal
+         * Impossible to validate due uncertain number of different
+         * servers around the world
+         */
         return TRUE;
     }
 }

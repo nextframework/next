@@ -2,14 +2,20 @@
 
 namespace Next\Application;
 
-use Next\Controller\ControllerException;         # Controller Chain Exception Class
 use Next\Controller\Router\RouterException;      # Router Exception Class
-use Next\View\View;                              # View Interface
+use Next\Controller\ControllerException;         # Controller Chain Exception Class
+use Next\Cache\CacheException;                   # Cache Exception Class
+
 use Next\Controller\Router\Router;               # Router Interface
+
 use Next\Components\Object;                      # Object Class
+
+use Next\HTTP\Request;                           # Request Class
+use Next\HTTP\Response;                          # Response Class
+
 use Next\Controller\Chain as ControllerChain;    # Controllers Chain Class
-use Next\Controller\Router\Standard;             # Standard Router Class
-use Next\HTTP\Request, Next\HTTP\Response;       # Next Request & Response Classes
+use Next\View\View;                              # View Interface
+use Next\Cache\Schema\Chain as CachingChain;    # Controllers Chain Class
 
 /**
  * Application Class
@@ -22,25 +28,11 @@ use Next\HTTP\Request, Next\HTTP\Response;       # Next Request & Response Class
 abstract class AbstractApplication extends Object implements Application {
 
     /**
-     * Controllers Chain
+     * Default Options
      *
-     * @var Next\Controller\Chain $controllers
+     * @var array $defaultOptions
      */
-    protected $controllers;
-
-    /**
-     * View Engine
-     *
-     * @var Next\View\View $view
-     */
-    protected $view;
-
-    /**
-     * Router
-     *
-     * @var Next\Controller\Router\Router $router
-     */
-    protected $router;
+    protected $defaultOptions = array();
 
     /**
      * Request Object
@@ -57,105 +49,91 @@ abstract class AbstractApplication extends Object implements Application {
     protected $response;
 
     /**
-     * Application Constructor
+     * Router
      *
-     * @param Next\Controller\Router\Router|optional $router
-     *
-     *  <p>URL Router Class designed to this specific Application.</p>
-     *
-     *  <p>
-     *      If NULL, the Standard Router (based in SQLITE Databases)
-     *      will be used instead.
-     *  </p>
-     *
-     * @param Next\HTTP\Request|optional $request
-     *
-     *  <p>Customized Request Object</p>
-     *
-     *  <p>
-     *      If NULL, an unmodified Request object will be used instead
-     *  </p>
-     *
-     * @param Next\HTTP\Response
-     *
-     *  <p>Customized Response Object</p>
-     *
-     *  <p>
-     *      If NULL, an unmodified Response object will be used instead
-     *  </p>
-     *
-     * @throws Next\Application\ApplicationException
-     *  Invalid Controller added to Controllers Chain
+     * @var Next\Controller\Router\Router $router
      */
-    public function __construct( Router $router = NULL, Request $request = NULL, Response $response = NULL ) {
+    protected $router;
+
+    /**
+     * Controllers Chain
+     *
+     * @var Next\Controller\Chain $controllers
+     */
+    protected $controllers;
+
+    /**
+     * View Engine
+     *
+     * @var Next\View\View $view
+     */
+    protected $view;
+
+    /**
+     * Caching Services Chain
+     *
+     * @var Next\Cache\Schema\Chain $cache
+     */
+    protected $cache;
+
+    /**
+     * Constructor Overwriting
+     * Sets up a type-hinted Application Object for all Caching Schema
+     *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for Caching Schema
+     */
+    public function __construct( $options = NULL ) {
 
         // Setting Up Application's Resources...
 
-            // Controllers Classes
-
-        $this -> controllers = new ControllerChain;
-
-        try {
-
-            $this -> setupControllers();
-
-        } catch( ControllerException $e ) {
-
-            throw new ApplicationException(
-
-                $e -> getMessage()
-            );
-        }
-
             // Request and Response Objects
 
-        $this -> request  = ( ! is_null( $request ) ? $request : new Request );
+        $this -> request  = new Request;
 
-        $this -> response = ( ! is_null( $response ) ? $response : new Response );
+        $this -> response = new Response;
 
             // Router
 
-        try {
-
-            $this -> router = ( ! is_null( $router ) ? $router : new Standard );
-
-        } catch( RouterException $e ) {
-
-            throw new ApplicationException( $e -> getMessage() );
-        }
-
-            // View Engine
-
-        $this -> setupView();
+        $this -> setupRouter();
 
             // Database Adapters
 
         $this -> setupDatabase();
 
-            // Localization / Internationalization
+            // View Engine
 
-        $this -> setupLocale();
+        $this -> setupView();
 
-        // Additional Initialization
+            // Controllers Classes
+
+        $this -> controllers = new ControllerChain;
+
+        $this -> setupControllers();
+
+            // Caching
+
+        $this -> cache = new CachingChain;
+
+        $this -> setupCache();
+
+            // Additional Initialization
 
         $this -> init();
 
         // Checking Application's Integrity
 
         $this -> checkIntegrity();
+
+        parent::__construct( $options );
     }
 
     /**
-     * Additional Initialization. Must be overwritten
-     */
-    protected function init() {}
-
-    /**
-     * View Engine Setup
+     * Router Setup
      *
-     * It's NOT abstract because not all the Applications requires a View Engine
+     * It's NOT abstract because not all Applications requires a Routing system
      */
-    protected function setupView() {}
+    protected function setupRouter() {}
 
     /**
      * Database(s) Setup
@@ -166,11 +144,18 @@ abstract class AbstractApplication extends Object implements Application {
     protected function setupDatabase() {}
 
     /**
-     * Localization/Internationalization Setup
+     * View Engine Setup
      *
-     * It's NOT abstract because not all the Applications requires Localization
+     * It's NOT abstract because not all the Applications requires a View Engine
      */
-    protected function setupLocale() {}
+    protected function setupView() {}
+
+    /**
+     * Caching Setup
+     *
+     * It's NOT abstract because not all the Applications requires a Caching System
+     */
+    protected function setupCache() {}
 
     // Interface Methods (also Accessors)
 
@@ -184,38 +169,6 @@ abstract class AbstractApplication extends Object implements Application {
      */
     public function getApplicationDirectory() {
         return $this -> getClass() -> getNamespaceName();
-    }
-
-    /**
-     * Get Controllers Chain
-     *
-     * Get all Controller Objects associated to Application
-     *
-     * @return Next\Controller\Chain
-     *  Controllers Collection Object
-     */
-    public function getControllers() {
-        return $this -> controllers;
-    }
-
-    /**
-     * Get View Engine
-     *
-     * @return Next\View\View
-     *  View Engine Object
-     */
-    public function getView() {
-        return $this -> view;
-    }
-
-    /**
-     * Get Router
-     *
-     * @return Next\Controller\Router\Router
-     *  Router Object
-     */
-    public function getRouter() {
-        return $this -> router;
     }
 
     /**
@@ -270,6 +223,48 @@ abstract class AbstractApplication extends Object implements Application {
         return $this -> response;
     }
 
+    /**
+     * Get Router
+     *
+     * @return Next\Controller\Router\Router
+     *  Router Object
+     */
+    public function getRouter() {
+        return $this -> router;
+    }
+
+    /**
+     * Get View Engine
+     *
+     * @return Next\View\View
+     *  View Engine Object
+     */
+    public function getView() {
+        return $this -> view;
+    }
+
+    /**
+     * Get Controllers Chain
+     *
+     * Get all Controller Objects associated to Application
+     *
+     * @return Next\Controller\Chain
+     *  Controllers Collection Object
+     */
+    public function getControllers() {
+        return $this -> controllers;
+    }
+
+    /**
+     * Get Caching Schema Chain
+     *
+     * @return Next\Cache\Schema\Chain
+     *  Caching Schema Collection Chain Object
+     */
+    public function getCache() {
+        return $this -> cache;
+    }
+
     // Abstract Methods Definition
 
     /**
@@ -285,18 +280,17 @@ abstract class AbstractApplication extends Object implements Application {
      * Check Application Integrity
      *
      * @throws Next\Application\ApplicationException
-     *  Application has no View Engine assigned
+     *  Application has an invalid Router assigned
      *
      * @throws Next\Application\ApplicationException
-     *  Assigned View Engine is invalid over interface implementing check
+     *  Assigned has an invalid View Engine assigned
      */
     private function checkIntegrity() {
 
-        // Checking if we have some View Engine Registered
+        // Checking if assigned Router is valid
 
-        if( is_null( $this -> view ) ) {
-
-            throw ApplicationException::noViewEngine( $this );
+        if( ! $this -> router instanceof Router ) {
+            throw ApplicationException::invalidRouter();
         }
 
         // Checking if assigned View Engine is Valid

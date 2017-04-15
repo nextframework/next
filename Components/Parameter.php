@@ -12,7 +12,7 @@ use Next\Components\Debug\Exception;      # Exception Class
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class Parameter implements \Countable {
+class Parameter implements \Countable, \ArrayAccess {
 
     /**
      * Object Parameters
@@ -103,7 +103,7 @@ class Parameter implements \Countable {
 
                 if( is_int( $property ) ) {
 
-                    throw new \Next\Components\Debug\Exception(
+                    throw new Exception(
 
                         'All options must be an associative array'
                     );
@@ -116,7 +116,7 @@ class Parameter implements \Countable {
         }
     }
 
-    // Interface Methods Implementation
+    // Countable Interface Method Implementation
 
     /**
      * Count Parameters Options
@@ -130,31 +130,145 @@ class Parameter implements \Countable {
         return count( get_object_vars( $this ), TRUE );
     }
 
-    // Overloading
+    // ArrayAccess Interface Methods Implementation
 
     /**
-     * Grant access to Parameter properties
+     * Adds a new value to Parameter Object
      *
-     * @param  string $property
-     *  Parameter property
+     * @param string $identifier
+     *  String identifier for the value
+     *
+     * @param mixed $value
+     *  Parameter value
+     *
+     * @throws Next\Components\Debug\Exception
+     *  Thrown if trying to add a value without an identifier for it, differently of
+     *  most implementations of ArrayAccess::offsetSet():
+     */
+    public function offsetSet( $identifier, $value ) {
+
+        if( is_null( $identifier ) ) {
+
+            throw new Exception(
+                'Parameter Objects require a string to serve as identifier for the value being added'
+            );
+        }
+
+        $this -> parameters -> {$identifier} = $value;
+    }
+
+    /**
+     * Checks if a Parameter Identifier exists
+     *
+     * @param string $identifier
+     *  Parameter Identifier
+     *
+     * @return boolean
+     *  TRUE if Parameter Identifier exists and FALSE otherwise
+     */
+    public function offsetExists( $identifier ) {
+        return isset( $this -> parameters -> {$identifier} );
+    }
+
+    /**
+     * Removes a Parameter Identifier
+     *
+     * @param string $identifier
+     *  Parameter Identifier
+     *
+     * @throws Next\Components\Debug\Exception
+     *  thrown if trying to remove a Identifier that doesn't exist
+     */
+    public function offsetUnset($identifier) {
+
+        if( ! isset( $this -> parameters -> {$identifier} ) ) {
+
+            throw new Exception(
+
+                sprintf(
+                    'Identifier <strong>%s</strong> doesn\'t exist and thus cannot be removed', $identifier
+                )
+            );
+        }
+
+        unset( $this -> parameters -> {$identifier} );
+    }
+
+    /**
+     * Grants access to Parameter Identifiers
+     *
+     * @param string $identifier
+     *  Parameter Identifier
      *
      * @return mixed
      *  Parameter value
      */
-    public function __get( $property ) {
-        return $this -> parameters -> {$property};
+    public function offsetGet( $identifier ) {
+        return ( isset( $this -> parameters -> {$identifier} ) ? $this -> parameters -> {$identifier} : NULL );
+    }
+
+    // Overloading
+
+    /**
+     * Checks if a Parameter Identifier exists
+     *
+     * @param string $identifier
+     *  Parameter Identifier
+     *
+     * @return boolean
+     *  TRUE if Parameter Identifier exists and FALSE otherwise
+     */
+    public function __isset( $identifier ) {
+        return ( isset( $this -> parameters -> {$identifier} ) );
     }
 
     /**
-     * Check if a Parameter property exist
+     * Removes a Parameter Identifier
      *
-     * @param  string  $property
-     *  Parameter property
+     * @param string $identifier
+     *  Parameter Identifier
      *
-     * @return boolean
-     *  TRUE if Parameter property exist and FALSE otherwise
+     * @throws Next\Components\Debug\Exception
+     *  thrown if trying to remove a Identifier that doesn't exist
      */
-    public function __isset( $property ) {
-        return ( isset( $this -> parameters -> {$property} ) );
+    public function __unset( $identifier ) {
+
+        if( ! isset( $this -> parameters -> {$identifier} ) ) {
+
+            throw new Exception(
+
+                sprintf(
+                    'Identifier <strong>%s</strong> doesn\'t exist and thus cannot be removed', $identifier
+                )
+            );
+        }
+
+        unset( $this -> parameters -> {$identifier} );
+    }
+
+    /**
+     * Adds a new value to Parameter Object
+     *
+     * @param string $identifier
+     *  String identifier for the value
+     *
+     * @param mixed $value
+     *  Parameter value
+     */
+    public function __set( $identifier, $value ) {
+        $this -> parameters -> {$identifier} = $value;
+    }
+
+    /**
+     * Grants access to Parameter Identifiers
+     *
+     * @param string $identifier
+     *  Parameter Identifier
+     *
+     * @return mixed
+     *  Parameter value
+     */
+    public function __get( $identifier ) {
+        return ( isset( $this -> parameters -> {$identifier} ) ? $this -> parameters -> {$identifier} : NULL );
     }
 }

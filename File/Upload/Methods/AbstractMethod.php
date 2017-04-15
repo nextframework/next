@@ -54,15 +54,18 @@ abstract class AbstractMethod extends Object implements Method {
      *
      * @param Next\File\Upload\Handler $handler
      *   Upload Handler
+     *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for each Upload Method
      */
-    public function __construct( UploadHandler $handler ) {
+    public function __construct( UploadHandler $handler, $options = NULL ) {
 
         $this -> handler           = $handler;
 
         $this -> validators        = new ValidatorsChain;
         $this -> postProcessors    = new PostProcessorChain;
 
-        parent::__construct();
+        parent::__construct( $options );
     }
 
     // Method Interface Methods Implementations

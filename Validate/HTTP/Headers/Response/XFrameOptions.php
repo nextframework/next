@@ -28,9 +28,6 @@ class XFrameOptions extends Object implements Headers {
      *        X-Frame-Options = "X-Frame-Options" ":" ( deny | sameorigin )
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -43,7 +40,9 @@ class XFrameOptions extends Object implements Headers {
      * @link
      *  http://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Common_non-standard_response_headers
      */
-    public function validate( $data ) {
-        return ( strcasecmp( $data, 'deny' ) == 0 || strcasecmp( $data, 'sameorigin' ) == 0 );
+    public function validate() {
+
+        return ( strcasecmp( $this -> options -> value, 'deny'       ) == 0 ||
+                 strcasecmp( $this -> options -> value, 'sameorigin' ) == 0 );
     }
 }

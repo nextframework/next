@@ -39,15 +39,11 @@ abstract class AbstractCollection extends Object
     private $iterator;
 
     /**
-     * Collection Constructor
-     *
-     * Delegates startup routines in order to allow Collection to be cleared
-     * by the user too
+     * Additional Initialization
      *
      * @see Next\Components\Collection\AbstractCollection::clear()
      */
-    public function __construct() {
-
+    public function init() {
         $this -> clear();
     }
 
@@ -88,33 +84,68 @@ abstract class AbstractCollection extends Object
      */
     public function add( Object $object, $offset = NULL ) {
 
-        if( $this -> accept( $object ) ) {
+        // Check Object acceptance
 
-            // Adding Object and References at specific offset
-
-            if( $offset !== NULL ) {
-
-                $this -> collection[ $offset ] = $object;
-
-                $this -> references[ $offset ] = array(
-
-                    'name' => (string) $object,
-                    'hash' => $object -> getHash()
-                );
-
-            } else {
-
-                // Or at the end of the Collection
-
-                $this -> collection[] = $object;
-
-                $this -> references[] = array(
-
-                    'name' => (string) $object,
-                    'hash' => $object -> getHash()
-                );
-            }
+        if( ! $this -> accept( $object ) ) {
+            return $this;
         }
+
+        // Adding Object and References at specific offset
+
+        if( $offset !== NULL ) {
+
+            $this -> collection[ $offset ] = $object;
+
+            $this -> references[ $offset ] = array(
+
+                'name' => (string) $object,
+                'hash' => $object -> getHash()
+            );
+
+        } else {
+
+            // Or at the end of the Collection
+
+            $this -> collection[] = $object;
+
+            $this -> references[] = array(
+
+                'name' => (string) $object,
+                'hash' => $object -> getHash()
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * Adds a new Object to the beginning of Collection
+     *
+     * @param Next\Components\Object $object
+     *  Object to prepend to Collection
+     *
+     * @return Next\Components\Collection\AbstractCollection
+     *  Collection Object (Fluent Interface)
+     */
+    public function prepend( Object $object ) {
+
+        // Checking Object acceptance
+
+        if( ! $this -> accept( $object ) ) {
+            return $this;
+        }
+
+        array_unshift( $this -> collection, $object );
+
+        array_unshift(
+
+            $this -> references,
+
+            array(
+                'name' => (string) $object,
+                'hash' => $object -> getHash()
+            )
+        );
 
         return $this;
     }
@@ -130,10 +161,10 @@ abstract class AbstractCollection extends Object
      */
     public function remove( $reference ) {
 
-        $index = $this -> find( $reference );
+        $i = $this -> find( $reference );
 
-        if( $index !== FALSE && $index != -1 && array_key_exists( $index, $this -> collection ) ) {
-            unset( $this -> collection[ $index ], $this -> references[ $index ] );
+        if( $i !== FALSE && $i != -1 && array_key_exists( $i, $this -> collection ) ) {
+            unset( $this -> collection[ $i ], $this -> references[ $i ] );
         }
 
         return $this;
@@ -153,7 +184,7 @@ abstract class AbstractCollection extends Object
 
         /**
          * @internal
-         * Differently of Lists::find() that accepts integers as
+         * Differently of Lists::item() that accepts integers as
          * possible reference (direct offset), here, such type is prohibited
          * as we're testing if an Object (or a reference to it) exists in the
          * Collection, instead of trying to find one for manipulation
@@ -268,8 +299,8 @@ abstract class AbstractCollection extends Object
      *  It can be a string, an integer or an Next\Components\Object object
      *
      * @return boolean|integer
-     *  It return -1 if Collection is empty or if the reference couldn't be found within it
-     *  It returns FALSE if the searching process fails
+     *  Returns -1 if Collection is empty or if the reference couldn't be
+     *  found within it and FALSE if the searching process fails
      *
      * @see Next\Components\Utils\ArrayUtils::search()
      */
@@ -283,7 +314,11 @@ abstract class AbstractCollection extends Object
 
             $hash = $reference -> getHash();
 
-            return array_key_exists( $hash, $this -> references ) ? $this -> references[ $hash ] : -1;
+            if( array_key_exists( $hash, $this -> references ) ) {
+                return $this -> references[ $hash ];
+            }
+
+            return  -1;
         }
 
         /**
@@ -407,7 +442,10 @@ abstract class AbstractCollection extends Object
      *  The string representation of Collection
      */
     public function serialize() {
-        return serialize( array( $this -> collection, $this -> references, $this -> iterator ) );
+
+        return serialize(
+            array( $this -> collection, $this -> references, $this -> iterator )
+        );
     }
 
     /**

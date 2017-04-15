@@ -28,21 +28,21 @@ class ApplicationException extends \Next\Components\Debug\Exception {
      *
      * @var integer
      */
-    const INVALID_APPLICATION = 0x00000033;
+    const INVALID_APPLICATION    = 0x00000033;
 
     /**
      * Application has no View Engine assigned
      *
      * @var integer
      */
-    const NO_VIEW_ENGINE = 0x00000034;
+    const INVALID_ROUTER         = 0x00000034;
 
     /**
      * Application has an invalid View Engine
      *
      * @var integer
      */
-    const INVALID_VIEW_ENGINE = 0x00000035;
+    const INVALID_VIEW_ENGINE    = 0x00000035;
 
     // Exceptions Messages
 
@@ -66,7 +66,7 @@ class ApplicationException extends \Next\Components\Debug\Exception {
 
             <br /><br />
 
-            Applications must implement Application Interface',
+            Applications must implement Application Interface (Next\Application\Application)',
 
             self::INVALID_APPLICATION,
 
@@ -75,25 +75,21 @@ class ApplicationException extends \Next\Components\Debug\Exception {
     }
 
     /**
-     * Missing View Engine
+     * Invalid Router
      *
-     * Application has no View Engine assigned to it
-     *
-     * @param Next\Application\Application $application
-     *  Assigned Application
+     * Assigned Router is not valid because it doesn't
+     * implements Next\Controller\Router\Router
      *
      * @return Next\Application\ApplicationException
-     *  Exception for Applications without View Engine
+     *  Exception for Applications with an invalid Router
      */
-    public static function noViewEngine( Application $application ) {
+    public static function invalidRouter() {
 
         return new self(
 
-            'Application <strong>%s</strong> has no View Engine assigned',
+            'Routers must implement Router Interface (Next\Controller\Router\Router)',
 
-            self::NO_VIEW_ENGINE,
-
-            (string) $application
+            self::INVALID_ROUTER
         );
     }
 
@@ -110,7 +106,7 @@ class ApplicationException extends \Next\Components\Debug\Exception {
 
         return new self(
 
-            'View Engines must implement View Interface',
+            'View Engines must implement View Interface (Next\View\View)',
 
             self::INVALID_VIEW_ENGINE
         );

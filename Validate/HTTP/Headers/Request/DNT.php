@@ -31,9 +31,6 @@ class DNT extends Object implements Headers {
      *        DNT = "DNT" ":" 1*( 1 | 0 )
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -46,10 +43,7 @@ class DNT extends Object implements Headers {
      * @link
      *  http://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Common_non-standard_request_headers
      */
-    public function validate( $data ) {
-
-        $data = (int) $data;
-
-        return ( $data == 1 || $data == 0 );
+    public function validate() {
+        return ( (int) $this -> options -> value == 1 || (int) $this -> options -> value == 0 );
     }
 }

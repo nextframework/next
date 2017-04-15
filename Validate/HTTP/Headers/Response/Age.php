@@ -26,9 +26,6 @@ class Age extends Object implements Headers {
      *        age-value = delta-seconds
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -36,10 +33,10 @@ class Age extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.6
      *  RFC 2616 Section 14.6
      */
-    public function validate( $data ) {
+    public function validate() {
 
         // Age Header value must be a positive integer representing the seconds
 
-        return ( preg_match( '@^[0-9]+$@', $data ) != 0 );
+        return ( preg_match( '@^[0-9]+$@', $this -> options -> value ) != 0 );
     }
 }

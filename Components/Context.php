@@ -36,7 +36,7 @@ class Context implements Contextualizable {
      *  One or more methods accessible through extended Context.
      *  Defaults to NULL, which means almost all PUBLIC methods will be accessible
      *
-     *   @param string|array|optional $properties
+     * @param string|array|optional $properties
      *  One or more properties accessible through extended Context
      *  Defaults to NULL, which means all PROTECTED properties will be accessible
      *
@@ -46,12 +46,21 @@ class Context implements Contextualizable {
     function extend( Invoker $invoker, $methods = NULL, $properties = NULL ) {
 
         $caller = $invoker -> getCaller();
-        $callee = $invoker -> getCallee() -> getClass();
+        $callee = $invoker -> getCallee();
+
+        if( $callee instanceof Mimicker ) {
+
+            $reflector = new \ReflectionObject( $callee -> getMimicker() );
+
+        } else {
+
+            $reflector = $callee -> getClass();
+        }
 
         // Methods
 
         if( is_null( $methods ) ) {
-            $methods = $callee -> getMethods( \ReflectionMethod::IS_PUBLIC );
+            $methods = $reflector -> getMethods( \ReflectionMethod::IS_PUBLIC );
         }
 
         // Restricting access to methods of some classes to avoid infinite loops
@@ -65,7 +74,7 @@ class Context implements Contextualizable {
         // Properties
 
         if( is_null( $properties ) ) {
-            $properties = $callee -> getProperties( \ReflectionProperty::IS_PROTECTED );
+            $properties = $reflector -> getProperties( \ReflectionProperty::IS_PROTECTED );
         }
 
         $properties = array_filter( $properties, array( $this, 'filter' ) );
@@ -76,7 +85,7 @@ class Context implements Contextualizable {
 
         try {
 
-            $property = $callee -> getproperty( sprintf( '_%s', strtolower( $caller ) ) );
+            $property = $reflector -> getproperty( sprintf( '_%s', strtolower( $caller ) ) );
 
             $property -> setAccessible( TRUE );
 
@@ -89,7 +98,7 @@ class Context implements Contextualizable {
         // Building Context Structure
 
         $this -> callables[ $caller -> getClass() -> getName() ][] = array(
-            $invoker -> getCallee(), $methods, $properties
+            ( $callee instanceof Mimicker ? $callee -> getMimicker() : $callee ), $methods, $properties
         );
 
         return $this;

@@ -2,6 +2,8 @@
 
 namespace Next\Session\Handlers;
 
+use Next\Components\Object;    # Object Class
+
 /**
  * Mongo Handler for Session Storage Class
  *
@@ -10,7 +12,17 @@ namespace Next\Session\Handlers;
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class Mongo extends AbstractHandler {
+class Mongo extends Object implements Handler {
+
+    /**
+     * Session Handler Mongo DB Default Options
+     *
+     * @var array $defaultOptions
+     */
+    protected $defaultOptions = array(
+        'database'  => 'Mongo',
+        'savePath'  => 'mongodb://localhost:27017'
+    );
 
     /**
      * Mongo Object
@@ -179,57 +191,5 @@ class Mongo extends AbstractHandler {
                                 )
                             )
                         );
-    }
-
-    // Parameterizable Methods Implementation
-
-    /**
-     * Set Mongo Handler Options
-     *
-     * @return array
-     *
-     *  <p>
-     *      An associative array with Mongo DB Session Handler default options
-     *  </p>
-     *
-     *  <p>
-     *
-     *      <ul>
-     *
-     *          <li>
-     *
-     *              <p><strong>database</strong></p>
-     *
-     *              <p>Mongo Database Name</p>
-     *
-     *              <p>Default Value: <strong>Mongo</strong></p>
-     *
-     *          </li>
-     *
-     *          <li>
-     *
-     *              <p><strong>savePath</strong></p>
-     *
-     *              <p>Session Save Path</p>
-     *
-     *              <p>For Mongo Handler the connection URL</p>
-     *
-     *              <p>
-     *                  Default Value:
-     *                  <strong>mongodb://localhost:27017</strong>
-     *              </p>
-     *          </li>
-     *
-     *      </ul>
-     *
-     *  </p>
-     */
-    public function setOptions() {
-
-        return array(
-
-            'database'  => 'Mongo',
-            'savePath'  => 'mongodb://localhost:27017'
-        );
     }
 }

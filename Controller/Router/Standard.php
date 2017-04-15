@@ -17,6 +17,15 @@ use Next\HTTP\Request;                   # Request Class
  */
 class Standard extends AbstractRouter {
 
+    /**
+     * Default Options
+     *
+     * @var array $defaultOptions
+     */
+    protected $defaultOptions = array(
+        'filePath' => 'data/routes.php'
+    );
+
     // RegExp and String Delimiter Constants
 
     /**
@@ -174,52 +183,17 @@ class Standard extends AbstractRouter {
 
         // Checking if PHP File Exists
 
-        if( ! file_exists( $this -> options -> filePath ) ) {
+        if( $this -> options -> filePath === FALSE || ! file_exists( $this -> options -> filePath ) ) {
 
             throw RouterException::connectionFailure(
 
-                'PHP File Database File <strong>%s</strong> doesn\'t exist',
+                'PHP Database File <strong>%s</strong> doesn\'t exist',
 
                 RouterException::CONNECTION_FAILED,
 
                 array( $this -> options -> filePath )
             );
         }
-    }
-
-    // Parameterizable Interface Methods Implementation
-
-    /**
-     * Set Standard Router Options
-     *
-     * @return array
-     *
-     *  <p>An associative array with Standard Router default options</p>
-     *
-     *  <p>
-     *
-     *      <ul>
-     *
-     *          <li>
-     *
-     *              <p><strong>filePath</strong></p>
-     *
-     *              <p>Path for PHP File</p>
-     *
-     *              <p>Default Value: <strong>data/routes.php</strong></p>
-     *
-     *          </li>
-     *
-     *      </ul>
-     *
-     *  </p>
-     */
-    public function setOptions() {
-
-        return array(
-
-            'filePath' => 'data/routes.php'
-        );
     }
 
     // Abstract Methods Implementation

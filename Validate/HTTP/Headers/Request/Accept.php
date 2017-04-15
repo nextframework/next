@@ -35,11 +35,8 @@ class Accept extends Object implements Headers {
      *        accept-extension  = ";" token [ "=" ( token | quoted-string ) ]
      * </code>
      *
-     * @internal There is a little difference in the first "Media Range" possibility in order\n
-     * to make it compatible with Doc Comment Syntax \endinternal
-     *
-     * @param string $data
-     *  Data to validate
+     * There is a little difference in the first "Media Range" possibility in order
+     * to make it compatible with Doc Comment Syntax
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
@@ -48,7 +45,7 @@ class Accept extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
      *  RFC 2616 Section 14.1
      */
-    public function validate( $data ) {
+    public function validate() {
 
         preg_match(
 
@@ -74,7 +71,7 @@ class Accept extends Object implements Headers {
                 IANA::RANGE, self::FLOAT, self::TOKEN, self::TOKEN
             ),
 
-            $data, $match
+            $this -> options -> value, $match
         );
 
         /**
@@ -96,9 +93,9 @@ class Accept extends Object implements Headers {
              */
             if( preg_match( sprintf( '@^%s$@', IANA::MIME ), $match['range'], $mime ) != 0 ) {
 
-                $IANA = new IANA;
+                $IANA = new IANA( array( 'value' => $mime[ 0 ] ) );
 
-                if( $IANA -> validate( $mime[ 0 ] ) ) {
+                if( $IANA -> validate() ) {
 
                     // Valid as Full MIME
 

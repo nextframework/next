@@ -42,9 +42,12 @@ abstract class AbstractDataGateway extends Object implements DataGateway {
      * @param mixed $source
      *  Source Data to populate the Rowset
      *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for each DataGateway
+     *
      * @see Next\DB\Table\AbstractDataGateway::setSource()
      */
-    public function __construct( Manager $manager, $source ) {
+    public function __construct( Manager $manager, $source, $options = NULL ) {
 
         $this -> manager =& $manager;
 
@@ -52,7 +55,7 @@ abstract class AbstractDataGateway extends Object implements DataGateway {
 
         $this -> setSource( $source );
 
-        parent::__construct();
+        parent::__construct( $options );
     }
 
     /**

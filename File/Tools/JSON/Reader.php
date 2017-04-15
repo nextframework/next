@@ -30,8 +30,14 @@ class Reader extends Object {
      *
      * @param string $file
      *   JSON File to read
+     *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for the JSON Reader
      */
-    public function __construct( $file ) {
+    public function __construct( $file, $options = NULL ) {
+
+        parent::__construct( $options );
+
         $this -> file = $file;
     }
 

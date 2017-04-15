@@ -4,6 +4,8 @@ namespace Next\Validate\IANA;
 
 use Next\Validate\Validate;    # Validate Interface
 
+use Next\Components\Object;    # Object Class
+
 /**
  * IANA Content Encoding Validation Class
  *
@@ -12,7 +14,7 @@ use Next\Validate\Validate;    # Validate Interface
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class ContentEncoding implements Validate {
+class ContentEncoding extends Object implements Validate {
 
     /**
      * Valid Content Encodings
@@ -29,13 +31,15 @@ class ContentEncoding implements Validate {
     /**
      * Validates given Content Encoding
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      */
-    public function validate( $data ) {
-        return ( preg_match( sprintf( '/^%s$/i', self::ENCODING ), $data ) != 0 );
+    public function validate() {
+
+        $test = preg_match(
+            sprintf( '/^%s$/i', self::ENCODING ), $this -> options -> value
+        );
+
+        return ( $test != 0 );
     }
 }

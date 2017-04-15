@@ -45,9 +45,6 @@ class Expires extends Object implements Headers {
      *                    | "Sep" | "Oct" | "Nov" | "Dec"
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -57,10 +54,12 @@ class Expires extends Object implements Headers {
      *
      * @see Next\Validate\HTTP\Headers\Common\Date::validate()
      */
-    public function validate( $data ) {
+    public function validate() {
 
-        $date = new Date;
+        $date = new Date(
+            array( 'value' => $this -> options -> value )
+        );
 
-        return $date -> validate( $data );
+        return $date -> validate();
     }
 }

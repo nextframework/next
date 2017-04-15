@@ -26,8 +26,13 @@ class Expression extends Object {
      *
      * @param string $expression
      *  SQL Expression
+     *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for the Query Expression
      */
-    public function __construct( $expression ) {
+    public function __construct( $expression, $options = NULL ) {
+
+        parent::__construct( $options );
 
         $this -> expression =& $expression;
     }

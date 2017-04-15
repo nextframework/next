@@ -5,6 +5,7 @@ namespace Next\HTTP;
 use Next\HTTP\Request\RequestException;             # Request Exception Classes
 use Next\HTTP\Stream\Adapter\AdapterException;      # Adapter Exception Class
 use Next\HTTP\Headers\Fields\FieldsException;       # Headers Fields Exception Class
+use Next\HTTP\Headers\Fields\Field;                 # Header Fields Interface
 use Next\HTTP\Stream\Adapter\Adapter;               # HTTP Stream Adapter Interface
 use Next\Components\Object;                         # Object Class
 use Next\Components\Invoker;                        # Invoker Class
@@ -204,7 +205,7 @@ class Request extends Object {
     private $rawPostData = array();
 
     /**
-     * Request Constructor
+     * Additional Initialization
      *
      * If only one argument is provided, it'll be checked against
      * Next\HTTP\Stream\Adapter\Adapter.
@@ -220,9 +221,7 @@ class Request extends Object {
      * values will take place: REQUEST_URI from $_SERVER and GET as
      * Request Method
      */
-    public function __construct() {
-
-        parent::__construct();
+    public function init() {
 
         // Cookies Management Object
 
@@ -329,9 +328,11 @@ class Request extends Object {
              */
             $this -> basepath = basename( dirname( $_SERVER['SCRIPT_FILENAME'] ) );
 
-            // Default Request Headers. Internal Requests only.
+            // Adding default Request Headers
 
-            if( defined( 'TURBO_MODE' ) && ! TURBO_MODE === TRUE ) $this -> addDefaultHeaders();
+            if( defined( 'TURBO_MODE' ) && ! TURBO_MODE === TRUE ) {
+                $this -> addDefaultHeaders();
+            }
         }
     }
 
@@ -500,7 +501,7 @@ class Request extends Object {
     /**
      * Get Request Protocol Version
      *
-     * We are detecting the Protocol Version here, instead of detect in Request's Constructor,
+     * We are detecting the Protocol Version here, instead of detect in Request Constructor,
      * because get_headers() function does another Request to target Server, and since
      * this is not an extremely useful information, this routine is executed only when required
      *
@@ -647,9 +648,9 @@ class Request extends Object {
      */
     public function isAjax() {
 
-        $header = $this -> headers -> find( 'X-Requested-With' );
+        $header = $this -> headers -> findHeader( 'X-Requested-With' );
 
-        return ( $header !== FALSE && $header -> getValue() == 'XMLHttpRequest' );
+        return ( $header instanceof Field && $header -> getValue() == 'XMLHttpRequest' );
     }
 
     /**
@@ -660,9 +661,10 @@ class Request extends Object {
      */
     public function isFlash() {
 
-        $header = $this -> headers -> find( 'User-Agent' );
+        $header = $this -> headers -> findHeader( 'User-Agent' );
 
-        return ( $header !== FALSE && strpos( $header -> getValue(), 'flash' ) !== FALSE );
+        return ( $header instanceof Field &&
+                 strpos( $header -> getValue(), 'flash' ) !== FALSE );
     }
 
     /**
@@ -961,7 +963,7 @@ class Request extends Object {
      *  No HTTP Stream Adapter provided
      *
      * @throws Next\HTTP\Headers\Fields\FieldsException
-     *  Invalid or mal-formed Cookie (s) Value (s)
+     *  Invalid or malformed Cookie (s) Value (s)
      *
      * @see Next\HTTP\Stream\Adapter\AdapterException
      */
@@ -1032,7 +1034,6 @@ class Request extends Object {
         try {
 
             $this -> headers -> addHeader(
-
                 $this -> cookies -> getCookies( TRUE )
             );
 
@@ -1114,63 +1115,62 @@ class Request extends Object {
          * - Content-Type    => As part of headers, must be application/json
          * - POSTDATA        => A JSON string in the format {"longUrl": "LONG_URL_HERE"}
          *
-         * But, among all the default headers automatically provided through apache_request_headers()
-         * function -OR- by analyzing $_SERVER contents, a simple Request to the Service fails
+         * But, among all the default headers automatically provided
+         * through apache_request_headers() function -OR- by analyzing
+         * $_SERVER contents, a simple Request to the Service fails
          *
          * So, if we have an HTTP Stream to work with, these Headers are not added
          */
+        if( function_exists( 'apache_request_headers' ) ) {
 
-          if( function_exists( 'apache_request_headers' ) ) {
+            try {
 
-               try {
+                $this -> headers -> addHeader( apache_request_headers() );
 
-                   $this -> headers -> addHeader( apache_request_headers() );
-
-               } catch( FieldsException $e ) {
+            } catch( FieldsException $e ) {
 
                 /**
                  * @internal
                  * We're silencing the FieldsException in order to not break the Request Flow
                  * However, if this Exception is caught, no Request Headers will be available
                  */
-               }
+            }
 
-           } else {
+        } else {
 
-               // This avoids non-HTTP-related indexes to be added as Generic Header
+            // This avoids non-HTTP-related indexes to be added as Generic Header
 
-               $fields = array_filter(
+            $fields = array_filter(
 
-                   array_keys( $_SERVER ),
+                array_keys( $_SERVER ),
 
-                   function( $item ) {
+                function( $item ) {
+                    return ( substr( $item, 0, 5 ) == 'HTTP_' );
+                }
+            );
 
-                       return ( substr( $item, 0, 5 ) == 'HTTP_' );
-                   }
-               );
+            $length = count( $fields );
 
-               $length = count( $fields );
+            if( $length != 0 ) {
 
-               if( $length != 0 ) {
+                try {
 
-                   try {
+                    $this -> headers -> addHeader(
 
-                       $this -> headers -> addHeader(
+                        array_intersect_key(
 
-                           array_intersect_key(
+                            $_SERVER,
 
-                               $_SERVER,
+                            array_combine( $fields, array_fill( 0, $length, NULL ) )
+                        )
+                    );
 
-                               array_combine( $fields, array_fill( 0, $length, NULL ) )
-                           )
-                       );
+                } catch( FieldsException $e ) {
 
-                   } catch( FieldsException $e ) {
-
-                       // Same explanation as above
-                   }
-               }
-           }
+                    // Same explanation as above
+                }
+            }
+        }
     }
 
     // Request Method-related Wrappers
@@ -1199,13 +1199,8 @@ class Request extends Object {
         if( ! empty( $POSTDATA ) ) {
 
             $this -> adapter -> getContext() -> setOptions(
-
                 array(
-
-                    'http' => array(
-
-                        'content' => $POSTDATA
-                    )
+                    'http' => array(  'content' => $POSTDATA )
                 )
             );
 

@@ -20,19 +20,16 @@ class Chain extends AbstractCollection {
     /**
      * Executes all Validators added to the Chain
      *
-     * @param  mixed $data
-     *  Data to validate
-     *
      * @return boolean|Next\Validate\Validate
      *  TRUE if valid by all Validators and Validator Object otherwise
      */
-    public function validate( $data ) {
+    public function validate() {
 
         if( count( $this ) == 0 ) return TRUE;
 
         foreach( $this -> getIterator() as $validator ) {
 
-            if( ! $validator -> validate( $data ) ) return $validator;
+            if( $validator -> validate() === FALSE ) return $validator;
         }
 
         return TRUE;

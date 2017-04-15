@@ -5,8 +5,9 @@ namespace Next\Tools\Routes\Generators\Writer;
 use Next\Tools\Routes\Generators\Writer\OutputWriterException;    # Output Writer Exception Class
 use Next\DB\Table\TableException;                                 # Table Exception Class
 
-use Next\DB\Driver\PDO\Adapter\SQLite as Adapter;                 # PDO SQLite Adapter
+use Next\Components\Object;                                       # Object Class
 
+use Next\DB\Driver\PDO\Adapter\SQLite as Adapter;                 # PDO SQLite Adapter
 use Next\DB\Table\Manager;                                        # Table Manager
 
 /**
@@ -23,7 +24,7 @@ use Next\DB\Table\Manager;                                        # Table Manage
  *                Next\DB\Table\TableException,
  *                Next\DB\Table\Manager
  */
-class SQLite extends AbstractWriter {
+class SQLite extends Object implements Writer {
 
     /**
      * Entity Manager
@@ -37,28 +38,22 @@ class SQLite extends AbstractWriter {
      *
      * Creates and configures the Table Manager object needed to
      * connect to the SQLite Database
+     *
+     * @throws Next\Tools\Routes\Generators\Writer\OutputWriterException
+     *  Thrown if the required <strong>dbPath</strong> option with
+     *  the path to the SQLite database file is missing or empty
      */
     protected function init() {
+
+        if( ! isset( $this -> options -> dbPath ) ) {
+            throw OutputWriterException::missingConfigurationOption( 'dbPath' );
+        }
 
         // Entity Manager
 
         $this -> manager = new Manager(
             new Adapter( array( 'dbPath' => $this -> options -> dbPath ) )
         );
-    }
-
-    /**
-     * Integrity Check
-     *
-     * @throws Next\Tools\Routes\Generators\Writer\OutputWriterException
-     *  Throw if the required <strong>dbPath</strong> option with
-     *  the path to the SQLite database file is missing or empty
-     */
-    protected function checkRequirements() {
-
-        if( ! isset( $this -> options -> dbPath ) ) {
-            throw OutputWriterException::missingConfigurationOption( 'dbPath' );
-        }
     }
 
     // Output Writer Interface Methods
@@ -131,8 +126,6 @@ class SQLite extends AbstractWriter {
 
     /**
      * Resets the Writer to be used again
-     *
-     * @return void
      */
     public function reset() {
         $this -> manager -> setTable( new SQLite\Entity ) -> delete() -> rowCount();

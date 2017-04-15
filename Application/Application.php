@@ -23,23 +23,6 @@ interface Application {
     public function getApplicationDirectory();
 
     /**
-     * Get Controllers Chain
-     *
-     * Get all Controller Objects associated to Application
-     */
-    public function getControllers();
-
-    /**
-     * Get View Engine
-     */
-    public function getView();
-
-    /**
-     * Get Router
-     */
-    public function getRouter();
-
-    /**
      * Set Request Object
      *
      * @param Next\HTTP\Request $request
@@ -64,4 +47,26 @@ interface Application {
      * Get Response Object
      */
     public function getResponse();
+
+    /**
+     * Get Router
+     */
+    public function getRouter();
+
+    /**
+     * Get View Engine
+     */
+    public function getView();
+
+    /**
+     * Get Controllers Chain
+     *
+     * Get all Controller Objects associated to Application
+     */
+    public function getControllers();
+
+    /**
+     * Get Caching Schema Chain
+     */
+    public function getCache();
 }

@@ -70,9 +70,6 @@ class CacheControl extends Object implements Headers {
      *        cache-extension = token [ "=" ( token | quoted-string ) ]
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -80,9 +77,9 @@ class CacheControl extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9
      *  RFC 2616 Section 14.9
      */
-    public function validate( $data ) {
+    public function validate() {
 
-        $match = preg_match(
+        $test = preg_match(
 
                      sprintf(
 
@@ -91,9 +88,9 @@ class CacheControl extends Object implements Headers {
                          self::DIR, self::TOKEN, self::TOKEN
                      ),
 
-                     $data
+                     $this -> options -> value
                  );
 
-        return $match != 0;
+        return ( $test != 0 );
     }
 }

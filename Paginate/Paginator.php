@@ -2,6 +2,8 @@
 
 namespace Next\Paginate;
 
+use Next\Components\Object;           # Object Class
+
 use Next\Paginate\Style\Style;        # Paginate Scrolling Style Interface
 use Next\Paginate\Adapter\Adapter;    # Paginate Adapter
 use Next\Paginate\Style\Sliding;      # Paginate Default Scrolling Style
@@ -14,7 +16,7 @@ use Next\Paginate\Style\Sliding;      # Paginate Default Scrolling Style
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class Paginator implements \Countable, \IteratorAggregate {
+class Paginator extends Object implements \Countable, \IteratorAggregate {
 
     /**
      * Pagination Adapter
@@ -65,8 +67,13 @@ class Paginator implements \Countable, \IteratorAggregate {
      *
      * @param Next\Paginate\Style\Style|optional $style
      *  Optional Paginate Scrolling Style Algorithm
+     *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for the Paginator
      */
-    public function __construct( Adapter $adapter, Style $style = NULL ) {
+    public function __construct( Adapter $adapter, Style $style = NULL, $options = NULL ) {
+
+        parent::__construct( $options );
 
         $this -> adapter =& $adapter;
 

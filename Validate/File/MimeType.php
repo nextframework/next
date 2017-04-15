@@ -30,13 +30,12 @@ class MimeType extends Object implements Validate {
     /**
      * Validates given File MimeType
      *
-     * @param string|array $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      */
-    public function validate( $data ) {
+    public function validate() {
+
+        $data = $this -> options -> value;
 
         if( count( (array) $this -> options -> acceptedFileTypes ) == 0 ) return TRUE;
 

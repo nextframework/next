@@ -2,6 +2,8 @@
 
 namespace Next\Paginate\Adapter;
 
+use Next\Components\Object;    # Object Class
+
 /**
  * Standard Paginate Adapter Class
  *
@@ -10,7 +12,7 @@ namespace Next\Paginate\Adapter;
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class Standard implements Adapter {
+class Standard extends Object implements Adapter {
 
     /**
      * Adapter Data Source
@@ -24,8 +26,13 @@ class Standard implements Adapter {
      *
      * @param array $source
      *  Data Source
+     *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for Paginate Standard Adapter
      */
-    public function __construct( array $source ) {
+    public function __construct( array $source, $options = NULL ) {
+
+        parent::__construct( $options );
 
         $this -> source =& $source;
     }

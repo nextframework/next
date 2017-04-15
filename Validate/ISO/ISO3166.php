@@ -4,6 +4,8 @@ namespace Next\Validate\ISO;
 
 use Next\Validate\Validate;    # Validate Interface
 
+use Next\Components\Object;    # Object Class
+
 /**
  * ISO-3166 Validation Class
  *
@@ -12,7 +14,7 @@ use Next\Validate\Validate;    # Validate Interface
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class ISO3166 implements Validate {
+class ISO3166 extends Object implements Validate {
 
     /**
      * Content Language
@@ -47,13 +49,13 @@ class ISO3166 implements Validate {
     /**
      * Validates given Country Code
      *
-     * @param string $data
-     *  Data to Validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      */
-    public function validate( $data ) {
+    public function validate() {
+
+        $data = $this -> options -> value;
+
         return ( strlen( $data ) == 2 && in_array( $data, self::$codes ) );
     }
 

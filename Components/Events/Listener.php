@@ -28,14 +28,17 @@ class Listener extends Object {
      *  A callable resource for when an Event has been handled,
      *  much like Next\Components\Interfaces\Observer::update()
      *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for each Event Listener
+     *
      * @throws Next\Components\Events\EventsException
      *  Thrown if provided callback is not callable
      *
      * @see Next\Components\Interfaces\Observer::update()
      */
-    public function __construct( $callback ) {
+    public function __construct( $callback, $options = NULL ) {
 
-        parent::__construct();
+        parent::__construct( $options );
 
         if( ! is_callable( $callback ) ) {
             throw EventsException::invalidCallback();

@@ -41,7 +41,6 @@ class Invoker {
     function __construct ( Object $caller, Object $callee ) {
 
         $this -> caller =& $caller;
-
         $this -> callee =& $callee;
     }
 

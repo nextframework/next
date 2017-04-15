@@ -31,18 +31,24 @@ class Extension extends Object implements Validate {
     /**
      * Validates given File Extension
      *
-     * @param string|array $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      */
-    public function validate( $data ) {
+    public function validate() {
 
-        if( count( (array) $this -> options -> acceptedFileExtensions ) == 0 ) return TRUE;
+        $data = $this -> options -> value;
+
+        if( count( (array) $this -> options -> acceptedFileExtensions ) == 0 ) {
+            return TRUE;
+        }
 
         $ext = ( is_array( $data ) ? $data[ 0 ] : $data );
 
-        return ArrayUtils::in( Tools::getFileExtension( $ext ), (array) $this -> options -> acceptedFileExtensions );
+        return ArrayUtils::in(
+
+            Tools::getFileExtension( $ext ),
+
+            (array) $this -> options -> acceptedFileExtensions
+        );
     }
 }

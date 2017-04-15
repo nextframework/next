@@ -41,10 +41,13 @@ class Handler extends Object {
      *
      * @param Next\Components\Events\Event|optional $event
      *  An optional Event Object
+     *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for the Event Handler
      */
-    public function __construct( Event $event = NULL ) {
+    public function __construct( Event $event = NULL, $options = NULL ) {
 
-        parent::__construct();
+        parent::__construct( $options );
 
         $this -> event = ( ! is_null( $event ) ? $event : new Event );
     }

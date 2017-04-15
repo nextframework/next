@@ -66,9 +66,6 @@ class Link extends Object implements Headers {
      *        ext-rel-type   = URI
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -76,7 +73,7 @@ class Link extends Object implements Headers {
      *  http://tools.ietf.org/html/rfc2183#section-2
      *  RFC 2183 Section 2
      */
-    public function validate( $data ) {
+    public function validate() {
 
         preg_match(
 
@@ -121,15 +118,18 @@ class Link extends Object implements Headers {
                   IANA::RANGE
             ),
 
-            $data, $matches
+            $this -> options -> value, $matches
         );
 
-        // Language
+        // Validating Language, if present
 
-        $language = new AcceptLanguage;
+        if( isset( $matches['lang'] ) ) {
 
-        if( isset( $matches['lang'] ) && ! $language -> validate( $matches['lang'] ) ) {
-            return FALSE;
+            $language = new AcceptLanguage(
+                array( 'value' => $matches['lang'] )
+            );
+
+            if( ! $language -> validate() ) return FALSE;
         }
 
         $matches = array_filter( $matches );

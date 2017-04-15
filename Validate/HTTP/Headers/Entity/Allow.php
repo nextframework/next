@@ -31,9 +31,6 @@ class Allow extends Object implements Headers {
      *        Allow   = "Allow" ":" #Method
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -41,7 +38,15 @@ class Allow extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.7
      *  RFC 2616 Section 14.7
      */
-    public function validate( $data ) {
-        return ( preg_match( sprintf( '@^%s$@i', self::METHODS ), $data ) != 0 );
+    public function validate() {
+
+        $test = preg_match(
+
+            sprintf( '@^%s$@i', self::METHODS ),
+
+            $this -> options -> value
+        );
+
+        return ( $test != 0 );
     }
 }

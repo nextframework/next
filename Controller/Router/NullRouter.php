@@ -31,13 +31,6 @@ class NullRouter extends AbstractRouter {
         return FALSE;
     }
 
-    // Parameterizable Interface Methods Implementation
-
-    /**
-     * Set Child Classes Options
-     */
-    public function setOptions() {}
-
     // Abstract Methods Implementation
 
     /**

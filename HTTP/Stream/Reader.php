@@ -28,8 +28,13 @@ class Reader extends Object implements Reader\Reader {
      *
      * @param Next\HTTP\Stream\Adapter\Adapter $adapter
      *  Stream Adapter from which data will be read
+     *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for the HTTP Stream Reader
      */
-    public function __construct( Adapter $adapter ) {
+    public function __construct( Adapter $adapter, $options = NULL ) {
+
+        parent::__construct( $options );
 
         $adapter -> open();
 

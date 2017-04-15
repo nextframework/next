@@ -31,9 +31,6 @@ class From extends Object implements Headers {
      *     but only the Header format, with generic e-mail pattern
      * </p>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -41,7 +38,15 @@ class From extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.22
      *  RFC 2616 Section 14.22
      */
-    public function validate( $data ) {
-        return ( preg_match( '/^[^@]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$/', $data ) != 0 );
+    public function validate() {
+
+        $test = preg_match(
+
+            '/^[^@]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$/',
+
+            $this -> options -> value
+        );
+
+        return ( $test != 0 );
     }
 }

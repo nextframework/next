@@ -28,9 +28,6 @@ class AcceptCharset extends Object implements Headers {
      *        If Quality Value is not present, then 1 is assumed
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -38,13 +35,13 @@ class AcceptCharset extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.2
      *  RFC 2616 Section 14.2
      */
-    public function validate( $data ) {
+    public function validate() {
 
         preg_match(
 
             sprintf( '@^(?<charset>%s)(?:;q=(?<quality>%s))?$@x', IANA::CHARSET, self::FLOAT ),
 
-            $data, $match
+            $this -> options -> value, $match
         );
 
         if( count( $match ) != 0 ) {
@@ -57,10 +54,11 @@ class AcceptCharset extends Object implements Headers {
 
             // Validating against IANA's Registry Common Names and its Aliases
 
-            $IANA = new IANA;
+            $IANA = new IANA(
+                array( 'value' => ( array_key_exists( 'charset', $match ) ? $match['charset'] : NULL ) )
+            );
 
-            if( $IANA -> validate( $match['charset'] ) ) {
-
+            if( $IANA -> validate() ) {
                 return TRUE;
             }
         }

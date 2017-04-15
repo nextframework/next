@@ -2,6 +2,8 @@
 
 namespace Next\Session;
 
+use Next\Components\Object;                     # Object Class
+
 use Next\Session\Handlers\HandlersException;    # Session Handlers Exception Class
 use Next\Session\Handlers\Handler;              # Session Handlers Interface
 use Next\Components\Collections\Set;            # Set Iterator Class
@@ -14,7 +16,7 @@ use Next\Components\Collections\Set;            # Set Iterator Class
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class Handlers {
+class Handlers extends Object {
 
     /**
      * Handlers Set
@@ -42,8 +44,13 @@ class Handlers {
      *
      * @param Next\Session\Manager $session
      *  Session Object
+     *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for the Session Handler
      */
-    public function __construct( Manager $session ) {
+    public function __construct( Manager $session, $options = NULL ) {
+
+        parent::__construct( $options );
 
         $this -> handlers = new Set;
 

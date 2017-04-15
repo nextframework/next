@@ -2,12 +2,12 @@
 
 namespace Next\Components\Debug;
 
-use Next\Application\ApplicationException;                      # Application Exception
-use Next\HTTP\Response\ResponseException;                       # Response Exception
-use Next\HTTP\Headers\Fields\FieldsException;                   # Header Field Exception
-use Next\Controller\Router\NullRouter;                          # Null Router Class
-use Next\HTTP\Request;                                          # HTTP Request
-use Next\HTTP\Response;                                         # HTTP Response
+use Next\Application\ApplicationException;       # Application Exception
+use Next\HTTP\Response\ResponseException;        # Response Exception
+use Next\HTTP\Headers\Fields\FieldsException;    # Header Field Exception
+use Next\Controller\Router\NullRouter;           # Null Router Class
+use Next\HTTP\Request;                           # HTTP Request
+use Next\HTTP\Response;                          # HTTP Response
 
 /**
  * Error & Exception Handlers Class
@@ -182,7 +182,7 @@ class Handlers {
 
                 // Setting Up Application
 
-                $application = new Handlers\HandlersApplication( new NullRouter );
+                $application = new Handlers\HandlersApplication;
 
                 $application ->  setRequest( $request )
                              -> setResponse( $response );

@@ -17,13 +17,10 @@ class Generic extends Object implements Headers {
     /**
      * Validates Generic Header Field
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      */
-    public function validate( $data ) {
+    public function validate() {
 
         /**
          * @internal
@@ -32,6 +29,7 @@ class Generic extends Object implements Headers {
          * requirements are being followed, let's look for a semi-colon
          * and the lack o 'Generic' keyword
          */
-        return ( ( strpos( $data, ':' ) === FALSE || stripos( $data, 'Generic' ) !== FALSE ) ? FALSE : TRUE );
+        return ( ( strpos( $this -> options -> value, ':' ) === FALSE ||
+                   stripos( $this -> options -> value, 'Generic' ) !== FALSE ) ? FALSE : TRUE );
     }
 }

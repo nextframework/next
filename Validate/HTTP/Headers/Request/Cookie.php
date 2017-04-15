@@ -30,21 +30,18 @@ class Cookie extends Object implements Headers {
      *        cookievalue = token
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
      * @link http://en.wikipedia.org/wiki/HTTP_Cookie
      */
-    public function validate( $data ) {
+    public function validate() {
 
         $match = preg_match(
 
                      sprintf( '/^(?<name>%s)(?:=(?<value>[\'"]?%s[\'"]?))?$/', self::TOKEN, self::TOKEN ),
 
-                     $data
+                     $this -> options -> value
                  );
 
         return ( $match != 0 );

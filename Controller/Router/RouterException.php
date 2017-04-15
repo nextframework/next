@@ -24,28 +24,28 @@ class RouterException extends \Next\Components\Debug\Exception {
      *
      * @var integer
      */
-    const CONNECTION_FAILED         = 0x00000165;
+    const CONNECTION_FAILED                      = 0x00000165;
 
     /**
      * Data read failure
      *
      * @var integer
      */
-    const DATA_READ_FAILURE         = 0x00000166;
+    const DATA_READ_FAILURE                      = 0x00000166;
 
     /**
      * Missing Required Parameter
      *
      * @var integer
      */
-    const MISSING_REQUIRED_PARAM    = 0x00000167;
+    const MISSING_REQUIRED_PARAM                 = 0x00000167;
 
     /**
      * Invalid Required Parameter
      *
      * @var integer
      */
-    const INVALID_REQUIRED_PARAM    = 0x00000168;
+    const INVALID_REQUIRED_PARAM                 = 0x00000168;
 
     // Exception Messages
 

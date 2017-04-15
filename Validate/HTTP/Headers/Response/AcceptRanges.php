@@ -26,9 +26,6 @@ class AcceptRanges extends Object implements Headers {
      *        acceptable-ranges = 1#range-unit | "none"
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -36,7 +33,9 @@ class AcceptRanges extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.5
      *  RFC 2616 Section 14.5
      */
-    public function validate( $data ) {
-        return ( strcasecmp( $data, 'none' ) == 0 || strcasecmp( $data, 'bytes' ) == 0 );
+    public function validate() {
+
+        return ( strcasecmp( $this -> options -> value, 'none'  ) == 0 ||
+                 strcasecmp( $this -> options -> value, 'bytes' ) == 0 );
     }
 }

@@ -2,8 +2,9 @@
 
 namespace Next\Components\Debug\Handlers;
 
-use Next\Application\AbstractApplication;    # Abstract Application Class
-use Next\View\Standard as View;              # View Engine
+use Next\Application\AbstractApplication;           # Abstract Application Class
+use Next\View\Standard as View;                     # View Engine
+use Next\Controller\Router\NullRouter as Router;    # Standard Router Class
 
 /**
  * Errors and Exception Handlers Application Class
@@ -23,6 +24,15 @@ class HandlersApplication extends AbstractApplication {
         $this -> view = new View( $this );
 
         $this -> view -> setBasepath( sprintf( '%s/Views', dirname( __FILE__ ) ) );
+    }
+
+    // Application Interface Method Implementation
+
+    /**
+     * Router Setup
+     */
+    public function setupRouter() {
+        $this -> router = new Router( $this );
     }
 
     // Abstract Methods Implementation

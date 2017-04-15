@@ -236,6 +236,10 @@ class ArrayUtils {
 
         foreach( $iterator as $item ) {
 
+            // Nothing to compare against
+
+            if( is_null( $item ) ) continue;
+
             if( ! $strict ) {
 
                 // Strings

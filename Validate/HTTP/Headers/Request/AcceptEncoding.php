@@ -28,9 +28,6 @@ class AcceptEncoding extends Object implements Headers {
      *        codings          = ( content-coding | "*" )
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -38,15 +35,20 @@ class AcceptEncoding extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.3
      *  RFC 2616 Section 14.3
      */
-    public function validate( $data ) {
+    public function validate() {
 
-        preg_match(
+        $test = preg_match(
 
-            sprintf( '@^(?<encoding>\*|%s)(?:;q=(?<quality>%s))?$@x', IANA::ENCODING, self::FLOAT ),
+            sprintf(
 
-            $data, $match
+                '@^(?<encoding>\*|%s)(?:;q=(?<quality>%s))?$@x',
+
+                IANA::ENCODING, self::FLOAT
+            ),
+
+            $this -> options -> value
         );
 
-        return ( $match != 0 );
+        return ( $test != 0 );
     }
 }

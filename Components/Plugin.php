@@ -2,17 +2,17 @@
 
 namespace Next\Components;
 
-use Next\Application\Application;                   # Application Interface
-use Next\View\View;                                 # View Engine Interface
+use Next\Application\Application;                      # Application Interface
+use Next\View\View;                                    # View Engine Interface
 
-use Next\Components\Object;                         # Object Class
-use Next\Components\Invoker;                        # Invoker Class
+use Next\Components\Object;                            # Object Class
+use Next\Components\Invoker;                           # Invoker Class
 
-use Next\Components\Events\Event;                   # Event Class
-use Next\Components\Events\Handler as EventHandler; # Event Handler Class
-use Next\Components\Events\Listener;                # Event Listener Class
+use Next\Components\Events\Event;                      # Event Class
+use Next\Components\Events\Handler as EventHandler;    # Event Handler Class
+use Next\Components\Events\Listener;                   # Event Listener Class
 
-use Next\DB\Table\Manager;                          # Table Manager Class
+use Next\DB\Table\Manager;                             # Table Manager Class
 
 abstract class Plugin extends Object {
 
@@ -37,7 +37,7 @@ abstract class Plugin extends Object {
      * Plugins Exceptions FIle
      *
      * The same consideration as above, but this refers to the file where
-     * the Exception messages raised bt the Plugin *may* reside
+     * the Exception messages raised by the Plugin *may* reside
      *
      * @var string
      */
@@ -108,7 +108,7 @@ abstract class Plugin extends Object {
     protected $routesBaseURI;
 
     /**
-     * Flag to condition whether the Plugin is configurable
+     * Flag to condition whether the Plugin is configurable or not
      *
      * @var boolean $configurable
      */
@@ -163,7 +163,10 @@ abstract class Plugin extends Object {
 
             $this -> manager = $manager;
 
-            $this -> extend( new Invoker( $this, $this -> manager ), array( 'addRepository', 'getRepository', 'getRepositories' ) );
+            $this -> extend(
+                new Invoker( $this, $this -> manager ),
+                array( 'addRepository', 'getRepository', 'getRepositories' )
+            );
         }
 
         $this -> addDefaultEventListeners();
@@ -171,7 +174,7 @@ abstract class Plugin extends Object {
 
     /**
      * Routines to be performed after any possible post-processing, but
-     * before the Plugin can be activated. E.g: Before it's added in a database
+     * before the Plugin can be activated. E.g: Before it's added to a database
      *
      * @param array|optional $args
      *  Additional arguments for execution
@@ -180,7 +183,7 @@ abstract class Plugin extends Object {
 
     /**
      * Routines to be performed after the Plugin can be activated.
-     * E.g: After it's added in a database
+     * E.g: After it's added to a database
      *
      * @param array|optional $args
      *  Additional arguments for execution
@@ -274,7 +277,7 @@ abstract class Plugin extends Object {
      * Routines to be performed before the Plugin is tested.
      * E.g: A Plugin that manipulates an external source with checkable
      * informations, like an SQLite database file with settings of any sort,
-     * can't foreknow its own path so this method may render something like a
+     * can't foreknow its own path, so this method may render something like a
      * GUI where the user input the mentioned path manually
      *
      * @param array|optional $args
@@ -284,7 +287,7 @@ abstract class Plugin extends Object {
 
     /**
      * The test routine, that ensures whatever the main routine did
-     * wasn't accidentally (and manually undone later)
+     * wasn't accidentally (and manually) undone later
      *
      * @param array|optional $args
      *  Additional arguments for execution
@@ -295,6 +298,12 @@ abstract class Plugin extends Object {
 
     /**
      * Returns whether or not the Plugin *may* be configurable
+     *
+     * Configurable Plugins doesn't mean necessarily Plugins' Objects Configuration.
+     * Although this class' constructor has been overwritten,
+     * Next\Components\Object::__constructor() has been called under parent context
+     * and thus all resources, including those provided by Next\Components\Parameter
+     * are still available
      *
      * @return boolean
      *   Whether the Plugin is configurable
@@ -352,7 +361,7 @@ abstract class Plugin extends Object {
      *
      * 'success'    => For when everything went as expected
      * 'warning'    => For when the main purpose went as expected, but something
-     *                 non crucial to Plugin execution failed
+     *                 non-critical to the execution of the Plugin failed
      * 'info'       => For informational purposes, like a post-processing tip
      * 'error'      => For when something not happened as expected.
      *                 Usually this is used when the Plugin decides to not use
@@ -362,14 +371,12 @@ abstract class Plugin extends Object {
      * All default Event Listeners are provided as implementation of
      * Next\Components\Event\Listener and requires, additionally to the
      * Event Object passed automatically by Event Handler,
-     * an Object instance of Next\View\View and a string in order to create the
-     * Template Variable (success, warning, error and info, respectively)
+     * an Object instance of Next\View\View and a string with the message
+     * in order to create the Template Variable (success, warning, error and info, respectively)
      *
      * Also, by default, both 'info' and 'error' Event Listeners have their propagation
      * stopped, so once they are handled by Event Handler, no other Listeners will
      * be further handled
-     *
-     * @return void
      *
      * @see Next\Components\Events\Handler::addListener()
      */

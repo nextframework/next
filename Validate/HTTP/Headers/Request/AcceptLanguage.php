@@ -29,9 +29,6 @@ class AcceptLanguage extends Object implements Headers {
      *        language-range  = ( ( 1*8ALPHA *( "-" 1*8ALPHA ) ) | "*" )
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -39,7 +36,7 @@ class AcceptLanguage extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4
      *  RFC 2616 Section 14.4
      */
-    public function validate( $data ) {
+    public function validate() {
 
         preg_match(
 
@@ -47,7 +44,7 @@ class AcceptLanguage extends Object implements Headers {
                 '@^(?<abbr>[a-zA-Z]{2})(?:-(?<country>[a-zA-Z]{2}))?(?:;q=(?<quality>%s))?$@x', self::FLOAT
             ),
 
-            $data, $match
+            $this -> options -> value, $match
         );
 
         if( count( $match ) != 0 ) {
@@ -57,9 +54,9 @@ class AcceptLanguage extends Object implements Headers {
              * General Format is correct
              * Let's check chosen Language Abbreviation against ISO 639 Standards
              */
-            $ISO = new ISO639;
+            $ISO = new ISO639( array( 'value' => $match['abbr'] ) );
 
-            if( $ISO -> validate( $match['abbr'] ) ) {
+            if( $ISO -> validate() ) {
 
                 /**
                  * @internal
@@ -68,10 +65,9 @@ class AcceptLanguage extends Object implements Headers {
                  */
                 if( isset( $match['country'] ) ) {
 
-                    $ISO = new ISO3166;
+                    $ISO = new ISO3166( array( 'value' => $match['country'] ) );
 
-                    if( $ISO -> validate( $match['country'] ) ) {
-
+                    if( $ISO -> validate() ) {
                         return TRUE;
                     }
                 }

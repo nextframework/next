@@ -24,9 +24,6 @@ class Vary extends Object implements Headers {
      *        Vary  = "Vary" ":" ( "*" | 1#field-name )
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -34,10 +31,13 @@ class Vary extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.44
      *  RFC 2616 Section 14.44
      */
-    public function validate( $data ) {
+    public function validate() {
 
-        // Not necessary because field-name can be a RFC 2616 Header or a user-defined field as well
-
+        /**
+         * @internal
+         * Not necessary because field-name can be a RFC 2616 Header
+         * or a user-defined field as well
+         */
         return TRUE;
     }
 }

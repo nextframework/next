@@ -16,13 +16,6 @@ use Next\Application\Chain as Applications;    # Application Chain Class
 abstract class AbstractGenerator extends Object implements Generator {
 
     /**
-     * Routes Generators Default Options
-     *
-     * @var array $defaultOptions
-     */
-    private $defaultOptions = array();
-
-    /**
      * Applications Chain
      *
      * @var Next\Application\Chain $applications
@@ -64,9 +57,7 @@ abstract class AbstractGenerator extends Object implements Generator {
 
         $this -> applications =& $applications;
 
-        // Parameter Object (through parent construction)
-
-        parent::__construct( $this -> defaultOptions, $options );
+        parent::__construct( $options );
     }
 
     // Accessors

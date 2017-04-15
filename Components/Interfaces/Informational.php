@@ -24,4 +24,9 @@ interface Informational {
      * Get error message
      */
     public function getErrorMessage();
+
+    /**
+     * Get informational message
+     */
+    public function getInformationalMessage();
 }

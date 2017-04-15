@@ -111,10 +111,13 @@ class Builder extends Object {
      *
      * @param Next\DB\Query\Renderer $renderer
      *  Query Renderer to be used
+     *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for the Query Builder
      */
-    public function __construct( Renderer $renderer ) {
+    public function __construct( Renderer $renderer, $options = NULL ) {
 
-        parent::__construct();
+        parent::__construct( $options );
 
         $this -> renderer = $renderer;
     }

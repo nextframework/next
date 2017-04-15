@@ -24,9 +24,6 @@ class IfRange extends Object implements Headers {
      *        If-Range = "If-Range" ":" ( entity-tag | HTTP-date )
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -34,10 +31,14 @@ class IfRange extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.27
      *  RFC 2616 Section 14.27
      */
-    public function validate( $data ) {
+    public function validate() {
 
-        // We can't validate ETags yet, so even we can validate HTTP-date we can't offer a full validator...
-
+        /**
+         * @internal
+         *
+         * We can't validate ETags yet, so even we can validate HTTP-date,
+         * we can't offer a full validator...
+         */
         return TRUE;
     }
 }

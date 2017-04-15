@@ -65,7 +65,10 @@ class Statement extends \PDOStatement {
      *  on <strong>$style</strong> argument and FALSE otherwise
      */
     public function fetch( $fetch_style = null, $cursor_orientation = null, $cursor_offset = null ) {
-        return $this -> adapter -> fetch( $fetch_style );
+
+        return $this -> adapter -> fetch(
+            $fetch_style, $cursor_orientation, $cursor_offset
+        );
     }
 
     /**
@@ -73,25 +76,39 @@ class Statement extends \PDOStatement {
      *
      * @param integer|optional $fetch_style
      *  Fetch mode for this fetch operation
+     *  Not directly used (documentation only)
      *
      * @param mixed|optional $fetch_argument
      *  Complementary argument to Fetch Style
+     *  Not directly used (documentation only)
      *
      * @param array|optional $ctor_args
      *
-     *   <p>Arguments passed to a Class Constructor.</p>
+     *  <p>Arguments passed to a Class Constructor.</p>
      *
-     *   <p>
-     *     Used only when <strong>$fetch_Style</strong> is
-     *     <em>PDO::FETCH_CLASS</em>
-     *   </p>
+     *  <p>
+     *    Used only when <strong>$fetch_Style</strong> is
+     *    <em>PDO::FETCH_CLASS</em>
+     *  </p>
+     *
+     *  Not directly used (documentation only)
      *
      * @return array|stdClass|boolean
      *  An array or an stdClass object on success, depending
      *  on <strong>$style</strong> argument and FALSE otherwise
      */
     public function fetchAll( $fetch_style = NULL, $fetch_argument = NULL, $ctor_args = NULL ) {
-        return $this -> adapter -> fetchAll( $fetch_style );
+
+        /**
+         * @internal
+         *
+         * Method arguments can't be used directly anymore in order to maintain
+         * compatibility with the functionality provided by Statement::fetch()
+         * and other methods with variable number of arguments
+         */
+        list( $fetch_style, $fetch_argument, $ctor_args ) = func_get_arg( 0 ) + array( NULL, NULL, NULL );
+
+        return $this -> adapter -> fetchAll( $fetch_style, $fetch_argument, $ctor_args );
     }
 
     /**
@@ -150,7 +167,7 @@ class Statement extends \PDOStatement {
      *  TRUE on success and FALSE otherwise
      */
     public function setFetchMode( $fetchStyle, $params = NULL ) {
-        return $this -> adapter -> setFetchMode( $fetchStyle );
+        return $this -> adapter -> setFetchMode( $fetchStyle, $params );
     }
 
     // Miscellaneous Methods

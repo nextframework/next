@@ -3,8 +3,9 @@
 namespace Next\HTTP;
 
 use Next\HTTP\Response\ResponseException;          # Response Exception
-
 use Next\HTTP\Headers\Fields\FieldsException;      # Headers Fields Exception Class
+
+use Next\HTTP\Headers\Fields\Field;                # Header Field Interface
 
 use Next\Components\Object;                        # Object Class
 use Next\Components\Invoker;                       # Invoker Class
@@ -684,6 +685,14 @@ class Response extends Object {
     private $shouldAbort = TRUE;
 
     /**
+     * Should we cleanup excess of whitespace and try to
+     * fix indentation for markup languages?
+     *
+     * @var boolean $shouldCleanupMarkup
+     */
+    private $shouldCleanupMarkup = TRUE;
+
+    /**
      * Should we avoid Response Headers to be sent?
      *
      * @var boolean $disableSendingHeaders
@@ -698,10 +707,13 @@ class Response extends Object {
      *
      * @param array|optional $metaData
      *  Response Meta Data
+     *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for the Response Object
      */
-    public function __construct( $data = NULL, array $metaData = array() ) {
+    public function __construct( $data = NULL, array $metaData = array(), $options = NULL ) {
 
-        parent::__construct();
+        parent::__construct( $options );
 
         // Headers Management Object
 
@@ -829,37 +841,39 @@ class Response extends Object {
      */
     public function send() {
 
-        // Cleaning Up HTML's extra NewLines
+        if( $this -> shouldCleanupMarkup ) {
 
-        $this -> body = preg_replace( self::CLEANUP, "\n\n", $this -> body );
+            // Cleaning Up HTML's extra NewLines
 
-        // Fixing XHTML end tag position
+            $this -> body = preg_replace( self::CLEANUP, "\n\n", $this -> body );
 
-        $this -> body = preg_replace( '/\s*>/m', '>', $this -> body );
+            // Fixing XHTML end tag position
 
-        // Removing extra spaces after an element string and sending its closing tag to the next line
+            $this -> body = preg_replace( '/\s*>/m', '>', $this -> body );
 
-        $this -> body = preg_replace_callback( '/^(\s+)(\w+)\s*<(.*?)>$/m',
+            // Removing extra spaces after an element string and sending its closing tag to the next line
 
-            function( $matches ) {
+            $this -> body = preg_replace_callback( '/^(\s+)(\w+)\s*<(.*?)>$/m',
 
-                $indentSize = ( strlen( $matches[1] ) - 4 );
-                $indentSize = ( $indentSize < 0 ? 0 : $indentSize );
+                function( $matches ) {
 
-                /**
-                 * Inserting the reduced indentation level for the closing tag
-                 * in replacements array
-                 */
-                ArrayUtils::insert(
-                    array( 3 => str_repeat( ' ', $indentSize ) ), $matches
-                );
+                    $indentSize = ( strlen( $matches[1] ) - 4 );
+                    $indentSize = ( $indentSize < 0 ? 0 : $indentSize );
 
-                return vsprintf( "%s%s\n%s<%s>", array_slice( $matches, 1, 4 ) );
+                    /**
+                     * Inserting the reduced indentation level for the closing tag
+                     * in replacements array
+                     */
+                    ArrayUtils::insert(
+                        array( 3 => str_repeat( ' ', $indentSize ) ), $matches
+                    );
 
-            },
+                    return vsprintf( "%s%s\n%s<%s>", array_slice( $matches, 1, 4 ) );
+                },
 
-            $this -> body
-        );
+                $this -> body
+            );
+        }
 
         // Should we return the Response...
 
@@ -946,7 +960,6 @@ class Response extends Object {
              *  If an FieldsException is caught, we have a Relative URI so
              *  we'll send it as a Raw Header
              */
-
             $this -> headers -> addHeader(
 
                 new Raw( sprintf( 'Location: %s', $to ) )
@@ -1032,6 +1045,32 @@ class Response extends Object {
     public function disableSendingHeaders( $flag ) {
 
         $this -> disableSendingHeaders = (bool) $flag;
+
+        return $this;
+    }
+
+    /**
+     * Get current state of Markup Cleanup flag
+     *
+     * @return boolean
+     *  Markup Cleanup flag value
+     */
+    public function shouldCleanupMarkup() {
+        return $this -> shouldCleanupMarkup;
+    }
+
+    /**
+     * Change state of Markup Cleaning flag
+     *
+     * @param boolean $flag
+     *  New state for the flag
+     *
+     * @return Next\HTTP\Response
+     *  Response Instance (Fluent Interface)
+     */
+    public function cleanupMarkup( $flag ) {
+
+        $this -> shouldCleanupMarkup = (bool) $flag;
 
         return $this;
     }
@@ -1293,6 +1332,23 @@ class Response extends Object {
         return $this -> statusCode;
     }
 
+    /**
+     * Get the message associated to a Response Code
+     *
+     * @param  mixed|integer $code
+     *  HTTP Response Code to have its associated message retrieved
+     *
+     * @return string|null
+     *  The HTTP Response Code message associated if known by Response class.
+     *  If not, return NULL
+     */
+    public function getStatusMessage( $code ) {
+
+        if( ! array_key_exists( $code, $this -> messages ) ) return NULL;
+
+        return $this -> messages[ $code ];
+    }
+
     // Auxiliary Methods
 
     /**
@@ -1323,19 +1379,34 @@ class Response extends Object {
              */
             if( $header instanceof Generic ) {
 
+                /**
+                 * @internal
+                 *
+                 * Generic Headers usually doesn't have a Header Field Class,
+                 * having its name and value separated by a colon
+                 *
+                 * It's like the headers is being manually sent
+                 * through the header() function
+                 */
                 list( $name, $value ) = explode( ':', $header -> getValue() );
 
                 header( sprintf( '%s: %s', $name, trim( $value ) ) );
 
             } elseif( $header instanceof Raw ) {
 
-                // Raw Headers. Sent "as is"
+                // Raw Headers are sent "as is", like HTTP Status Code, for example
 
                 header( $header -> getValue() );
 
+            } elseif( $header instanceof Field ) {
+
+                // Well formed Header? Let's build a string representation
+
+                header( sprintf( '%s: %s', $header -> getName(), $header -> getValue() ) );
+
             } else {
 
-                // Well formed Header? Let's use its string representation
+                // Anything else? Not a good idea but, c'est la vie
 
                 header( (string) $header );
             }

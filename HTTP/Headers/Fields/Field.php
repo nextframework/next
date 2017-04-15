@@ -13,6 +13,14 @@ namespace Next\HTTP\Headers\Fields;
 interface Field {
 
     /**
+     * Set Header Value
+     *
+     * @param string $value
+     *  Header Value
+     */
+    public function setValue( $value );
+
+    /**
      * Get Header Name
      */
     public function getName();

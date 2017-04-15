@@ -28,9 +28,6 @@ class Pragma extends Object implements Headers {
      *        extension-pragma  = token [ "=" ( token | quoted-string ) ]
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -38,7 +35,15 @@ class Pragma extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.32
      *  RFC 2616 Section 14.32
      */
-    public function validate( $data ) {
-        return preg_match( sprintf( '/^(no-cache|%s=[\'"]?%s[\'"]?)$/', self::TOKEN, self::TOKEN ), $data ) != 0;
+    public function validate() {
+
+        $test = preg_match(
+
+            sprintf( '/^(no-cache|%s=[\'"]?%s[\'"]?)$/', self::TOKEN, self::TOKEN ),
+
+            $this -> options -> value
+        );
+
+        return ( $test != 0 );
     }
 }

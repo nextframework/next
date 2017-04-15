@@ -25,9 +25,6 @@ class ContentEncoding extends Object implements Headers {
      *        Content-Encoding  = "Content-Encoding" ":" 1#content-coding
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -35,7 +32,15 @@ class ContentEncoding extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.11
      *  RFC 2616 Section 14.11
      */
-    public function validate( $data ) {
-         return ( preg_match( sprintf( '@^%s$@x', IANA::ENCODING ), $data ) != 0 );
+    public function validate() {
+
+        $test = preg_match(
+
+            sprintf( '@^%s$@x', IANA::ENCODING ),
+
+            $this -> options -> value
+        );
+
+         return ( $test != 0 );
     }
 }

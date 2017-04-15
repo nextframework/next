@@ -24,9 +24,6 @@ class Upgrade extends Object implements Headers {
      *        Upgrade = "Upgrade" ":" 1#product
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -34,10 +31,14 @@ class Upgrade extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.42
      *  RFC 2616 Section 14.42
      */
-    public function validate( $data ) {
+    public function validate() {
 
-        // Impossible to validate due uncertain number of different protocols around the world
-
+        /**
+         * @internal
+         *
+         * Impossible to validate due uncertain number of different
+         * protocols around the world
+         */
         return TRUE;
     }
 }

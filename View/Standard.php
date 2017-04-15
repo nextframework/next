@@ -192,7 +192,9 @@ class Standard extends Object implements View {
      * @param Next\Application\Application $application
      *  Application Object
      */
-    public function __construct( Application $application = NULL ) {
+    public function __construct( Application $application = NULL, $options = NULL ) {
+
+        parent::__construct( $options );
 
         // Setting Up Composite View Queue
 
@@ -1074,9 +1076,10 @@ class Standard extends Object implements View {
 
         $application    = $this -> _application -> getApplicationDirectory();
 
-        $controller     = $this -> _application -> getRouter() -> getController();
+        $router         = $this -> _application -> getRouter();
 
-        $action         = $this -> _application -> getRouter() -> getMethod();
+        $controller     = $router -> getController();
+        $action         = $router -> getMethod();
 
         /**
          * @internal

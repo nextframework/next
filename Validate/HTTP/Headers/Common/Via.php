@@ -30,9 +30,6 @@ class Via extends Object implements Headers {
      *        pseudonym         = token
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -40,9 +37,9 @@ class Via extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.45
      *  RFC 2616 Section 14.45
      */
-    public function validate( $data ) {
+    public function validate() {
 
-        preg_match(
+        $test = preg_match(
 
             sprintf(
 
@@ -61,9 +58,9 @@ class Via extends Object implements Headers {
                 self::TOKEN, self::TOKEN, self::TOKEN
             ),
 
-            $data, $match
+            $this -> options -> value, $match
         );
 
-        return ( count( $match ) != 0 );
+        return ( $test != 0 );
     }
 }

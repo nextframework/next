@@ -26,16 +26,13 @@ class XPoweredBy extends Object implements Headers {
      *        X-Powered-By = "X-Powered-By" ":" ( text )
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
      * @link
      *  http://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Common_non-standard_response_headers
      */
-    public function validate( $data ) {
+    public function validate() {
 
         // Everything is acceptable
 

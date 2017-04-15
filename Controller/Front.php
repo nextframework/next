@@ -2,16 +2,22 @@
 
 namespace Next\Controller;
 
+use Next\Controller\Dispatcher\Dispatcher;             # Controllers Dispatcher Interface
+
+use Next\Controller\Router\RouterException;            # Router Exception Class
 use Next\Controller\Dispatcher\DispatcherException;    # Dispatcher Exception Class
+
+use Next\HTTP\Headers\Fields\FieldsException;          # Header Fields Exception Class
+use Next\HTTP\Response\ResponseException;              # Response Exception Class
+
 use Next\Components\Object;                            # Object Class
 use Next\Application\Chain as Applications;            # Applications Chain
-use Next\Controller\Dispatcher\Dispatcher;             # Controllers Dispatcher Interface
 use Next\Controller\Dispatcher\Standard;               # Standard Dispatcher Class
-use Next\HTTP\Headers\Fields\FieldsException;          # Header Fields Exception Class
+
+use Next\Components\Debug\Handlers;                    # Errors & Exceptions Handlers
+
 use Next\HTTP\Request;                                 # Request Class
 use Next\HTTP\Response;                                # Response Class
-use Next\HTTP\Response\ResponseException;              # Response Exception Class
-use Next\Components\Debug\Handlers;                    # Errors & Exceptions Handlers
 
 /**
  * Front Controller Class
@@ -42,8 +48,13 @@ class Front extends Object {
      *
      * @param Next\Application\Chain $applications
      *  Applications Chain
+     *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for the Front Controller
      */
-    public function __construct( Applications $applications ) {
+    public function __construct( Applications $applications, $options = NULL ) {
+
+        parent::__construct( $options );
 
         $this -> applications = $applications;
 
@@ -60,6 +71,7 @@ class Front extends Object {
      * <ul>
      *
      *     <li>Iterates through available applications</li>
+     *     <li>Execute any Caching Schema associated to the Application</li>
      *     <li>Configures its Resources</li>
      *     <li>Tries to match a Route against Requested URI</li>
      *     <li>Instantiates the proper Controller</li>
@@ -73,37 +85,36 @@ class Front extends Object {
      */
     public function dispatch() {
 
-        // Iterating through Application's Collection...
-
         foreach( $this -> applications as $application ) {
 
-            // ... and trying to match a Route
+            $response = $application -> getResponse();
+            $router   = $application -> getRouter();
+
+            // Do we have any Caching Schema to run?
+
+            $caching = $application -> getCache();
+
+            if( count( $caching ) > 0 ) {
+                foreach( $caching as $schema ) $schema -> run();
+            }
+
+            // Aborting the flow if there's not Router for the Application
+
+            if( $router === FALSE ) return FALSE;
+
+            // Leaving the Flow if we shouldn't route (i.e. direct access to files)
+
+            if( ! $router -> shouldRoute() ) {
+                return FALSE;
+            }
 
             try {
 
-                $match = $application -> getRouter() -> find( $application );
+                // Trying to find a matching Route
 
-                // We have a match!
+                $match = $router -> find( $application );
 
                 if( $match !== FALSE ) {
-
-                    // Shortening Application's Response
-
-                    $response = $application -> getResponse();
-
-                    // Adding some Headers before Send
-
-                    try {
-
-                        $response -> addHeader(
-
-                            new \Next\HTTP\Headers\Fields\Response\XPoweredBy(
-
-                                'Next Framework'
-                            )
-                        );
-
-                    } catch( FieldsException $e ) {}
 
                     /**
                      * @internal
@@ -146,7 +157,7 @@ class Front extends Object {
                     }
                 }
 
-            } catch( \Next\Controller\Router\RouterException $e ) {
+            } catch( RouterException $e ) {
 
                 $this -> dispatcher -> setDispatched( TRUE );
 

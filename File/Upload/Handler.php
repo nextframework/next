@@ -6,7 +6,6 @@ use Next\HTTP\Response\ResponseException;          # Response Exception Class
 
 use Next\Application\Application;                  # Application Interface
 
-use Next\Components\Interfaces\Parameterizable;    # Parameterizable Interface
 use Next\Components\Object;                        # Object Class
 use Next\Components\Parameter;                     # Parameter Class
 
@@ -20,7 +19,7 @@ class Handler extends Object {
      *
      * @var array $defaultOptions
      */
-    private $defaultOptions = array(
+    protected $defaultOptions = array(
 
         'uploadDir'                 => 'uploads',
         'name'                      => 'files',
@@ -50,17 +49,17 @@ class Handler extends Object {
      * @param Next\Application\Application|optional $application
      *  Optional Application Object
      *
-     * @param array|stdClass|Next\Components\Parameter|optional $options
-     *  Options to affect Upload Handler behavior
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for Upload Handler
      *
      * @see Next\Components\Parameter
      */
     public function __construct( Application $application = NULL, $options = NULL ) {
 
-        parent::__construct( $this -> defaultOptions, $options );
+        parent::__construct( $options );
 
-        $this -> request     = ( ! is_null( $application ) ? $application -> getRequest()  : new Request  );
-        $this -> response    = ( ! is_null( $application ) ? $application -> getResponse() : new Response );
+        $this -> request     = $application -> getRequest()
+        $this -> response    = $application -> getResponse();
 
         $this -> checkIntegrity();
     }
@@ -108,6 +107,8 @@ class Handler extends Object {
         }
     }
 
+    // Accessors
+
     /**
      * Get Request Object
      *
@@ -135,7 +136,6 @@ class Handler extends Object {
         if( ! is_dir( $this -> options -> uploadDir ) ) {
 
             throw new \Exception(
-
                 sprintf( 'Upload directory %s is not a valid directory', $this -> options -> uploadDir )
             );
         }
@@ -143,7 +143,6 @@ class Handler extends Object {
         if( ! is_writable( $this -> options -> uploadDir ) ) {
 
             throw new \Exception(
-
                 sprintf( 'Upload directory %s is not writable', $this -> options -> uploadDir )
             );
         }

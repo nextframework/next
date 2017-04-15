@@ -4,6 +4,8 @@ namespace Next\Validate\IANA;
 
 use Next\Validate\Validate;    # Validate Interface
 
+use Next\Components\Object;    # Object Class
+
 /**
  * IANA MIME Type Validation Class
  *
@@ -12,7 +14,7 @@ use Next\Validate\Validate;    # Validate Interface
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class MIME implements Validate {
+class MIME extends Object implements Validate {
 
     /**
      * Range Types
@@ -628,21 +630,18 @@ class MIME implements Validate {
     /**
      * Validates given MIME Type
      *
-     * @param string $data
-     *  Data to Validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      */
-    public function validate( $data ) {
+    public function validate() {
 
         // Input string must have a slash
 
-        if( strpos( $data, '/' ) === FALSE ) {
+        if( strpos( $this -> options -> value, '/' ) === FALSE ) {
             return FALSE;
         }
 
-        $data = explode( '/', $data );
+        $data = explode( '/', $this -> options -> value );
 
         // Splitting operation must result a two-indexes array
 

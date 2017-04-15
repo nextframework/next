@@ -2,10 +2,13 @@
 
 namespace Next\Tools\Routes\Generators\Writer;
 
-use Next\HTTP\Stream\Writer;
-use Next\HTTP\Stream\Adapter\Socket;
 use Next\HTTP\Stream\Adapter\AdapterException;    # Stream Adapter Exception
 use Next\HTTP\Stream\Writer\WriterException;      # HTTP Stream Writer Exception Class
+
+use Next\Components\Object;                       # Object Class
+
+use Next\HTTP\Stream\Writer as Adapter;           # HHTP Stream Writer Class
+use Next\HTTP\Stream\Adapter\Socket;              # HTTP Stream Socket Adapter
 
 /**
  * Routes Generator Tool: Standard Output Writer (PHP arrays)
@@ -15,16 +18,16 @@ use Next\HTTP\Stream\Writer\WriterException;      # HTTP Stream Writer Exception
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class Standard extends AbstractWriter {
+class Standard extends Object implements Writer {
 
     /**
-     * Integrity Check
+     * Additional Initialization
      *
      * @throws Next\Tools\Routes\Generators\Writer\WriterException
-     *  Throw if the required <strong>filePath</strong> option with
+     *  Thrown if the required <strong>filePath</strong> option with
      *  the path to the PHP file to write the array is missing or empty
      */
-    protected function checkIntegrity() {
+    protected function init() {
 
         if( ! isset( $this -> options -> filePath ) ) {
             throw WriterException::missingConfigurationOption( 'filePath' );
@@ -81,7 +84,7 @@ class Standard extends AbstractWriter {
 
         try {
 
-            $writer = new Writer(
+            $writer = new Adapter(
                 new Socket( $this -> options -> filePath, Socket::READ_WRITE )
             );
 
@@ -134,7 +137,7 @@ class Standard extends AbstractWriter {
      */
     public function reset() {
 
-        $writer = new Writer(
+        $writer = new Adapter(
             new Socket( $this -> options -> filePath, Socket::TRUNCATE_WRITE )
         );
 
@@ -147,5 +150,7 @@ class Standard extends AbstractWriter {
         $writer -> write( '' );
 
         $writer -> getAdapter() -> close();
+
+        return $this;
     }
 }

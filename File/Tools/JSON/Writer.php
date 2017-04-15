@@ -43,10 +43,13 @@ class writer extends Object {
      * @param string|array $data
      *  Data to write
      *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for the JSON Writer
+     *
      * @throws Next\Components\Debug\Exception
      *  Thrown if given data is a valid PHP resource
      */
-    public function __construct( $file, $data ) {
+    public function __construct( $file, $data, $options = NULL ) {
 
         if( is_resource( $data ) ) {
             throw new Exception( 'Resources cannot be encoded' );

@@ -222,8 +222,13 @@ class Socket extends AbstractAdapter {
      *
      * @throws Next\HTTP\Stream\Adapter\AdapterException
      *  Chosen mode is invalid
+     *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for Caching Schema
      */
-    public function __construct( $filename, $mode = self::READ, Context $context = NULL ) {
+    public function __construct( $filename, $mode = self::READ, Context $context = NULL, $options = NULL ) {
+
+        parent::__construct( $options );
 
         $this -> filename = trim( $filename );
 

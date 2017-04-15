@@ -25,9 +25,6 @@ class TransferEncoding extends Object implements Headers {
      *        Transfer-Encoding       = "Transfer-Encoding" ":" 1#transfer-coding
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -35,7 +32,15 @@ class TransferEncoding extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.41
      *  RFC 2616 Section 14.41
      */
-    public function validate( $data ) {
-        return ( preg_match( sprintf( '@^(chunked|%s)$@i', IANA::ENCODING ), $data ) != 0 );
+    public function validate() {
+
+        $test = preg_match(
+
+            sprintf( '@^(chunked|%s)$@i', IANA::ENCODING ),
+
+            $this -> options -> value
+        );
+
+        return ( $test != 0 );
     }
 }

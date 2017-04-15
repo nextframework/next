@@ -36,9 +36,7 @@ abstract class AbstractTable extends Object implements Table {
      * @throws Next\DB\Table\TableException
      *  Thrown if the PRIMARY KEY column NAME is missing from Entity
      */
-    public function __construct() {
-
-        parent::__construct();
+    public function init() {
 
         if( is_null( $this -> _primary ) ) {
             throw TableException::missingPrimaryKey( $this );
@@ -82,7 +80,7 @@ abstract class AbstractTable extends Object implements Table {
      */
     public function setPrimaryKey( $pk ) {
 
-        $this -> {$this -> _primary} = (integer) $pk;
+        $this -> {$this -> _primary} = $pk;
 
         return $this;
     }

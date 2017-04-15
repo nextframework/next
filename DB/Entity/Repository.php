@@ -51,9 +51,12 @@ class Repository extends Object {
      * </p>
      *
      * @param Next\DB\Table\Manager|optional $manager
-     *  Entity Manager
+     *  Optional Entity Manager
+     *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for each Entity Repository
      */
-    public function __construct( Manager $manager = NULL ) {
+    public function __construct( Manager $manager = NULL, $options = NULL ) {
 
         if( ! is_null( $manager ) ) {
 
@@ -61,11 +64,12 @@ class Repository extends Object {
 
             /**
              * @internal
+             *
              * Invoking the parent constructor must occur after set the property above
              * in order to trigger Object::init() from child classes which may change
              * the Table Object used by Manager
              */
-            parent::__construct();
+            parent::__construct( $options );
 
             // And this integrity checking ensures a Table Object was set
 

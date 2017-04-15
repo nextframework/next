@@ -24,9 +24,6 @@ class ContentLength extends Object implements Headers {
      *        Content-Length    = "Content-Length" ":" 1*DIGIT
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -34,7 +31,7 @@ class ContentLength extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.13
      *  RFC 2616 Section 14.13
      */
-    public function validate( $data ) {
-        return ( preg_match( '/^[0-9]+$/', $data ) != 0 );
+    public function validate() {
+        return ( preg_match( '/^[0-9]+$/', $this -> options -> value ) != 0 );
     }
 }

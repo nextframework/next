@@ -25,10 +25,9 @@ class Cookies extends Object {
     private $cookies;
 
     /**
-     * Cookies Management Class Constructor
+     * Additional Initialization
      */
-    public function __construct() {
-
+    public function init() {
         $this -> cookies = new Lists;
     }
 

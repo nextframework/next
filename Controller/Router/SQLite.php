@@ -2,9 +2,10 @@
 
 namespace Next\Controller\Router;
 
-use Next\Application\Application;    # Application Interface
-use Next\HTTP\Request;               # Request Class
+use Next\Application\Application;                     # Application Interface
+use Next\HTTP\Request;                                # Request Class
 
+use Next\DB\Driver\PDO\Adapter\SQLite as Adapater;    # SQLite DB Adapter
 /**
  * Standard Controller Router Class
  *
@@ -14,6 +15,15 @@ use Next\HTTP\Request;               # Request Class
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
 class SQLite extends Standard {
+
+    /**
+     * Default Options
+     *
+     * @var array $defaultOptions
+     */
+    protected $defaultOptions = array(
+        'dbPath' => 'data/routes.sqlite'
+    );
 
     /**
      * SQLite Connection Resource
@@ -166,7 +176,7 @@ class SQLite extends Standard {
 
         // Checking if Database File Exists
 
-        if( ! file_exists( $this -> options -> dbPath ) ) {
+        if( $this -> options -> dbPath === FALSE || ! file_exists( $this -> options -> dbPath ) ) {
 
             throw RouterException::connectionFailure(
 
@@ -178,50 +188,13 @@ class SQLite extends Standard {
             );
         }
 
-        $adapter = new \Next\DB\Driver\PDO\Adapter\SQLite(
-
+        $adapter = new Adapter(
            array(
-
                'dbPath' => $this -> options -> dbPath
            )
        );
 
         $this -> dbh = $adapter -> getConnection();
-    }
-
-    // Parameterizable Interface Methods Implementation
-
-    /**
-     * Set Standard Router Options
-     *
-     * @return array
-     *
-     *  <p>An associative array with Standard Router default options</p>
-     *
-     *  <p>
-     *
-     *      <ul>
-     *
-     *          <li>
-     *
-     *              <p><strong>dbPath</strong></p>
-     *
-     *              <p>Path for SQLite Database File</p>
-     *
-     *              <p>Default Value: <strong>data/routes.sqlite</strong></p>
-     *
-     *          </li>
-     *
-     *      </ul>
-     *
-     *  </p>
-     */
-    public function setOptions() {
-
-        return array(
-
-            'dbPath' => 'data/routes.sqlite'
-        );
     }
 
     // Auxiliary Methods

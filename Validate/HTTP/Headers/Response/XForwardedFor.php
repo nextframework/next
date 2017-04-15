@@ -26,9 +26,6 @@ class XForwardedFor extends Object implements Headers {
      *        X-Forwarded-For = "X-Forwarded-For" ":" *( client | proxy )
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -41,7 +38,7 @@ class XForwardedFor extends Object implements Headers {
      * @link
      *  http://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Common_non-standard_response_headers
      */
-    public function validate( $data ) {
+    public function validate() {
 
         // Not enough Information... again :P
 

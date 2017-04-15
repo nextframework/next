@@ -27,14 +27,17 @@ abstract class AbstractTypes extends Object implements Type {
      * @param mixed|Next\Components\Types\Type|optional $value
      *  Value to build the Type object, be it raw or another Type Object
      *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for each Type Object
+     *
      * @throws InvalidArgumentException
      *  Given argument is not acceptable by concrete datatype class
      *
      * @see Next\Components\Types\AbstractTypes::set()
      */
-    public function __construct( $value = NULL ) {
+    public function __construct( $value = NULL, $options = NULL ) {
 
-        parent::__construct();
+        parent::__construct( $options );
 
         if( $value !== NULL ) {
 

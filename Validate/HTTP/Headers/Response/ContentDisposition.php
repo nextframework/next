@@ -57,9 +57,6 @@ class ContentDisposition extends Object implements Headers {
      *                         ; numeric timezones (+HHMM or -HHMM) MUST be used
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -67,7 +64,7 @@ class ContentDisposition extends Object implements Headers {
      *  http://tools.ietf.org/html/rfc2183#section-2
      *  RFC 2183 Section 2
      */
-    public function validate( $data ) {
+    public function validate() {
 
         preg_match(
 
@@ -101,26 +98,36 @@ class ContentDisposition extends Object implements Headers {
                 self::TOKEN
             ),
 
-            $data, $matches
+            $this -> options -> value, $matches
         );
 
-        /**
-         * @internal
-         * Now we have to check the HTTP-dates
-         * Instead of repeat gmdate() function several times, let's use Date Header Validator
-         */
-        $date = new Date;
+        // Validating HTTP-dates, if present
 
-        if( isset( $matches['creation'] ) && ! $date -> validate( $matches['creation'] ) ) {
-            return FALSE;
+        if( isset( $matches['creation'] ) ) {
+
+            $date = new Date(
+                array( 'value' => $matches['creation'] )
+            );
+
+            if( ! $date -> validate() ) return FALSE;
         }
 
-        if( isset( $matches['modification'] ) && ! $date -> validate( $matches['modification'] ) ) {
-            return FALSE;
+        if( isset( $matches['modification'] ) ) {
+
+            $date = new Date(
+                array( 'value' => $matches['modification'] )
+            );
+
+            if( ! $date -> validate() ) return FALSE;
         }
 
-        if( isset( $matches['read'] ) && ! $date -> validate( $matches['read'] ) ) {
-            return FALSE;
+        if( isset( $matches['read'] ) ) {
+
+            $date = new Date(
+                array( 'value' => $matches['read'] )
+            );
+
+            if( ! $date -> validate() ) return FALSE;
         }
 
         $matches = array_filter( $matches );

@@ -24,9 +24,6 @@ class Authorization extends Object implements Headers {
      *        Authorization  = "Authorization" ":" credentials
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -34,7 +31,7 @@ class Authorization extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.8
      *  RFC 2616 Section 14.8
      */
-    public function validate( $data ) {
+    public function validate() {
         return TRUE;
     }
 }

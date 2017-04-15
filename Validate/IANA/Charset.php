@@ -4,6 +4,8 @@ namespace Next\Validate\IANA;
 
 use Next\Validate\Validate;    # Validate Interface
 
+use Next\Components\Object;    # Object Class
+
 /**
  * IANA Charset Validation Class
  *
@@ -12,7 +14,7 @@ use Next\Validate\Validate;    # Validate Interface
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class Charset implements Validate {
+class Charset extends Object implements Validate {
 
     /**
      * Character Set Regular Expression
@@ -1264,19 +1266,16 @@ class Charset implements Validate {
     /**
      * Validates given Character Set
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      */
-    public function validate( $data ) {
+    public function validate() {
 
         // We have to check in Registry keys (common names) and its sub-arrays (aliases)
 
         $source = array_merge( array_keys( self::$charsets ), self::$charsets );
 
-        return in_array( $data, $source );
+        return in_array( $this -> options -> value, $source );
     }
 
     // Accessors

@@ -3,6 +3,9 @@
 namespace Next\Tools\ClassMapper;
 
 use Next\Tools\ClassMapper\ClassMapperException;    # ClassMapper Exception Class
+
+use Next\Components\Object;                         # Object Class
+use Next\HTTP\Response;                             # Response Class
 use Next\XML\Writer;                                # XML Writer Class
 
 /**
@@ -13,7 +16,20 @@ use Next\XML\Writer;                                # XML Writer Class
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class XML extends AbstractMapper {
+class XML extends Object implements Mapper {
+
+    /**
+     * Default Options
+     *
+     * @var array $defaultOptions
+     */
+    protected $defaultOptions = array(
+
+        'rootNode'          => 'map',
+        'filename'          => 'map.xml',
+        'save'              => FALSE,
+        'outputDirectory'   => ''
+    );
 
     /**
      * XML Writer Object
@@ -23,9 +39,16 @@ class XML extends AbstractMapper {
     private $writer;
 
     /**
-     * Additional Initialization. Must be overwritten
+     * Additional Initialization
+     *
+     * Check Options Integrity, initializes the Next\XML\Writer Object and starts
+     * the root node of the XML structure
+     *
+     * @see Next\Tools\ClassMapper\XML::checkIntegrity()
      */
     protected function init() {
+
+        $this -> checkIntegrity();
 
         // Starting XML File
 
@@ -50,24 +73,20 @@ class XML extends AbstractMapper {
 
         // Iterating through Map Data
 
+        $this -> writer -> addParent( 'classes' );
+
         foreach( $map as $class => $path ) {
 
-            $this -> writer -> addParent( 'classes' )
-                            -> addChild(
-
-                                   'class', NULL,
-
-                                   array( 'name' => $class, 'path' => $path ),
-
-                                   TRUE
-                               );
+            $this -> writer -> addChild(
+                'class', NULL, array( 'name' => $class, 'path' => $path )
+            );
         }
 
         // Displaying...
 
         if( ! $this -> options -> save ) {
 
-            return $this -> writer -> output();
+            return $this -> writer -> output( new Response );
 
         // ... or saving the File
 
@@ -80,25 +99,6 @@ class XML extends AbstractMapper {
                 $this -> writer -> output( NULL )
             );
         }
-    }
-
-    // Parameterizable Interface Method Implementation
-
-    /**
-     * Setup XML ClassMapper Options
-     *
-     * @return array
-     *  XML ClassMapper Options
-     */
-    public function setOptions() {
-
-        return array(
-
-            'rootNode'          => 'map',
-            'filename'          => 'map.xml',
-            'save'              => FALSE,
-            'outputDirectory'   => ''
-        );
     }
 
     // Auxiliary Methods
@@ -118,7 +118,7 @@ class XML extends AbstractMapper {
      * @throws Next\Tools\ClassMapper\ClassMapperException
      *  Filename is missing
      */
-    protected function checkIntegrity() {
+    private function checkIntegrity() {
 
         // If the root node name was overwritten with an empty string...
 

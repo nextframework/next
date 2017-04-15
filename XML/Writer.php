@@ -2,11 +2,14 @@
 
 namespace Next\XML;
 
-use Next\Components\Interfaces\Parameterizable;           # Parameterizable Interface
-use Next\HTTP\Response\ResponseException;                 # Response Exception Class
-use Next\Components\Parameter;                            # Parameter Class
-use Next\HTTP\Response;                                   # Response Class
-use Next\HTTP\Headers\Fields\Entity\ContentType;          # Content-Type Entity Header
+use Next\HTTP\Response\ResponseException;           # Response Exception Class
+
+use Next\Components\Object;                         # Object Class
+use Next\Components\Invoker;                        # Invoker Class
+use Next\Components\Mimicker;                       # Object Mimicker Class
+
+use Next\HTTP\Response;                             # Response Class
+use Next\HTTP\Headers\Fields\Entity\ContentType;    # Content-Type Entity Header
 
 /**
  * XML Writer Class
@@ -16,14 +19,14 @@ use Next\HTTP\Headers\Fields\Entity\ContentType;          # Content-Type Entity 
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class Writer extends \XMLWriter implements Parameterizable {
+class Writer extends Object {
 
     /**
      * XML Writer Default Options
      *
      * @var array $defaultOptions
      */
-    private $defaultOptions = array(
+    protected $defaultOptions = array(
 
         'addPrologue' => TRUE,
         'version'     => '1.0',
@@ -38,165 +41,24 @@ class Writer extends \XMLWriter implements Parameterizable {
     );
 
     /**
-     * XML Writer Options
-     *
-     * @var Next\Components\Parameter $options
-     */
-    protected $options;
-
-    /**
      * XML Writer Constructor
-     *
-     * @param mixed|optional $options
-     *
-     *   <br />
-     *
-     *   <p>List of Options to affect XML Output. Acceptable values are:</p>
-     *
-     *   <p>
-     *
-     *       <ul>
-     *
-     *           <li>Associative and multidimensional array</li>
-     *
-     *           <li>
-     *
-     *               An {@link http://php.net/manual/en/reserved.classes.php stdClass Object}
-     *
-     *           </li>
-     *
-     *           <li>A well formed Parameter Object</li>
-     *
-     *       </ul>
-     *
-     *   </p>
-     *
-     *   <p>The arguments taken in consideration are:</p>
-     *
-     *   <p>
-     *
-     *       <ul>
-     *
-     *           <li>
-     *
-     *               <p><strong>addPrologue</strong></p>
-     *
-     *               <p>
-     *                   Defines whether or not the XML Prologue
-     *                   <em>(<?xml version="1.0"...)</em> will be added.
-     *               </p>
-     *
-     *               <p>Default Value: <strong>TRUE</strong>.</p>
-     *
-     *           </li>
-     *
-     *           <li>
-     *
-     *               <p><strong>version</strong>
-     *
-     *               <p>
-     *                   The XML version, only visible in output if
-     *                   <strong>addPrologue</strong> option is set to TRUE.
-     *               </p>
-     *
-     *               <p>
-     *                   Default Value: <strong>1.0</strong>
-     *                   (as string, not double)
-     *               </p>
-     *
-     *           </li>
-     *
-     *           <li>
-     *
-     *               <p><strong>charset</strong></p>
-     *
-     *               <p>
-     *                   The XML Character Set to be used.
-     *               </p>
-     *
-     *               <p>
-     *                   Only visible if <strong>addPrologue</strong>
-     *                   is set as TRUE.
-     *               </p>
-     *
-     *               <p>Default Value: <strong>utf-8</strong></p>
-     *
-     *           </li>
-     *
-     *           <li>
-     *
-     *               <p><strong>indent</strong></p>
-     *
-     *               <p>
-     *                   A subgroup of options containing one or more of
-     *                   the following options:
-     *               </p>
-     *
-     *               <ul>
-     *
-     *                   <li>
-     *
-     *                       <p><strong>enabled</strong></p>
-     *
-     *                       <p>
-     *                           Defines if output XML will be indented
-     *                           or not.
-     *                       </p>
-     *
-     *                       <p>Default Value: <strong>TRUE</strong></p>
-     *
-     *                   </li>
-     *
-     *                   <li>
-     *
-     *                       <p><strong>char</strong></p>
-     *
-     *                       <p>The character used for indentation</p>
-     *
-     *                       <p>
-     *                           Usually a <strong>\t</strong> (tabulation) or
-     *                           a blank space is used.
-     *                       </p>
-     *
-     *                       <p>
-     *                           Default Value: <strong>\t</strong>
-     *                           (tabulation)
-     *                       </p>
-     *
-     *                   </li>
-     *
-     *                   <li>
-     *
-     *                       <p><strong>repeat</strong></p>
-     *
-     *                       <p>
-     *                           How many times character defined in
-     *                           <strong>char</strong> option will be
-     *                           repeated.
-     *                       </p>
-     *
-     *                       <p>
-     *                           Default Value: <strong>1</strong>
-     *                           (one tabulation)
-     *                       </p>
-     *
-     *                   </li>
-     *
-     *               </ul>
-     *
-     *           </li>
-     *
-     *       </ul>
-     *
-     *   </p>
-     *
-     * @see Next\Components\Parameter
      */
     public function __construct( $options = NULL ) {
 
-        // Setting Up Options Object
+        /**
+         * @internal
+         *
+         * Although Next\XML\Writer doesn't require any other argument to be
+         * constructed, case in which Next\Components\Object::init() could be
+         * overwritten to provide all necessary additional initialization,
+         * by doing so the Default Options defined by overriding the property
+         * above are not properly merged, preventing further customization
+         */
+        parent::__construct( $options );
 
-        $this -> options = new Parameter( $this -> defaultOptions, $options );
+        // Extending this class' Context to native XMLWriter Class
+
+        $this -> extend( new Invoker( $this, new Mimicker( new \XMLWriter ) ) );
 
         // Starting XML Document
 
@@ -209,7 +71,6 @@ class Writer extends \XMLWriter implements Parameterizable {
             $this -> setIndent( TRUE );
 
             $this -> setIndentString(
-
                 str_repeat( $this -> options -> indent -> char, $this -> options -> indent -> repeat )
             );
         }
@@ -217,7 +78,6 @@ class Writer extends \XMLWriter implements Parameterizable {
         // Should we add XML Prologue (<?xml version="1.0"...)
 
         if( $this -> options -> addPrologue ) {
-
             $this -> startDocument( $this -> options -> version, $this -> options -> charset );
         }
     }
@@ -341,7 +201,7 @@ class Writer extends \XMLWriter implements Parameterizable {
 
             try {
 
-                $response -> addHeader( new ContentType( 'text/xml' ) ) -> send();
+                $response -> addHeader( new ContentType( 'text/xml' ) );
 
             } catch( ResponseException $e ) {
 
@@ -352,7 +212,7 @@ class Writer extends \XMLWriter implements Parameterizable {
                  */
             }
 
-            print $this -> outputMemory(); exit;
+            $response -> appendBody( $this -> outputMemory() ) -> send();
 
         } else {
 

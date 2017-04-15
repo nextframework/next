@@ -2,8 +2,7 @@
 
 namespace Next\Controller\Router;
 
-use Next\Components\Interfaces\Parameterizable;    # Parameterizable Interface
-use Next\Application\Application;                  # Application Interface
+use Next\Application\Application;    # Application Interface
 
 /**
  * Controller Router Interface
@@ -13,7 +12,7 @@ use Next\Application\Application;                  # Application Interface
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-interface Router extends Parameterizable {
+interface Router {
 
     /**
      * Finds a match Route

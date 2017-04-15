@@ -25,9 +25,6 @@ class ContentType extends Object implements Headers {
      *        Content-Type   = "Content-Type" ":" media-type
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -35,7 +32,7 @@ class ContentType extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17
      *  RFC 2616 Section 14.17
      */
-    public function validate( $data ) {
+    public function validate() {
 
         /**
          * @internal
@@ -52,7 +49,7 @@ class ContentType extends Object implements Headers {
                 IANA::RANGE, self::TOKEN, self::TOKEN
             ),
 
-            $data, $match
+            $this -> options -> value, $match
         );
 
         /**
@@ -74,9 +71,9 @@ class ContentType extends Object implements Headers {
              */
             if( preg_match( sprintf( '@^%s$@', IANA::MIME ), $match['range'], $mime ) != 0 ) {
 
-                $IANA = new IANA;
+                $IANA = new IANA( array( 'value' => $mime[ 0 ] ) );
 
-                if( $IANA -> validate( $mime[ 0 ] ) ) {
+                if( $IANA -> validate() ) {
 
                     // Valid as Full MIME
 

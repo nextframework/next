@@ -65,7 +65,6 @@ class Manager {
      * Session Constructor
      */
     private function __construct() {
-
         $this -> handlers = new Handlers( $this );
     }
 

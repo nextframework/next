@@ -16,12 +16,15 @@ abstract class AbstractDecorator extends Object implements Decorator {
     /**
      * Decorator Constructor
      *
-     *  @param string $message
-     *    Resource to decorate
+     * @param string $message
+     *   Resource to decorate
+     *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for each Decorator
      */
-    public function __construct( $resource ) {
+    public function __construct( $resource, $options = NULL ) {
 
-        parent::__construct();
+        parent::__construct( $options );
 
         $this -> resource =& $resource;
     }

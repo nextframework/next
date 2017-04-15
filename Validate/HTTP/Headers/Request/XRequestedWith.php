@@ -26,9 +26,6 @@ class XRequestedWith extends Object implements Headers {
      *        X-Requested-With = "X-Requested-With" ":" 1*( token )
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -41,7 +38,7 @@ class XRequestedWith extends Object implements Headers {
      * @link
      *  http://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Common_non-standard_request_headers
      */
-    public function validate( $data ) {
+    public function validate() {
 
         /**
          * @internal

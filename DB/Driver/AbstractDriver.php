@@ -21,7 +21,7 @@ abstract class AbstractDriver extends Object implements Driver {
      *
      * @var array $defaultOptions
      */
-    private $defaultOptions = array(
+    protected $defaultOptions = array(
 
         'host'     => 'localhost',
         'username' => 'root',
@@ -34,18 +34,6 @@ abstract class AbstractDriver extends Object implements Driver {
      * @var mixed $connection
      */
     protected $connection;
-
-    /**
-     * Connection Driver COnstructor
-     *
-     * @param mixed|optional $options
-     *  Driver User Options
-     *
-     * @see Next\Components\Parameter
-     */
-    public function __construct( $options = NULL ) {
-        parent::__construct( $this -> defaultOptions, $options );
-    }
 
     /**
      * Additional Initialization

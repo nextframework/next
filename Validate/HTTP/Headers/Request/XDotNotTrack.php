@@ -29,9 +29,6 @@ class XDoNotTrack extends Object implements Headers {
      *     even without guarantees about its functionality
      * </p>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -44,10 +41,7 @@ class XDoNotTrack extends Object implements Headers {
      * @link
      *  http://en.wikipedia.org/wiki/X-Do-Not-Track
      */
-    public function validate( $data ) {
-
-        $data = (int) $data;
-
-        return ( $data == 1 || $data == 0 );
+    public function validate() {
+        return ( (int) $this -> options -> value == 1 || (int) $this -> options -> value == 0 );
     }
 }

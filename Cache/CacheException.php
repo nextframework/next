@@ -2,6 +2,8 @@
 
 namespace Next\Cache;
 
+use Next\Components\Object;    # Object Class
+
 /**
  * Cache Exception Class
  *
@@ -24,51 +26,35 @@ class CacheException extends \Next\Components\Debug\Exception {
      *
      * @var integer
      */
-    const NO_METADATA               = 0x00000099;
-
-    /**
-     * Corrupted Metadata Structure
-     *
-     * @var integer
-     */
-    const CORRUPTED_METADATA        = 0x0000009A;
+    const INVALID_CACHING_SCHEMA    = 0x00000099;
 
     // Exception Messages
 
     /**
-     * Metadata Reading Impossibility
+     * Invalid Caching Schema
      *
-     * Metadata Files could not be read by designed Cache Backend
+     * Given Object is not a valid Caching Schema because it doesn't
+     * implements Next\Cache\Schema\Schema
+     *
+     * @param Next\Components\Object $object
+     *  Object assigned as Caching Schema
      *
      * @return Next\Cache\CacheException
-     *  Exception for Metadata readbility failure
+     *  Exception for invalid Caching Schema
      */
-    public static function noMetadata() {
+    public static function invalidCachingSchema( Object $object ) {
 
         return new self(
 
-            'Unable to read Meta Data from Meta File',
+            '<strong>%s</strong> is not a valid Caching Schema.
 
-            self::NO_METADATA
-        );
-    }
+            <br /><br />
 
-    /**
-     * Corrupoted Metadata Structure
-     *
-     * Metadata File's Content is corrupted because it doesn't
-     * follows the expected structure
-     *
-     * @return Next\Cache\CacheException
-     *  Exception for Metadata integrity corruption
-     */
-    public static function corruptedMetadata() {
+            Caching Schema must implement Caching Schema Interface',
 
-        return new self(
+            self::INVALID_CACHING_SCHEMA,
 
-            'Corrupted Meta Data Structure',
-
-            self::CORRUPTED_METADATA
+            (string) $object
         );
     }
 }

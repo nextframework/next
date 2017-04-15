@@ -26,9 +26,6 @@ class XForwardedProto extends Object implements Headers {
      *        X-Forwarded-Proto = "X-Forwarded-Proto" ":" https
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -38,7 +35,7 @@ class XForwardedProto extends Object implements Headers {
      * @link
      *  http://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Common_non-standard_response_headers
      */
-    public function validate( $data ) {
-        return ( strcasecmp( $data, 'https' ) == 0 );
+    public function validate() {
+        return ( strcasecmp( $this -> options -> value, 'https' ) == 0 );
     }
 }

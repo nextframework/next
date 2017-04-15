@@ -24,9 +24,6 @@ class ProxyAuthenticate extends Object implements Headers {
      *        Proxy-Authenticate  = "Proxy-Authenticate" ":" 1#challenge
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -34,7 +31,7 @@ class ProxyAuthenticate extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.33
      *  RFC 2616 Section 14.33
      */
-    public function validate( $data ) {
+    public function validate() {
         return TRUE;
     }
 }

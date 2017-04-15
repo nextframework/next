@@ -29,7 +29,7 @@ class ClassMapper extends \FilterIterator {
      *  Directory to iterate or a well formed Recursive Iterator
      *
      * @throws ClassMapperException
-     *  Given argument is a string but do not refers to avalid directory
+     *  Given argument is a string but do not refers to a valid directory
      *
      * @throws ClassMapperException
      *  Given argument is not a string pointing to a valid Directory

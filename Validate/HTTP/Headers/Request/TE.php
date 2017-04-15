@@ -26,9 +26,6 @@ class TE extends Object implements Headers {
      *        t-codings = "trailers" | ( transfer-extension [ accept-params ] )
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -36,13 +33,13 @@ class TE extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.39
      *  RFC 2616 Section 14.39
      */
-    public function validate( $data ) {
+    public function validate() {
 
         preg_match(
 
             sprintf( '@^(?<coding>trailers|%s(?:;q=(?<quality>%s))?)$@x',
 
-            IANA::ENCODING, self::FLOAT ), $data, $match
+            IANA::ENCODING, self::FLOAT ), $this -> options -> value, $match
         );
 
         return ( count( $match ) != 0 );

@@ -42,8 +42,13 @@ class Environment extends Object {
      * @param boolean|optional $initializing
      *  Defines whether or not the Session Environment is under initialization,
      *  which will create the required structured under $_SESSION
+     *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for the Session Environment
      */
-    public function __construct( $environment, $initializing = FALSE ) {
+    public function __construct( $environment, $initializing = FALSE, $options = NULL ) {
+
+        parent::__construct( $options );
 
         // Registering Session Environment
 

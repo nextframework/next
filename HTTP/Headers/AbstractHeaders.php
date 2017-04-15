@@ -120,11 +120,9 @@ abstract class AbstractHeaders extends Object {
     );
 
     /**
-     * Headers Management Class Constructor
+     * Additional Initialization
      */
-    public function __construct() {
-
-        parent::__construct();
+    protected function init() {
 
         // Setting Up Headers Lists
 
@@ -230,7 +228,7 @@ abstract class AbstractHeaders extends Object {
                     '/(-|_)(\w)/',
 
                     function( $matches ) {
-                        return strtoupper( $matches[1]);
+                        return strtoupper( $matches[ 2 ] );
                     },
 
                     $header
@@ -264,7 +262,7 @@ abstract class AbstractHeaders extends Object {
 
                         /**
                          * @internal
-                         * We'll rethrow the same Exception caught if a true error occur
+                         * We'll re-throw the same Exception caught if a true error occur
                          * so our Exception Handler can do the rest
                          */
                         if( $e -> getCode() !== FieldsException::ALL_INVALID ) {
@@ -294,19 +292,16 @@ abstract class AbstractHeaders extends Object {
     /**
      * Check if given Header Field exists
      *
-     * This is an accessor to be used mainly in Mixin Objects
+     * This is an accessory to be used mainly in Mixin Objects
      *
      * @param string $header
      *  Header Field to be searched
      *
-     * @param integer|float|optional $level
-     *  Minimum similarity level
-     *
      * @return boolean
      *  TRUE if it exists and FALSE otherwise
      */
-    public function hasHeader( $header, $level = NULL ) {
-        return ( $this -> headers -> find( $header, $level ) instanceof Field );
+    public function hasHeader( $header ) {
+        return ( $this -> headers -> item( $header ) instanceof Field );
     }
 
     /**
@@ -315,16 +310,20 @@ abstract class AbstractHeaders extends Object {
      * @param string $header
      *  Header Field to be searched
      *
-     * @param integer|float|optional $level
-     *  Minimum similarity level
-     *
      * @return Next\HTTP\Headers\Fields\Field|boolean
-     *  If Header exists, it will be returned.
-     *
-     *  Otherwise, FALSE will
+     *  If Header exists, it will be returned, otherwise, FALSE will
      */
-    public function findHeader( $header, $level = NULL ) {
-        return $this -> headers -> find( $header, $level );
+    public function findHeader( $header ) {
+
+        $h = $this -> headers -> find( $header );
+
+        if( $h != -1 && $h != FALSE &&
+            array_key_exists( $h, $this -> headers -> getCollection() ) ) {
+
+            return $this -> headers[ $h ];
+        }
+
+        return FALSE;
     }
 
     /**

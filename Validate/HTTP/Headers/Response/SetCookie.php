@@ -40,9 +40,6 @@ class SetCookie extends Object implements Headers {
      *                        |       "Version" "=" 1*DIGIT
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -53,7 +50,7 @@ class SetCookie extends Object implements Headers {
      * @link
      *  http://en.wikipedia.org/wiki/HTTP_Cookie
      */
-    public function validate( $data ) {
+    public function validate() {
 
         preg_match(
 
@@ -95,20 +92,20 @@ class SetCookie extends Object implements Headers {
                 self::TOKEN, self::TOKEN, self::FLOAT
             ),
 
-            $data, $matches
+            $this -> options -> value, $matches
          );
 
         $matches = array_filter( $matches );
 
-        /**
-         * @internal
-         * Now we have to check the HTTP-dates
-         * Instead of repeat gmdate() function several times, let's use Date Header Validator
-         */
-        $date = new Date;
+        // Validating Expiration Date, if present
 
-        if( isset( $matches['expires'] ) && ! $date -> validate( $matches['expires'] ) ) {
-            return FALSE;
+        if( isset( $matches['expires'] ) ) {
+
+            $date = new Date(
+                array( 'value' => $matches['expires'] )
+            );
+
+            if( ! $date -> validate() ) return FALSE;
         }
 
         return ( $matches != 0 );

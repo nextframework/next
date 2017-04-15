@@ -35,9 +35,6 @@ class ContentRange extends Object implements Headers {
      *        instance-length           = 1*DIGIT
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -45,7 +42,15 @@ class ContentRange extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.16
      *  RFC 2616 Section 14.16
      */
-    public function validate( $data ) {
-        return ( preg_match( '/^bytes [0-9]+-[1-9][0-9]*\/([1-9][0-9]*|\*)$/i', $data ) != 0 );
+    public function validate() {
+
+        $test = preg_match(
+
+            '/^bytes [0-9]+-[1-9][0-9]*\/([1-9][0-9]*|\*)$/i',
+
+            $this -> options -> value
+        );
+
+        return ( $test != 0 );
     }
 }

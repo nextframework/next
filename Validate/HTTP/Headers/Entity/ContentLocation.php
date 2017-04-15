@@ -25,9 +25,6 @@ class ContentLocation extends Object implements Headers {
      *                           ( absoluteURI | relativeURI )
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -35,9 +32,9 @@ class ContentLocation extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.14
      *  RFC 2616 Section 14.14
      */
-    public function validate( $data ) {
+    public function validate() {
 
-        preg_match(
+        $test = preg_match(
 
             sprintf(
 
@@ -46,9 +43,9 @@ class ContentLocation extends Object implements Headers {
                 Headers::ABSOLUTE_URI, Headers::RELATIVE_URI
             ),
 
-            $data, $match
+            $this -> options -> value, $match
         );
 
-        return ( count( $match ) != 0 );
+        return ( $match != 0 );
     }
 }

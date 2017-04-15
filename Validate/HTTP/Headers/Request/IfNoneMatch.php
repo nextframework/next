@@ -24,9 +24,6 @@ class IfNoneMatch extends Object implements Headers {
      *        If-None-Match = "If-None-Match" ":" ( "*" | 1#entity-tag )
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -34,7 +31,7 @@ class IfNoneMatch extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.26
      *  RFC 2616 Section 14.26
      */
-    public function validate( $data ) {
+    public function validate() {
 
         // We can't validate ETags yet, so...
 

@@ -69,7 +69,7 @@ abstract class AbstractController extends Object implements Controller {
      *       <em>DEVELOPMENT_MODE<em> is not <strong>2</strong>
      *   </p>
      */
-    final public function __construct( Application $application = NULL ) {
+    final public function __construct( Application $application = NULL, $options = NULL ) {
 
         // If we have an Application (dispatching process), let's handle it
 
@@ -88,12 +88,12 @@ abstract class AbstractController extends Object implements Controller {
 
             // HTTP GET Params (a.k.a. Dynamic Params) as Template Variables
 
-            $this -> view -> assign( $application -> getRequest() -> getQuery() );
-
-            // Constructing Parent, which executes additional initialization routines
-
-            parent::__construct();
+            $this -> view -> assign( $this -> request -> getQuery() );
         }
+
+        // Constructing parent Object, which executes additional initialization routines
+
+        parent::__construct( $options );
     }
 
     // Accessors

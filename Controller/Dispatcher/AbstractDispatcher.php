@@ -30,17 +30,6 @@ abstract class AbstractDispatcher extends Object implements Dispatcher {
     protected $isDispatched = FALSE;
 
     /**
-     * Dispatcher Contructor
-     *
-     * @param boolean $shouldReturn
-     *  Dispatcher shoul be returned?
-     */
-    public function __construct( $shouldReturn = FALSE ) {
-
-        $this -> shouldReturn = $shouldReturn;
-    }
-
-    /**
      * Set Response as Dispatched
      *
      * @param boolean $flag

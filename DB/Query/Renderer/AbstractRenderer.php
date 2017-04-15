@@ -27,8 +27,13 @@ abstract class AbstractRenderer extends Object implements Renderer {
      *
      * @param string $quoteIdentifier
      *  Quote Identifier
+     *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for the Query Expression
      */
-    public function __construct( $quoteIdentifier ) {
+    public function __construct( $quoteIdentifier, $options = NULL ) {
+
+        parent::__construct( $options );
 
         $this -> quoteIdentifier = $quoteIdentifier;
     }

@@ -42,8 +42,9 @@ abstract class AbstractContext implements Context {
 
             /**
              * @internal
+             *
              * Next\Stream\Context\AbstractContext::setOptions() is not being used here
-             * because when constructing th object no options were
+             * because when constructing the object no options were
              * defined yet
              */
             $this -> options = $options;

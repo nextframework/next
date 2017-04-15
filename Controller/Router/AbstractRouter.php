@@ -2,7 +2,8 @@
 
 namespace Next\Controller\Router;
 
-use Next\Components\Object;    # Object Class
+use Next\Application\Application;    # Application Interface
+use Next\Components\Object;          # Object Class
 
 /**
  * Controller Router Class
@@ -15,11 +16,18 @@ use Next\Components\Object;    # Object Class
 abstract class AbstractRouter extends Object implements Router {
 
     /**
-     * Default Options
+     * Application Object
      *
-     * @var array $defaultOptions
+     * @var Next\Application\Application $application
      */
-    private $defaultOptions = array();
+    protected $application;
+
+    /**
+     * Flag to condition whether or not the Router will do its job
+     *
+     * @var boolean $shouldRoute
+     */
+    protected $shouldRoute = TRUE;
 
     /**
      * Dynamic GET Params
@@ -43,18 +51,21 @@ abstract class AbstractRouter extends Object implements Router {
     protected $method;
 
     /**
-     * Router Constructor
+     * Constructor Overwriting
+     * Sets up a type-hinted Application Object for all Routing Strategies
+     *
+     * @param Next\Application\Application $application
+     *  Application Object
      *
      * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
-     *  Configuration Options for Router Strategy
-     *
-     * @see Next\Components\Parameter
+     *  Optional Configuration Options for Router Adapter
      */
-    public function __construct( $options = NULL ) {
-        parent::__construct( $this -> defaultOptions, $options );
-    }
+    public function __construct( Application $application, $options = NULL ) {
 
-    // Accessors
+        parent::__construct( $options );
+
+        $this -> application = $application;
+    }
 
     /**
      * Additional Initialization
@@ -63,6 +74,34 @@ abstract class AbstractRouter extends Object implements Router {
     protected function init() {
         $this -> connect();
     }
+
+    // Routing Flow-related Methods
+
+    /**
+     * Sets the Router to abort its flow, not routing anything,
+     * so the Front Controller can keep going
+     *
+     * @return Next\Controller\Router\Router
+     *  Router Object (Fluent Interface)
+     */
+    public function abortFlow() {
+
+        $this -> shouldRoute = FALSE;
+
+        return $this;
+    }
+
+    /**
+     * Gets the current state of Routing Flow flag
+     *
+     * @return boolean
+     *  Current state of Routing Flow flag
+     */
+    public function shouldRoute() {
+        return $this -> shouldRoute;
+    }
+
+    // Accessors
 
     /**
      * Get match Controller
@@ -82,18 +121,6 @@ abstract class AbstractRouter extends Object implements Router {
      */
     public function getMethod() {
         return $this -> method;
-    }
-
-    // Parameterizable Interface Methods Implementation
-
-    /**
-     * Get Router Options
-     *
-     * @return Next\Components\Parameter
-     *  Parameter Object with merged options
-     */
-    public function getOptions() {
-        return $this -> options;
     }
 
     // Abstract Methods Definition

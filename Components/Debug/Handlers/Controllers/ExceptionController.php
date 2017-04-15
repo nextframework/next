@@ -29,14 +29,14 @@ class ExceptionController extends AbstractController {
      * Exception Handler Development Action
      */
     final public function development() {
-        $this -> trigger( 'exception/development' );
+        $this -> trigger( 'exception-development' );
     }
 
     /**
      * Exception Handler Production Action
      */
     final public function production() {
-        $this -> trigger( 'exception/production' );
+        $this -> trigger( 'exception-production' );
     }
 
     /**

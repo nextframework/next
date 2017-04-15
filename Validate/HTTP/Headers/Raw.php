@@ -17,13 +17,10 @@ class Raw extends Object implements Headers {
     /**
      * Validates Generic Header Field
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      */
-    public function validate( $data ) {
+    public function validate() {
 
         // Raw Header doesn't need to be validated
 

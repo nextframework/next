@@ -51,7 +51,7 @@ class Adapter extends AbstractStatement {
      * Execute a prepared statement.
      *
      * @param array|optional $params
-     *  Values to bind to parameter placeholders.
+     *  Values to bind to parameter placeholders
      *
      * @return boolean TRUE on success and FALSE on failure
      */
@@ -63,13 +63,16 @@ class Adapter extends AbstractStatement {
      * Fetch the next row from a ResultSet
      *
      * @param integer|optional $style
-     *  Fetch mode for this fetch operation
+     *  Fetch mode for this fetch operation.
+     *  Not directly used (documentation only)
      *
      * @param integer|optional $cursor
      *  Determines which row will be returned to the caller
+     *  Not directly used (documentation only)
      *
      * @param integer|optional $offset
      *  Controls the cursor orientation
+     *  Not directly used (documentation only)
      *
      * @return array|stdClass|boolean
      *  An array or an stdClass object on success, depending
@@ -84,13 +87,14 @@ class Adapter extends AbstractStatement {
      *
      * @param integer|optional $style
      *  Fetch mode for this fetch operation
+     *  Not directly used (documentation only)
      *
      * @return array|object|boolean
      *  An array or an stdClass object on success, depending
      *  on <strong>$style</strong> argument and FALSE otherwise
      */
     public function fetchAll( $style = null ) {
-        return $this -> invoke( 'fetchAll', $style );
+        return $this -> invoke( 'fetchAll', func_get_args() );
     }
 
     /**
@@ -149,7 +153,7 @@ class Adapter extends AbstractStatement {
      *  TRUE on success and FALSE otherwise
      */
     public function setFetchMode( $mode, $params = NULL ) {
-        return $this -> invoke( 'setFetchMode' );
+        return $this -> invoke( 'setFetchMode', array( $mode, $params ) );
     }
 
     // Miscellaneous Methods
@@ -191,14 +195,14 @@ class Adapter extends AbstractStatement {
 
             /**
              * @internal
-             * The trick here is to reflect over Statement Parent Class
-             * (even if PDOStatement has no parent class).
+             * The trick here is to reflect over Statement parent class,
+             * even if PDOStatement has no parent class
              *
              * And then call <strong>$method</strong> from THIS context
              */
             $reflector = new \ReflectionMethod( get_parent_class( $this -> stmt ), $method );
 
-            return $reflector -> invokeArgs( $this -> stmt, (array) $args );
+            return $reflector -> invokeArgs( $this -> stmt, array_filter( (array) $args ) );
 
         } catch( \PDOException $e ) {
 

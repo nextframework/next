@@ -33,10 +33,13 @@ class Event extends Object {
      *
      * @param string|optional $name
      *  An optional Event Name
+     *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for each Event
      */
-    public function __construct( $name = NULL ) {
+    public function __construct( $name = NULL, $options = NULL ) {
 
-        parent::__construct();
+        parent::__construct( $options );
 
         $this -> name = ( ! is_null( $name ) ? $name : 'Next' );
     }

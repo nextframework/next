@@ -27,9 +27,6 @@ class Connection extends Object implements Headers {
      *        connection-token = token
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -37,7 +34,7 @@ class Connection extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.10
      *  RFC 2616 Section 14.10
      */
-    public function validate( $data ) {
-        return ( strcasecmp( $data, 'close' ) == 0 || strcasecmp( $data, 'keep-alive' ) == 0 );
+    public function validate() {
+        return in_array( $this -> options -> value, array( 'close', 'keep-alive' ) );
     }
 }

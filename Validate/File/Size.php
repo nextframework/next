@@ -28,13 +28,12 @@ class Size extends Object implements Validate {
     /**
      * Validates given File Size
      *
-     * @param string|array $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      */
-    public function validate( $data ) {
+    public function validate() {
+
+        $data = $this -> options -> value;
 
         $size = ( is_array( $data ) ? $data[ 1 ] : $data );
 

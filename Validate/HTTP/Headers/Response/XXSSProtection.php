@@ -33,9 +33,6 @@ class XXSSProtection extends Object implements Headers {
      *
      * @note So far only "mode=block" (without quotes) is accepted as valid param
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -48,7 +45,15 @@ class XXSSProtection extends Object implements Headers {
      * @link
      *  http://en.wikipedia.org/wiki/Cross-site_scripting
      */
-    public function validate( $data ) {
-        return ( preg_match( '/^1(?:;(?<mode>mode=[\'"]?block[\'"]?))?$/i', $data ) != 0 );
+    public function validate() {
+
+        $test = preg_match(
+
+            '/^1(?:;(?<mode>mode=[\'"]?block[\'"]?))?$/i',
+
+            $this -> options -> value
+        );
+
+        return ( $test != 0 );
     }
 }

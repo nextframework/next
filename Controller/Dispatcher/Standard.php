@@ -48,7 +48,7 @@ class Standard extends AbstractDispatcher {
 
             $application -> getRequest() -> setQuery( $data -> params );
 
-            // Calling Action from Controller at defined Application
+            // Calling Action from Controller of defined Application
 
             $reflector = new \ReflectionMethod( $data -> controller, $data -> method );
 

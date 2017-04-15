@@ -20,32 +20,58 @@ class ContextException extends \Next\Components\Debug\Exception {
     protected $range = array( 0x000001FE, 0x00000230 );
 
     /**
+     * Resource is not mimic-able
+     *
+     * @var integer
+     */
+    const NOT_MIMICABLE = 0x000001FE;
+
+    /**
      * Caller Object not found as extended context
      *
      * @var integer
      */
-    const CALLER_NOT_FOUND = 0x000001FE;
+    const CALLER_NOT_FOUND = 0x000001FF;
 
     /**
      * Method not known in extended context
      *
      * @var integer
      */
-    const METHOD_NOT_FOUND = 0x000001FF;
+    const METHOD_NOT_FOUND = 0x00000200;
 
     /**
      * Property not known in extended context
      *
      * @var integer
      */
-    const PROPERTY_NOT_FOUND = 0x00000200;
+    const PROPERTY_NOT_FOUND = 0x00000201;
 
     /**
      * Property changes failed
      *
      * @var integer
      */
-    const PROPERTY_CHANGES_FAILED = 0x00000201;
+    const PROPERTY_CHANGES_FAILED = 0x00000202;
+
+    /**
+     * Resource not mimic-able
+     *
+     * @param mixed $resource
+     *  Resource trying to mimic a Next\Components\Object instance
+     *
+     * @return Next\Components\ComponentsException
+     *  Resource not mimic-able
+     */
+    public static function notMimicable() {
+
+        return new self(
+
+            'Only objects can (or need to) be mimic-able',
+
+            self::NOT_MIMICABLE
+        );
+    }
 
     /**
      * Caller Object not found as extended context

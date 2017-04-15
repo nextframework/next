@@ -348,11 +348,9 @@ class Browser extends Object {
     private $info;
 
     /**
-     * Browser Information Constructor
+     * Additional Initialization
      */
-    public function __construct() {
-
-        parent::__construct();
+    public function init() {
 
         $this -> info = new \stdClass;
 

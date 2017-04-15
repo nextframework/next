@@ -36,7 +36,6 @@ class Chain extends AbstractCollection {
     protected function accept( Object $object ) {
 
         if( ! $object instanceof Application ) {
-
             throw ApplicationException::invalidApplication( $object );
         }
 

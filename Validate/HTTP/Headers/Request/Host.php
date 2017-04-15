@@ -16,6 +16,13 @@ use Next\Components\Object;                # Object Class
 class Host extends Object implements Headers {
 
     /**
+     * Host Validation RegExp
+     *
+     * @var string
+     */
+    const HOST = '/^(?:(?:(?:http|ftp)s?):\/\/)?[\w#:.?+=&%@!\/-]+(:[0-9]+)?/';
+
+    /**
      * Validates Host Header Field in according to RFC 2616 Section 14.23
      *
      * <p><strong>RFC Specification</strong></p>
@@ -24,9 +31,6 @@ class Host extends Object implements Headers {
      *        Host = "Host" ":" host [ ":" port ] ;
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -34,10 +38,7 @@ class Host extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.23
      *  RFC 2616 Section 14.23
      */
-    public function validate( $data ) {
-
-        $match = preg_match( '/^(?:(?:(?:http|ftp)s?):\/\/)?[\w#:.?+=&%@!\/-]+(:[0-9]+)?/', $data );
-
-        return ( $match != 0 );
+    public function validate() {
+        return ( preg_match( self::HOST, $this -> options -> value ) != 0 );
     }
 }

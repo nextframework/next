@@ -4,6 +4,8 @@ namespace Next\Tools\ClassMapper;
 
 use Next\Tools\ClassMapper\ClassMapperException;    # ClassMapper Exception Class
 
+use Next\Components\Object;                         # Object Class
+
 /**
  * Class Mapper Tool: Standard Format (Array)
  *
@@ -12,62 +14,22 @@ use Next\Tools\ClassMapper\ClassMapperException;    # ClassMapper Exception Clas
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class Standard extends AbstractMapper {
+class Standard extends Object implements Mapper {
 
     /**
-     * PHP Array Builder
+     * Default Options
      *
-     * @param array $map
-     *  Mapped Array
+     * @var array $defaultOptions
      */
-    public function build( array $map ) {
+    protected $defaultOptions = array(
 
-        // Displaying...
-
-        if( ! $this -> options -> save ) {
-
-            print '<pre>'; print_r( $map );
-
-        // ... or saving the File
-
-        } else {
-
-            $content = sprintf(
-
-                "<?php\n\n\$map = %s;\n\nreturn \$map;\n\n?>",
-
-                str_replace( '\\\\', '\\', var_export( $map, TRUE ) )
-            );
-
-
-            file_put_contents(
-
-                $this -> options -> outputDirectory . '/' .
-                    $this -> options -> filename, $content
-            );
-        }
-    }
-
-    // Parameterizable Interface Method Implementation
+        'filename'          => 'map.php',
+        'save'              => FALSE,
+        'outputDirectory'   => ''
+    );
 
     /**
-     * Setup Standard (PHP-Array) ClassMapper Options
-     *
-     * @return array
-     *  Standard (PHP-Array) ClassMapper Options
-     */
-    public function setOptions() {
-
-        return array(
-
-            'filename'          => 'map.php',
-            'save'              => FALSE,
-            'outputDirectory'   => ''
-        );
-    }
-
-    /**
-     * Check Options Integrity
+     * Additional Initialization. Check Options Integrity
      *
      * @throws Next\Tools\ClassMapper\ClassMapperException
      *  Output directory is not set
@@ -81,7 +43,7 @@ class Standard extends AbstractMapper {
      * @throws Next\Tools\ClassMapper\ClassMapperException
      *  Filename is missing
      */
-    protected function checkIntegrity() {
+    protected function init() {
 
         // If we want to save the File...
 
@@ -110,6 +72,40 @@ class Standard extends AbstractMapper {
             if( empty( $this -> options -> filename ) ) {
                 throw ClassMapperException::missingOutputFilename();
             }
+        }
+    }
+
+    /**
+     * PHP Array Builder
+     *
+     * @param array $map
+     *  Mapped Array
+     */
+    public function build( array $map ) {
+
+        // Displaying...
+
+        if( ! $this -> options -> save ) {
+
+            print '<pre>'; print_r( $map );
+
+        // ... or saving the File
+
+        } else {
+
+            $content = sprintf(
+
+                "<?php\n\n\$map = %s;",
+
+                str_replace( '\\\\', '\\', var_export( $map, TRUE ) )
+            );
+
+
+            file_put_contents(
+
+                $this -> options -> outputDirectory . '/' .
+                    $this -> options -> filename, $content
+            );
         }
     }
 }

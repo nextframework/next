@@ -3,6 +3,8 @@
 namespace Next\Tools\Routes\Generators\Annotations;
 
 use Next\Tools\Routes\Generators\GeneratorsException;    # Routes Generators Exception Class
+
+use Next\Components\Object;                              # Object Class
 use Next\Components\Utils\ArrayUtils;                    # Array Utils Class
 
 /**
@@ -13,7 +15,7 @@ use Next\Components\Utils\ArrayUtils;                    # Array Utils Class
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class Parser {
+class Parser extends Object {
 
     /**
      * Locale Parameter Data
@@ -58,8 +60,13 @@ class Parser {
      *
      * @param string|optional $basepath
      *  Routes Basepath, appended to every route
+     *
+     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     *  Optional Configuration Options for Annotations Parser
      */
-    public function __construct( array $routes, array $args, $controller, $method, $domain = '', $basepath = '' ) {
+    public function __construct( array $routes, array $args, $controller, $method, $domain = '', $basepath = '', $options = NULL ) {
+
+        parent::__construct( $options );
 
         $this -> parseRoutes( $routes, $args, $controller, $method, $domain, $basepath );
     }

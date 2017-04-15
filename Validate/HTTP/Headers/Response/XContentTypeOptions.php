@@ -28,9 +28,6 @@ class XContentTypeOptions extends Object implements Headers {
      *        X-Content-Type-Options = "X-Content-Type-Options" ":" nosniff
      * </code>
      *
-     * @param string $data
-     *  Data to validate
-     *
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      *
@@ -43,7 +40,7 @@ class XContentTypeOptions extends Object implements Headers {
      * @link
      *  http://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Common_non-standard_response_headers
      */
-    public function validate( $data ) {
-        return ( strcasecmp( $data, 'nosniff' ) == 0 );
+    public function validate() {
+        return ( strcasecmp( $this -> options -> value, 'nosniff' ) == 0 );
     }
 }
