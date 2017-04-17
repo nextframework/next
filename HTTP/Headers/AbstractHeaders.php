@@ -251,10 +251,9 @@ abstract class AbstractHeaders extends Object {
 
                         // ...and trying to add it
 
-                        $object = new $class( $value );
+                        $object = new $class( array( 'value' => $value ) );
 
                         if( $this -> accept( $object ) ) {
-
                             $this -> headers -> add( $object );
                         }
 
@@ -281,7 +280,7 @@ abstract class AbstractHeaders extends Object {
                  * Generic Header don't need to be accepted
                  */
                 $this -> addHeader(
-                    new Generic( sprintf( '%s: %s', $header, $value ) )
+                    new Generic( array( 'value' => sprintf( '%s: %s', $header, $value ) ) )
                 );
             }
         }

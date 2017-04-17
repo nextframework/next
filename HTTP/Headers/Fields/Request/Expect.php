@@ -20,11 +20,16 @@ class Expect extends AbstractField implements Request {
     /**
      * Get Header Field Validator
      *
+     * @param mixed|string $value
+     *  Header value to be validated
+     *
      * @return Next\Validate\Validate
      *  Associated Validator
      */
-    protected function getValidator() {
-        return new \Next\Validate\HTTP\Headers\Request\Expect;
+    protected function getValidator( $value ) {
+        return new \Next\Validate\HTTP\Headers\Request\Expect(
+            array( 'value' => $value )
+        );
     }
 
     /**

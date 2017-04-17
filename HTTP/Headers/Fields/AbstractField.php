@@ -136,8 +136,7 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
 
             if( count( $value ) != 0 ) {
 
-                $validator = $this -> getValidator()
-                                   -> setOptions( array( 'value' => trim( $v ) ) );
+                $validator = $this -> getValidator( trim( $v ) );
 
                 foreach( $value as $v ) {
 
@@ -154,8 +153,7 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
 
             // If the Header does not accepts multiple values, let's validate just once
 
-            $validator = $this -> getValidator()
-                               -> setOptions( array( 'value' => $value ) );
+            $validator = $this -> getValidator( $value );
 
             if( $validator -> validate() !== FALSE ) {
 
@@ -199,7 +197,7 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
      *  Header Field Value
      */
     public function getValue() {
-        return $this -> value;
+        return $this -> options -> value;
     }
 
     // Auxiliary Methods
@@ -223,12 +221,35 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
 
         if( ! isset( $this -> options -> name ) || empty( $this -> options -> name ) ) {
 
-            throw FieldsException::unfullfilledRequirements( 'Headers must have a name!' );
+            throw FieldsException::unfullfilledRequirements(
+                sprintf( 'Header <strong>%s</strong> doesn\'t have a defined name', (string) $this )
+            );
+        }
+
+        if( ! isset( $this -> options -> value ) || empty( $this -> options -> value ) ) {
+
+            throw FieldsException::unfullfilledRequirements(
+
+                sprintf(
+
+                    'Header <strong>%s</strong> doesn\'t have a value to be set',
+
+                    $this -> options -> name
+                )
+            );
         }
 
         // Validator Interfaces Implementations
 
-        $validator = $this -> getValidator();
+        /**
+         * @internal
+         *
+         * AbstractField::getValidator() requires a value to to be used as
+         * Validator Constructor but here, before all the routines of adding
+         * the Header Field start, we just need to check the Validator iteself,
+         * so we use a dummy value just to get access of the object provided
+         */
+        $validator = $this -> getValidator( NULL );
 
         if( ! $validator instanceof Validate ) {
 
@@ -286,9 +307,12 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
     /**
      * Get Header Field Validator
      *
-     * It's Abstract because each Header Field requires a different validation routine
+     * @param mixed|string $value
+     *  Header value to be validated
+     *
+     * @abstract
      */
-    abstract protected function getValidator();
+    abstract protected function getValidator( $value );
 
     // OverLoading
 

@@ -31,26 +31,25 @@ class ContentLanguage extends AbstractField implements Entity {
 
         return preg_replace_callback(
 
-                   '@^(.*?)(-.*?)?(;q=.*?)?$@',
+        '@^(.*?)(-.*?)?(;q=.*?)?$@',
 
-                   function( array $matches ) {
+            function( array $matches ) {
 
-                       // Language Abbreviations must be lowercase
+                // Language Abbreviations must be lowercase
 
-                       $return = strtolower( $matches[ 1 ] );
+                $return = strtolower( $matches[ 1 ] );
 
-                       // Country Codes must be upercase
+                // Country Codes must be upercase
 
-                       if( isset( $matches[ 2 ] ) ) {
+                if( isset( $matches[ 2 ] ) ) {
+                    $return .= strtoupper( $matches[ 2 ] );
+                }
 
-                           $return .= strtoupper( $matches[ 2 ] );
-                       }
+                return $return;
+            },
 
-                       return $return;
-                   },
-
-                   $data
-               );
+            $data
+        );
     }
 
     // Abstract Methods Implementation
@@ -58,11 +57,16 @@ class ContentLanguage extends AbstractField implements Entity {
     /**
      * Get Header Field Validator
      *
+     * @param mixed|string $value
+     *  Header value to be validated
+     *
      * @return Next\Validate\Validate
      *  Associated Validator
      */
-    protected function getValidator() {
-        return new \Next\Validate\HTTP\Headers\Entity\ContentLanguage;
+    protected function getValidator( $value ) {
+        return new \Next\Validate\HTTP\Headers\Entity\ContentLanguage(
+            array( 'value' => $value )
+        );
     }
 
     /**

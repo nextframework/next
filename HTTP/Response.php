@@ -12,9 +12,9 @@ use Next\Components\Invoker;                       # Invoker Class
 
 use Next\Components\Utils\ArrayUtils;              # Array Utils Class
 
-use Next\HTTP\Headers\Fields\Response\Location;    # Location Header Field
-use Next\HTTP\Headers\Fields\Raw;                  # Raw Data Header Field
-use Next\HTTP\Headers\Fields\Generic;              # Generic Data Header Field
+use Next\HTTP\Headers\Fields\Response\Location;    # Location Header Class
+use Next\HTTP\Headers\Fields\Raw;                  # Raw Data Header Class
+use Next\HTTP\Headers\Fields\Generic;              # Generic Data Header Class
 
 /**
  * Response Class
@@ -952,7 +952,7 @@ class Response extends Object {
 
             // Location Header should be sent ONLY with Absolute URIs
 
-            $this -> headers -> addHeader( new Location( $url ) );
+            $this -> headers -> addHeader( new Location( array( 'value' => $url ) ) );
 
         } catch( FieldsException $e ) {
 
@@ -962,7 +962,7 @@ class Response extends Object {
              */
             $this -> headers -> addHeader(
 
-                new Raw( sprintf( 'Location: %s', $to ) )
+                new Raw( array( 'value' => sprintf( 'Location: %s', $to ) ) )
             );
         }
 
@@ -1191,7 +1191,7 @@ class Response extends Object {
 
             try {
 
-                $this -> headers -> addHeader( new Raw( $message ) );
+                $this -> headers -> addHeader( new Raw( array( 'value' => $message ) ) );
 
            } catch( FieldsException $e ) {}
 

@@ -89,7 +89,9 @@ class Cookies extends Object {
 
             try {
 
-                $this -> cookies -> add( new Cookie( $cookie ) );
+                $this -> cookies -> add(
+                    new Cookie( array( 'value' => $cookie ) )
+                );
 
             } catch( FieldsException $e ) {
 
@@ -161,7 +163,7 @@ class Cookies extends Object {
             array( $iterator )
         );
 
-        return new Cookie( rtrim( $cookieString, ";" ) );
+        return new Cookie( array( 'value' => rtrim( $cookieString, ";" ) ) );
     }
 
     /**

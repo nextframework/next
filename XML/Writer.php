@@ -41,20 +41,9 @@ class Writer extends Object {
     );
 
     /**
-     * XML Writer Constructor
+     * Additional initialization
      */
-    public function __construct( $options = NULL ) {
-
-        /**
-         * @internal
-         *
-         * Although Next\XML\Writer doesn't require any other argument to be
-         * constructed, case in which Next\Components\Object::init() could be
-         * overwritten to provide all necessary additional initialization,
-         * by doing so the Default Options defined by overriding the property
-         * above are not properly merged, preventing further customization
-         */
-        parent::__construct( $options );
+    public function init() {
 
         // Extending this class' Context to native XMLWriter Class
 
@@ -201,7 +190,7 @@ class Writer extends Object {
 
             try {
 
-                $response -> addHeader( new ContentType( 'text/xml' ) );
+                $response -> addHeader( new ContentType( array( 'value' => 'text/xml' ) ) );
 
             } catch( ResponseException $e ) {
 

@@ -31,33 +31,33 @@ class AcceptLanguage extends AbstractField implements Request {
 
         return preg_replace_callback(
 
-                  '@^(.*?)(-.*?)?(;q=.*?)?$@',
+            '@^(.*?)(-.*?)?(;q=.*?)?$@',
 
-                  function( array $matches ) {
+            function( array $matches ) {
 
-                      // Language Abbreviations must be lowercase
+                // Language Abbreviations must be lowercase
 
-                      $return = strtolower( $matches[ 1 ] );
+                $return = strtolower( $matches[ 1 ] );
 
-                      // Country Codes must be upercase
+                // Country Codes must be upercase
 
-                      if( isset( $matches[ 2 ] ) && strpos( $matches[ 2 ], 'q=' ) === FALSE ) {
+                if( isset( $matches[ 2 ] ) && strpos( $matches[ 2 ], 'q=' ) === FALSE ) {
 
-                          $return .= strtoupper( $matches[ 2 ] );
-                      }
+                    $return .= strtoupper( $matches[ 2 ] );
+                }
 
-                      // Quality Values
+                // Quality Values
 
-                      if( isset( $matches[ 3 ] ) ) {
+                if( isset( $matches[ 3 ] ) ) {
 
-                          $return .= $matches[ 3 ]; // Untouched
-                      }
+                    $return .= $matches[ 3 ]; // Untouched
+                }
 
-                      return $return;
-                  },
+                return $return;
+            },
 
-                  $data
-               );
+            $data
+       );
     }
 
     // Abstract Methods Implementation
@@ -65,11 +65,16 @@ class AcceptLanguage extends AbstractField implements Request {
     /**
      * Get Header Field Validator
      *
+     * @param mixed|string $value
+     *  Header value to be validated
+     *
      * @return Next\Validate\Validate
      *  Associated Validator
      */
-    protected function getValidator() {
-        return new \Next\Validate\HTTP\Headers\Request\AcceptLanguage;
+    protected function getValidator( $value ) {
+        return new \Next\Validate\HTTP\Headers\Request\AcceptLanguage(
+            array( 'value' => $value )
+        );
     }
 
     /**

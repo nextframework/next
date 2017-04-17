@@ -56,11 +56,16 @@ class Warning extends AbstractField {
     /**
      * Get Header Field Validator
      *
+     * @param mixed|string $value
+     *  Header value to be validated
+     *
      * @return Next\Validate\Validate
      *  Associated Validator
      */
-    protected function getValidator() {
-        return new \Next\Validate\HTTP\Headers\Common\Warning;
+    protected function getValidator( $value ) {
+        return new \Next\Validate\HTTP\Headers\Common\Warning(
+            array( 'value' => $value )
+        );
     }
 
     /**

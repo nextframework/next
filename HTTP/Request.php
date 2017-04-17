@@ -11,7 +11,7 @@ use Next\Components\Object;                         # Object Class
 use Next\Components\Invoker;                        # Invoker Class
 use Next\HTTP\Stream\Adapter\Socket;                # HTTP Stream Socket Adapter Class
 use Next\HTTP\Stream\Context\SocketContext;         # HTTP Stream Socket Context Class
-use Next\HTTP\Headers\Fields\Entity\ContentType;    # HTTP Content-type Header Field
+use Next\HTTP\Headers\Fields\Entity\ContentType;    # Content-Type Header Class
 use Next\HTTP\Stream\Reader;                        # HTTP Stream Reader
 use Next\File\Tools;                                # File Tools Class
 
@@ -1213,7 +1213,9 @@ class Request extends Object {
 
                 try {
 
-                    $this-> headers -> addHeader( new ContentType( 'application/x-www-form-urlencoded' ) );
+                    $this-> headers -> addHeader(
+                        new ContentType( array( 'value' => 'application/x-www-form-urlencoded' ) )
+                    );
 
                 } catch( FieldsException $e ) {
 

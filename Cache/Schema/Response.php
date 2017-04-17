@@ -2,12 +2,12 @@
 
 namespace Next\Cache\Schema;
 
-use Next\HTTP\Headers\Fields\Entity\ContentType;
-use Next\HTTP\Headers\Fields\Entity\ContentLength;
-use Next\HTTP\Headers\Fields\Entity\LastModified;    # Last-Modified Header Class
-use Next\HTTP\Headers\Fields\Common\CacheControl;    # Cache-Control Header Class
-use Next\HTTP\Headers\Fields\Response\ETag;          # ETag Header Class
-use Next\HTTP\Headers\Fields\Raw;                    # Raw Header Field Class
+use Next\HTTP\Headers\Fields\Entity\ContentType;      # Content-Type Hader Class
+use Next\HTTP\Headers\Fields\Entity\ContentLength;    # Content-Length Header Class
+use Next\HTTP\Headers\Fields\Entity\LastModified;     # Last-Modified Header Class
+use Next\HTTP\Headers\Fields\Common\CacheControl;     # Cache-Control Header Class
+use Next\HTTP\Headers\Fields\Response\ETag;           # ETag Header Class
+use Next\HTTP\Headers\Fields\Raw;                     # Raw Header Field Class
 
 /**
  * Response Headers Caching Class
@@ -112,10 +112,14 @@ class Response extends AbstractSchema {
 
             $etag = md5_file( $URI );
 
-            $response -> addHeader( new LastModified( gmdate( 'D, d M Y H:i:s', $lm ) .' GMT' ) )
-                      -> addHeader( new ETag( $etag ) )
-                      -> addHeader( new CacheControl( 'public' ) );
+            $response -> addHeader(
+                new LastModified( array( 'value' => gmdate( 'D, d M Y H:i:s', $lm ) .' GMT' ) )
+            );
 
+            $response -> addHeader( new ETag( array( 'value' => $etag ) ) )
+                      -> addHeader( new CacheControl( array( 'value' => 'public' ) ) );
+
+            //var_dump( $response -> getHeaders() );exit;
             // Ugliest shortening ever >.<
 
             $HIMS = ( isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) ? $_SERVER['HTTP_IF_MODIFIED_SINCE'] : FALSE );
@@ -125,13 +129,17 @@ class Response extends AbstractSchema {
 
                 // File has not changed
 
-                $response -> addHeader( new Raw( 'HTTP/1.1 304 Not Modified' ) );
+                $response -> addHeader(
+                    new Raw( array( 'value' => 'HTTP/1.1 304 Not Modified' ) )
+                );
 
             } elseif( $HINM !== FALSE && $HINM == $etag ) {
 
                 // File has not changed
 
-                $response -> addHeader( new Raw( 'HTTP/1.1 304 Not Modified' ) );
+                $response -> addHeader(
+                    new Raw( array( 'value' => 'HTTP/1.1 304 Not Modified' ) )
+                );
 
             } else  {
 
@@ -139,15 +147,19 @@ class Response extends AbstractSchema {
 
                 if( array_key_exists( $matches[ 1 ], $this -> mime ) ) {
 
-                    $response -> addHeader( new ContentType( $this -> mime[ $matches[ 1 ] ] ) );
+                    $response -> addHeader(
+                        new ContentType( array( 'value' => $this -> mime[ $matches[ 1 ] ] ) )
+                    );
 
                 } else {
 
-                    $response -> addHeader( new ContentType( self::DEFAULT_CTYPE ) );
+                    $response -> addHeader(
+                        new ContentType( array( 'value' => self::DEFAULT_CTYPE ) )
+                    );
                 }
 
                 $response -> cleanupMarkup( FALSE )
-                          -> addHeader( 'Content-Length', strlen( $data ) )
+                          -> addHeader( new ContentLength( array( 'value' => strlen( $data ) ) ) )
                           -> appendBody( $data );
             }
 

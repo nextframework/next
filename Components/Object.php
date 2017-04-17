@@ -209,7 +209,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      * Set Class Options
      * It's not really implemented because not all child classes have something to be configured
      */
-    public function setOptions( $options = array() ) {}
+    public function setOptions() {}
 
     // OverLoading
 

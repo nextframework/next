@@ -20,11 +20,16 @@ class ProxyAuthorization extends AbstractField implements Request {
     /**
      * Get Header Field Validator
      *
+     * @param mixed|string $value
+     *  Header value to be validated
+     *
      * @return Next\Validate\Validate
      *  Associated Validator
      */
-    protected function getValidator() {
-        return new \Next\Validate\HTTP\Headers\Request\ProxyAuthorization;
+    protected function getValidator( $value ) {
+        return new \Next\Validate\HTTP\Headers\Request\ProxyAuthorization(
+            array( 'value' => $value )
+        );
     }
 
     /**
