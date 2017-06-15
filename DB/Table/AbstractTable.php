@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Database Table Abstract Class | DB\Table\AbstractTable.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\DB\Table;
 
 use Next\Components\Object;    # Object Class
@@ -33,7 +41,7 @@ abstract class AbstractTable extends Object implements Table {
      *
      * Checks for the presence of model PRIMARY KEY and thus aborting if missing
      *
-     * @throws Next\DB\Table\TableException
+     * @throws \Next\DB\Table\TableException
      *  Thrown if the PRIMARY KEY column NAME is missing from Entity
      */
     public function init() {
@@ -75,7 +83,7 @@ abstract class AbstractTable extends Object implements Table {
      * @param integer|mixed $pk
      *  PRIMARY KEY value
      *
-     * @return Next\SB\Table\Table
+     * @return \Next\SB\Table\Table
      *  Table Object (Fluent Interface)
      */
     public function setPrimaryKey( $pk ) {
@@ -87,6 +95,11 @@ abstract class AbstractTable extends Object implements Table {
 
     /**
      * List Table Fields
+     *
+     * @param boolean|optional $ignorePrefixed
+     *  Defines whether or not properties with a leading underscore
+     *  (i.e. $_property) will also be ignored when listing Table Fields.
+     *  Defaults to TRUE
      *
      * @return array
      *  Modified Table Fields
@@ -152,87 +165,85 @@ abstract class AbstractTable extends Object implements Table {
     // ArrayAccess Methods Implementation
 
     /**
-     * Checks whether or not a Table Column exists
+     * Checks whether or not a Column at given offset exists
      *
-     * @param  mixed|string|integer $column
-     *  Table Column to look for
+     * @param mixed|string|integer $offset
+     *  Column offset to be checked for
      *
      * @return boolean
-     *  TRUE if given column exists and FALSE otherwise
+     *  TRUE if given column offset exists and FALSE otherwise
      */
-    public function offsetExists( $column ) {
-        return property_exists( $this, $column );
+    public function offsetExists( $offset ) {
+        return property_exists( $this, $offset );
     }
 
     /**
-     * Returns the value of given Table Column
+     * Returns the value of given a Column at given offset
      *
-     * @param  mixed|string|integer $column
-     *  Table Column to look for
+     * @param mixed|string|integer $offset
+     *  Column offset to be retrieved
      *
      * @return mixed
      *  Data stored in given Table Column
      */
-    public function offsetGet( $column ) {
-        return $this -> {$column};
+    public function offsetGet( $offset ) {
+        return $this -> {$offset};
     }
 
     /**
-     * Assigns a value to a Table Column
+     * Assigns a value to a Column at given offset
      *
-     * @param  mixed|string|integer $column
-     *  Table Column to assign data to
+     * @param mixed|string|integer $offset
+     *  Column offset to where assign data to
      *
      * @param mixed $value
      *  Data do assign
-     *
-     * @return void
      */
-    public function offsetSet( $column, $value ) {
-        $this -> {$column} = $value;
+    public function offsetSet( $offset, $value ) {
+        $this -> {$offset} = $value;
     }
 
     /**
-     * Empties the contents of given Table Column
+     * Empties the contents of a Column at given offset
      *
-     * Note: This, obviously, won't destroy the property
-     *
-     * @param  mixed|string|integer $column
-     *  Table Column to be emptied
+     * @param mixed|string|integer $offset
+     *  Column offset to be emptied
      *
      * @return void
      */
     public function offsetUnset( $offset ) {
-        $this -> {$field} = NULL;
+        $this -> {$offset} = NULL;
     }
 
     // Overloading
 
     /**
-     * Set field value
+     * Assigns a value to a Column at given offset
      *
-     * @note Plain and simple! No treatment will be applied!
-     *
-     * @param string $field
-     *  Table Field
+     * @param mixed|string|integer $offset
+     *  Column offset to where assign data to
      *
      * @param mixed $value
-     *  Field Value
+     *  Data do assign
+     *
+     * @see AbstractTable::offsetSet()
      */
-    public function __set( $field, $value ) {
-        $this -> {$field} = $value;
+    public function __set( $offset, $value ) {
+        $this -> offsetSet( $offset, $value );
     }
 
     /**
-     * Get field value
+     * Get column value at given offset
      *
-     * @param string $field
-     *  Table Field
+     * @param mixed|string|integer $offset
+     *  Column offset to be retrieved
      *
-     * @param mixed $value
-     *  Field Value
+     * @return mixed
+     *  Data stored in given Table Column
+     *
+     * @see AbstractTable::offsetGet()
      */
-    public function __get( $field ) {
-        return ( isset( $this -> {$field} ) ? $this -> {$field} : NULL );
+    public function __get( $offset ) {
+        return $this -> offsetGet( $offset );
     }
 }

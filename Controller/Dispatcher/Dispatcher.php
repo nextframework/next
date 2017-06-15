@@ -1,28 +1,35 @@
 <?php
 
+/**
+ * Controllers Dispatchers Interface | Controller\Dispatcher\Dispatcher.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Controller\Dispatcher;
 
 use Next\Application\Application;    # Application Interface
 
-use Next\Components\Parameter;              # Parameter Class
+use Next\Components\Parameter;       # Parameter Class
 
 /**
- * Controller Dispatcher Interface
+ * Defines the Dispatcher Type, with all methods that must be present
+ * in an Dispatcher, be it through \Next\Controller\Dispatcher\AbstractDispatcher
+ * or the concrete implementations of it
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Controller\Dispatcher
  */
 interface Dispatcher {
 
     /**
      * Dispatches the Controller
      *
-     * @param Next\Application\Application $application
+     * @param \Next\Application\Application $application
      *  Application to Configure
      *
-     * @param Next\Components\Parameter $data
+     * @param \Next\Components\Parameter $data
      *  Parameters to Configure Application
      */
     public function dispatch( Application $application, Parameter $data );

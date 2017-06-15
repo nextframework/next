@@ -1,16 +1,21 @@
 <?php
 
+/**
+ * Types Components Abstract Class | Components\Types\AbstractTypes.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components\Types;
 
 use Next\Components\Object;    # Object Class
 
 /**
- * Datatypes Abstract Class
+ * Defines the base structure for a Data-type
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components\Types
  */
 abstract class AbstractTypes extends Object implements Type {
 
@@ -24,16 +29,16 @@ abstract class AbstractTypes extends Object implements Type {
     /**
      * Datatype Constructor
      *
-     * @param mixed|Next\Components\Types\Type|optional $value
+     * @param mixed|\Next\Components\Types\Type|optional $value
      *  Value to build the Type object, be it raw or another Type Object
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for each Type Object
      *
      * @throws InvalidArgumentException
      *  Given argument is not acceptable by concrete datatype class
      *
-     * @see Next\Components\Types\AbstractTypes::set()
+     * @see \Next\Components\Types\AbstractTypes::set()
      */
     public function __construct( $value = NULL, $options = NULL ) {
 
@@ -59,7 +64,7 @@ abstract class AbstractTypes extends Object implements Type {
      * @param mixed $value
      *  Value to set
      *
-     * @return Next\Components\Interfaces\Type
+     * @return \Next\Components\Interfaces\Type
      *  Type Object (Fluent-Interface)
      *
      * @throws InvalidArgumentException
@@ -108,14 +113,14 @@ abstract class AbstractTypes extends Object implements Type {
     // Overloading
 
     /**
-     * Return the Next\Components\Types\Type value, regardless
+     * Return the \Next\Components\Types\Type value, regardless
      * the desired property name
      *
      * This allows the Object value to be read without invoking the accessor
      * method -AND- through any character length, which comes in handy with
      * strict line length standards
      *
-     * @param  mixed|string $property
+     * @param mixed|string $property
      *  Property to be retrieved. Not used!
      *
      * @return mixed

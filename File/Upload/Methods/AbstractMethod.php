@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP File Upload Abstract Method Class | HTTP\File\Upload\Methods\AbstractMethod.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\File\Upload\Methods;
 
 use Next\Components\Object;                                        # Object Class
@@ -12,26 +20,31 @@ use Next\File\Upload\PostProcessor\Chain as PostProcessorChain;    # Post-Proces
 use Next\File\Upload\PostProcessor\PostProcessor;                  # Post-Processor Interface
 use Next\File\Upload\Handler as UploadHandler;                     # Upload Handler Class
 
+/**
+ * Defines a base structure for File Uploading through different Request Methods
+ *
+ * @package    Next\File\Upload
+ */
 abstract class AbstractMethod extends Object implements Method {
 
     /**
      * Upload Handler
      *
-     * @var Next\File\Upload\Handler $handler
+     * @var \Next\File\Upload\Handler $handler
      */
     protected $handler;
 
     /**
      * Validators Chain
      *
-     * @var Next\Validate\Chain $validators
+     * @var \Next\Validate\Chain $validators
      */
     protected $validators;
 
     /**
      * Upload Post Processors CHain
      *
-     * @var Next\File\Upload\PostProcessor\Chain $postProcessors
+     * @var \Next\File\Upload\PostProcessor\Chain $postProcessors
      */
     protected $postProcessors;
 
@@ -52,10 +65,10 @@ abstract class AbstractMethod extends Object implements Method {
     /**
      * Upload Method Constructor
      *
-     * @param Next\File\Upload\Handler $handler
+     * @param \Next\File\Upload\Handler $handler
      *   Upload Handler
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for each Upload Method
      */
     public function __construct( UploadHandler $handler, $options = NULL ) {
@@ -73,10 +86,10 @@ abstract class AbstractMethod extends Object implements Method {
     /**
      * Add an external Validator to the Chain
      *
-     * @param Next\Validate\Validator $validator
+     * @param \Next\Validate\Validator $validator
      *  External Validator
      *
-     * @return Next\File\Upload\Methods\Method
+     * @return \Next\File\Upload\Methods\Method
      *  Upload Method Object (Fluent-Interface)
      */
     public function addValidator( Validator $validator ) {
@@ -89,7 +102,7 @@ abstract class AbstractMethod extends Object implements Method {
     /**
      * Get Validators Chain
      *
-     * @return Next\Validate\Chain
+     * @return \Next\Validate\Chain
      *  Validators Chain
      */
     public function getValidators() {
@@ -99,10 +112,10 @@ abstract class AbstractMethod extends Object implements Method {
     /**
      * Add an Upload Post-Processor
      *
-     * @param Next\File\Upload\PostProcessor $processor
+     * @param \Next\File\Upload\PostProcessor $processor
      *  Upload Post-Processor
      *
-     * @return Next\File\Upload\Methods\Method
+     * @return \Next\File\Upload\Methods\Method
      *  Upload Method Object (Fluent-Interface)
      */
     public function addPostProcessor( PostProcessor $processor ) {
@@ -115,7 +128,7 @@ abstract class AbstractMethod extends Object implements Method {
     /**
      * Get Post-Processors Chain
      *
-     * @return Next\File\Upload\PostProcessor\Chain
+     * @return \Next\File\Upload\PostProcessor\Chain
      *  Post-Processors Chain
      */
     public function getPostProcessors() {

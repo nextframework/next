@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Routes Generator Abstract Generator Class | Tools\Routes\Generators\AbstractGenerator.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Tools\Routes\Generators;
 
 use Next\Components\Object;                    # Object Class
@@ -18,7 +26,7 @@ abstract class AbstractGenerator extends Object implements Generator {
     /**
      * Applications Chain
      *
-     * @var Next\Application\Chain $applications
+     * @var \Next\Application\Chain $applications
      */
     protected $applications;
 
@@ -39,13 +47,13 @@ abstract class AbstractGenerator extends Object implements Generator {
     /**
      * Routes Generator Constructor
      *
-     * @param Next\Application\Chain $applications
+     * @param \Next\Application\Chain $applications
      *  Applications Chain to iterate through
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Configuration options for Routes Generators
      *
-     * @see Next\Components\Parameter
+     * @see \Next\Components\Parameter
      */
     public function __construct( Applications $applications, $options = NULL ) {
 

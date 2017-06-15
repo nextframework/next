@@ -1,14 +1,19 @@
 <?php
 
+/**
+ * Types Component "Unsigned" Type Class | Components\Types\Unsigned.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components\Types;
 
 /**
- * Unsigned Integer Datatype Class
+ * Defines the Unsigned Data-type Type
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components\Types
  */
 final class Unsigned extends Number {
 
@@ -25,9 +30,9 @@ final class Unsigned extends Number {
      * @return boolean
      *  TRUE if given value is of the type integer and FALSE otherwise
      *
-     * @see Next\Components\Types\Number::accept()
-     * @see Next\Components\Types\Integer::accept()
-     * @see Next\Components\Types\Float::accept()
+     * @see \Next\Components\Types\Number::accept()
+     * @see \Next\Components\Types\Integer::accept()
+     * @see \Next\Components\Types\Float::accept()
      */
     protected function accept( $value ) {
         return parent::accept( $value ) && ( $value >= 0 );

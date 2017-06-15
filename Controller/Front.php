@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Controller Front Class | Controller\Front.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Controller;
 
 use Next\Controller\Dispatcher\Dispatcher;             # Controllers Dispatcher Interface
@@ -20,36 +28,47 @@ use Next\HTTP\Request;                                 # Request Class
 use Next\HTTP\Response;                                # Response Class
 
 /**
- * Front Controller Class
+ * The Front Controller Class, one of the most busy classes in the
+ * Routing/Dispatching process:
  *
- * @author        Bruno Augusto
+ * - Iterates through all \Next\Application\Application added to \Next\Application\Chain;
+ * - Executes all \Next\Cache\Schema\Schema added to their \Next\Cache\Schema\Chain;
+ * - Checks with their \Next\Controller\Router\Router if current
+ *   Request should be routed or delivered "as is";
+ * - Communes with their Routers until one of them becomes able to
+ *   handle current Request;
+ * - Deals with their associated \Next\Controller\Dispatcher\Dispatcher,
+ *   checking if its \Next\HTTP\Response should output a Response Body
+ *   or return it for later;
+ * - And if anything at fail in the process deal with \Next\Components\Debug\Handlers
+ *   to create an Error Response or then send 503 or 404 Headers
+ *   to the browser;
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Controller
  */
 class Front extends Object {
 
     /**
      * Controller Dispatcher Object
      *
-     * @var Next\Controller\Dispatcher\Dispatcher $dispatcher
+     * @var \Next\Controller\Dispatcher\Dispatcher $dispatcher
      */
     private $dispatcher;
 
     /**
      * Applications Chain
      *
-     * @var Next\Application\Chain $applications
+     * @var \Next\Application\Chain $applications
      */
     private $applications;
 
     /**
      * Front Controller Constructor
      *
-     * @param Next\Application\Chain $applications
+     * @param \Next\Application\Chain $applications
      *  Applications Chain
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for the Front Controller
      */
     public function __construct( Applications $applications, $options = NULL ) {
@@ -66,22 +85,9 @@ class Front extends Object {
     /**
      * Dispatches a Controller
      *
-     * The centered process includes:
-     *
-     * <ul>
-     *
-     *     <li>Iterates through available applications</li>
-     *     <li>Execute any Caching Schema associated to the Application</li>
-     *     <li>Configures its Resources</li>
-     *     <li>Tries to match a Route against Requested URI</li>
-     *     <li>Instantiates the proper Controller</li>
-     *     <li>Sends the Response to browser</li>
-     *
-     * </ul>
-     *
      * @return mixed|void
-     *  Returns what the chosen Dispatcher have dispatched, if configured to
-     *  do so
+     *  Returns what the chosen Dispatcher have dispatched,
+     *  if configured to do so
      */
     public function dispatch() {
 
@@ -189,10 +195,10 @@ class Front extends Object {
     /**
      * Set a Dispatcher Object
      *
-     * @param Next\Controller\Dispatcher\Dispatcher $dispatcher
+     * @param \Next\Controller\Dispatcher\Dispatcher $dispatcher
      *  Dispatcher Object
      *
-     * @return Next\Controller\Front
+     * @return \Next\Controller\Front
      *  Front Controller Instance (Fluent Interface)
      */
     public function setDispatcher( Dispatcher $dispatcher ) {
@@ -205,7 +211,7 @@ class Front extends Object {
     /**
      * Get Dispatcher Object
      *
-     * @return Next\Controller\Dispatcher\Dispatcher
+     * @return \Next\Controller\Dispatcher\Dispatcher
      *  Dispatcher Object
      */
     public function getDispatcher() {

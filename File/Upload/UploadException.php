@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * File Upload Exception Class | File\Upload\UploadException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\File\Upload;
 
 use Next\Components\Object;    # Object Class
@@ -46,13 +54,13 @@ class UploadException extends \Next\Components\Debug\Exception {
      * Invalid Chain Post-Processor
      *
      * Given Object is not a valid Post-Processor because it doesn't
-     * implements neither Next\File\Upload\PostProcessor\PostProcessor
-     * and/or Next\Components\Interfaces\Informational interfaces
+     * implements neither \Next\File\Upload\PostProcessor\PostProcessor
+     * and/or \Next\Components\Interfaces\Informational interfaces
      *
-     * @param Next\Components\Object $object
+     * @param \Next\Components\Object $object
      *  Object used as Post-Processor
      *
-     * @return Next\File\Upload\UploadException
+     * @return \Next\File\Upload\UploadException
      *  Exception for Invalid Post-Processors
      */
     public static function invalidChainPostProcessor( Object $object ) {
@@ -74,7 +82,7 @@ class UploadException extends \Next\Components\Debug\Exception {
     /**
      * Nothing to Upload
      *
-     * @return Next\File\Upload\UploadException
+     * @return \Next\File\Upload\UploadException
      *  Exception for when there is nothing to upload
      */
     public static function nothingToUpload() {
@@ -84,7 +92,7 @@ class UploadException extends \Next\Components\Debug\Exception {
     /**
      * Exceeded number of concurrent files
      *
-     * @return Next\File\Upload\UploadException
+     * @return \Next\File\Upload\UploadException
      *  Exception for when the number of concurrent files were exceeded
      */
     public static function concurrentFilesLimit() {

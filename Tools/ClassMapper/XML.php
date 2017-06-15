@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Class Mapper: XML Format | Tools\ClassMapper\XML.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Tools\ClassMapper;
 
 use Next\Tools\ClassMapper\ClassMapperException;    # ClassMapper Exception Class
@@ -34,17 +42,17 @@ class XML extends Object implements Mapper {
     /**
      * XML Writer Object
      *
-     * @var Next\XML\Writer $writer
+     * @var \Next\XML\Writer $writer
      */
     private $writer;
 
     /**
      * Additional Initialization
      *
-     * Check Options Integrity, initializes the Next\XML\Writer Object and starts
+     * Check Options Integrity, initializes the \Next\XML\Writer Object and starts
      * the root node of the XML structure
      *
-     * @see Next\Tools\ClassMapper\XML::checkIntegrity()
+     * @see \Next\Tools\ClassMapper\XML::checkIntegrity()
      */
     protected function init() {
 
@@ -106,16 +114,16 @@ class XML extends Object implements Mapper {
     /**
      * Checks Options Integrity
      *
-     * @throws Next\Tools\ClassMapper\ClassMapperException
+     * @throws \Next\Tools\ClassMapper\ClassMapperException
      *  Output directory is not set
      *
-     * @throws Next\Tools\ClassMapper\ClassMapperException
+     * @throws \Next\Tools\ClassMapper\ClassMapperException
      *  Output directory doesn't exist or it's not a valid directory
      *
-     * @throws Next\Tools\ClassMapper\ClassMapperException
+     * @throws \Next\Tools\ClassMapper\ClassMapperException
      *  Output directory is not writable
      *
-     * @throws Next\Tools\ClassMapper\ClassMapperException
+     * @throws \Next\Tools\ClassMapper\ClassMapperException
      *  Filename is missing
      */
     private function checkIntegrity() {

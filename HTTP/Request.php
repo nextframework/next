@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP Request Class | HTTP\Request.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP;
 
 use Next\HTTP\Request\RequestException;             # Request Exception Classes
@@ -130,21 +138,21 @@ class Request extends Object {
     /**
      * Cookies Management Object
      *
-     * @var Next\HTTP\Cookies $cookies
+     * @var \Next\HTTP\Cookies $cookies
      */
     private $cookies;
 
     /**
      * Headers Management Object
      *
-     * @var Next\HTTP\Headers\RequestHeaders $headers
+     * @var \Next\HTTP\Headers\RequestHeaders $headers
      */
     private $headers;
 
     /**
      * HTTP Stream Adapter
      *
-     * @var Next\HTTP\Stream\Adapter\Adapter $adapter
+     * @var \Next\HTTP\Stream\Adapter\Adapter $adapter
      */
     private $adapter;
 
@@ -208,7 +216,7 @@ class Request extends Object {
      * Additional Initialization
      *
      * If only one argument is provided, it'll be checked against
-     * Next\HTTP\Stream\Adapter\Adapter.
+     * \Next\HTTP\Stream\Adapter\Adapter.
      *
      * If it passes, it will be used and Request URI will be retrieved
      * from it
@@ -352,7 +360,7 @@ class Request extends Object {
      * @param string $basepath
      *  Request Base Path
      *
-     * @return Next\HTTP\Request
+     * @return \Next\HTTP\Request
      *  Request Object (Fluent Interface)
      */
     public function setBasepath( $basepath ) {
@@ -473,7 +481,7 @@ class Request extends Object {
      * Get Request Protocol
      *
      * @param boolean|optional $includeVersion
-     *  If TRUE Next\HTTP\Request::getProtocolVersion() will be
+     *  If TRUE \Next\HTTP\Request::getProtocolVersion() will be
      *  invoked in order to *try to) provide Server Protocol version too
      *
      *  This can be a little slow!
@@ -692,7 +700,7 @@ class Request extends Object {
      * @param array $data
      *  Params to be used as Dynamic (a.k.a. GET) Params
      *
-     * @return Next\HTTP\Request
+     * @return \Next\HTTP\Request
      *  Request Instance (Fluent Interface)
      */
     public function setQuery( array $data ) {
@@ -735,10 +743,10 @@ class Request extends Object {
      * @param mixed|optional $value
      *  Field Value
      *
-     * @return Next\HTTP\Request
+     * @return \Next\HTTP\Request
      *  Request Instance (Fluent Interface)
      *
-     * @throws Next\HTTP\Request\RequestException
+     * @throws \Next\HTTP\Request\RequestException
      *   <strong>$value</strong> argument is NULL, case in which a
      *  possible RAW Data should be considered instead
      */
@@ -783,7 +791,7 @@ class Request extends Object {
      * @param mixed|optional $value
      *  Field Value
      *
-     * @return Next\HTTP\Request
+     * @return \Next\HTTP\Request
      *  Request Instance (Fluent Interface)
      */
     public function setRawPostData( $field, $value = NULL ) {
@@ -951,20 +959,20 @@ class Request extends Object {
     /**
      * Send the Request
      *
-     * @return Next\HTTP\Response|NULL
+     * @return \Next\HTTP\Response|NULL
      *
      *  If an AdapterException is caught
      *  something is wrong with Response being send and thus NULL is returned
      *
-     *  Otherwise, if everything is fine, a Next\HTTP\Response instance will
+     *  Otherwise, if everything is fine, a \Next\HTTP\Response instance will
      *
-     * @throws Next\HTTP\Request\RequestException
+     * @throws \Next\HTTP\Request\RequestException
      *  No HTTP Stream Adapter provided
      *
-     * @throws Next\HTTP\Headers\Fields\FieldsException
+     * @throws \Next\HTTP\Headers\Fields\FieldsException
      *  Invalid or malformed Cookie (s) Value (s)
      *
-     * @see Next\HTTP\Stream\Adapter\AdapterException
+     * @see \Next\HTTP\Stream\Adapter\AdapterException
      */
     public function send() {
 
@@ -1081,7 +1089,7 @@ class Request extends Object {
     /**
      * Get Connection Adapter, available only in External Requests
      *
-     * @return Next\HTTP\Adapter\Adapter
+     * @return \Next\HTTP\Adapter\Adapter
      *  Adapter Object
      */
     public function getAdapter() {

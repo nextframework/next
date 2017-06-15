@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Database Driver Interface | DB\Driver\Driver.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\DB\Driver;
 
 /**
@@ -37,7 +45,7 @@ interface Driver {
      * @param string $statement
      *  Query Statement
      *
-     * @see Next\DB\Statement\Statement
+     * @see \Next\DB\Statement\Statement
      */
     public function query( $statement );
 
@@ -47,7 +55,7 @@ interface Driver {
      * @param string $statement
      *  Statement to be prepared
      *
-     * @see Next\DB\Statement\Statement
+     * @see \Next\DB\Statement\Statement
      */
     public function prepare( $statement );
 

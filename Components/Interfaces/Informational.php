@@ -1,17 +1,20 @@
 <?php
 
+/**
+ * Informational Components Interface | Components\Interfaces\Informational.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components\Interfaces;
 
 /**
- * Informational Interface
+ * Informational Objects provides information messages about their
+ * processing state, success, error or just neutral messages
  *
- * Informational Objects are assumed to provide information messages about
- * their processing, success or error
- *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2014 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components\Interfaces
  */
 interface Informational {
 

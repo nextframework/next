@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Sessions handler Exception Class | Session\Handlers\HandlersException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Session\Handlers;
 
 /**
@@ -34,7 +42,7 @@ class HandlersException extends \Next\Components\Debug\Exception {
      * @param string $handlerName
      *  Desired Handler Name
      *
-     * @return Next\Session\Handlers\HandlersException
+     * @return \Next\Session\Handlers\HandlersException
      *  Exception for unknown handler
      */
     public static function unknownHandler( $handlerName ) {

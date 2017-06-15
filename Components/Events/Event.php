@@ -1,16 +1,21 @@
 <?php
 
+/**
+ * Events Component Class | Components\Events\Event.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components\Events;
 
 use Next\Components\Object;    # Object Class
 
 /**
- * Event Class
+ * The Event Class is a manually propagated Component similar to JavaScript's Events
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2014 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components\Events
  */
 class Event extends Object {
 
@@ -34,7 +39,7 @@ class Event extends Object {
      * @param string|optional $name
      *  An optional Event Name
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for each Event
      */
     public function __construct( $name = NULL, $options = NULL ) {
@@ -52,7 +57,7 @@ class Event extends Object {
      * @return bool
      *   Whether propagation was already stopped for this event
      *
-     * @see Next\Components\Events\Event::stopPropagation()
+     * @see \Next\Components\Events\Event::stopPropagation()
      */
     public function isPropagationStopped() {
         return $this -> propagationStopped;

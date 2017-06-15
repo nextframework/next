@@ -1,36 +1,41 @@
 <?php
 
+/**
+ * GUID Generator Prototypable Class | Components\Types\String\GUID.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace  Next\Components\Types\String;
 
 use Next\Components\Debug\Exception;          # Exception Class
 
-use Next\Components\Interfaces\Prototyped;    # Prototyped Interface
+use Next\Components\Interfaces\Prototypable;    # Prototypable Interface
 
 use Next\Components\Types\String;             # String Object Class
 
 /**
  * Generates a GUID in compliance with RFC 4122 Section 4.4
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2016 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components\Types
  */
-class GUID implements Prototyped {
+class GUID implements Prototypable {
 
-    // Prototyped Interface Method Implementation
+    // Prototypable Interface Method Implementation
 
     /**
      * Prototypes the GUID routine by proxying, treating and handling
      * the mixed arguments received
      *
-     * @return Next\Components\Types\String
+     * @return \Next\Components\Types\String
      *  A String Object with the generated GUID
      *
-     * @throws Next\Components\Debug\Exception
+     * @throws \Next\Components\Debug\Exception
      *  Thrown if OpenSSL Extension is not enabled
      *
-     * @see Next\Components\Types\String\GUID::GUID()
+     * @see \Next\Components\Types\String\GUID::GUID()
      */
     public function prototype() {
 

@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Routes Generator Output Writer Exception Class | Tools\Routes\Generators\Writer\OutputWriterException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Tools\Routes\Generators\Writer;
 
 /**
@@ -44,7 +52,7 @@ class OutputWriterException extends \Next\Components\Debug\Exception {
      * @param string $option
      *  The required configuration option
      *
-     * @return Next\Tools\Routes\Generators\GeneratorsException
+     * @return \Next\Tools\Routes\Generators\GeneratorsException
      *  Exception for a missing required configuration
      */
     public static function missingConfigurationOption( $option ) {
@@ -64,7 +72,7 @@ class OutputWriterException extends \Next\Components\Debug\Exception {
      * @param array $args
      *  Variable list of arguments to build final message
      *
-     * @return Next\Tools\RoutesGenerator\RoutesGeneratorException
+     * @return \Next\Tools\RoutesGenerator\RoutesGeneratorException
      *  Exception for Routes writability failure
      */
     public static function recordingFailure( array $args ) {

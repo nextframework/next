@@ -1,7 +1,16 @@
 <?php
 
+/**
+ * Components Debug Error & Exception Handlers Class | Components\Debug\Handlers.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components\Debug;
 
+use Next\Controller\Controller;                  # Controller Interface
 use Next\Application\ApplicationException;       # Application Exception
 use Next\HTTP\Response\ResponseException;        # Response Exception
 use Next\HTTP\Headers\Fields\FieldsException;    # Header Field Exception
@@ -10,24 +19,22 @@ use Next\HTTP\Request;                           # HTTP Request
 use Next\HTTP\Response;                          # HTTP Response
 
 /**
- * Error & Exception Handlers Class
+ * Registers Error and Exception handlers to deal with runtime errors
+ * or uncaught Exceptions producing a nicer view
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components\Debug
  */
 class Handlers {
 
     /**
-     *  Handler Register
+     * Handler Register
      *
-     *  @param  string $what
-     *    What Handler should be registered? Exception or Error
+     * @param string $which
+     *  Which Handler should be registered? Exception or Error
      */
-    public static function register( $what ) {
+    public static function register( $which ) {
 
-        switch( $what ) {
+        switch( $which ) {
 
             case 'error':
 
@@ -132,19 +139,19 @@ class Handlers {
     }
 
     /**
-     *  Error Exception
+     * Error Exception
      *
-     *  @param integer $severity
-     *    Exception Severity
+     * @param integer $severity
+     *  Exception Severity
      *
-     *  @param string $message
-     *    Exception Message
+     * @param string $message
+     *  Exception Message
      *
-     *  @param string $file
-     *    Filename were the error occurred
+     * @param string $file
+     *  Filename were the error occurred
      *
-     *  @param integer $line
-     *    Line were the error occurred
+     * @param integer $line
+     *  Line were the error occurred
      */
     public static function error( $severity, $message, $file, $line ) {
 
@@ -159,90 +166,72 @@ class Handlers {
     // Auxiliary Methods
 
     /**
-     * Exception Response Wrapper
+     * Exception Handler Wrapper
      *
-     * @param Exception $e
-     *  Exception thrown
+     * @param \Next\Controller\Controller|string $controller
+     *  Controller to be dispatched
      *
-     * @param string $mode
-     *  Exception Mode, also an ExceptionController method to be invoked
+     * @param string $action
+     *  Action Method to be called in that Controller
+     *
+     * @param array|optional $query
+     *  A list of arguments to be passed to that Controller as GET parameters
+     *
+     * @param integer|mixed|optional
+     *  An HTTP Status Code to be sent as Response Header
      */
     private static function handle( $controller, $action, array $query = array(), $code = NULL ) {
 
         try {
 
-            $request  = new Request;
-            $response = new Response;
+            $application = new Handlers\HandlersApplication;
+
+            $request  = $application -> getRequest();
+            $response = $application -> getResponse();
+
+            // Adding GET Parameters, if any
 
             if( count( $query ) > 0 ) {
                 $request -> setQuery( $query );
             }
 
-            try {
+            // Dispatching Controller
 
-                // Setting Up Application
+            call_user_func( array( new $controller( $application ), $action ) );
 
-                $application = new Handlers\HandlersApplication;
+            // Adding Response Code
 
-                $application ->  setRequest( $request )
-                             -> setResponse( $response );
-
-                // Dispatching Controller
-
-                call_user_func(
-
-                    array( new $controller( $application ), $action )
-                );
-
-                $response = $application -> getResponse();
-
-                // Adding Response Code
-
-                if( ! is_null( $code ) ) {
-
-                    try {
-
-                        $response -> addHeader( $code );
-
-                    } catch( FieldsException $e ) {}
-                }
-
-                // Sending the Response
+            if( ! is_null( $code ) ) {
 
                 try {
 
-                    $response -> send();
+                    $response -> addHeader( $code );
 
-                } catch( ResponseException $e ) {
-
-                    /**
-                     * @internal
-                     * If we can't send the Response, there is a
-                     * Internal Server Error, but it'll only be sent if we're still
-                     * able to send headers, which is not the case of very specific scenarios,
-                     * when the current buffer length cannot determined and thus, cleansed.
-                     * Otherwise, this would cause an infinite loop
-                     */
-                    if( Response::canSendHeaders() ) self::response( 500 );
-                }
-
-            } catch( ApplicationException $e ) {
-
-                echo $e -> getMessage();
+                } catch( FieldsException $e ) {}
             }
 
-        } catch( ResponseException $e ) {
+            // Sending the Response
 
-            /**
-             * This ResponseException is the result of a ResponseException being caught,
-             * triggering Handlers::error() to send an Internal Server Error status code
-             * when any header has already been sent but the output buffer could not be
-             * cleansed during Handler registration because its length could not be retrieved
-             *
-             * And by silencing this here we avoid the echo below to be called
-             */
+            try {
 
-        } catch( Exception $e ) {
+                $response -> send();
+
+            } catch( ResponseException $e ) {
+
+                /**
+                 * @internal
+                 *
+                 * If we can't send the Response, there is a
+                 * Internal Server Error, but it'll only be sent if we're still
+                 * able to send headers, which is not the case of very specific scenarios,
+                 * when the current buffer length cannot determined and thus, cleansed.
+                 *
+                 * Otherwise, this would cause an infinite loop
+                 */
+                if( Response::canSendHeaders() ) self::response( 500 );
+            }
+
+        } catch( ApplicationException $e ) {
 
             // If fail here, you're in serious troubles XD
 

@@ -1,14 +1,21 @@
 <?php
 
+/**
+ * Controller Interface | Controller\Controller.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Controller;
 
 /**
- * Controller Interface
+ * Defines the Controller Type, with all methods that must be present
+ * in an Controller, be it through \Next\Controller\AbstractController
+ * or the concrete implementations of it
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Controller
  */
 interface Controller {
 

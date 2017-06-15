@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP Common Header Field Validator Class: Connection | Validate\Headers\Common\Connection.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Validate\HTTP\Headers\Common;
 
 use Next\Validate\HTTP\Headers\Headers;    # HTTP Protocol Headers Interface

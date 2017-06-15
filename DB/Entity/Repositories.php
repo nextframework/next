@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Database Entity Repositories Collection Class | DB\Entity\Repositories.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\DB\Entity;
 
 use Next\Components\Object;    # Object Class
@@ -17,9 +25,9 @@ use Next\DB\Table\Manager;     # Entities Manager Class
  *
  * @uses         ReflectionClass,
  *               ReflectionException,
- *               Next\Components\Object,
- *               Next\DB\Table\Manager
- *               Next\DB\Entity\EntityException
+ *               \Next\Components\Object,
+ *               \Next\DB\Table\Manager
+ *               \Next\DB\Entity\EntityException
  */
 class Repositories extends Object {
 
@@ -33,16 +41,16 @@ class Repositories extends Object {
     /**
      * Add a new Entity Repository
      *
-     * @param string|object  $repository
+     * @param string|object $repository
      *  Repository classname or object
      *
-     * @param string|optional  $alias
+     * @param string|optional $alias
      *  An optional alias for the Repository
      *
-     * @param Next\DB\Table\Manager $manager
+     * @param \Next\DB\Table\Manager $manager
      *  Entity Manager Object
      *
-     * @return Next\DB\Entity\Repositories
+     * @return \Next\DB\Entity\Repositories
      *  Repositories Object (Fluent-Interface)
      */
     public function addRepository( $repository, $alias = NULL, Manager $manager ) {
@@ -69,7 +77,7 @@ class Repositories extends Object {
              * of creating a valid ReflectionClass object must be
              * properly handled within a try...catch() block because if this
              * ReflectionException is not caught here, it'll, eventually, be
-             * handled by the Framework itself in Next\Controller\Front::dispatch()
+             * handled by the Framework itself in \Next\Controller\Front::dispatch()
              *
              * However, because that handling has a different purpose,
              * Repository Classes that can't be found would return a not-so-useful
@@ -84,13 +92,13 @@ class Repositories extends Object {
     /**
      * Get an Entity Repository
      *
-     * @param  string $repository
+     * @param string $repository
      *  Entity Repository to retrieve, be it the full classpath or its alias directly
      *
-     * @return Next\DB\Entity\Repository
+     * @return \Next\DB\Entity\Repository
      *  The Entity Repository Object
      *
-     * @throws Next\DB\Entity\EntityException
+     * @throws \Next\DB\Entity\EntityException
      *  Thrown if Repository Object doesn't exist
      */
     public function getRepository( $repository ) {

@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Application Abstract Class | Application/AbstractApplication.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Application;
 
 use Next\Controller\Router\RouterException;      # Router Exception Class
@@ -15,15 +23,12 @@ use Next\HTTP\Response;                          # Response Class
 
 use Next\Controller\Chain as ControllerChain;    # Controllers Chain Class
 use Next\View\View;                              # View Interface
-use Next\Cache\Schema\Chain as CachingChain;    # Controllers Chain Class
+use Next\Cache\Schema\Chain as CachingChain;     # Controllers Chain Class
 
 /**
- * Application Class
+ * Defines the base structure for an Application created with Next Framework
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Application
  */
 abstract class AbstractApplication extends Object implements Application {
 
@@ -37,50 +42,50 @@ abstract class AbstractApplication extends Object implements Application {
     /**
      * Request Object
      *
-     * @var Next\HTTP\Request $request
+     * @var \Next\HTTP\Request $request
      */
     protected $request;
 
     /**
      * Response Object
      *
-     * @var Next\HTTP\Response $response
+     * @var \Next\HTTP\Response $response
      */
     protected $response;
 
     /**
      * Router
      *
-     * @var Next\Controller\Router\Router $router
+     * @var \Next\Controller\Router\Router $router
      */
     protected $router;
 
     /**
      * Controllers Chain
      *
-     * @var Next\Controller\Chain $controllers
+     * @var \Next\Controller\Chain $controllers
      */
     protected $controllers;
 
     /**
      * View Engine
      *
-     * @var Next\View\View $view
+     * @var \Next\View\View $view
      */
     protected $view;
 
     /**
      * Caching Services Chain
      *
-     * @var Next\Cache\Schema\Chain $cache
+     * @var \Next\Cache\Schema\Chain $cache
      */
     protected $cache;
 
     /**
-     * Constructor Overwriting
+     * Constructor Overwriting.
      * Sets up a type-hinted Application Object for all Caching Schema
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for Caching Schema
      */
     public function __construct( $options = NULL ) {
@@ -129,38 +134,45 @@ abstract class AbstractApplication extends Object implements Application {
     }
 
     /**
-     * Router Setup
+     * Router Setup.
      *
-     * It's NOT abstract because not all Applications requires a Routing system
+     * It's **not** abstract because not all Applications require
+     * a Routing System
      */
     protected function setupRouter() {}
 
     /**
-     * Database(s) Setup
+     * Database(s) Setup.
      *
-     * It's NOT abstract because not all the Applications requires a Database
+     * It's **not** abstract because not all Applications require
+     * a Database.
+     *
      * Our built-in HandlersApplication is an example of that.
+     *
+     * @see Next\Components\Debug\Handlers\HandlersApplication
      */
     protected function setupDatabase() {}
 
     /**
-     * View Engine Setup
+     * View Engine Setup.
      *
-     * It's NOT abstract because not all the Applications requires a View Engine
+     * It's **not** abstract because not all the Applications require
+     * a View Engine
      */
     protected function setupView() {}
 
     /**
-     * Caching Setup
+     * Caching Setup.
      *
-     * It's NOT abstract because not all the Applications requires a Caching System
+     * It's **not** abstract because not all the Applications require
+     * a Caching System
      */
     protected function setupCache() {}
 
-    // Interface Methods (also Accessors)
+    // Application Interface Methods Implementation
 
     /**
-     * Get Application Directory
+     * Get Application Directory.
      *
      * Application directory comes from Application Class NameSpace
      *
@@ -172,12 +184,12 @@ abstract class AbstractApplication extends Object implements Application {
     }
 
     /**
-     * Set Request Object
+     * Set Request Object.
      *
-     * @param Next\HTTP\Request $request
+     * @param \Next\HTTP\Request $request
      *  Request Object
      *
-     * @return Next\Application\Application
+     * @return \Next\Application\Application
      *  Application Instance (Fluent Interface)
      */
     public function setRequest( Request $request ) {
@@ -190,7 +202,7 @@ abstract class AbstractApplication extends Object implements Application {
     /**
      * Get Request Object
      *
-     * @return Next\HTTP\Request
+     * @return \Next\HTTP\Request
      *  Request Object
      */
     public function getRequest() {
@@ -200,10 +212,10 @@ abstract class AbstractApplication extends Object implements Application {
     /**
      * Set Response Object
      *
-     * @param Next\HTTP\Response $response
+     * @param \Next\HTTP\Response $response
      *  Response Object
      *
-     * @return Next\Application\Application
+     * @return \Next\Application\Application
      *  Application Instance (Fluent Interface)
      */
     public function setResponse( Response $response ) {
@@ -216,7 +228,7 @@ abstract class AbstractApplication extends Object implements Application {
     /**
      * Get Response Object
      *
-     * @return Next\HTTP\Response
+     * @return \Next\HTTP\Response
      *  Response Object
      */
     public function getResponse() {
@@ -226,7 +238,7 @@ abstract class AbstractApplication extends Object implements Application {
     /**
      * Get Router
      *
-     * @return Next\Controller\Router\Router
+     * @return \Next\Controller\Router\Router
      *  Router Object
      */
     public function getRouter() {
@@ -236,7 +248,7 @@ abstract class AbstractApplication extends Object implements Application {
     /**
      * Get View Engine
      *
-     * @return Next\View\View
+     * @return \Next\View\View
      *  View Engine Object
      */
     public function getView() {
@@ -244,11 +256,9 @@ abstract class AbstractApplication extends Object implements Application {
     }
 
     /**
-     * Get Controllers Chain
+     * Get all Controller Objects associated to the Application
      *
-     * Get all Controller Objects associated to Application
-     *
-     * @return Next\Controller\Chain
+     * @return \Next\Controller\Chain
      *  Controllers Collection Object
      */
     public function getControllers() {
@@ -258,7 +268,7 @@ abstract class AbstractApplication extends Object implements Application {
     /**
      * Get Caching Schema Chain
      *
-     * @return Next\Cache\Schema\Chain
+     * @return \Next\Cache\Schema\Chain
      *  Caching Schema Collection Chain Object
      */
     public function getCache() {
@@ -270,20 +280,22 @@ abstract class AbstractApplication extends Object implements Application {
     /**
      * Controllers Setup
      *
-     * It's abstract because every Application must define its own Controllers
+     * @internal
+     *
+     * Abstract because every Application must define its own Controllers
      */
     abstract protected function setupControllers();
 
     // Auxiliary Methods
 
     /**
-     * Check Application Integrity
+     * Checks Application Integrity
      *
-     * @throws Next\Application\ApplicationException
+     * @throws \Next\Application\ApplicationException
      *  Application has an invalid Router assigned
      *
-     * @throws Next\Application\ApplicationException
-     *  Assigned has an invalid View Engine assigned
+     * @throws \Next\Application\ApplicationException
+     *  Assigned Application has an invalid View Engine assigned
      */
     private function checkIntegrity() {
 

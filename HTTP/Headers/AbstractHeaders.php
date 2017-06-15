@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP Headers Abstract Class | HTTP\Headers\AbstractHeaders.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Headers;
 
 use Next\HTTP\Headers\Fields\FieldsException;    # Header Fields Exception Class
@@ -33,7 +41,7 @@ abstract class AbstractHeaders extends Object {
     /**
      * Headers List
      *
-     * @var Next\Components\Collections\Lists $headers
+     * @var \Next\Components\Collections\Lists $headers
      */
     private $headers;
 
@@ -150,7 +158,7 @@ abstract class AbstractHeaders extends Object {
      *           A well-formed Header Field.
      *
      *           It'll be used "as is", an instance of
-     *           Next\HTTP\Headers\Fields\Field
+     *           \Next\HTTP\Headers\Fields\Field
      *       </li>
      *
      *       <li>
@@ -172,10 +180,10 @@ abstract class AbstractHeaders extends Object {
      * @param string|optional $value
      *  Header Field Value
      *
-     * @return Next\HTTP\Headers\AbstractHeaders
+     * @return \Next\HTTP\Headers\AbstractHeaders
      *  AbstractHeaders Object (Fluent Interface)
      *
-     * @throws Next\HTTP\Headers\Fields\FieldsException
+     * @throws \Next\HTTP\Headers\Fields\FieldsException
      *  Invalid or mal-formed Header Value
      */
     public function addHeader( $header, $value = NULL ) {
@@ -309,7 +317,7 @@ abstract class AbstractHeaders extends Object {
      * @param string $header
      *  Header Field to be searched
      *
-     * @return Next\HTTP\Headers\Fields\Field|boolean
+     * @return \Next\HTTP\Headers\Fields\Field|boolean
      *  If Header exists, it will be returned, otherwise, FALSE will
      */
     public function findHeader( $header ) {
@@ -331,7 +339,7 @@ abstract class AbstractHeaders extends Object {
      * @param boolean $asString
      *  If TRUE, instead a Collection, a string of all the headers will be returned
      *
-     * @return Next\Components\Collections\Lists|string|void
+     * @return \Next\Components\Collections\Lists|string|void
      *
      *   <p>
      *       If <strong>$asString</strong> is set to FALSE, the Headers
@@ -397,7 +405,7 @@ abstract class AbstractHeaders extends Object {
     /**
      * Check for Header Field acceptance
      *
-     * @param Next\HTTP\Headers\Fields\Field $field
+     * @param \Next\HTTP\Headers\Fields\Field $field
      *
      *  Header Field Object to have its
      *  acceptance in Headers Lists Collection checked

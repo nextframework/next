@@ -1,24 +1,29 @@
 <?php
 
+/**
+ * Controller Router Abstract Class | Controller\Router\AbstractRouter.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Controller\Router;
 
 use Next\Application\Application;    # Application Interface
 use Next\Components\Object;          # Object Class
 
 /**
- * Controller Router Class
+ * Defines the base structure for a Controller Router
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Controller\Router
  */
 abstract class AbstractRouter extends Object implements Router {
 
     /**
      * Application Object
      *
-     * @var Next\Application\Application $application
+     * @var \Next\Application\Application $application
      */
     protected $application;
 
@@ -54,10 +59,10 @@ abstract class AbstractRouter extends Object implements Router {
      * Constructor Overwriting
      * Sets up a type-hinted Application Object for all Routing Strategies
      *
-     * @param Next\Application\Application $application
+     * @param \Next\Application\Application $application
      *  Application Object
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for Router Adapter
      */
     public function __construct( Application $application, $options = NULL ) {
@@ -81,7 +86,7 @@ abstract class AbstractRouter extends Object implements Router {
      * Sets the Router to abort its flow, not routing anything,
      * so the Front Controller can keep going
      *
-     * @return Next\Controller\Router\Router
+     * @return \Next\Controller\Router\Router
      *  Router Object (Fluent Interface)
      */
     public function abortFlow() {

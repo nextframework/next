@@ -1,14 +1,20 @@
 <?php
 
+/**
+ * Components Exception Class | Components\ComponentsException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components;
 
 /**
- * Components Exception Class
+ * Defines wrapper static methods for all Exceptions thrown
+ * within the Components Module
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components
  */
 class ComponentsException extends \Next\Components\Debug\Exception {
 
@@ -35,12 +41,12 @@ class ComponentsException extends \Next\Components\Debug\Exception {
 
     /**
      * Exception for when something unexpected occurs while mapping
-     * an array into a Next\Components\Parameter Object recursively
+     * an array into a \Next\Components\Parameter Object recursively
      *
      * @param string $message
      *  Message with the error occurred
      *
-     * @return next\Components\ComponentsException
+     * @return \Next\Components\ComponentsException
      *  Exception for array to object mapping errors
      */
     public static function mapping( $message ) {
@@ -54,10 +60,10 @@ class ComponentsException extends \Next\Components\Debug\Exception {
      * @param string $method
      *  Method being invoked
 
-     * @param Next\Components\Object $object
+     * @param \Next\Components\Object $object
      *  The Object context
      *
-     * @return Next\Components\ComponentsException
+     * @return \Next\Components\ComponentsException
      *  Exception for constructor overwritten
      */
     public static function extendedContextFailure( $method, Object $object ) {
@@ -86,10 +92,10 @@ class ComponentsException extends \Next\Components\Debug\Exception {
      * @param string $property
      *  Property being overloaded
      *
-     * @param Next\Components\Object $object
+     * @param \Next\Components\Object $object
      *  The Object context
      *
-     * @return Next\Components\ComponentsException
+     * @return \Next\Components\ComponentsException
      *  Exception for constructor overwritten
      */
     public static function overloadedPropertyUpdateFailure( $property, Object $object ) {
@@ -118,10 +124,10 @@ class ComponentsException extends \Next\Components\Debug\Exception {
      * @param string $property
      *  Property being overloaded
      *
-     * @param Next\Components\Object $object
+     * @param \Next\Components\Object $object
      *  The Object context
      *
-     * @return Next\Components\ComponentsException
+     * @return \Next\Components\ComponentsException
      *  Exception for constructor overwritten
      */
     public static function overloadedPropertyReadingFailure( $property, Object $object ) {

@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP Entity Header Field Class: Last-Modified | HTTP\Headers\Fields\Entity\LastModified.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Validate\HTTP\Headers\Entity;
 
 use Next\Validate\HTTP\Headers\Headers;        # HTTP Protocol Headers Interface
@@ -52,7 +60,7 @@ class LastModified extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.29
      *  RFC 2616 Section 14.29
      *
-     * @see Next\Validate\HTTP\Headers\Common\Date::validate()
+     * @see \Next\Validate\HTTP\Headers\Common\Date::validate()
      */
     public function validate() {
 

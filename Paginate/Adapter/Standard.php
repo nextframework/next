@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Pagination Standard Adapter Class | Paginate\Adapter\Standard.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Paginate\Adapter;
 
 use Next\Components\Object;    # Object Class
@@ -27,7 +35,7 @@ class Standard extends Object implements Adapter {
      * @param array $source
      *  Data Source
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for Paginate Standard Adapter
      */
     public function __construct( array $source, $options = NULL ) {

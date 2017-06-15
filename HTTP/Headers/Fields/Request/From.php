@@ -1,13 +1,25 @@
 <?php
 
+/**
+ * HTTP Request Header Field Class: From | HTTP\Headers\Fields\Request\From.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Headers\Fields\Request;
 
-use Next\HTTP\Headers\Fields\Request;           # Request Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField;     # Header Field Abstract Class
-use Next\Validate\HTTP\Headers\Request\From;    # Request From Header Field Validator Class
+use Next\HTTP\Headers\Fields\Request;          # Request Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;    # Header Field Abstract Class
 
 /**
- * From Header Field Class
+ * Request 'From' Header Field Validator Class
+ */
+use Next\Validate\HTTP\Headers\Request\From as Validator;
+
+/**
+ * Request 'From' Header Field Class
  *
  * @author        Bruno Augusto
  *
@@ -24,11 +36,11 @@ class From extends AbstractField implements Request {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validator
+     * @return \Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new From( array( 'value' => $value ) );
+        return new Validator( array( 'value' => $value ) );
     }
 
     /**

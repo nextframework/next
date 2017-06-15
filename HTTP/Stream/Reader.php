@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP Stream Reader Class | HTTP\Stream\Reader.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Stream;
 
 use Next\HTTP\Stream\Reader\ReaderException;      # HTTP Stream Reader Exception Class
@@ -26,10 +34,10 @@ class Reader extends Object implements Reader\Reader {
     /**
      * Stream Reader Constructor
      *
-     * @param Next\HTTP\Stream\Adapter\Adapter $adapter
+     * @param \Next\HTTP\Stream\Adapter\Adapter $adapter
      *  Stream Adapter from which data will be read
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for the HTTP Stream Reader
      */
     public function __construct( Adapter $adapter, $options = NULL ) {
@@ -51,10 +59,10 @@ class Reader extends Object implements Reader\Reader {
      *  Always return the read data, because if failed
      *  to read an Exception is thrown
      *
-     * @throws Next\HTTP\Stream\Reader\ReaderException
+     * @throws \Next\HTTP\Stream\Reader\ReaderException
      *  Number of bytes is equal zero
      *
-     * @throws Next\HTTP\Stream\Reader\ReaderException
+     * @throws \Next\HTTP\Stream\Reader\ReaderException
      *  Fail when trying to read
      */
     public function read( $length = 4096 ) {
@@ -88,10 +96,10 @@ class Reader extends Object implements Reader\Reader {
      * @return string Always return the read data, because if failed
      * to read an Exception is thrown
      *
-     * @throws Next\HTTP\Stream\Reader\ReaderException
+     * @throws \Next\HTTP\Stream\Reader\ReaderException
      *  Number of bytes is zero
      *
-     * @throws Next\HTTP\Stream\Reader\ReaderException
+     * @throws \Next\HTTP\Stream\Reader\ReaderException
      *  Fail when trying to read
      */
     public function readLine( $length = 1024 ) {
@@ -138,7 +146,7 @@ class Reader extends Object implements Reader\Reader {
     /**
      * Get Adapter Object
      *
-     * @return Next\HTTP\Stream\Adapter\Adapter
+     * @return \Next\HTTP\Stream\Adapter\Adapter
      *  HTTP Stream Adapter
      */
     public function getAdapter() {

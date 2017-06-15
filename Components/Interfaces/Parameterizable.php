@@ -1,18 +1,21 @@
 <?php
 
+/**
+ * Parameterizable Component Interface | Components\Interfaces\Parameterizable.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components\Interfaces;
 
 /**
- * Parameterizable Interface
- *
- * Parameterizable Objects are assumed to use Next\Components\Parameter
- * to provide a way to customize classes functionality theough
+ * Parameterizable Objects make use of \Next\Components\Parameter
+ * to provide a way to customize classes functionality with
  * Default, Common and Use Options
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components\Interfaces
  */
 interface Parameterizable {
 

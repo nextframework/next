@@ -1,23 +1,26 @@
 <?php
 
+/**
+ * Prototype Component Class | Components\Prototype.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components;
 
 use Next\Components\Interfaces\Prototypical;    # Prototypical Interface
-use Next\Components\Interfaces\Prototyped;      # Prototyped Interface
+use Next\Components\Interfaces\Prototypable;    # Prototypable Interface
 use Next\Components\Utils\ArrayUtils;           # ArrayUtils Class
 
 /**
- * Prototype Class
- *
  * Defines the base of a Prototypical Object allowing all of its
- * instances have callable features available
+ * instances have previously implemented callable features available
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components
  */
-abstract class Prototype implements Prototypical  {
+abstract class Prototype implements Prototypical {
 
     /**
      * Registered Prototypes
@@ -38,7 +41,7 @@ abstract class Prototype implements Prototypical  {
      * @param array $args
      *  Default arguments available to callable resource
      *
-     * @return Next\Components\Prototype
+     * @return \Next\Components\Prototype
      *  Prototype Instance (Fluent Interface)
      */
     public function implement( $name, $callable, $args = array() ) {
@@ -51,7 +54,7 @@ abstract class Prototype implements Prototypical  {
     /**
      * Invoke a prototyped resource from a caller context
      *
-     * @param Next\Components\Object $caller
+     * @param \Next\Components\Object $caller
      *  Caller Object
      *
      * @param string $method
@@ -60,10 +63,10 @@ abstract class Prototype implements Prototypical  {
      * @param array $args
      *  Calling Arguments
      *
-     * @return Next\Components\Object
+     * @return \Next\Components\Object
      *  Caller Object updated
      *
-     * @throws Next\Components\Debug\Exception
+     * @throws \Next\Components\Debug\Exception
      *  Called resource is not known as a prototype nor as a extended method
      */
     public function call( Object $caller, $method, array $args = array() ) {
@@ -83,7 +86,7 @@ abstract class Prototype implements Prototypical  {
                 $args = self::$prototypes[ $method ][ 1 ];
             }
 
-            if( self::$prototypes[ $method ][ 0 ] instanceof Prototyped ) {
+            if( self::$prototypes[ $method ][ 0 ] instanceof Prototypable ) {
 
                 $result = self::$prototypes[ $method ][ 0 ] -> prototype( $args );
 

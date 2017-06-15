@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Database Entity Exception Class | DB\Entity\EntityException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\DB\Entity;
 
 /**
@@ -55,7 +63,7 @@ class EntityException extends \Next\Components\Debug\Exception {
      * @param string $repositoryClass
      *  Repository Classname
      *
-     * @return Next\DB\Entity\EntityException
+     * @return \Next\DB\Entity\EntityException
      *  Invalid Repository Class
      */
     public static function invalidRepository( $repositoryClass ) {
@@ -76,7 +84,7 @@ class EntityException extends \Next\Components\Debug\Exception {
      * @param string $repositoryClass
      *  Repository Classname
      *
-     * @return Next\DB\Entity\EntityException
+     * @return \Next\DB\Entity\EntityException
      *  Repository Class doesn't exist
      */
     public static function repositoryNotExists( $repositoryClass ) {
@@ -92,7 +100,7 @@ class EntityException extends \Next\Components\Debug\Exception {
     /**
      * Missing Entity Manager
      *
-     * @return  Next\DB\Entity\EntityException
+     * @return  \Next\DB\Entity\EntityException
      *  Missing Entity Manager
      */
     public function noEntityManager() {
@@ -102,7 +110,7 @@ class EntityException extends \Next\Components\Debug\Exception {
     /**
      * No Entity
      *
-     * @return Next\DB\Entity\EntityException
+     * @return \Next\DB\Entity\EntityException
      *  No Entity defined
      */
     public static function noEntity() {

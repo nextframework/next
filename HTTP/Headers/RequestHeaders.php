@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP Request Headers Class | HTTP\Headers\RequestHeaders.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Headers;
 
 use Next\HTTP\Headers\Fields\Field;       # Header Fields Interface
@@ -25,7 +33,7 @@ class RequestHeaders extends AbstractHeaders {
      * This reverse logic is because there are two categories, Common and Entity,
      * with headers that can be common to Request and/or Response at same time
      *
-     * @param Next\HTTP\Headers\Fields\Field $field
+     * @param \Next\HTTP\Headers\Fields\Field $field
      *
      *  Header Field Object to have its acceptance in Request Headers Lists Collection checked
      *

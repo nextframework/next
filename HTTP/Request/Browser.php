@@ -1,16 +1,23 @@
 <?php
 
+/**
+ * HTTP Request Browser Informations Class | HTTP\Request\Browser.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Request;
 
 use Next\Components\Object;    # Object Class
 
 /**
- * HTTP Request Browser Information Class
+ * Defines a class to obtain various informations by analyzing Request and Server variables
  *
- * @author        Bruno Augusto
+ * @package    Next\Request
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @todo       Needs a SERIOUS rewriting >.<
  */
 class Browser extends Object {
 
@@ -345,6 +352,11 @@ class Browser extends Object {
      */
     const OPENSOLARIS           = 'OpenSolaris';
 
+    /**
+     * Found informations
+     *
+     * @var stdClass $info
+     */
     private $info;
 
     /**
@@ -362,8 +374,8 @@ class Browser extends Object {
     /**
      * Get ALL Detected Information
      *
-     * @return Next\HTTP\Request\Browser
-     *  Bowser Object (Information are stored in a stdClass)
+     * @return \Next\HTTP\Request\Browser
+     *  Browser Object (Information are stored in a stdClass)
      */
     public function getInfo() {
 

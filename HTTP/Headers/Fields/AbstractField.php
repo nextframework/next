@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP Header Field Abstract Class | HTTP\Headers\Fields\AbstractField.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Headers\Fields;
 
 use Next\Components\Interfaces\Parameterizable;    # Parameterizable Interface
@@ -78,7 +86,7 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
      * @param string $value
      *  Header Value
      *
-     * @throws Next\HTTP\Headers\Fields\FieldsException
+     * @throws \Next\HTTP\Headers\Fields\FieldsException
      *  All possible values assigned to the Header are invalid
      */
     public function setValue( $value ) {
@@ -205,15 +213,15 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
     /**
      * Check Options Integrity
      *
-     * @throws Next\HTTP\Headers\Fields\FieldsException
+     * @throws \Next\HTTP\Headers\Fields\FieldsException
      *  Header Field has no well-formed name
      *
-     * @throws Next\HTTP\Headers\Fields\FieldsException
-     *  Object defined as validator is not instance of Next\Validate\Validate
+     * @throws \Next\HTTP\Headers\Fields\FieldsException
+     *  Object defined as validator is not instance of \Next\Validate\Validator
      *
-     * @throws Next\HTTP\Headers\Fields\FieldsException
+     * @throws \Next\HTTP\Headers\Fields\FieldsException
      *  Provided validator is not a Header Field Validator, characterized
-     *  as instance of Next\Validate\HTTP\Headers\Headers
+     *  as instance of \Next\Validate\HTTP\Headers\Headers
      */
     private function checkIntegrity() {
 
@@ -261,7 +269,7 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
         if( ! $validator instanceof Headers ) {
 
             throw FieldsException::unfullfilledRequirements(
-                'HTTP Headers Validators must implement HTTP Headers Validate Interface'
+                'HTTP Headers Validators must implement HTTP Headers Validator Interface'
             );
         }
     }

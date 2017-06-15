@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP Stream Abstract Adapter Class | HTTP\Stream\Adapter\AbstractAdapter.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Stream\Adapter;
 
 use Next\HTTP\Stream\Context\Context;    # Stream Context Interface
@@ -32,7 +40,7 @@ abstract class AbstractAdapter extends Object implements Adapter {
     /**
      * Stream Context
      *
-     * @var Next\HTTP\Stream\Context\Context $context
+     * @var \Next\HTTP\Stream\Context\Context $context
      */
     protected $context;
 
@@ -61,10 +69,10 @@ abstract class AbstractAdapter extends Object implements Adapter {
     /**
      * Set Adapter Context
      *
-     * @param Next\HTTP\Stream\Context\Context $context
+     * @param \Next\HTTP\Stream\Context\Context $context
      *  Context Object
      *
-     * @return Next\HTTP\Stream\Adapter\Adapter
+     * @return \Next\HTTP\Stream\Adapter\Adapter
      *  Stream Adapter Object (Fluent Interface)
      */
     public function setContext( Context $context ) {
@@ -77,7 +85,7 @@ abstract class AbstractAdapter extends Object implements Adapter {
     /**
      * Get Adapter Context
      *
-     * @return Next\HTTP\Stream\Context\Context
+     * @return \Next\HTTP\Stream\Context\Context
      *  Stream Context Object (Fluent Interface)
      */
     public function getContext() {

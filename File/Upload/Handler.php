@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * File Upload Handler Class | File\Upload\Handler.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\File\Upload;
 
 use Next\HTTP\Response\ResponseException;          # Response Exception Class
@@ -12,6 +20,12 @@ use Next\Components\Parameter;                     # Parameter Class
 use Next\HTTP\Request;                             # Request Class
 use Next\HTTP\Response;                            # Response Class
 
+/**
+ * Defines a File Upload Handler delegating the process accordingly
+ * to the Request Method
+ *
+ * @package    Next\File\Upload
+ */
 class Handler extends Object {
 
     /**
@@ -32,33 +46,33 @@ class Handler extends Object {
     /**
      * Request Object
      *
-     * @var Next\HTTP\Request
+     * @var \Next\HTTP\Request
      */
     private $request;
 
     /**
      * Response Object
      *
-     * @var Next\HTTP\Response
+     * @var \Next\HTTP\Response
      */
     private $response;
 
     /**
      * Upload Handler Constructor
      *
-     * @param Next\Application\Application|optional $application
+     * @param \Next\Application\Application|optional $application
      *  Optional Application Object
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for Upload Handler
      *
-     * @see Next\Components\Parameter
+     * @see \Next\Components\Parameter
      */
     public function __construct( Application $application = NULL, $options = NULL ) {
 
         parent::__construct( $options );
 
-        $this -> request     = $application -> getRequest()
+        $this -> request     = $application -> getRequest();
         $this -> response    = $application -> getResponse();
 
         $this -> checkIntegrity();
@@ -67,16 +81,21 @@ class Handler extends Object {
     /**
      * Handle the upload process accordingly with Request Method
      *
-     * @return Next\File\Upload\Methods\Method
+     * @return \Next\File\Upload\Methods\Method
      *  Upload Method
      */
     public function upload() {
 
         $method = $this -> request -> getData( $_REQUEST, '_method' );
 
-        if( ! is_null( $method ) && $method === Request::DELETE ) {
+        /**
+         * @internal
+         *
+         * What?! o.O
+         */
+        /*if( ! is_null( $method ) && $method === Request::DELETE ) {
             return new Methods\Delete;
-        }
+        }*/
 
         switch( $this -> request -> getServer( 'REQUEST_METHOD' ) ) {
 
@@ -100,9 +119,7 @@ class Handler extends Object {
                 break;
 
             default:
-
                 $this -> response -> addHeader( 405 ) -> send();
-
             break;
         }
     }
@@ -112,7 +129,7 @@ class Handler extends Object {
     /**
      * Get Request Object
      *
-     * @return Next\HTTP\Request
+     * @return \Next\HTTP\Request
      *  Request Object
      */
     public function getRequest() {
@@ -122,7 +139,7 @@ class Handler extends Object {
     /**
      * Get Response Object
      *
-     * @return Next\HTTP\Response
+     * @return \Next\HTTP\Response
      *  Response Object
      */
     public function getResponse() {
@@ -131,6 +148,15 @@ class Handler extends Object {
 
     // Auxiliary Methods
 
+    /**
+     * Checks the integrity of Parameterizable Object ensuring all options are set as they should
+     *
+     * @throws \Exception
+     *  Thrown if defined Upload Directory is not a directory
+     *
+     * @throws \Exception
+     *  Thrown if defined Upload Directory is not a writable
+     */
     private function checkIntegrity() {
 
         if( ! is_dir( $this -> options -> uploadDir ) ) {

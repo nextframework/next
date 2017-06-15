@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Database Abstract Driver Class | DB\Driver\AbstractDriver.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\DB\Driver;
 
 use Next\Components\Interfaces\Parameterizable;    # Parameterizable Interface
@@ -81,7 +89,7 @@ abstract class AbstractDriver extends Object implements Driver {
     /**
      * Get DB Driver Options
      *
-     * @return Next\Components\Parameter
+     * @return \Next\Components\Parameter
      *  Parameter Object with merged options
      */
     public function getOptions() {

@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Extended Context Component Class | Components\Context.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components;
 
 use Next\Components\Interfaces\Contextualizable;    # Contextualizable Interface
@@ -7,15 +15,11 @@ use Next\Components\Invoker;                        # Invoker Class
 use Next\Components\Utils\ArrayUtils;               # Array Utils Class
 
 /**
- * Context Class
+ * Bridges two \Next\Components\Object instances wrapped by a
+ * \Next\Components\Invoker Object and handles methods calling
+ * and properties setting/getting within the Extended Context
  *
- * Context registers Invoker objects to allow Invoker Caller's context to be
- * extended, almost like PHP 5.4 Traits
- *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components
  */
 class Context implements Contextualizable {
 
@@ -29,7 +33,7 @@ class Context implements Contextualizable {
     /**
      * Register a new Invoker Object to be used as context extension
      *
-     * @param Next\Components\Invoker $invoker
+     * @param \Next\Components\Invoker $invoker
      *  Invoker Object
      *
      * @param string|array|optional $methods
@@ -40,7 +44,7 @@ class Context implements Contextualizable {
      *  One or more properties accessible through extended Context
      *  Defaults to NULL, which means all PROTECTED properties will be accessible
      *
-     * @return Next\Components\Context
+     * @return \Next\Components\Context
      *  Context Instance (Fluent Interface)
      */
     function extend( Invoker $invoker, $methods = NULL, $properties = NULL ) {
@@ -107,7 +111,7 @@ class Context implements Contextualizable {
     /**
      * Invoke an extended resource from a caller context
      *
-     * @param Next\Components\Object $caller
+     * @param \Next\Components\Object $caller
      *  Caller Object
      *
      * @param string $method
@@ -121,7 +125,7 @@ class Context implements Contextualizable {
      *
      *  If invoking process fail, false will returned.
      *
-     * @throws Next\Components\Debug\Exception
+     * @throws \Next\Components\Debug\Exception
      *  Called resource is not known as an extended method
      */
     public function call( Object $caller, $method, array $args = array() ) {
@@ -161,7 +165,7 @@ class Context implements Contextualizable {
          *
          * @internal
          *
-         * In fact, because of the Prototype feature, triggered in Next\Components\Object::__call()
+         * In fact, because of the Prototype feature, triggered in \Next\Components\Object::__call()
          * when a generic Exception is thrown, this Exception will never be caught or seen
          */
         throw ContextException::methodNotFound( $method );
@@ -170,7 +174,7 @@ class Context implements Contextualizable {
     /**
      * Get value of a protected property from caller context
      *
-     * @param Next\Components\Object $caller
+     * @param \Next\Components\Object $caller
      *  Caller Object
      *
      * @param string $property
@@ -237,7 +241,7 @@ class Context implements Contextualizable {
     /**
      * Set value to a protected property from caller context
      *
-     * @param Next\Components\Object $caller
+     * @param \Next\Components\Object $caller
      *  Caller Object
      *
      * @param string $property
@@ -307,12 +311,12 @@ class Context implements Contextualizable {
     /**
      * Filter elements of an array to not be a method of:
      *
-     * - Next\Components\Object
-     * - Next\Components\Context
-     * - Next\Components\Prototype
+     * - \Next\Components\Object
+     * - \Next\Components\Context
+     * - \Next\Components\Prototype
      * - Any magic method (__get(), __set()...)
      *
-     * @param  string|ReflectionMethod|ReflectionProperty $element
+     * @param string|ReflectionMethod|ReflectionProperty $element
      *  The current element in the "behind the scenes" loop of array_filter()
      *
      * @return boolean
@@ -343,7 +347,7 @@ class Context implements Contextualizable {
     /**
      * Get method name from ReflectionMethod and ReflectionProperty objects
      *
-     * @param  string|reflectionMethod|ReflectionProperty $element
+     * @param string|reflectionMethod|ReflectionProperty $element
      *  The current element in the "behind the scenes" loop of array_map()
      *
      * @return string

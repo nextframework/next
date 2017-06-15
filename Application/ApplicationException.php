@@ -1,16 +1,22 @@
 <?php
 
+/**
+ * Application Exception Class | Application\ApplicationException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Application;
 
 use Next\Components\Object;    # Object Class
 
 /**
- * Application Exception Class
+ * Defines wrapper static methods for all Exceptions thrown
+ * within the Application Module
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Application
  */
 class ApplicationException extends \Next\Components\Debug\Exception {
 
@@ -24,7 +30,7 @@ class ApplicationException extends \Next\Components\Debug\Exception {
     /**
      * Invalid Application.
      *
-     * <p>Used by Next\Application\Chain</p>
+     * <p>Used by \Next\Application\Chain</p>
      *
      * @var integer
      */
@@ -50,12 +56,12 @@ class ApplicationException extends \Next\Components\Debug\Exception {
      * Invalid Application
      *
      * Given Object is not a valid Application because it doesn't
-     * implements Next\Application\\Application
+     * implements \Next\Application\\Application
      *
-     * @param Next\Components\Object $object
+     * @param \Next\Components\Object $object
      *  Object assigned as Application
      *
-     * @return Next\Application\ApplicationException
+     * @return \Next\Application\ApplicationException
      *  Exception for invalid Applications
      */
     public static function invalidApplication( Object $object ) {
@@ -78,9 +84,9 @@ class ApplicationException extends \Next\Components\Debug\Exception {
      * Invalid Router
      *
      * Assigned Router is not valid because it doesn't
-     * implements Next\Controller\Router\Router
+     * implements \Next\Controller\Router\Router
      *
-     * @return Next\Application\ApplicationException
+     * @return \Next\Application\ApplicationException
      *  Exception for Applications with an invalid Router
      */
     public static function invalidRouter() {
@@ -97,9 +103,9 @@ class ApplicationException extends \Next\Components\Debug\Exception {
      * Invalid View Engine
      *
      * Assigned View Engine is not valid because it doesn't
-     * implements Next\View\View
+     * implements \Next\View\View
      *
-     * @return Next\Application\ApplicationException
+     * @return \Next\Application\ApplicationException
      *  Exception for Applications with invalid View Engine
      */
     public static function invalidViewEngine() {

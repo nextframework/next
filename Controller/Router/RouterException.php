@@ -1,14 +1,20 @@
 <?php
 
+/**
+ * Controller Routers Exception Class | Controller\Router\RouterException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Controller\Router;
 
 /**
- * Controller Router Exception Class
+ * Defines wrapper static methods for all Exceptions thrown
+ * within the Controller Router Module
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Controller\Router
  */
 class RouterException extends \Next\Components\Debug\Exception {
 
@@ -64,7 +70,7 @@ class RouterException extends \Next\Components\Debug\Exception {
      * @param array|optional $args
      *  Variable list of argument to build final message
      *
-     * @return Next\Controller\Router\RouterException
+     * @return \Next\Controller\Router\RouterException
      *  Exception for Connection failure
      */
     public static function connectionFailure( $message, $code, array $args = array() ) {
@@ -89,7 +95,7 @@ class RouterException extends \Next\Components\Debug\Exception {
      * @param array|optional $args
      *  Variable list of argument to build final message
      *
-     * @return Next\Controller\Router\RouterException
+     * @return \Next\Controller\Router\RouterException
      *  Exception for data reading failure
      */
     public static function dataReadingFailure( $message, $code, array $args = array() ) {
@@ -104,7 +110,7 @@ class RouterException extends \Next\Components\Debug\Exception {
      * @param string $parameter
      *  Route Parameter being analyzed
      *
-     * @return Next\Controller\Router\RouterException
+     * @return \Next\Controller\Router\RouterException
      *  Exception for missing required parameter
      */
     public static function missingParameter( $parameter ) {
@@ -131,7 +137,7 @@ class RouterException extends \Next\Components\Debug\Exception {
      * @param string $parameter
      *  Route Parameter being analyzed
      *
-     * @return Next\Controller\Router\RouterException
+     * @return \Next\Controller\Router\RouterException
      *  Exception for invalid required parameter
      */
     public static function invalidParameter( $parameter ) {

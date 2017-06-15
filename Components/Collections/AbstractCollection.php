@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Collections Component Abstract Class | Components\Collection\AbstractCollection.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components\Collections;
 
 use Next\Components\Object;              # Object Class
@@ -7,12 +15,9 @@ use Next\Components\Object;              # Object Class
 use Next\Components\Utils\ArrayUtils;    # ArrayUtils Class
 
 /**
- * Collection Class
+ * Defines the base structure for an Object Collections created with Next Framework
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components\Collections
  */
 abstract class AbstractCollection extends Object
     implements \Countable, \IteratorAggregate, \Serializable {
@@ -41,7 +46,7 @@ abstract class AbstractCollection extends Object
     /**
      * Additional Initialization
      *
-     * @see Next\Components\Collection\AbstractCollection::clear()
+     * @see \Next\Components\Collection\AbstractCollection::clear()
      */
     public function init() {
         $this -> clear();
@@ -57,7 +62,7 @@ abstract class AbstractCollection extends Object
      *
      * </ul>
      *
-     * @return Next\Components\Collection\AbstractCollection
+     * @return \Next\Components\Collection\AbstractCollection
      *  Collection Object (Fluent Interface)
      */
     public function clear() {
@@ -76,10 +81,13 @@ abstract class AbstractCollection extends Object
     /**
      * Adds a new Object to Collection
      *
-     * @param Next\Components\Object $object
+     * @param \Next\Components\Object $object
      *  Object to add to Collection
      *
-     * @return Next\Components\Collection\AbstractCollection
+     * @param mixed|integer|optional
+     *  Specific offset to add the Object to
+     *
+     * @return \Next\Components\Collection\AbstractCollection
      *  Collection Object (Fluent Interface)
      */
     public function add( Object $object, $offset = NULL ) {
@@ -121,10 +129,10 @@ abstract class AbstractCollection extends Object
     /**
      * Adds a new Object to the beginning of Collection
      *
-     * @param Next\Components\Object $object
+     * @param \Next\Components\Object $object
      *  Object to prepend to Collection
      *
-     * @return Next\Components\Collection\AbstractCollection
+     * @return \Next\Components\Collection\AbstractCollection
      *  Collection Object (Fluent Interface)
      */
     public function prepend( Object $object ) {
@@ -153,10 +161,10 @@ abstract class AbstractCollection extends Object
     /**
      * Removes an Object from Collection
      *
-     * @param mixed|integer|string|Next\Components\Object $reference
+     * @param mixed|integer|string|\Next\Components\Object $reference
      *  Offset to remove
      *
-     * @return Next\Components\Collection\AbstractCollection
+     * @return \Next\Components\Collection\AbstractCollection
      *  Collection Object (Fluent Interface)
      */
     public function remove( $reference ) {
@@ -173,7 +181,7 @@ abstract class AbstractCollection extends Object
     /**
      * Check if an Objects exists
      *
-     * @param mixed|integer|string|Next\Components\Object $reference
+     * @param mixed|integer|string|\Next\Components\Object $reference
      *  An Object object or the name of an Object to check if
      *  it's present in Collection
      *
@@ -197,7 +205,7 @@ abstract class AbstractCollection extends Object
     /**
      * Shuffles Collection while keeping the References Table relation
      *
-     * @return Next\Components\Collection\AbstractCollection|void
+     * @return \Next\Components\Collection\AbstractCollection|void
      *  Collection Object (Fluent Interface), if Collection has elements
      */
     public function shuffle() {
@@ -220,19 +228,19 @@ abstract class AbstractCollection extends Object
      * of its index within it, therefore it's not affected by
      * AbstractCollection::shuffle(), for example
      *
-     * @param  boolean $shift
+     * @param boolean $shift
      *  If TRUE the first element will be *really* removed from the
      *  Collection before being returned, along with its metadata.
      *
      *  If FALSE (default) it will be just retrieved, without
      *  affecting Collection's data
      *
-     * @return Next\Components\Object
+     * @return \Next\Components\Object
      *  First Object added to Collection, if Collection has any elements
      *  Or the Collection Object as of Fluent Interface, if Collection is empty
      *
-     * @see Next\Components\Collections\AbstractCollection::shuffle()
-     * @see Next\Components\Collections\AbstractCollection::remove()
+     * @see \Next\Components\Collections\AbstractCollection::shuffle()
+     * @see \Next\Components\Collections\AbstractCollection::remove()
      */
     public function shift( $shift = FALSE ) {
 
@@ -257,19 +265,19 @@ abstract class AbstractCollection extends Object
      * of its index within it, therefore it's not affected by
      * AbstractCollection::shuffle(), for example
      *
-     * @param  boolean $pop
+     * @param boolean $pop
      *  If TRUE the last element will be *really* removed from the
      *  Collection before being returned, along with its metadata.
      *
      *  If FALSE (default) it will be just retrieved, without
      *  affecting Collection's data
      *
-     * @return Next\Components\Object
+     * @return \Next\Components\Object
      *  Last Object added to Collection, if Collection has any elements
      *  Or the Collection Object as of Fluent Interface, if Collection is empty
      *
-     * @see Next\Components\Collections\AbstractCollection::shuffle()
-     * @see Next\Components\Collections\AbstractCollection::remove()
+     * @see \Next\Components\Collections\AbstractCollection::shuffle()
+     * @see \Next\Components\Collections\AbstractCollection::remove()
      */
     public function pop( $pop = FALSE ) {
 
@@ -294,15 +302,15 @@ abstract class AbstractCollection extends Object
     /**
      * Finds an Object offset inside the Collection
      *
-     * @param  mixed|string|integer|Next\Components\Object $reference
+     * @param mixed|string|integer|\Next\Components\Object $reference
      *  A reference to search for.
-     *  It can be a string, an integer or an Next\Components\Object object
+     *  It can be a string, an integer or an \Next\Components\Object object
      *
      * @return boolean|integer
      *  Returns -1 if Collection is empty or if the reference couldn't be
      *  found within it and FALSE if the searching process fails
      *
-     * @see Next\Components\Utils\ArrayUtils::search()
+     * @see \Next\Components\Utils\ArrayUtils::search()
      */
     public function find( $reference ) {
 
@@ -374,7 +382,7 @@ abstract class AbstractCollection extends Object
     /**
      * Check Object acceptance
      *
-     * @param Next\Components\Object $object
+     * @param \Next\Components\Object $object
      *  Object to have its acceptance in Collection checked
      */
     abstract protected function accept( Object $object );
@@ -399,7 +407,7 @@ abstract class AbstractCollection extends Object
      * @param string|Iterator $iterator
      *  A valid Iterator or a classname string of a valid Iterator
      *
-     * @return Next\Components\Collection\AbstractCollection
+     * @return \Next\Components\Collection\AbstractCollection
      *  Collection Object (Fluent Interface)
      */
     public function setIterator( $iterator ) {

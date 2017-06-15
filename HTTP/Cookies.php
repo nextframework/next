@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP Cookies Class | HTTP\Cookies.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP;
 
 use Next\HTTP\Headers\Fields\FieldsException;   # Header Fields Exception Class
@@ -20,7 +28,7 @@ class Cookies extends Object {
     /**
      * Registered Cookies
      *
-     * @var Next\Components\Collections\Lists $cookies
+     * @var \Next\Components\Collections\Lists $cookies
      */
     private $cookies;
 
@@ -42,10 +50,10 @@ class Cookies extends Object {
      * @param string|optional $value
      *  Cookie value, in case a non RFC definition is being used
      *
-     * @return Next\HTTP\Cookies
+     * @return \Next\HTTP\Cookies
      *  Cookies Object (Fluent Interface)
      *
-     * @throws Next\HTTP\Headers\Fields\FieldsException
+     * @throws \Next\HTTP\Headers\Fields\FieldsException
      *  Invalid or mal-formed Cookie Value
      */
     public function addCookie( $cookie, $value = NULL ) {
@@ -72,7 +80,7 @@ class Cookies extends Object {
 
             /**
              * @internal
-             * In case Next\HTTP\Cookies::addCookie() was invoked like:
+             * In case \Next\HTTP\Cookies::addCookie() was invoked like:
              *
              * $cookies -> addCookie( 'cookiename', 'cookievalue' )
              *
@@ -119,7 +127,7 @@ class Cookies extends Object {
      * @param boolean $asString
      *  If TRUE, instead a Collection, a string of all the cookies will be returned
      *
-     * @return Next\Components\Collections\Lists|Next\HTTP\Headers\Fields\Request\Cookie
+     * @return \Next\Components\Collections\Lists|\Next\HTTP\Headers\Fields\Request\Cookie
      *
      *   <p>
      *     If <strong>$asString</strong> is set to FALSE, the Cookies
@@ -169,7 +177,7 @@ class Cookies extends Object {
     /**
      * Empties Request Cookies
      *
-     * @return Next\HTTP\Cookies
+     * @return \Next\HTTP\Cookies
      *  Cookies Object (Fluent Interface)
      */
     public function clearCookies() {

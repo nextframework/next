@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Database Gateway Exception Class | DB\Table\DataGatewayException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\DB\Table;
 
 /**
@@ -38,7 +46,7 @@ class DataGatewayException extends \Next\Components\Debug\Exception {
     /**
      * Exception for empty Data-sources being wrongly manipulated through Overloading
      *
-     * @return Next\DB\Table\DataGatewayException
+     * @return \Next\DB\Table\DataGatewayException
      *  Exception for empty Data-sources being wrongly manipulated through Overloading
      */
     public static function emptyDataSource() {
@@ -54,7 +62,7 @@ class DataGatewayException extends \Next\Components\Debug\Exception {
     /**
      * Trying to access a Row object directly when the RowSet has multiple records
      *
-     * @return Next\DB\Table\DataGatewayException
+     * @return \Next\DB\Table\DataGatewayException
      *  Exception for Data-sources with more than one Records being wrongly
      *  manipulated through Overloading
      */

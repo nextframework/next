@@ -1,16 +1,21 @@
 <?php
 
+/**
+ * Parameterizable Component Class | Components\Parameter.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components;
 
 use Next\Components\Debug\Exception;      # Exception Class
 
 /**
- * Parameter Class
+ * Defines a data-structure for Class Options as part of the Parameterizable Concept
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components
  */
 class Parameter implements \Countable, \ArrayAccess {
 
@@ -74,11 +79,11 @@ class Parameter implements \Countable, \ArrayAccess {
      *           An {@link http://php.net/manual/en/reserved.classes.php stdClass Object}
      *       </li>
      *
-     *       <li>Next\Components\Object object</li>
+     *       <li>\Next\Components\Object object</li>
      *
      *   </ul>
      *
-     * @throws Next\Components\Debug\Exception
+     * @throws \Next\Components\Debug\Exception
      *  Any option is not an associative array, because
      *  doesn't make sense to have a public property just to store NULL
      */
@@ -101,6 +106,12 @@ class Parameter implements \Countable, \ArrayAccess {
 
     // Accessors
 
+    /**
+     * Get all Parameters
+     *
+     * @return stdClass
+     *  All Parameters merged together in a stdClass structure
+     */
     public function getParameters() {
         return $this -> parameters;
     }
@@ -137,7 +148,7 @@ class Parameter implements \Countable, \ArrayAccess {
             /**
              * @internal
              *
-             * The only way for Next\Components\Object::map() to handle the
+             * The only way for \Next\Components\Object::map() to handle the
              * integrity checking below is to NOT condition Parameter::offsetSet()
              * routine to be or not an array
              *
@@ -204,7 +215,7 @@ class Parameter implements \Countable, \ArrayAccess {
      * @param string $identifier
      *  Parameter Identifier
      *
-     * @throws Next\Components\Debug\Exception
+     * @throws \Next\Components\Debug\Exception
      *  thrown if trying to remove a Identifier that doesn't exist
      */
     public function offsetUnset($identifier) {
@@ -268,7 +279,7 @@ class Parameter implements \Countable, \ArrayAccess {
      * @param string $identifier
      *  Parameter Identifier
      *
-     * @throws Next\Components\Debug\Exception
+     * @throws \Next\Components\Debug\Exception
      *  thrown if trying to remove a Identifier that doesn't exist
      */
     public function __unset( $identifier ) {

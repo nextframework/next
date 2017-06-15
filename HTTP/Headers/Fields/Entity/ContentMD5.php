@@ -1,13 +1,25 @@
 <?php
 
+/**
+ * HTTP Entity Header Field Class: Content-MD5 | HTTP\Headers\Fields\Entity\ContentMD5.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Headers\Fields\Entity;
 
-use Next\HTTP\Headers\Fields\Entity;                 # Entity Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField;          # Header Field Abstract Class
-use Next\Validate\HTTP\Headers\Entity\ContentMD5;    # Content-MD5 Header Field Validator Class
+use Next\HTTP\Headers\Fields\Entity;           # Entity Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;    # Header Field Abstract Class
 
 /**
- * Content-MD5 Header Field Class
+ * Entity 'Content-MD5' Header Field Validator Class
+ */
+use Next\Validate\HTTP\Headers\Entity\ContentMD5 as Validator;
+
+/**
+ * 'Content-MD5' Header Field Class
  *
  * @author        Bruno Augusto
  *
@@ -24,11 +36,11 @@ class ContentMD5 extends AbstractField implements Entity {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validator
+     * @return \Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new ContentMD5( array( 'value' => $value ) );
+        return new Validator( array( 'value' => $value ) );
     }
 
     /**

@@ -1,12 +1,24 @@
 <?php
 
+/**
+ * HTTP Common Header Field Class: Cache-Control | HTTP\Headers\Fields\Common\Cache-Control.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Headers\Fields\Common;
 
-use Next\HTTP\Headers\Fields\AbstractField;           # Header Field Abstract Class
-use Next\Validate\HTTP\Headers\Common\CacheControl    # Cache Control Header Field Validator Class
+use Next\HTTP\Headers\Fields\AbstractField;    # Header Field Abstract Class
 
 /**
- * Cache-Control Header Field Class
+ * 'Cache Control' Header Field Validator Class
+ */
+use Next\Validate\HTTP\Headers\Common\CacheControl as Validator;
+
+/**
+ * 'Cache-Control' Header Field Class
  *
  * @author        Bruno Augusto
  *
@@ -23,11 +35,11 @@ class CacheControl extends AbstractField {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validator
+     * @return \Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new CacheControl( array( 'value' => $value ) );
+        return new Validator( array( 'value' => $value ) );
     }
 
     /**

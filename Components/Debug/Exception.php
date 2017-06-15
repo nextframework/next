@@ -1,16 +1,20 @@
 <?php
 
+/**
+ * Debug Component Exception Standard Class | Components\Debug\Exception.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components\Debug;
 
 /**
- * Exception Class
+ * Defines a variation of native Exception Class with native support
+ * for placeholded messages and, in the future, translation
  *
- * A Standard Class which allows Exception to be Translated
- *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components\Debug
  */
 class Exception extends \Exception {
 
@@ -148,7 +152,7 @@ class Exception extends \Exception {
      * @param array|optional $args
      *  Variable list of argument to build final message
      *
-     * @return Next\Components\Debug
+     * @return \Next\Components\Debug
      *  Exception for Unfulfilled requirements
      */
     public static function unfullfilledRequirements( $message, array $args = array() ) {
@@ -167,7 +171,7 @@ class Exception extends \Exception {
      * @param array|optional $args
      *  Variable list of argument to build final message
      *
-     * @return Next\Components\Debug
+     * @return \Next\Components\Debug
      *  Exception for Unfulfilled requirements
      */
     public static function logic( $message, array $args = array() ) {
@@ -185,7 +189,7 @@ class Exception extends \Exception {
      * @param array|optional $args
      *  Variable list of argument to build final message
      *
-     * @return Next\Components\Debug
+     * @return \Next\Components\Debug
      *  Exception for Unfulfilled requirements
      */
     public static function wrongUse( $message, array $args = array() ) {

@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Collections Component Lists Class | Components\Collections\Lists.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components\Collections;
 
 use Next\Components\Object;              # Object Class
@@ -9,14 +17,10 @@ use Next\Components\Utils\ArrayUtils;    # ArrayUtils Class
 use Next\Components\Debug\Exception;     # Exception Class
 
 /**
- * Lists Class
+ * Defines a structure derived from \Next\Components\Collections\AbstractCollection
+ * through which a Collection can be accessed directly through their offsets
  *
- * Lists are Collections with ability to find Objects from given offsets
- *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components\Collections
  */
 class Lists extends AbstractCollection implements \ArrayAccess {
 
@@ -26,10 +30,10 @@ class Lists extends AbstractCollection implements \ArrayAccess {
      * @param mixed|integer|string $reference
      *  Object reference to find
      *
-     * @return Next\Components\Object|boolean
+     * @return \Next\Components\Object|boolean
      *  Object of given offset or FALSE if given offset doesn't exists
      *
-     * @see Next\Components\Collections\AbstractCollection::find()
+     * @see \Next\Components\Collections\AbstractCollection::find()
      */
     public function item( $reference ) {
 
@@ -49,7 +53,7 @@ class Lists extends AbstractCollection implements \ArrayAccess {
      * Checks whether or not an offset exists within the Collection
      * as Interface alias to Lists::item()
      *
-     * @param  mixed|string|integer $offset
+     * @param mixed|string|integer $offset
      *  Offset to search
      *
      * @return boolean
@@ -65,10 +69,10 @@ class Lists extends AbstractCollection implements \ArrayAccess {
      * Returns the Object stored at given offset in the Collection
      * as an Interface alias to Lists::item()
      *
-     * @param  mixed|string|integer $offset
+     * @param mixed|string|integer $offset
      *  Offset to retrieve data from
      *
-     * @return Next\Components\Object|boolean
+     * @return \Next\Components\Object|boolean
      *  Object stored if given offset exists and FALSE otherwise
      *
      * @see Lists::item()
@@ -81,18 +85,18 @@ class Lists extends AbstractCollection implements \ArrayAccess {
      * Assign a value to the specified offset in the Collection
      * as an Interface alias to AbstractCollection::add()
      *
-     * @param  mixed|string|integer $offset
+     * @param mixed|string|integer $offset
      *  Offset where new data will be stored
      *
-     * @param mixed|Next\Components\Object $object
+     * @param mixed|\Next\Components\Object $object
      *  Object to add
      *
      * @return void
      *
-     * @throws Next\Components\Debug\Exception
-     *  Throw if given is not an instance of Next\Components\Object
+     * @throws \Next\Components\Debug\Exception
+     *  Throw if given is not an instance of \Next\Components\Object
      *
-     * @see Next\Components\Collection\AbstractCollection::add()
+     * @see \Next\Components\Collection\AbstractCollection::add()
      */
     public function offsetSet( $offset, $object ) {
         $this -> add( $object, $offset );
@@ -102,12 +106,12 @@ class Lists extends AbstractCollection implements \ArrayAccess {
      * Removes an Object from Collection at given offset
      * as an Interface alias to AbsractCollection::remove()
      *
-     * @param  mixed|string|integer $offset
+     * @param mixed|string|integer $offset
      *  Offset to unset
      *
      * @return void
      *
-     * @see Next\Components\Collections\AbsractCollection::remove()
+     * @see \Next\Components\Collections\AbsractCollection::remove()
      */
     public function offsetUnset( $offset ) {
         $this -> remove( $offset );
@@ -118,7 +122,7 @@ class Lists extends AbstractCollection implements \ArrayAccess {
     /**
      * Check Object acceptance
      *
-     * @param Next\Components\Object $object
+     * @param \Next\Components\Object $object
      *  Object to have its acceptance in Collection checked
      *
      * @return boolean

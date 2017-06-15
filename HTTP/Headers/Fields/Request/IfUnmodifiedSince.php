@@ -1,13 +1,25 @@
 <?php
 
+/**
+ * HTTP Request Header Field Class: If-Unmodified-Since | HTTP\Headers\Fields\Request\IfUnmodifiedSince.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Headers\Fields\Request;
 
-use Next\HTTP\Headers\Fields\Request;                        # Request Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField;                  # Header Field Abstract Class
-use Next\Validate\HTTP\Headers\Request\IfUnmodifiedSince;    # Request If-Unmodified-Since Header Field Validator Class
+use Next\HTTP\Headers\Fields\Request;          # Request Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;    # Header Field Abstract Class
 
 /**
- * If-Unmodified-Since Header Field Class
+ * Request 'If-Unmodified-Since' Header Field Validator Class
+ */
+use Next\Validate\HTTP\Headers\Request\IfUnmodifiedSince as Validator;
+
+/**
+ * Request 'If-Unmodified-Since' Header Field Class
  *
  * @author        Bruno Augusto
  *
@@ -24,11 +36,11 @@ class IfUnmodifiedSince extends AbstractField implements Request {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validator
+     * @return \Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new IfUnmodifiedSince( array( 'value' => $value ) );
+        return new Validator( array( 'value' => $value ) );
     }
 
     /**

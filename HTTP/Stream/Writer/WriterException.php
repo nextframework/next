@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP Stream Writer Exception Class | HTTP\Stream\Writer\WriterException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Stream\Writer;
 
 /**
@@ -31,7 +39,7 @@ class WriterException extends \Next\Components\Debug\Exception {
     /**
      * Unable to write bytes in opened Stream
      *
-     * @return Next\HTTP\Stream\Writer\WriterException
+     * @return \Next\HTTP\Stream\Writer\WriterException
      *  Exception for Stream writability failure
      */
     public static function writeFailure() {

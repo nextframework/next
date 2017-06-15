@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP Entity Header Field Validator Class: Content-Language | Validate\Headers\Entity\ContentLanguage.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Validate\HTTP\Headers\Entity;
 
 use Next\Validate\HTTP\Headers\Headers;    # HTTP Protocol Headers Interface
@@ -56,7 +64,7 @@ class ContentLanguage extends Object implements Headers {
              * Let's check chosen Language Abbreviation against ISO 639 Standards
              */
             $ISO = new ISO639(
-                array( 'value' => ( array_key_exists( 'abbr', $match ) ? $match['abbr'] : NULL )
+                array( 'value' => ( array_key_exists( 'abbr', $match ) ? $match['abbr'] : NULL ) )
             );
 
             if( $ISO -> validate() ) {

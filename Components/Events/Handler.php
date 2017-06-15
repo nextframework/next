@@ -1,17 +1,23 @@
 <?php
 
+/**
+ * Event Component Handler Class | Components\Events\Handler.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components\Events;
 
 use Next\Components\Object;               # Object Class
 use Next\Components\Collections\Lists;    # Collection Lists Class
 
 /**
- * Event Handler Class
+ * The Event Handler deals with all \Next\Components\Events\Listener
+ * associated with an \Next\Components\Events\Event
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2014 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components\Events
  */
 class Handler extends Object {
 
@@ -25,7 +31,7 @@ class Handler extends Object {
     /**
      * The Event Object
      *
-     * @var Next\Components\Events\Event $event
+     * @var \Next\Components\Events\Event $event
      */
     protected $event;
 
@@ -39,10 +45,10 @@ class Handler extends Object {
     /**
      * Events Handler Constructor
      *
-     * @param Next\Components\Events\Event|optional $event
+     * @param \Next\Components\Events\Event|optional $event
      *  An optional Event Object
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for the Event Handler
      */
     public function __construct( Event $event = NULL, $options = NULL ) {
@@ -55,10 +61,13 @@ class Handler extends Object {
     /**
      * Attach a new Event Listener Object
      *
-     * @param Next\Components\Events\Listener $listener
+     * @param string $name
+     *  Event Listener identifier key
+     *
+     * @param \Next\Components\Events\Listener $listener
      *  Event Listener to be handled within the Event
      *
-     * @return Next\Components\Events\Handler
+     * @return \Next\Components\Events\Handler
      *   Events Handler Object (Fluent Interface)
      */
     public function addListener( $name, Listener $listener ) {
@@ -74,10 +83,10 @@ class Handler extends Object {
      * @param string $name
      *  Event Listener trigger reference, through which it'll be searched and removed
      *
-     * @return Next\Components\Events\Handler
+     * @return \Next\Components\Events\Handler
      *   Events Handler Object (Fluent Interface)
      *
-     * @throws Next\Components\Events\EvenstException
+     * @throws \Next\Components\Events\EvenstException
      *  Thrown if given Listener, as referenced by its trigger name, doesn't exist
      */
     public function removeListener( $name ) {
@@ -103,14 +112,14 @@ class Handler extends Object {
      * @param string $name
      *  Event Listener trigger name
      *
-     * @return Next\Components\Events\Handler
+     * @return \Next\Components\Events\Handler
      *   Events Handler Object (Fluent Interface)
      *
-     * @throws Next\Components\Events\EventsException
+     * @throws \Next\Components\Events\EventsException
      *  Throw if given Event Listener, as referenced by
      *  the trigger name, doesn't exist
      *
-     * @throws Next\Components\Events\EventsException
+     * @throws \Next\Components\Events\EventsException
      *  Thrown if given Listener, as referenced by its trigger name,
      *  could not be handled, raising a ReflectionException
      */
@@ -155,7 +164,7 @@ class Handler extends Object {
      * Allow an automatically assigned Event (empty constructor) to
      * have its propagation directives manipulated
      *
-     * @return Next\Components\Events\Event
+     * @return \Next\Components\Events\Event
      *  The Event Object
      */
     public function getEvent() {
@@ -168,10 +177,10 @@ class Handler extends Object {
      * @param string $name
      *  An optional Event Listener trigger name to filter to a specific Collection
      *
-     * @return array|Next\Components\Collections\Lists
+     * @return array|\Next\Components\Collections\Lists
      *  If <strong$name</strong> is provided and matches to a Collection
      *  of handled Listeners the Collection, as instance of
-     *  Next\Components\Collections\Lists will be returned
+     *  \Next\Components\Collections\Lists will be returned
      *
      * Otherwise an array with all handled results will instead
      */

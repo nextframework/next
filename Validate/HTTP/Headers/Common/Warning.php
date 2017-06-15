@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP Common Header Field Validator Class: Warning | Validate\Headers\Common\Warning.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Validate\HTTP\Headers\Common;
 
 use Next\Validate\HTTP\Headers\Headers;    # HTTP Protocol Headers Interface
@@ -64,7 +72,7 @@ class Warning extends Object implements Headers {
      */
     public function validate() {
 
-        $data = this -> options -> value;
+        $data = $this -> options -> value;
 
         preg_match(
 

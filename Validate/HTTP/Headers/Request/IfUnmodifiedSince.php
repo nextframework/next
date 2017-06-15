@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP Request Header Field Class: If-Unmodified-Since | HTTP\Headers\Fields\Request\IfUnmodifiedSince.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Validate\HTTP\Headers\Request;
 
 use Next\Validate\HTTP\Headers\Headers;        # HTTP Protocol Headers Interface
@@ -52,7 +60,7 @@ class IfUnmodifiedSince extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.28
      *  RFC 2616 Section 14.28
      *
-     * @see Next\Validate\HTTP\Headers\Common\Date::validate()
+     * @see \Next\Validate\HTTP\Headers\Common\Date::validate()
      */
     public function validate() {
 

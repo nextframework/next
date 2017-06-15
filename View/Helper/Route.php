@@ -1,19 +1,33 @@
 <?php
 
+/**
+ * View Engine Helpers: Route | View\Helper\Route.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\View\Helper;
 
+/**
+ * Defines the Route View Helper that allows the creation of a full URL,
+ * optionally wrapping it the the anchor tags automatically
+ *
+ * @package    Next\View\Helpers
+ */
 class Route implements Helper {
 
     /**
      * Builds a Route and optionally wraps it in a HTML anchor tag
      *
-     * @param  string $route
+     * @param string $route
      *  The immutable portion of route
      *
-     * @param  array|optional $params
+     * @param array|optional $params
      *  An optional associative array if the variable key/value pairs
      *
-     * @param  string|optional $text
+     * @param string|optional $text
      *  An optional text. If defined indicates that an HTML anchor tag should
      *  be rendered
      *

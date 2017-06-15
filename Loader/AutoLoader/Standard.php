@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Standard AutoLoader Class | Loader\AutoLoader\Standard.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Loader\AutoLoader;
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'AutoLoadable.php';        # AutoLoadable Interface
@@ -30,10 +38,10 @@ class Standard implements AutoLoadable {
      * @param string $file
      *  PHP-Array Map File to work with
      *
-     * @throws Next\LoaderException
+     * @throws \Next\LoaderException
      *  PHP-Array Filename was not set
      *
-     * @throws Next\LoaderException
+     * @throws \Next\LoaderException
      *  PHP-Array File is not readable
      */
     public function __construct( $file ) {

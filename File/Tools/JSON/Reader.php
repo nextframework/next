@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * JSON Reader Class | File\Tools\JSON\Reader.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\File\Tools\JSON;
 
 use Next\Components\Debug\Exception;            # Exception Class
@@ -9,6 +17,11 @@ use Next\Components\Object;                     # Object Class
 use Next\HTTP\Stream\Reader as StreamReader;    # HTTP Stream Reader Class
 use Next\HTTP\Stream\Adapter\Socket;            # HTTP Stream Socket Class
 
+/**
+ * Defines a wrapper for JSON reading
+ *
+ * @package    Next\File\Tools\JSON
+ */
 class Reader extends Object {
 
     const ERR_JSON_ERROR_NONE              = '';
@@ -31,7 +44,7 @@ class Reader extends Object {
      * @param string $file
      *   JSON File to read
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for the JSON Reader
      */
     public function __construct( $file, $options = NULL ) {
@@ -44,7 +57,7 @@ class Reader extends Object {
     /**
      * Reads the JSON File
      *
-     * @param  boolean|optional $assoc
+     * @param boolean|optional $assoc
      *  Defines whether or not the processed data will be returned
      *  as associative array. Defaults to TRUE
      *
@@ -88,7 +101,7 @@ class Reader extends Object {
      * Converts json_last_error() to a human-readable string, pretty much like
      * json_last_error_msg(), but for older versions than PHP 5.5+
      *
-     * @param  integer  $error
+     * @param integer $error
      *  The error code returned by json_last_error()
      *
      * @return array

@@ -1,13 +1,25 @@
 <?php
 
+/**
+ * HTTP Request Header Field Class: X-Do-Not-Track | HTTP\Headers\Fields\Request\XDoNotTrack.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Headers\Fields\Request;
 
-use Next\HTTP\Headers\Fields\Request;                  # Request Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField;            # Header Field Abstract Class
-use Next\Validate\HTTP\Headers\Request\XDoNotTrack;    # Request X-Do-Not-Track Header Field Validator Class
+use Next\HTTP\Headers\Fields\Request;          # Request Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;    # Header Field Abstract Class
 
 /**
- * X-Do-Not-Track Header Field Class
+ * Request 'X-Do-Not-Track' Header Field Validator Class
+ */
+use Next\Validate\HTTP\Headers\Request\XDoNotTrack as Validator;
+
+/**
+ * Request 'X-Do-Not-Track' Header Field Class
  *
  * @author        Bruno Augusto
  *
@@ -24,11 +36,11 @@ class XDoNotTrack extends AbstractField implements Request {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validator
+     * @return \Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new XDoNotTrack( array( 'value' => $value ) );
+        return new Validator( array( 'value' => $value ) );
     }
 
     /**

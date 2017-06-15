@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Routes Generator Standard Output Writer Class (Arrays) | Tools\Routes\Generators\Writer\Standard.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Tools\Routes\Generators\Writer;
 
 use Next\HTTP\Stream\Adapter\AdapterException;    # Stream Adapter Exception
@@ -23,7 +31,7 @@ class Standard extends Object implements Writer {
     /**
      * Additional Initialization
      *
-     * @throws Next\Tools\Routes\Generators\Writer\WriterException
+     * @throws \Next\Tools\Routes\Generators\Writer\WriterException
      *  Thrown if the required <strong>filePath</strong> option with
      *  the path to the PHP file to write the array is missing or empty
      */
@@ -45,9 +53,9 @@ class Standard extends Object implements Writer {
      * @return integer
      *  Number of records processed
      *
-     * @throws Next\Tools\Routes\Generators\Writer\WriterException
+     * @throws \Next\Tools\Routes\Generators\Writer\WriterException
      *  Unable to record route, as a rethrowing of a
-     *  Next\DB\Statement\StatementException caught
+     *  \Next\DB\Statement\StatementException caught
      */
     public function save( array $data ) {
 
@@ -143,8 +151,8 @@ class Standard extends Object implements Writer {
 
         /**
          * @internal
-         * We don't need to write anything, but Next\HTTP\Stream\Writer\Writer::write()
-         * must be called so the 'wb' opening mode used in Next\HTTP\Stream\Adapter\Socket
+         * We don't need to write anything, but \Next\HTTP\Stream\Writer\Writer::write()
+         * must be called so the 'wb' opening mode used in \Next\HTTP\Stream\Adapter\Socket
          * constructor above can do its job emptying the file
          */
         $writer -> write( '' );

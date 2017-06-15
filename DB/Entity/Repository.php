@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Database Entity Repository Class | DB\Entity\Repository.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\DB\Entity;
 
 use Next\DB\Query\Query;        # Query Interface
@@ -19,24 +27,24 @@ use Next\DB\Table\Manager;      # Entities Manager Class
  * @package      Next
  * @subpackage   DB\Entity
  *
- * @uses         Next\DB\Query\Query,
- *               Next\Components\Object,
- *               Next\Components\Invoker,
- *               Next\DB\Table\Manager
- *               Next\DB\Entity\EntityException
+ * @uses         \Next\DB\Query\Query,
+ *               \Next\Components\Object,
+ *               \Next\Components\Invoker,
+ *               \Next\DB\Table\Manager
+ *               \Next\DB\Entity\EntityException
  */
 class Repository extends Object {
 
     /**
      * Table Manager
      *
-     * @var Next\DB\Table\Manager
+     * @var \Next\DB\Table\Manager
      */
     protected $manager;
 
     /**
      * Table Name
-     * Not to confuse with Next\DB\Table\Table Object
+     * Not to confuse with \Next\DB\Table\Table Object
      *
      * @var string
      */
@@ -50,10 +58,10 @@ class Repository extends Object {
      *     be configured.
      * </p>
      *
-     * @param Next\DB\Table\Manager|optional $manager
+     * @param \Next\DB\Table\Manager|optional $manager
      *  Optional Entity Manager
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for each Entity Repository
      */
     public function __construct( Manager $manager = NULL, $options = NULL ) {
@@ -86,16 +94,16 @@ class Repository extends Object {
     /**
      * Finds an Entity by its Primary Key / Unique Identifier
      *
-     * @param  array $id
+     * @param array $id
      *  Primary Key / Unique Identifier of the Entity being looked for
      *
-     * @return Next\DB\Table\RowSet
+     * @return \Next\DB\Table\RowSet
      *  RowSet Object with Entity data, if any
      *
-     * @throws Next\DB\Entity\EntityException
+     * @throws \Next\DB\Entity\EntityException
      *  Throw if trying to use resources from Entity Manager without having one
      *
-     * @see Next\DB\Statement\Statement::fetch()
+     * @see \Next\DB\Statement\Statement::fetch()
      */
     public function find( array $id ) {
 
@@ -113,16 +121,16 @@ class Repository extends Object {
     /**
      * Finds all Entities in the Repository
      *
-     * @param Next\DB\Query\Expression|string|array|optional $columns
+     * @param \Next\DB\Query\Expression|string|array|optional $columns
      *  Columns to be included in SELECT Statement
      *
-     * @return Next\DB\Table\RowSet
+     * @return \Next\DB\Table\RowSet
      *  RowSet Object with fetched data, if any
      *
-     * @throws Next\DB\Entity\EntityException
+     * @throws \Next\DB\Entity\EntityException
      *  Throw if trying to use resources from Entity Manager without having one
      *
-     * @see Next\DB\Statement\Statement::fetchAll()
+     * @see \Next\DB\Statement\Statement::fetchAll()
      */
     public function findAll( $columns = Query::WILDCARD ) {
 
@@ -138,23 +146,23 @@ class Repository extends Object {
     /**
      * Finds Entities in the Repository that matches a set of criteria
      *
-     * @param  array  $criteria
+     * @param array $criteria
      *  One or more criteria to condition the Entity
      *
-     * @param  string|array|optional  $order
+     * @param string|array|optional $order
      *  One or more fields to order the Entity in the resultset
      *
-     * @param  string|array|optional  $limit
+     * @param string|array|optional $limit
      *  Restrictions on how many Entities will be present in the resultset and
      *  from which offset the finding process will start
      *
-     * @return Next\DB\Table\RowSet
+     * @return \Next\DB\Table\RowSet
      *  RowSet Object with fetched data, if any
      *
-     * @throws Next\DB\Entity\EntityException
+     * @throws \Next\DB\Entity\EntityException
      *  Throw if trying to use resources from Entity Manager without having one
      *
-     * @see Next\DB\Statement\Statement::fetchAll()
+     * @see \Next\DB\Statement\Statement::fetchAll()
      */
     public function findBy( array $criteria, $order = NULL, $limit = NULL ) {
 
@@ -191,19 +199,19 @@ class Repository extends Object {
      *
      * It's an acting interface alias for Repository::findBy()
      *
-     * @param  array  $criteria
+     * @param array $criteria
      *  One or more criteria to condition the Entity
      *
-     * @param  string|array|optional  $order
+     * @param string|array|optional $order
      *  One or more fields to order the Entity in the resultset
      *
-     * @return Next\DB\Table\RowSet
+     * @return \Next\DB\Table\RowSet
      *  RowSet Object with fetched data, if any
      *
-     * @throws Next\DB\Entity\EntityException
+     * @throws \Next\DB\Entity\EntityException
      *  Throw if trying to use resources from Entity Manager without having one
      *
-     * @see Next\DB\Entity\Repository::findBy()
+     * @see \Next\DB\Entity\Repository::findBy()
      */
     public function findOneBy( array $criteria, $order = NULL ) {
         return $this -> findBy( $criteria, $order, 1 );
@@ -214,7 +222,7 @@ class Repository extends Object {
     /**
      * Get Entity Manager used with the Entity Repository
      *
-     * @return Next\DB\Table\Manager
+     * @return \Next\DB\Table\Manager
      *  Table Manager
      */
     public function getManager() {
@@ -225,13 +233,13 @@ class Repository extends Object {
      * Get Entity Table associated to the Entity Manager used
      * with Entity Repository
      *
-     * @return Next\DB\Table\Table
+     * @return \Next\DB\Table\Table
      *  Entity Table
      *
-     * @throws Next\DB\Entity\EntityException
+     * @throws \Next\DB\Entity\EntityException
      *  Throw if trying to use resources from Entity Manager without having one
      *
-     * @see Next\DB\Table\Manager::getTable()
+     * @see \Next\DB\Table\Manager::getTable()
      */
     public function getTable() {
 
@@ -249,7 +257,7 @@ class Repository extends Object {
      *
      * @return void
      *
-     * @throws Next\DB\Entity\EntityException
+     * @throws \Next\DB\Entity\EntityException
      *  Thrown if no Table Object was defined
      */
     private function checkIntegrity() {

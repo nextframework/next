@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * PDO Statement Mimicker Class | DB\Statement\PDO\Statement.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\DB\Statement\PDO;
 
 use Next\DB\Statement\Statement as StatementInterface;    # Statement Interface
@@ -17,14 +25,14 @@ class Statement extends \PDOStatement {
     /**
      * Statement Adapter
      *
-     * @var Next\DB\Statement\Statement $adapter
+     * @var \Next\DB\Statement\Statement $adapter
      */
     private $adapter;
 
     /**
      * PDOStatement Constructor
      *
-     * @param Next\DB\Statement\Statement $adapter
+     * @param \Next\DB\Statement\Statement $adapter
      *  Statement Adapter
      */
     private function __construct( StatementInterface $adapter ) {

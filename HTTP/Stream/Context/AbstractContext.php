@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP Stream Context Abstract Class | HTTP\Stream\Context\AbstractContext.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Stream\Context;
 
 use Next\Components\Utils\ArrayUtils;    # Array Utils Class
@@ -43,7 +51,7 @@ abstract class AbstractContext implements Context {
             /**
              * @internal
              *
-             * Next\Stream\Context\AbstractContext::setOptions() is not being used here
+             * \Next\Stream\Context\AbstractContext::setOptions() is not being used here
              * because when constructing the object no options were
              * defined yet
              */
@@ -57,7 +65,7 @@ abstract class AbstractContext implements Context {
      * @param array $options
      *  Context Options
      *
-     * @return Next\HTTP\Stream\Context\Context
+     * @return \Next\HTTP\Stream\Context\Context
      *  Stream Context Object (Fluent Interface)
      */
     public function setOptions( array $options ) {

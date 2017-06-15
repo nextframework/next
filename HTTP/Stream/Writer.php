@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP Stream Writer Class | HTTP\Stream\Writer.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Stream;
 
 use Next\HTTP\Stream\Writer\WriterException;      # HTTP Stream Writer Exception Class
@@ -26,10 +34,10 @@ class Writer extends Object implements Writer\Writer {
     /**
      * Stream Writer Constructor
      *
-     * @param Next\HTTP\Stream\Adapter\Adapter $adapter
+     * @param \Next\HTTP\Stream\Adapter\Adapter $adapter
      *  Stream Adapter where data will be written
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for the HTTP Stream Writer
      */
     public function __construct( Adapter $adapter, $options = NULL ) {
@@ -54,10 +62,10 @@ class Writer extends Object implements Writer\Writer {
      *  Always return the number of bytes written, because if failed
      *  to write an Exception is thrown
      *
-     * @throws Next\HTTP\Stream\Writer\WriterException
+     * @throws \Next\HTTP\Stream\Writer\WriterException
      *  Number of bytes is zero
      *
-     * @throws Next\HTTP\Stream\Writer\WriterException
+     * @throws \Next\HTTP\Stream\Writer\WriterException
      *  Fail when trying to write data
      */
     public function write( $string, $length = NULL ) {
@@ -98,7 +106,7 @@ class Writer extends Object implements Writer\Writer {
     /**
      * Get Adapter Object
      *
-     * @return Next\HTTP\Stream\Adapter\Adapter
+     * @return \Next\HTTP\Stream\Adapter\Adapter
      *  HTTP Stream Adapter
      */
     public function getAdapter() {

@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Error Handler Controller Class | Components\Debug\Handlers\Controllers\ErrorController.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components\Debug\Handlers\Controllers;
 
 use Next\View\ViewException;               # View Exception
@@ -8,15 +16,17 @@ use Next\Controller\AbstractController;    # Abstract Controller Class
 use Next\Components\Debug\Handlers;        # Next Debug Handlers Class
 
 /**
- * Error Controller of Handlers Application
+ * A \Next\Controller\Controller Class to be used by our custom Error Handler
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components\Debug
  */
 class ErrorController extends AbstractController {
 
+    /**
+     * Collection of (funny?) messages for some of the most common Status Code Errors
+     *
+     * @var array $data
+     */
     private $data = array(
 
         '403' => array(
@@ -84,7 +94,7 @@ class ErrorController extends AbstractController {
     );
 
     /**
-     * Error Handler Action
+     * Status Code Error Action Handler
      */
     final public function status() {
 
@@ -121,6 +131,9 @@ class ErrorController extends AbstractController {
         }
     }
 
+    /**
+     * Regular Error Message Action Handler
+     */
     final public function error() {
 
         $this -> view -> assign( 'e', $this -> e ) -> render( 'error.phtml' );

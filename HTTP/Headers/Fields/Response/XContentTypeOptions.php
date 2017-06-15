@@ -1,17 +1,25 @@
 <?php
 
+/**
+ * HTTP Response Header Field Class: X-Content-Type-Options | HTTP\Headers\Fields\Response\XContentTypeOptions.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Headers\Fields\Response;
 
 use Next\HTTP\Headers\Fields\Response;         # Response Headers Interface
 use Next\HTTP\Headers\Fields\AbstractField;    # Header Field Abstract Class
 
 /**
- * Response X-Content-Type-Options Header Field Validator Class
+ * Response 'X-Content-Type-Options' Header Field Validator Class
  */
-use Next\Validate\HTTP\Headers\Response\XContentTypeOptions;
+use Next\Validate\HTTP\Headers\Response\XContentTypeOptions as Validator;
 
 /**
- * X-Content-Type-Options Header Field Class
+ * Response 'X-Content-Type-Options' Header Field Class
  *
  * @author        Bruno Augusto
  *
@@ -44,11 +52,11 @@ class XContentTypeOptions extends AbstractField implements Response {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validator
+     * @return \Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new XContentTypeOptions( array( 'value' => $value ) );
+        return new Validator( array( 'value' => $value ) );
     }
 
     /**

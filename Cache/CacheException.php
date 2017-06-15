@@ -1,16 +1,22 @@
 <?php
 
+/**
+ * Caching Exception Class | Cache\CacheException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Cache;
 
 use Next\Components\Object;    # Object Class
 
 /**
- * Cache Exception Class
+ * Defines wrapper static methods for all Exceptions thrown
+ * within the Cache Module
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Cache
  */
 class CacheException extends \Next\Components\Debug\Exception {
 
@@ -34,12 +40,12 @@ class CacheException extends \Next\Components\Debug\Exception {
      * Invalid Caching Schema
      *
      * Given Object is not a valid Caching Schema because it doesn't
-     * implements Next\Cache\Schema\Schema
+     * implements \Next\Cache\Schema\Schema
      *
-     * @param Next\Components\Object $object
+     * @param \Next\Components\Object $object
      *  Object assigned as Caching Schema
      *
-     * @return Next\Cache\CacheException
+     * @return \Next\Cache\CacheException
      *  Exception for invalid Caching Schema
      */
     public static function invalidCachingSchema( Object $object ) {

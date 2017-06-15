@@ -1,14 +1,20 @@
 <?php
 
+/**
+ * Controllers Dispatcher Exception Class | Controller\Dispatcher\DispatcherException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Controller\Dispatcher;
 
 /**
- * Controller Dispatcher Exception Class
+ * Defines wrapper static methods for all Exceptions thrown
+ * within the Controller Dispatcher Module
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Controller\Dispatcher
  */
 class DispatcherException extends \Next\Components\Debug\Exception {
 
@@ -37,7 +43,7 @@ class DispatcherException extends \Next\Components\Debug\Exception {
      * @param \ReflectionException $e
      *  RflectionException caught
      *
-     * @return \Next\Controller\Dispatcher\DispatcherException
+     * @return \\Next\Controller\Dispatcher\DispatcherException
      *  Exception for caught ReflectionException
      */
     public static function reflection( \ReflectionException $e ) {

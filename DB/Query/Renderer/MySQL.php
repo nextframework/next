@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Database Query Renderer: MySQL | DB\Query\Renderer\MySQL.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\DB\Query\Renderer;
 
 use Next\DB\Query\Expression;    # Query Expression Class
@@ -248,15 +256,15 @@ class MySQL extends AbstractRenderer {
     /**
      * Render the JOIN Clause
      *
-     * @param  string|array $table
+     * @param string|array $table
      *  - A string with the JOIN Table
      *  - An associative single-index array for JOIN Table and its alias. E.g.:
      *  <code>array( 'm' => 'members' )</code>
      *
-     * @param  string $on
+     * @param string $on
      *  The ON Clause
      *
-     * @param  string|optional $type
+     * @param string|optional $type
      *  The JOIN Type. Defaults to INNER JOIN
      *
      * @return string
@@ -367,7 +375,7 @@ class MySQL extends AbstractRenderer {
      * Quotes the column name when they're in the same string as the
      * expression operator and the predicate, such as WHERE or JOIN Clauses
      *
-     * @param  array  &$columns
+     * @param array &$columns
      *  Statements in which to search the columns to quote
      *
      * @return void

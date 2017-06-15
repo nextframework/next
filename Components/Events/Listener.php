@@ -1,16 +1,23 @@
 <?php
 
+/**
+ * Event Component Listener Class | Components\Events\Listener.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components\Events;
 
-use Next\Components\Object;                 # Object Class
+use Next\Components\Object;    # Object Class
 
 /**
- * Listener Class
+ * Events Listeners acts similarly to Observer component of the
+ * Observer Pattern, executing routines when the
+ * \Next\Components\Events\Event state changes
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2014 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components\Events
  */
 class Listener extends Object {
 
@@ -26,15 +33,15 @@ class Listener extends Object {
      *
      * @param callable $callback
      *  A callable resource for when an Event has been handled,
-     *  much like Next\Components\Interfaces\Observer::update()
+     *  much like \Next\Components\Interfaces\Observer::update()
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for each Event Listener
      *
-     * @throws Next\Components\Events\EventsException
+     * @throws \Next\Components\Events\EventsException
      *  Thrown if provided callback is not callable
      *
-     * @see Next\Components\Interfaces\Observer::update()
+     * @see \Next\Components\Interfaces\Observer::update()
      */
     public function __construct( $callback, $options = NULL ) {
 
@@ -50,7 +57,7 @@ class Listener extends Object {
     /**
      * Receives update from Subject
      *
-     * @param Next\Components\Events\event $event
+     * @param \Next\Components\Events\event $event
      *  The Event being listened
      */
     public function update( Event $event ) {

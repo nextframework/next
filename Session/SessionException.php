@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Sessions Exception Class | Session\SessionException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Session;
 
 /**
@@ -38,7 +46,7 @@ class SessionException extends \Next\Components\Debug\Exception {
     /**
      * Session was already initialized
      *
-     * @return Next\Session\SessionException
+     * @return \Next\Session\SessionException
      *  Exception for initialization impossibility
      */
     public static function alreadyInitiated() {
@@ -54,7 +62,7 @@ class SessionException extends \Next\Components\Debug\Exception {
     /**
      * Session could not be initialized
      *
-     * @return Next\Session\SessionException
+     * @return \Next\Session\SessionException
      *  Exception for initialization impossibility
      */
     public static function initializationFailure() {

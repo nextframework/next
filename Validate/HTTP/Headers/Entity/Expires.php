@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP Entity Header Field Class: Expires | HTTP\Headers\Fields\Entity\Expires.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Validate\HTTP\Headers\Entity;
 
 use Next\Validate\HTTP\Headers\Headers;        # HTTP Protocol Headers Interface
@@ -52,7 +60,7 @@ class Expires extends Object implements Headers {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.21
      *  RFC 2616 Section 14.21
      *
-     * @see Next\Validate\HTTP\Headers\Common\Date::validate()
+     * @see \Next\Validate\HTTP\Headers\Common\Date::validate()
      */
     public function validate() {
 

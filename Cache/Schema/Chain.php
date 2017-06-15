@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Caching Schema Chain Class | Cache\Schema\Chain.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Cache\Schema;
 
 use Next\Cache\CacheException;                         # Cache Exception Class
@@ -8,12 +16,11 @@ use Next\Components\Object;                            # Object Class
 use Next\Components\Collections\AbstractCollection;    # Abstract Collection Class
 
 /**
- * Cache Schema Chain Class
+ * Defines a \Next\Components\Collections\AbstractCollection for Caching Schemas.
+ * To be a valid within this Collection, the Object must implement the
+ * \Next\Cache\Schema\Schema Interface
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2017 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Cache\Schema
  */
 class Chain extends AbstractCollection {
 
@@ -21,18 +28,18 @@ class Chain extends AbstractCollection {
      * Check Object acceptance
      *
      * Check if given Object is acceptable in Caching Schema Chain
-     * To be valid, the Object must implement Next\Cache\Schema\Schema
+     * To be valid, the Object must implement \Next\Cache\Schema\Schema
      *
-     * @param Next\Components\Object $object
+     * @param \Next\Components\Object $object
      *  An Object object
      *
-     *  The checking for Next\Cache\Schema\Schema implementation
+     *  The checking for \Next\Cache\Schema\Schema implementation
      *  will be done inside the method.
      *
      * @return boolean
      *  TRUE if given Object is acceptable by Caching Schema Collection and FALSE otherwise
      *
-     * @throws Next\Cache\CacheException
+     * @throws \Next\Cache\CacheException
      *  Given Caching Schema is not acceptable in Caching Schema Chain
      */
     protected function accept( Object $object ) {

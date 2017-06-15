@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * PDO Driver Abstract Class | DB\Driver\PDO\AbstractPDO.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\DB\Driver\PDO;
 
 use Next\DB\Driver\DriverException;    # Driver Exception Class
@@ -22,7 +30,7 @@ abstract class AbstractPDO extends AbstractDriver {
      *
      * @return PDO
      *
-     * @throws Next\DB\Driver\DriverException
+     * @throws \Next\DB\Driver\DriverException
      *  A PDOException was caught
      */
     public function connect() {
@@ -110,10 +118,10 @@ abstract class AbstractPDO extends AbstractDriver {
      * @param string $statement
      *  Query Statement
      *
-     * @return Next\DB\Statement\Statement
+     * @return \Next\DB\Statement\Statement
      *  Statement Object
      *
-     * @throws Next\DB\Driver\DriverException
+     * @throws \Next\DB\Driver\DriverException
      *  A PDOException was caught
      */
     public function query( $statement ) {
@@ -134,10 +142,10 @@ abstract class AbstractPDO extends AbstractDriver {
      * @param string $statement
      *  Statement to be prepared
      *
-     * @return Next\DB\Statement\Statement
+     * @return \Next\DB\Statement\Statement
      *  Statement Object
      *
-     * @throws Next\DB\Driver\DriverException
+     * @throws \Next\DB\Driver\DriverException
      *  A PDOException was caught
      */
     public function prepare( $statement ) {
@@ -166,7 +174,7 @@ abstract class AbstractPDO extends AbstractDriver {
      * @return integer|string
      *  ID of last inserted record
      *
-     * @throws Next\DB\Driver\DriverException
+     * @throws \Next\DB\Driver\DriverException
      *  A PDOException was caught
      */
     public function lastInsertId( $name = NULL ) {
@@ -205,7 +213,7 @@ abstract class AbstractPDO extends AbstractDriver {
     /**
      * Check for Connection Driver Requirements
      *
-     * @throws Next\DB\Driver\DriverException
+     * @throws \Next\DB\Driver\DriverException
      *  PDO Extension was not loaded
      */
     protected function checkRequirements() {

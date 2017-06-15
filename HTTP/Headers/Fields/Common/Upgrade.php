@@ -1,12 +1,24 @@
 <?php
 
+/**
+ * HTTP Common Header Field Class: Upgrade | HTTP\Headers\Fields\Common\Upgrade.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Headers\Fields\Common;
 
-use Next\HTTP\Headers\Fields\AbstractField;       # Header Field Abstract Class
-use Next\Validate\HTTP\Headers\Common\Upgrade;    # Upgrade Header Field Class
+use Next\HTTP\Headers\Fields\AbstractField;    # Header Field Abstract Class
 
 /**
- * Upgrade Header Field Class
+ * 'Upgrade' Header Field Validator Class
+ */
+use Next\Validate\HTTP\Headers\Common\Upgrade as Validator;
+
+/**
+ * 'Upgrade' Header Field Class
  *
  * @author        Bruno Augusto
  *
@@ -23,11 +35,11 @@ class Upgrade extends AbstractField {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validator
+     * @return \Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new Upgrade( array( 'value' => $value ) );
+        return new Validator( array( 'value' => $value ) );
     }
 
     /**

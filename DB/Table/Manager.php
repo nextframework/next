@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Database Table Manager | DB\Table\Manager.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\DB\Table;
 
 use Next\DB\Driver\DriverException;             # Driver Exception Class
@@ -25,28 +33,28 @@ class Manager extends Object {
     /**
      * Connection Driver
      *
-     * @var Next\DB\Driver\Driver $driver
+     * @var \Next\DB\Driver\Driver $driver
      */
     private $driver;
 
     /**
      * Table Object
      *
-     * @var Next\DB\Table\Table $table
+     * @var \Next\DB\Table\Table $table
      */
     private $table;
 
     /**
      * Query Builder
      *
-     * @var Next\DB\Query\Builder $builder
+     * @var \Next\DB\Query\Builder $builder
      */
     private $builder;
 
     /**
      * Entities Repositories
      *
-     * @var Next\DB\Entity\Repositories
+     * @var \Next\DB\Entity\Repositories
      */
     private $repositories;
 
@@ -63,14 +71,14 @@ class Manager extends Object {
     /**
      * Table Manager Constructor
      *
-     * @param Next\DB\Driver\Driver $driver
+     * @param \Next\DB\Driver\Driver $driver
      *  Connection Driver
      *
-     * @param Next\DB\Table\Table|optional $table
+     * @param \Next\DB\Table\Table|optional $table
      *  An optional Table Object. Required for most of CRUD operations,
      *  optional for Entity Managers (assuming they inject their own)
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for the Table Manager
      */
     public function __construct( Driver $driver, Table $table = NULL, $options = NULL ) {
@@ -119,7 +127,7 @@ class Manager extends Object {
      * @param array $source
      *  Data Source
      *
-     * @return Next\DB\Table\Manager
+     * @return \Next\DB\Table\Manager
      *  Table Manager Object (Fluent Interface)
      */
     public function setSource( array $source ) {
@@ -137,7 +145,7 @@ class Manager extends Object {
      * @return integer
      *  The number of rows affected
      *
-     * @see Next\DB\Driver\Driver::lastInsertId()
+     * @see \Next\DB\Driver\Driver::lastInsertId()
      */
     public function rowCount() {
 
@@ -157,10 +165,10 @@ class Manager extends Object {
      * @param string|integer|optional $fetchStyle
      *  The Fetch Mode, accordingly to chosen Driver
      *
-     * @return Next\DB\Table\RowSet
+     * @return \Next\DB\Table\RowSet
      *  RowSet Object with fetched data, if any
      *
-     * @see Next\DB\Statement\Statement::fetch()
+     * @see \Next\DB\Statement\Statement::fetch()
      */
     public function fetch( $fetchStyle = NULL ) {
 
@@ -180,10 +188,10 @@ class Manager extends Object {
      *  The Fetch Mode, accordingly to chosen Driver
      *  Not directly used (documentation only)
      *
-     * @return Next\DB\Table\RowSet
+     * @return \Next\DB\Table\RowSet
      *  RowSet Object with fetched data, if any
      *
-     * @see Next\DB\Statement\Statement::fetchAll()
+     * @see \Next\DB\Statement\Statement::fetchAll()
      */
     public function fetchAll( $style = NULL ) {
 
@@ -204,7 +212,7 @@ class Manager extends Object {
      * @param string|array|optional $columns
      *  Columns to be included in SELECT Statement
      *
-     * @return Next\DB\Table\Select
+     * @return \Next\DB\Table\Select
      *  Select Object
      */
     public function select( $columns = Query::WILDCARD ) {
@@ -225,7 +233,7 @@ class Manager extends Object {
      * @return integer|string
      *  The ID of last record inserted
      *
-     * @throws Next\DB\Table\TableException
+     * @throws \Next\DB\Table\TableException
      *  Trying to insert something without define any field
      */
     public function insert( $name = NULL ) {
@@ -248,10 +256,10 @@ class Manager extends Object {
     /**
      * Update Records in Table
      *
-     * @return Next\DB\Table\Manager
+     * @return \Next\DB\Table\Manager
      *  Manager instance, in order to allow method chaining to build the final query
      *
-     * @throws Next\DB\Table\TableException
+     * @throws \Next\DB\Table\TableException
      *  Trying to execute an UPDATE Statement without define any field
      */
     public function update() {
@@ -274,7 +282,7 @@ class Manager extends Object {
     /**
      * Delete Records from Table
      *
-     * @return Next\DB\Table\Manager
+     * @return \Next\DB\Table\Manager
      *  Manager instance, in order to allow method chaining to build the final query
      */
     public function delete() {
@@ -287,7 +295,7 @@ class Manager extends Object {
     /**
      * Resets the Table Manager by returning a new instance of it
      *
-     * @return Next\DB\Table\Manager
+     * @return \Next\DB\Table\Manager
      *  Table Manager Object (Fluent-Interface)
      */
     public function reset() {
@@ -297,7 +305,7 @@ class Manager extends Object {
     /**
      * Flushes Table Manager previously used informations, preparing it for another round
      *
-     * @return Next\DB\Table\Manager
+     * @return \Next\DB\Table\Manager
      *  Table Manager Object (Fluent-Interface)
      */
     public function flush() {
@@ -312,10 +320,10 @@ class Manager extends Object {
     /**
      * Set Table Object after the Manager Object is built
      *
-     * @param next\DB\Table\Table $table
+     * @param \Next\DB\Table\Table $table
      *  Table Object to replace the old one, if any
      *
-     * @return  Next\DB\Table\Manager
+     * @return  \Next\DB\Table\Manager
      *  Table Manager Object (Fluent-Interface)
      */
     public function setTable( Table $table ) {
@@ -342,7 +350,7 @@ class Manager extends Object {
      * @param string|optional $alias
      *  An optional alias for the Repository
      *
-     * @return  Next\DB\Table\Manager
+     * @return  \Next\DB\Table\Manager
      *  Table Manager Object (Fluent-Interface)
      */
     public function addRepository( $repository, $alias = NULL ) {
@@ -357,13 +365,13 @@ class Manager extends Object {
     /**
      * Get an Entity Repository
      *
-     * @param  string $repository
+     * @param string $repository
      *  Entity Repository to retrieve
      *
-     * @return Next\DB\Entity\Repository
+     * @return \Next\DB\Entity\Repository
      *  Entity Repository
      *
-     * @throws Next\DB|Entity\EntityException
+     * @throws \Next\DB|Entity\EntityException
      *  Thrown if Repository Object doesn't exist
      */
     public function getRepository( $repository ) {
@@ -373,7 +381,7 @@ class Manager extends Object {
     /**
      * Get Entities Repository Collection
      *
-     * @return Next\DB\Entity\Repositories
+     * @return \Next\DB\Entity\Repositories
      *  Entities Repositories
      */
     public function getRepositories() {
@@ -395,7 +403,7 @@ class Manager extends Object {
     /**
      * Get associated Table Object
      *
-     * @return Next\DB\Table\Table
+     * @return \Next\DB\Table\Table
      *  Table Object
      */
     public function getTable() {
@@ -415,7 +423,7 @@ class Manager extends Object {
     /**
      * Get associated Connection Driver
      *
-     * @return Next\DB\Driver\Driver
+     * @return \Next\DB\Driver\Driver
      *  Connection Driver
      */
     public function getDriver() {
@@ -425,7 +433,7 @@ class Manager extends Object {
     /**
      * Get Query Builder
      *
-     * @return Next\DB\Query\Builder
+     * @return \Next\DB\Query\Builder
      *  Query Builder
      */
     public function getBuilder() {
@@ -435,15 +443,15 @@ class Manager extends Object {
     // Auxiliary Methods
 
     /**
-     * Wrapper method for Next\DB\Driver\Driver::prepare() and Next\DB\Statement\Statement:execute()
+     * Wrapper method for \Next\DB\Driver\Driver::prepare() and Next\DB\Statement\Statement:execute()
      *
-     * @return Next\DB\Statement\Statement
+     * @return \Next\DB\Statement\Statement
      *  Statement Object
      *
-     * @throws Next\DB\Table\TableException
+     * @throws \Next\DB\Table\TableException
      *  SQL Statement is empty
      *
-     * @throws Next\DB\Table\TableException
+     * @throws \Next\DB\Table\TableException
      *  A DriverException or a StatementException is caught
      */
     private function execute() {

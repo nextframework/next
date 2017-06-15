@@ -1,33 +1,36 @@
 <?php
 
+/**
+ * Contextualizable Components Interface | Components\Interfaces\Contextualizable.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components\Interfaces;
 
 use Next\Components\Invoker;
 
 /**
- * Contextualizable Interface
- *
- * Contextualizable Objects are assumed to allow their context to be extended,
+ * Contextualizable Objects allow their context to be extended,
  * almost like PHP 5.4 Traits
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components\Interfaces
  */
 interface Contextualizable {
 
     /**
      * Register a new Invoker Object to be used as context extension
      *
-     * @param Next\Components\Invoker $invoker
+     * @param \Next\Components\Invoker $invoker
      *  Invoker Object
      *
      * @param string|array|optional $methods
      *  One or more methods accessible through extended Context.
      *  Defaults to NULL, which means almost all PUBLIC methods will be accessible
      *
-     *   @param string|array|optional $properties
+     * @param string|array|optional $properties
      *  One or more properties accessible through extended Context
      *  Defaults to NULL, which means all PROTECTED properties will be accessible
      */

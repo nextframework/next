@@ -1,14 +1,21 @@
 <?php
 
+/**
+ * Types Component "Boolean" Type Class | Components\Types\Boolean.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components\Types;
 
 /**
- * Boolean Datatype Class
+ * Defines the Boolean Data-type Type and prototypes some o PHP Boolean
+ * functions (some in different argument order) and some external/custom
+ * resources as well
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components\Types
  */
 final class Boolean extends AbstractTypes {
 

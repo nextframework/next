@@ -1,17 +1,23 @@
 <?php
 
+/**
+ * Routes Generators Applications' Annotations Class | Tools\Routes\Generators\Annotations\Applications.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Tools\Routes\Generators\Annotations;
 
 use Next\Application\Application as ApplicationInterface;    # Applications Interface
 use Next\Components\Object;                                  # Object Class
 
 /**
- * Routes Generator: Application Annotations Analyzer
+ * Defines the Applications Analyzer, filtering through data
+ * reflected and preparing structure for the Routes Generator process
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Tools\Routes\Generators
  */
 class Applications implements Annotations {
 
@@ -32,14 +38,14 @@ class Applications implements Annotations {
     /**
      * Application Object
      *
-     * @var Next\Application\Application $application
+     * @var \Next\Application\Application $application
      */
     private $application;
 
     /**
      * Applications Annotations Constructor
      *
-     * @param Next\Application\Application $application
+     * @param \Next\Application\Application $application
      *  Application to get Annotations from
      */
     public function __construct( ApplicationInterface $application ) {
@@ -111,7 +117,7 @@ class Applications implements Annotations {
      *
      * Domain Annotations start with !Domain
      *
-     * @param Next\Components\Object $application
+     * @param \Next\Components\Object $application
      *  Application Object
      *
      * @return array
@@ -136,7 +142,7 @@ class Applications implements Annotations {
      *
      * Path Annotations start with !Path
      *
-     * @param Next\Components\Object $application
+     * @param \Next\Components\Object $application
      *  Application Object
      *
      * @return string

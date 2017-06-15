@@ -1,14 +1,20 @@
 <?php
 
+/**
+ * Events Components Exception Class | Components\Events\EventsException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components\Events;
 
 /**
- * Events Exception Class
+ * Defines wrapper static methods for all Exceptions thrown
+ * within the Events Component
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components\Events
  */
 class EventsException extends \Next\Components\Debug\Exception {
 
@@ -46,7 +52,7 @@ class EventsException extends \Next\Components\Debug\Exception {
      * @param string $name
      *  Event Listener trigger reference
      *
-     * @return Next\Components\Events\EventsException
+     * @return \Next\Components\Events\EventsException
      *  Unknown Event Listener
      */
     public static function unknownListener( $name ) {
@@ -71,7 +77,7 @@ class EventsException extends \Next\Components\Debug\Exception {
      * @param \ReflectionException $e
      *  ReflectionException caught while trying to execute the Listener
      *
-     * @return Next\Components\Events\EventsException
+     * @return \Next\Components\Events\EventsException
      *  Event Listener Execution Error
      */
     public static function listenerExecutionError( $name, $event, \ReflectionException $e ) {
@@ -90,7 +96,7 @@ class EventsException extends \Next\Components\Debug\Exception {
     /**
      * Invalid Listener Callback
      *
-     * @return Next\Components\Events\EventsException
+     * @return \Next\Components\Events\EventsException
      *  Invalid Listener Callback error
      */
     public static function invalidCallback() {

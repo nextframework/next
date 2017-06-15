@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Database Query Expression Class | DB\Query\Expression.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\DB\Query;
 
 use Next\Components\Object;     # Object Class
@@ -27,7 +35,7 @@ class Expression extends Object {
      * @param string $expression
      *  SQL Expression
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for the Query Expression
      */
     public function __construct( $expression, $options = NULL ) {

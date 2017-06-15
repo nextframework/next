@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Routes Generator SQLite Output Writer Class | Tools\Routes\Generators\Writer\SQLite.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Tools\Routes\Generators\Writer;
 
 use Next\Tools\Routes\Generators\Writer\OutputWriterException;    # Output Writer Exception Class
@@ -18,18 +26,18 @@ use Next\DB\Table\Manager;                                        # Table Manage
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  *
- * @uses          Next\DB\Driver\PDO\Adapter\SQLite,
- *                Next\Tools\Routes\Generators\Writer\SQLite\Entity,
- *                Next\Tools\Routes\Generators\Writer\OutputWriterException
- *                Next\DB\Table\TableException,
- *                Next\DB\Table\Manager
+ * @uses          \Next\DB\Driver\PDO\Adapter\SQLite,
+ *                \Next\Tools\Routes\Generators\Writer\SQLite\Entity,
+ *                \Next\Tools\Routes\Generators\Writer\OutputWriterException
+ *                \Next\DB\Table\TableException,
+ *                \Next\DB\Table\Manager
  */
 class SQLite extends Object implements Writer {
 
     /**
      * Entity Manager
      *
-     * @var Next\DB\Table\Manager $manager
+     * @var \Next\DB\Table\Manager $manager
      */
     protected $manager;
 
@@ -39,7 +47,7 @@ class SQLite extends Object implements Writer {
      * Creates and configures the Table Manager object needed to
      * connect to the SQLite Database
      *
-     * @throws Next\Tools\Routes\Generators\Writer\OutputWriterException
+     * @throws \Next\Tools\Routes\Generators\Writer\OutputWriterException
      *  Thrown if the required <strong>dbPath</strong> option with
      *  the path to the SQLite database file is missing or empty
      */
@@ -67,9 +75,9 @@ class SQLite extends Object implements Writer {
      * @return integer
      *  Number of records processed
      *
-     * @throws Next\Tools\Routes\Generators\Writer\OutputWriterException
+     * @throws \Next\Tools\Routes\Generators\Writer\OutputWriterException
      *  Unable to record route, as a re-throwing of a
-     *  Next\DB\Statement\StatementException caught
+     *  \Next\DB\Statement\StatementException caught
      */
     public function save( array $data ) {
 

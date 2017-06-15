@@ -1,13 +1,25 @@
 <?php
 
+/**
+ * HTTP Request Header Field Class: Host | HTTP\Headers\Fields\Request\Host.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Headers\Fields\Request;
 
-use Next\HTTP\Headers\Fields\Request;           # Request Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField;     # Header Field Abstract Class
-use Next\Validate\HTTP\Headers\Request\Host;    # Request Host Header Field Validator Class
+use Next\HTTP\Headers\Fields\Request;          # Request Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;    # Header Field Abstract Class
 
 /**
- * Host Header Field Class
+ * Request 'Host' Header Field Validator Class
+ */
+use Next\Validate\HTTP\Headers\Request\Host as Validator;
+
+/**
+ * Request 'Host' Header Field Class
  *
  * @author        Bruno Augusto
  *
@@ -24,11 +36,11 @@ class Host extends AbstractField implements Request {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validator
+     * @return \Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new Host( array( 'value' => $value ) );
+        return new Validator( array( 'value' => $value ) );
     }
 
     /**

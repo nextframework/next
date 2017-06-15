@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Caching Schema Class: HTTP Response Headers | Cache\Schema\Response.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Cache\Schema;
 
 use Next\HTTP\Headers\Fields\Entity\ContentType;      # Content-Type Header Class
@@ -10,12 +18,14 @@ use Next\HTTP\Headers\Fields\Response\ETag;           # ETag Header Class
 use Next\HTTP\Headers\Fields\Raw;                     # Raw Header Field Class
 
 /**
- * Response Headers Caching Class
+ * Defines a Caching Schema through HTTP Response Headers, sending
+ * Content-Type, Content-Length, Last-Modified, Cache-Control and E-Tag
+ * Header Fields for resources that are allowed to be cached.
  *
- * @author        Bruno Augusto
+ * It's also responsible to send 304 and 404 Headers when given
+ * resource is, respectively, already cached or not found
  *
- * @copyright     Copyright (c) 2017 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Cache\Schema
  */
 class Response extends AbstractSchema {
 
@@ -77,7 +87,7 @@ class Response extends AbstractSchema {
     );
 
     /**
-     * Caching Routine to be executed by Next\Controller\Front
+     * Caching Routine to be executed by \Next\Controller\Front
      */
     public function run() {
 

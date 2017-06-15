@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Loader Exception File | Loader\LoaderException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Loader;
 
 require_once '/../Exception.php';
@@ -40,7 +48,7 @@ class LoaderException extends \Next\Components\Debug\Exception {
     /**
      * Duplicated AutoLoader
      *
-     * @return Next\LoaderException
+     * @return \Next\LoaderException
      *  Exception for duplicated Autoloader
      */
     public static function duplicated() {
@@ -56,7 +64,7 @@ class LoaderException extends \Next\Components\Debug\Exception {
     /**
      * Unknown AutoLoader
      *
-     * @return Next\LoaderException
+     * @return \Next\LoaderException
      *  Exception for unknown AutoLoader
      */
     public static function unknown() {

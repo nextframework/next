@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * View Engine Helpers: Sessions | View\Helper\Session.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\View\Helper;
 
 use Next\Components\Object;                           # Object Class
@@ -11,12 +19,18 @@ use Next\Session\Environment\EnvironmentException;    # Session Environment Exce
 
 use Next\View\ViewException;                          # View Exception Class
 
+/**
+ * Defines the Session View Helper through which Session Data can be
+ * retrieved directly from the View Templates
+ *
+ * @package    Next\View\Helpers
+ */
 class Session extends Object implements Helper {
 
     /**
      * Session Environment Object
      *
-     * @var Next\Session\Environment $environment
+     * @var \Next\Session\Environment $environment
      */
     private $environment;
 
@@ -37,10 +51,10 @@ class Session extends Object implements Helper {
     /**
      * Get an entry from $_SESSION through Session Environment
      *
-     * @param  string $name
+     * @param string $name
      *  The entry to be retrieved
      *
-     * @param  mixed|optional $default
+     * @param mixed|optional $default
      *  Something to return if desired entry doesn't exist
      *
      * @return mixed
@@ -48,8 +62,8 @@ class Session extends Object implements Helper {
      *  Otherwise, the value defined in <strong>$default</strong>, if defined,
      *  will be returned instead
      *
-     * @throws Next\View\ViewException
-     *  Thrown if a Next\Session\Environment\EnvironmentException is caught and
+     * @throws \Next\View\ViewException
+     *  Thrown if a \Next\Session\Environment\EnvironmentException is caught and
      *  the Exception Code is not the one associated to an undefined index, case
      *  in which what is defined in <strong>$default</strong>, if defined, will
      *  be returned instead

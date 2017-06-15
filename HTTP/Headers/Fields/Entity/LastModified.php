@@ -1,13 +1,25 @@
 <?php
 
+/**
+ * HTTP Entity Header Field Class: Last-Modified | HTTP\Headers\Fields\Entity\LastModified.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Headers\Fields\Entity;
 
-use Next\HTTP\Headers\Fields\Entity;                   # Entity Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField;            # Header Field Abstract Class
-use Next\Validate\HTTP\Headers\Entity\LastModified;    # Last-Modified Header Field Validator Class
+use Next\HTTP\Headers\Fields\Entity;           # Entity Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;    # Header Field Abstract Class
 
 /**
- * Last-Modified Header Field Class
+ * Entity 'Last-Modified' Header Field Validator Class
+ */
+use Next\Validate\HTTP\Headers\Entity\LastModified as Validator;
+
+/**
+ * 'Last-Modified' Header Field Class
  *
  * @author        Bruno Augusto
  *
@@ -24,11 +36,11 @@ class LastModified extends AbstractField implements Entity {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validator
+     * @return \Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new LastModified( array( 'value' => $value ) );
+        return new Validator( array( 'value' => $value ) );
     }
 
     /**

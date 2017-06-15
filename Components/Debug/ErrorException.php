@@ -1,23 +1,36 @@
 <?php
 
+/**
+ * Debug Component Error Exception Standard Class | Components\Debug\ErrorException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components\Debug;
 
+/**
+ * Defines a variation our own Exception Class with focused on triggered errors
+ *
+ * @package    Next\Components\Debug
+ */
 class ErrorException extends Exception {
 
     /**
-     *  ErrorException Constructor
+     * ErrorException Constructor
      *
-     *  @param string $message
-     *    Exception Message
+     * @param string $message
+     *  Exception Message
      *
-     *  @param integer $severity
-     *    Exception Severity
+     * @param integer $severity
+     *  Exception Severity
      *
-     *  @param string $file
-     *    Filename were the error occurred
+     * @param string $file
+     *  Filename were the error occurred
      *
-     *  @param integer $line
-     *    Line were the error occurred
+     * @param integer $line
+     *  Line were the error occurred
      */
     public function __construct( $message, $severity, $file, $line ) {
 
@@ -32,10 +45,10 @@ class ErrorException extends Exception {
     }
 
     /**
-     *  Gets the exception severity
+     * Gets the exception severity
      *
-     *  @return integer
-     *    Returns the severity level of the exception
+     * @return integer
+     *  Returns the severity level of the exception
      */
     public function getSeverity() {
         return $this -> severity;
@@ -44,8 +57,8 @@ class ErrorException extends Exception {
     /**
      *  Translate Severity Code to a nice (and more descriptive) text
      *
-     *  @return string
-     *    Severity Code translated
+     * @return string
+     *  Severity Code translated
      */
     public function __toString() {
 

@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP Response | HTTP\Response.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP;
 
 use Next\HTTP\Response\ResponseException;          # Response Exception
@@ -659,7 +667,7 @@ class Response extends Object {
     /**
      * Headers Management Object
      *
-     * @var Next\HTTP\ResponseHeaders $headers
+     * @var \Next\HTTP\ResponseHeaders $headers
      */
     private $headers;
 
@@ -708,7 +716,7 @@ class Response extends Object {
      * @param array|optional $metaData
      *  Response Meta Data
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for the Response Object
      */
     public function __construct( $data = NULL, array $metaData = array(), $options = NULL ) {
@@ -796,7 +804,7 @@ class Response extends Object {
      * @param string $content
      *  Content to be appended to Response Body
      *
-     * @return Next\HTTP\Response
+     * @return \Next\HTTP\Response
      *  Response Object (Fluent Interface)
      */
     public function appendBody( $content ) {
@@ -812,7 +820,7 @@ class Response extends Object {
      * @param string $content
      *  Content to be prepended to Response Body
      *
-     * @return Next\HTTP\Response
+     * @return \Next\HTTP\Response
      *  Response Object (Fluent Interface)
      */
     public function prependBody( $content ) {
@@ -825,7 +833,7 @@ class Response extends Object {
     /**
      * Clear Response Body
      *
-     * @return Next\HTTP\Response
+     * @return \Next\HTTP\Response
      */
     public function clearBody() {
 
@@ -919,7 +927,7 @@ class Response extends Object {
      *  When FALSE (default), the current full URL minus the current
      *  Request URI will be prepended to given URL
      *
-     * @throws Next\HTTP\Response\ResponseException
+     * @throws \Next\HTTP\Response\ResponseException
      *  Any header was already sent
      */
     public function redirect( $to, $raw = FALSE ) {
@@ -987,7 +995,7 @@ class Response extends Object {
      * @param boolean $flag
      *  New state for the flag
      *
-     * @return Next\HTTP\Response
+     * @return \Next\HTTP\Response
      *  Response Instance (Fluent Interface)
      */
     public function returnResponse( $flag ) {
@@ -1013,7 +1021,7 @@ class Response extends Object {
      * @param boolean $flag
      *  New state for the flag
      *
-     * @return Next\HTTP\Response
+     * @return \Next\HTTP\Response
      *  Response Instance (Fluent Interface)
      */
     public function abortFlow( $flag ) {
@@ -1039,7 +1047,7 @@ class Response extends Object {
      * @param boolean $flag
      *  New state for the flag
      *
-     * @return Next\HTTP\Response
+     * @return \Next\HTTP\Response
      *  Response Instance (Fluent Interface)
      */
     public function disableSendingHeaders( $flag ) {
@@ -1065,7 +1073,7 @@ class Response extends Object {
      * @param boolean $flag
      *  New state for the flag
      *
-     * @return Next\HTTP\Response
+     * @return \Next\HTTP\Response
      *  Response Instance (Fluent Interface)
      */
     public function cleanupMarkup( $flag ) {
@@ -1087,7 +1095,7 @@ class Response extends Object {
      *      thrown instead
      *   </p>
      *
-     * @throws Next\HTTP\Response\ResponseException
+     * @throws \Next\HTTP\Response\ResponseException
      *  Any header was already sent
      */
     public static function canSendHeaders() {
@@ -1111,7 +1119,7 @@ class Response extends Object {
     /**
      * Add response Header to be sent
      *
-     * This method intermediates Next\HTTP\Headers\AbstractHeaders::addHeader()
+     * This method intermediates \Next\HTTP\Headers\AbstractHeaders::addHeader()
      * in order to use the proper field for HTTP Response Status Code Headers
      *
      * @param mixed $header
@@ -1133,7 +1141,7 @@ class Response extends Object {
      *
      *               <p>
      *                   A well-formed Header Field, instance of
-     *                   Next\HTTP\Headers\Fields\Field
+     *                   \Next\HTTP\Headers\Fields\Field
      *               </p>
      *
      *               <p>In this case it'll be used "as is"</p>
@@ -1173,7 +1181,7 @@ class Response extends Object {
      * @param float $schemaVersion
      *  Schema Version. Only used if <strong>$header</strong> is an integer
      *
-     * @return Next\HTTP\Response
+     * @return \Next\HTTP\Response
      *  Response Object (Fluent Interface)
      */
     public function addHeader( $header, $value = NULL, $schemaVersion = 1.1 ) {
@@ -1335,7 +1343,7 @@ class Response extends Object {
     /**
      * Get the message associated to a Response Code
      *
-     * @param  mixed|integer $code
+     * @param mixed|integer $code
      *  HTTP Response Code to have its associated message retrieved
      *
      * @return string|null
@@ -1354,7 +1362,7 @@ class Response extends Object {
     /**
      * Send Response Headers
      *
-     * @throws Next\HTTP\Response\ResponseException
+     * @throws \Next\HTTP\Response\ResponseException
      *  Any header was already sent
      */
     private function sendHeaders() {

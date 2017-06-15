@@ -1,21 +1,28 @@
 <?php
 
+/**
+ * AlphaID Decoding Prototypable Class | Components\Types\String\AlphaID.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace  Next\Components\Types\String;
 
-use Next\Components\Interfaces\Prototyped;    # Prototyped Interface
+use Next\Components\Interfaces\Prototypable;    # Prototypable Interface
 
-use Next\Components\Types\Integer;            # Integer Object Class
-use Next\Components\Types\String;             # String Object Class
+use Next\Components\Types\Integer;              # Integer Object Class
+use Next\Components\Types\String;               # String Object Class
 
 /**
- * AlphaID Decoding Prototype Routine
+ * Creates a \Next\Components\Types\Integer with the value of a
+ * \Next\Components\Types\String \Next\Components\Types\Integer\AlphaID
+ * decoded into its original integer representation
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2016 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components\Types
  */
-class AlphaID implements Prototyped {
+class AlphaID implements Prototypable {
 
     /**
      * Decoding Character Set
@@ -24,24 +31,24 @@ class AlphaID implements Prototyped {
      */
     const SET = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-    // Prototyped Interface Method Implementation
+    // Prototypable Interface Method Implementation
 
     /**
      * Prototypes the AlphaID routine by proxying, treating and handling
      * the mixed arguments received
      *
-     * @return Next\Components\Types\Integer
+     * @return \Next\Components\Types\Integer
      *  An Integer Object with the decoded value
      *
      * @throws InvalidArgumentException
      *  Thrown if, after treated, the first argument, the number to be
-     *  decoded by Next\Components\Types\String\AlphaID::decode()
+     *  decoded by \Next\Components\Types\String\AlphaID::decode()
      *  is not present
      *
      * @throws InvalidArgumentException
      *  Thrown if the alternative character set is not a string
      *
-     * @see Next\Components\Types\String\AlphaID::decode()
+     * @see \Next\Components\Types\String\AlphaID::decode()
      */
     public function prototype() {
 
@@ -70,10 +77,10 @@ class AlphaID implements Prototyped {
      * @author    "poops"
      * @link      https://github.com/poops/php-classes/blob/master/AlphaId.php
      *
-     * @param  string|Next\Components\Types\String  $input
+     * @param string|\Next\Components\Types\String $input
      *  The string to be decoded or a String Object to get string from
      *
-     * @param  string $index
+     * @param string $index
      *  An alternative set of characters to perform the encoding process
      *
      * @return integer

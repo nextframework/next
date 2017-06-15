@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Database Driver Exception Class | DB\Driver\DriverException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\DB\Driver;
 
 /**
@@ -41,7 +49,7 @@ class DriverException extends \Next\Components\Debug\Exception {
      * @param PDOException $e
      *  PDOException caught
      *
-     * @return Next\DB\Driver\DriverException
+     * @return \Next\DB\Driver\DriverException
      *  Exception for a caught PDOException
      */
     public static function PDOException( \PDOException $e ) {
@@ -55,7 +63,7 @@ class DriverException extends \Next\Components\Debug\Exception {
      * @param string $message
      *  Message to be thrown
      *
-     * @return Next\DB\Driver\DriverException
+     * @return \Next\DB\Driver\DriverException
      *  Exception for missing Connection Adapter
      */
     public static function missingConnectionAdapterParameter( $message ) {

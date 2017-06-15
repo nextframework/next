@@ -1,13 +1,25 @@
 <?php
 
+/**
+ * HTTP Response Header Field Class: Proxy-Authenticate | HTTP\Headers\Fields\Response\Proxy-Authenticate.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Headers\Fields\Response;
 
-use Next\HTTP\Headers\Fields\Response;                        # Response Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField;                   # Header Field Abstract Class
-use Next\Validate\HTTP\Headers\Response\ProxyAuthenticate;    # Response Proxy-Authenticate Header Field Validator Class
+use Next\HTTP\Headers\Fields\Response;         # Response Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;    # Header Field Abstract Class
 
 /**
- * Proxy-Authenticate Header Field Class
+ * Response 'Proxy-Authenticate' Header Field Validator Class
+ */
+use Next\Validate\HTTP\Headers\Response\ProxyAuthenticate as Validator;
+
+/**
+ * Response 'Proxy-Authenticate' Header Field Class
  *
  * @author        Bruno Augusto
  *
@@ -24,11 +36,11 @@ class ProxyAuthenticate extends AbstractField implements Response {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validator
+     * @return \Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new ProxyAuthenticate( array( 'value' => $value ) );
+        return new Validator( array( 'value' => $value ) );
     }
 
     /**

@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Autoloader Class | Loader\AutoLoader.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Loader;
 
 use Next\Loader\LoaderException;            # Loader Exception Class
@@ -35,13 +43,13 @@ class AutoLoader {
     /**
      * Register a new AutoLoadable Object
      *
-     * @param Next\Loader\AutoLoader\AutoLoadable $autoloader
+     * @param \Next\Loader\AutoLoader\AutoLoadable $autoloader
      *  The AutoLoader Object to be registered
      *
-     * @return Next\AutoLoader
+     * @return \Next\AutoLoader
      *  AutoLoader Instance (Fluent Interface)
      *
-     * @throws Next\LoaderException
+     * @throws \Next\LoaderException
      *  Trying to register an already registred AutoLoadable Object
      */
     public function registerAutoLoader( AutoLoadable $autoloader ) {
@@ -63,13 +71,13 @@ class AutoLoader {
     /**
      * Unregister an AutoLoadable Object
      *
-     * @param Next\Loader\AutoLoader\AutoLoadable $autoloader
+     * @param \Next\Loader\AutoLoader\AutoLoadable $autoloader
      *  The AutoLoader Object to be registered
      *
-     * @return Next\AutoLoader
+     * @return \Next\AutoLoader
      *  AutoLoader Instance (Fluent Interface)
      *
-     * @throws Next\LoaderException
+     * @throws \Next\LoaderException
      *  Trying to unregister a non registered AutoLoadable Object
      */
     public function unregisterAutoLoader( AutoLoadable $autoloader ) {

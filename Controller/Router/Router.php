@@ -1,23 +1,30 @@
 <?php
 
+/**
+ * Controller Routers Interface | Controller\Router\Router.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Controller\Router;
 
 use Next\Application\Application;    # Application Interface
 
 /**
- * Controller Router Interface
+ * Defines the Router Type, with all methods that must be present
+ * in an Router, be it through \Next\Controller\Router\AbstractRouter
+ * or the concrete implementations of it
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Controller\Router
  */
 interface Router {
 
     /**
      * Finds a match Route
      *
-     * @param Next\Application\Application $application
+     * @param \Next\Application\Application $application
      *  Application to iterate Controllers
      */
     public function find( Application $application );

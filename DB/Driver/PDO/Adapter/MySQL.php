@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * PDO Driver Adapter: MySQL | DB\Driver\Adapter\MySQL.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\DB\Driver\PDO\Adapter;
 
 use Next\DB\Driver\DriverException;    # Driver Exception Class
@@ -33,7 +41,7 @@ class MySQL extends AbstractPDO {
      * @return string
      *  MySQL Adapter DSN used by PDO Connection
      *
-     * @throws Next\DB\Driver\DriverException
+     * @throws \Next\DB\Driver\DriverException
      *  Required <strong>Host</strong> or <strong>Database</strong>
      *  parameters was not set in Connection Parameters
      */
@@ -61,7 +69,7 @@ class MySQL extends AbstractPDO {
     /**
      * Check for MySQL Adapter Requirements
      *
-     * @throws Next\DB\Driver\DriverException
+     * @throws \Next\DB\Driver\DriverException
      *  PDO_MYSQL Extension was not loaded
      */
     protected function checkRequirements() {
@@ -86,7 +94,7 @@ class MySQL extends AbstractPDO {
     /**
      * Set an SQL Statement Renderer
      *
-     * @return Next\DB\Query\Renderer\Renderer
+     * @return \Next\DB\Query\Renderer\Renderer
      *  MySQL Renderer Object
      */
     public function getRenderer() {

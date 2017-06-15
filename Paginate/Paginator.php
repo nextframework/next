@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Paginator Class | Paginate\Paginator.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Paginate;
 
 use Next\Components\Object;           # Object Class
@@ -21,14 +29,14 @@ class Paginator extends Object implements \Countable, \IteratorAggregate {
     /**
      * Pagination Adapter
      *
-     * @var Next\Paginate\Adapter\Adapter $adapter
+     * @var \Next\Paginate\Adapter\Adapter $adapter
      */
     private $adapter;
 
     /**
      * Scrolling Style
      *
-     * @var Next\Paginate\Style\Style $style
+     * @var \Next\Paginate\Style\Style $style
      */
     private $style;
 
@@ -62,13 +70,13 @@ class Paginator extends Object implements \Countable, \IteratorAggregate {
     /**
      * Paginator Constructor
      *
-     * @param Next\Paginate\Adapter\Adapter $adapter
+     * @param \Next\Paginate\Adapter\Adapter $adapter
      *  Paginate Adapter
      *
-     * @param Next\Paginate\Style\Style|optional $style
+     * @param \Next\Paginate\Style\Style|optional $style
      *  Optional Paginate Scrolling Style Algorithm
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for the Paginator
      */
     public function __construct( Adapter $adapter, Style $style = NULL, $options = NULL ) {
@@ -152,7 +160,7 @@ class Paginator extends Object implements \Countable, \IteratorAggregate {
     /**
      * Get Pagination Adapter
      *
-     * @return Next\Paginate\Adapter\Adapter
+     * @return \Next\Paginate\Adapter\Adapter
      *  Pagination Adapter Object
      */
     public function getAdapter() {
@@ -162,7 +170,7 @@ class Paginator extends Object implements \Countable, \IteratorAggregate {
     /**
      * Get Scrolling Style
      *
-     * @return Next\Paginate\Style\Style
+     * @return \Next\Paginate\Style\Style
      *  Pagination Style Algorithm Object
      */
     public function getStyle() {
@@ -172,10 +180,10 @@ class Paginator extends Object implements \Countable, \IteratorAggregate {
     /**
      * Set Scrolling Style
      *
-     * @param Next\Paginate\Style\Style $style
+     * @param \Next\Paginate\Style\Style $style
      *  Paginate Algorithm Style
      *
-     * @return Next\Paginate\Paginator
+     * @return \Next\Paginate\Paginator
      *  Paginator Object (Fluent Interface)
      */
     public function setStyle( Style $style ) {
@@ -204,7 +212,7 @@ class Paginator extends Object implements \Countable, \IteratorAggregate {
      * @param integer $page
      *  Current Page
      *
-     * @return Next\Paginate\Paginator
+     * @return \Next\Paginate\Paginator
      *  Paginator Object (Fluent Interface)
      */
     public function setCurrentPage( $page ) {
@@ -234,7 +242,7 @@ class Paginator extends Object implements \Countable, \IteratorAggregate {
      * @param integer $amount
      *  Number of items per page
      *
-     * @return Next\Paginate\Paginator
+     * @return \Next\Paginate\Paginator
      *  Paginator Object (Fluent Interface)
      */
     public function setItemsPerPage( $amount ) {
@@ -250,7 +258,7 @@ class Paginator extends Object implements \Countable, \IteratorAggregate {
      * Count elements of Paginator object
      *
      * In fact this acts as a wrapper to
-     * Next\Paginate\Adapter\Adapter::count() so counting routine
+     * \Next\Paginate\Adapter\Adapter::count() so counting routine
      * is not triggered twice
      *
      * @return integer

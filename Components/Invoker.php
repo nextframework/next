@@ -1,41 +1,44 @@
 <?php
 
+/**
+ * Components Invoker Class | Components\Invoker.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components;
 
 /**
- * Invoker Class
+ * Wraps two \Next\Components\Object, a Caller Object and a Callee Object,
+ * encapsulating them in a common interface as part of Extended Context Concept
  *
- * Invoker intermediates calling processes involving a caller and a callee
- * Objects by encapsulating them in a common interface
- *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components
  */
 class Invoker {
 
     /**
      * Caller Object
      *
-     * @var Next\Components\Object $caller
+     * @var \Next\Components\Object $caller
      */
     private $caller;
 
     /**
      * Callee Object
      *
-     * @var Next\Components\Object $callee
+     * @var \Next\Components\Object $callee
      */
     private $callee;
 
     /**
      * Invoker Constructor
      *
-     * @param Next\Components\Object $caller
+     * @param \Next\Components\Object $caller
      *  Caller Object
      *
-     * @param Next\Components\Object $callee
+     * @param \Next\Components\Object $callee
      *  Callee Object
      */
     function __construct ( Object $caller, Object $callee ) {
@@ -47,7 +50,7 @@ class Invoker {
     /**
      * Get Caller Object
      *
-     * @return Next\Components\Object
+     * @return \Next\Components\Object
      *  Caller Object
      */
     public function getCaller() {
@@ -57,7 +60,7 @@ class Invoker {
     /**
      * Get Callee Object
      *
-     * @return Next\Components\Object
+     * @return \Next\Components\Object
      *  Callee Object
      */
     public function getCallee() {

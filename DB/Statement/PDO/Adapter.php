@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * PDO Statement Adapter Class | DB\Statement\PDO\Adapter.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\DB\Statement\PDO;
 
 use Next\DB\Statement\StatementException;    # Statement Exception Class
@@ -28,7 +36,7 @@ class Adapter extends AbstractStatement {
      *
      * @param PDOStatement $stmt
      *
-     * @return Next\DB\Statement\PDO\Adapter
+     * @return \Next\DB\Statement\PDO\Adapter
      *  Statement Adapter Object (Fluent Interface)
      *
      * @internal
@@ -186,7 +194,7 @@ class Adapter extends AbstractStatement {
      *  Returns what called PDOStatement method return and
      *  FALSE if a ReflectionException is caught
      *
-     * @throws Next\DB\Statement\StatementException
+     * @throws \Next\DB\Statement\StatementException
      *  A PDOException was caught
      */
     private function invoke( $method, $args = array() ) {

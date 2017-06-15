@@ -1,7 +1,21 @@
 <?php
 
+/**
+ * Decorators Component: Linkify | Components\Decorators\LinkifyDecorator.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components\Decorators;
 
+/**
+ * A linkify Decorator for rule based namespaced classes
+ * and PHP Manual functions
+ *
+ * @package    Next\Components\Decorators
+ */
 class LinkifyDecorator extends AbstractDecorator {
 
     /**
@@ -11,14 +25,96 @@ class LinkifyDecorator extends AbstractDecorator {
      */
     const PHP_MANUAL_URL = 'http://www.php.net';
 
+    /**
+     * Namespaced Class/Function RGEXP
+     *
+     * @var string
+     */
+    const REGEXP = '(?:
+                        \\\\?(?<namespace>(\\\\?\w+\\\\)+
+                        \w+)
+                        (?:(::)?)
+                        (?:(?<method>\w+)\(\))?
+                    |
+                        (?<function>\w+)\(\)?
+                    )';
+
+    /**
+     * Linkify Ruleset
+     *
+     * Every Class Linkify must have rules in both indexes:
+     *
+     * - 'namespace', for fully qualified namespaces WITHOUT a
+     *   specific method (i.e. Next\Application\Application)
+     * - 'full', for fully qualified namespaces PLUS a specific method
+     *   AFTER '::' (i.e. Next\Application\Application::getRouter())
+     *
+     * @var array $rules
+     */
     private $rules = array(
 
-        'Next\\.*' => array(
+        'namespace' => array(
 
-            'url'      => 'http://www.notready.com',
-            'format'   => '<a href="%1$s/%4$s.%5$s">%2$s::%3$s()</a>'
-        )
+            /**
+             * @internal
+             *
+             * Next Framework API Documentation with phpDocumentor 2. E.g:
+             *
+             * Next\Application\Application translates to
+             *     next.application.application.html
+             */
+            'Next\\\\' => array(
+
+                'url'      => 'http://nextframework.github.io/api',
+                'format'   => '<a href="%1$s/%4$s.html">%2$s</a>'
+            ),
+        ),
+
+        'full' => array(
+
+            /**
+             * @internal
+             *
+             * Next Framework API Documentation with phpDocumentor 2. E.g:
+             *
+             * Next\Application\Application::getRouter() translates to
+             *     next.application.application.html#method_getRouter
+             */
+            'Next\\\\' => array(
+
+                'url'      => 'http://nextframework.github.io/api',
+                'format'   => '<a href="%1$s/%4$s.html#method_%3$s">%2$s::%3$s()</a>'
+            ),
+        ),
     );
+
+    /**
+     * List of PHP Function and/or resources with hotlinks
+     * on PHP Manual (i.e. http://www.php.net/{function})
+     *
+     * @var array $functions
+     */
+    private $functions = array();
+
+    /**
+     * Additional Initialization.
+     *
+     * Lists all PHP Functions and/or resources with hotlinks on PHP Manual
+     */
+    public function init() {
+
+        $functions = get_defined_functions();
+        $functions = $functions['internal'];
+
+        $this -> functions = array_merge( $functions,
+
+            array(
+                '__halt_compiler()', 'array', 'die', 'echo', 'empty', 'eval',
+                'exit', 'include', 'include_once', 'isset', 'list', 'print',
+                'require', 'require_once', 'return', 'unset'
+            )
+        );
+    }
 
     // Decorator Interface Method Implementation
 
@@ -27,34 +123,29 @@ class LinkifyDecorator extends AbstractDecorator {
      *
      *  Replaces all internal functions and class' methods with links pointing to PHP Manual
      *
-     *  @return Next\Components\Exception\ErrorExceptionDecorator
+     *  @return \Next\Components\Exception\ErrorExceptionDecorator
      *    LinkifyDecorator Instance (Fluent Interface)
      */
     public function decorate() {
 
-        $that =& $this;
-
         $this -> resource = preg_replace_callback(
 
-            '/((?<object>(\w+\\\\?)+)::)?(?<function>\w+)\(\)/', #'/\s?(.*?)\(\)/',
+            sprintf( '#%s#x', self::REGEXP ),
 
-            function( $matches ) use( $that ) {
+            function( $matches ) {
 
-                if( array_key_exists( 'function', $matches ) && ! empty( $matches['function'] ) ) {
-
-                    // Linkifying Classes
-
-                    if( array_key_exists( 'object', $matches ) && ! empty( $matches['object'] ) ) {
-
-                        return $this -> linkifyClasses(
-
-                            $matches['object'], $matches['function']
-                        );
-                    }
-
-                    // Linkyfying Functions
+                if( array_key_exists( 'function', $matches ) ) {
 
                     return $this -> linkifyFunctions( $matches['function'] );
+
+                } else {
+
+                    return $this -> linkifyClasses(
+
+                        $matches['namespace'],
+
+                        ( array_key_exists( 'method', $matches ) ? $matches['method'] : NULL )
+                    );
                 }
             },
 
@@ -66,54 +157,69 @@ class LinkifyDecorator extends AbstractDecorator {
 
     // Auxiliary Methods
 
-    private function linkifyClasses( $class, $method ) {
+    /**
+     * Linkify Classes and, optionally, methods
+     *
+     * @param  string $namespace
+     *  Class namespace
+     *
+     * @param  string|optional $method
+     *  Optional Class' method
+     *
+     * @return string
+     *  Decoratable resource with found classes/methods linkified
+     */
+    private function linkifyClasses( $namespace, $method = NULL ) {
 
-        foreach( $this -> rules as $rule => $data ) {
+        $ruleset = ( empty( $method ) ? $this -> rules['namespace'] : $this -> rules['full'] );
 
-            if( preg_match( sprintf( '/%s/', $rule ), $class ) != 0 ) {
+        foreach( $ruleset as $rule => $data ) {
+
+            if( preg_match( sprintf( '/%s/', $rule ), $namespace ) != 0 ) {
 
                 /**
-                 *  Available Arguments
+                 *  @internal
                  *
                  *  In order to use them the rule defined in 'format' index
                  *  should use argument swapping, as described in sprintf() docs
                  *
+                 * The following arguments will be available, in the following order:
+                 *
                  *  - Match URL
-                 *  - Class name, "as is"
-                 *  - Method name, "as is"
-                 *  - Class name, backslashes changed to dots, lowercased
-                 *  - Method name, lowercased
+                 *  - Fully Qualified Namespace (backlashes preserved)
+                 *  - Method name
+                 *  - Fully Qualified Namespace (backslashes changed to dots)
                  */
                 return sprintf(
 
                     $data['format'],
 
-                    $data['url'], $class, $method,
+                    $data['url'], $namespace, $method,
 
-                    str_replace( '\\', '.', strtolower( $class ) ), strtolower( $method )
+                    str_replace( '\\', '.', $namespace ), $method
                 );
             }
         }
 
-        // If no pattern match, let's assume we're dealing with PHP Internal Classes
-
-        return sprintf(
-
-            '<a href="%s/%s.%s">%s::%s()</a>', self::PHP_MANUAL_URL,
-
-            strtolower( $class ), strtolower( $method ), $class, $method
-        );
+        return ( empty( $method ) ? $namespace : sprintf( '%s\%s::%s()', $namespace, $method ) );
     }
 
+    /**
+     * Linkify (PHP) Functions
+     *
+     * @param  string $expression
+     *  Expression where to look for (PHP) Functions to linkify
+     *
+     * @return string
+     *  Decoratable resource with (PHP) Functions linkified
+     */
     private function linkifyFunctions( $expression ) {
 
-        // Linking standalone functions
+        // Linking standalone functions/resources
 
-        $functions = get_defined_functions();
+        $exp = trim( $expression, '()' );
 
-        $exp = trim( $expression, '()' );   # No parenthesis, please
-
-        if( in_array( $exp, $functions['internal'] ) ) {
+        if( in_array( $exp, $this -> functions ) ) {
 
             return sprintf(
 
@@ -124,6 +230,8 @@ class LinkifyDecorator extends AbstractDecorator {
 
         }
 
-        return $expression;
+        // Not a recognized PHP function/resource
+
+        return sprintf( '%s()', $expression );
     }
 }

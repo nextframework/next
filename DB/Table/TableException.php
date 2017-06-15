@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Database Table Exception Exception Class | DB\Table\TableException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\DB\Table;
 
 use Next\DB\Driver\DriverException;          # Driver Exception Class
@@ -72,7 +80,7 @@ class TableException extends \Next\Components\Debug\Exception {
      * @param string $table
      *  Table name
      *
-     * @return Next\DB\Table\TableException
+     * @return \Next\DB\Table\TableException
      *  Exception to when the PRIMARY KEY column has not been defined in Table Class
      */
     public static function missingPrimaryKey( $table ) {
@@ -88,7 +96,7 @@ class TableException extends \Next\Components\Debug\Exception {
     /**
      * Unable to insert new record
      *
-     * @return Next\DB\Table\TableException
+     * @return \Next\DB\Table\TableException
      *  Exception when there is nothing to insert
      */
     public static function nothingToInsert() {
@@ -98,7 +106,7 @@ class TableException extends \Next\Components\Debug\Exception {
    /**
      * Unable to update an existent record
      *
-     * @return Next\DB\Table\TableException
+     * @return \Next\DB\Table\TableException
      *  Exception when there is nothing to update
      */
     public static function nothingToUpdate() {
@@ -108,11 +116,11 @@ class TableException extends \Next\Components\Debug\Exception {
     /**
      * Unable to prepare statement
      *
-     * @param Next\DB\Driver\DriverException $e
+     * @param \Next\DB\Driver\DriverException $e
      *  DriverException caught while invoking
-     *  Next\DB\Driver\Driver::prepare()
+     *  \Next\DB\Driver\Driver::prepare()
      *
-     * @return Next\DB\Table\TableException
+     * @return \Next\DB\Table\TableException
      *  Exception for statement preparing failure
      */
     public static function prepare( DriverException $e ) {
@@ -122,11 +130,11 @@ class TableException extends \Next\Components\Debug\Exception {
     /**
      * Unable to execute statement
      *
-     * @param Next\DB\Statement\StatementException $e
+     * @param \Next\DB\Statement\StatementException $e
      *  StatementException caught while invoking
-     *  Next\DB\Statement\Statement::execute()
+     *  \Next\DB\Statement\Statement::execute()
      *
-     * @return Next\DB\Table\TableException
+     * @return \Next\DB\Table\TableException
      *  Exception for statement execution failure
      */
     public static function execute( StatementException $e ) {

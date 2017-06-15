@@ -1,14 +1,20 @@
 <?php
 
+/**
+ * Array Utils Class | Components\Utils\ArrayUtils.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components\Utils;
 
 /**
- * Arrays Utils Class
+ * Collection of Array utility routines not present in original
+ * language or improved and/or expanded versions of them
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package Next\Components\Utils
  */
 class ArrayUtils {
 
@@ -298,7 +304,7 @@ class ArrayUtils {
     /**
      * Transpose a multidimensional array
      *
-     * @param  array $array
+     * @param array $array
      *   Multidimensional array to transpose
      *
      * @return array
@@ -320,10 +326,10 @@ class ArrayUtils {
      *
      * Defaults to TRUE, zeros are allowed
      *
-     * @param  array   $array
+     * @param array $array
      *  Array to filter
      *
-     * @param  boolean|optional $allowZeros
+     * @param boolean|optional $allowZeros
      *  Define whether or not zeros will be allowed in filtered array. If FALSE,
      *  array_filter() with its default behavior will be used. Otherwise, we'll use
      *  strlen() as callback.

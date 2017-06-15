@@ -1,10 +1,23 @@
 <?php
 
+/**
+ * File Upload Methods Interface | File\Upload\Methods\Method.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\File\Upload\Methods;
 
 use Next\Validate\Validator;                         # Validator Interface
 use Next\File\Upload\PostProcessor\PostProcessor;    # Post Processor Interface
 
+/**
+ * Defines all methods that must be present in an File Upload Method Strategy Class
+ *
+ * @package    Next\File\Upload
+ */
 interface Method {
 
     /**
@@ -15,7 +28,7 @@ interface Method {
     /**
      * Add an external Validator to the Chain
      *
-     * @param Next\Validate\Validator $validator
+     * @param \Next\Validate\Validator $validator
      */
     public function addValidator( Validator $validator );
 
@@ -27,7 +40,7 @@ interface Method {
     /**
      * Add an Upload Post-Processor
      *
-     * @param Next\File\Upload\PostProcessor $processor
+     * @param \Next\File\Upload\PostProcessor $processor
      *  Upload Post-Processor
      */
     public function addPostProcessor( PostProcessor $processor );

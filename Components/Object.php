@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * The Object Class | Components\Object.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components;
 
 use Next\Components\Interfaces\Contextualizable;    # Contextualizable Interface
@@ -7,12 +15,22 @@ use Next\Components\Interfaces\Informational;       # Informational Interface
 use Next\Components\Interfaces\Parameterizable;     # Informational Interface
 
 /**
- * Next Object Class
+ * The Object is the base Class of (almost) every class in Next Framework.
  *
- * @author        Bruno Augusto
+ * It implements the **Extended Context** Concept defined by Contextualizable
+ * Interface through which an Object can bridge methods of multiple
+ * classes to themselves, simulating multiple inheritance.
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * It also implements the **Informational Messages Concept** defined by
+ * Informational Interface through which an Object can pass on
+ * Error, Information and Success Messages.
+ *
+ * Last but not least, it implements the **Parameterizable Concept** through
+ * which an Object can have multiple Class Parameters without the need of
+ * constructor overwriting (pretty much like JavaScript Object arguments),
+ * reinforcing the **Additional Initialization Concept**
+ *
+ * @package    Next\Components
  */
 class Object extends Prototype implements Contextualizable, Informational, Parameterizable {
 
@@ -47,22 +65,22 @@ class Object extends Prototype implements Contextualizable, Informational, Param
     /**
      * Context Object
      *
-     * @var Next\Components\Context $context
+     * @var \Next\Components\Context $context
      */
     private $context;
 
     /**
      * Object Parameters
      *
-     * @var Next\Components\Parameter $options
+     * @var \Next\Components\Parameter $options
      */
     protected $options;
 
     /**
      * Object Constructor
      *
-     * @param mixed|optional $defaultOptions
-     *  Child class default options
+     * @param mixed|optional $options
+     *  Child class additional options
      */
     public function __construct( $options = NULL ) {
 
@@ -167,21 +185,21 @@ class Object extends Prototype implements Contextualizable, Informational, Param
     /**
      * Register a new Invoker Object to be used as context extension
      *
-     * @param Next\Components\Invoker $invoker
+     * @param \Next\Components\Invoker $invoker
      *  Invoker Object
      *
      * @param string|array|optional $methods
      *  One or more methods accessible through extended Context.
      *  Defaults to NULL, which means almost all PUBLIC methods will be accessible
      *
-     *   @param string|array|optional $properties
+     * @param string|array|optional $properties
      *  One or more properties accessible through extended Context
      *  Defaults to NULL, which means all PROTECTED properties will be accessible
      *
-     * @return Next\Components\Object
+     * @return \Next\Components\Object
      *  Object Instance (Fluent Interface)
      *
-     * @see Next\Components\Context::extend()
+     * @see \Next\Components\Context::extend()
      */
     final public function extend( Invoker $invoker, $methods = NULL, $properties = NULL ) {
 
@@ -200,7 +218,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      * @return array
      *  Registered Context Callables
      *
-     * @see Next\Components\Context::getCallables()
+     * @see \Next\Components\Context::getCallables()
      */
     public function getCallables() {
          return $this -> context -> getCallables();
@@ -271,11 +289,11 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      *
      * @return mixed|boolean
      *  Return what extended method returns or FALSE if a ReflectionException
-     *  is caught in Next\Components\Context::call()
+     *  is caught in \Next\Components\Context::call()
      *
-     * @throws Next\Components\ComponentsException
+     * @throws \Next\Components\ComponentsException
      *  Object Constructor was overwritten without invoking it through
-     *  parent context instead of using the Next\Components\Object::init()
+     *  parent context instead of using the \Next\Components\Object::init()
      */
     public function __call( $method, array $args = array() ) {
 
@@ -315,9 +333,9 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      * @param mixed $value
      *  New value for the property
      *
-     * @throws Next\Components\ComponentsException
+     * @throws \Next\Components\ComponentsException
      *  Object Constructor was overwritten without invoking it through
-     *  parent context instead of using the Next\Components\Object::init()
+     *  parent context instead of using the \Next\Components\Object::init()
      */
     public function __set( $property, $value ) {
 
@@ -347,9 +365,9 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      * @param string $property
      *  Property trying to be retrieved
      *
-     * @throws Next\Components\ComponentsException
+     * @throws \Next\Components\ComponentsException
      *  Object Constructor was overwritten without invoking it through
-     *  parent context instead of using the Next\Components\Object::init()
+     *  parent context instead of using the \Next\Components\Object::init()
      */
     public function __get( $property ) {
 

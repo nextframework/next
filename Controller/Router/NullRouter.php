@@ -1,27 +1,32 @@
 <?php
 
+/**
+ * Controller "Null" Router Class | Controller\Router\NullRouter.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Controller\Router;
 
 use Next\Application\Application;    # Application Interface
 
 /**
- * Null Router Class
+ * The Null Router accomplishes all interface and abstraction methods
+ * but in fact doesn't do anything.
  *
- * The Null Router accomplishes all interface and abstraction methods but in
- * fact doesn't do anything, useful when some component doesn't needs Routing,
- * like our built-in Exception Handlers
+ * It's useful when some resource doesn't need routing but may need
+ * to abort the Response Flow
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components\Router
  */
 class NullRouter extends AbstractRouter {
 
     /**
      * Finds a match Route
      *
-     * @param Next\Application\Application $application
+     * @param \Next\Application\Application $application
      *  Application to iterate Controllers
      *
      * @return boolean

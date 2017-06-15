@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Database Query Renderers Interface | DB\Query\Renderer\Renderer.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\DB\Query\Renderer;
 
 use Next\DB\Query\Query;    # Query Renderer Interface
@@ -111,7 +119,7 @@ interface Renderer extends Query {
      * @param array $fields
      *  An associative array, where keys are the fields and values orientations
      */
-    public function order( array $field );
+    public function order( array $fields );
 
     /**
      * Render the LIMIT Clause
@@ -127,15 +135,15 @@ interface Renderer extends Query {
     /**
      * Render the JOIN Clause
      *
-     * @param  string|array $table
+     * @param string|array $table
      *  - A string with the JOIN Table
      *  - An associative single-index array for JOIN Table and its alias. E.g.:
      *  <code>array( 'm' => 'members' )</code>
      *
-     * @param  string $on
+     * @param string $on
      *  The ON Clause
      *
-     * @param  string|optional $type
+     * @param string|optional $type
      *  The JOIN Type. Defaults to INNER JOIN
      */
     public function join( $table, $on, $type = Query::INNER_JOIN );

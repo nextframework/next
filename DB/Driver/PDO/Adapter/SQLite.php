@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * PDO Driver Adapter: SQLite | DB\Driver\PDO\Adapter\SQLite.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\DB\Driver\PDO\Adapter;
 
 use Next\DB\Driver\DriverException;    # Driver Exception Class
@@ -23,7 +31,7 @@ class SQLite extends AbstractPDO {
      * @return string
      *  SQLite Adapter DSN used by PDO Connection
      *
-     * @throws Next\DB\Driver\DriverException
+     * @throws \Next\DB\Driver\DriverException
      *  Required <strong>Path</strong> or <strong>File</strong>
      *  parameters was not set in Connection Parameters
      */
@@ -44,7 +52,7 @@ class SQLite extends AbstractPDO {
     /**
      * Check for SQLite Adapter Requirements
      *
-     * @throws Next\DB\Driver\DriverException
+     * @throws \Next\DB\Driver\DriverException
      *  PDO_SQLITE Extension was not loaded
      */
     protected function checkRequirements() {
@@ -75,7 +83,7 @@ class SQLite extends AbstractPDO {
      * IMPORTANT: The Symbol CANNOT be a single quote ( ' ), otherwise SQLite will return
      *            the column's name instead of column's value
      *
-     * @return Next\DB\Query\Renderer\Renderer
+     * @return \Next\DB\Query\Renderer\Renderer
      *  MySQL Renderer (yes! MySQL Renderer, read comment above)
      */
     public function getRenderer() {

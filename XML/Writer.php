@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * XML Writer Class | XML\Writer.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\XML;
 
 use Next\HTTP\Response\ResponseException;           # Response Exception Class
@@ -82,7 +90,7 @@ class Writer extends Object {
      * @param array|optional $attributes
      *  Parent Node Attributes
      *
-     * @return Next\XML\Writer
+     * @return \Next\XML\Writer
      *  XML Writer Object (Fluent Interface)
      */
     public function addParent( $name, array $attributes = array() ) {
@@ -115,7 +123,7 @@ class Writer extends Object {
      * @param boolean|optional $close
      *  If TRUE closes the first parent node of the child
      *
-     * @return Next\XML\Writer
+     * @return \Next\XML\Writer
      *  XML Writer Object (Fluent Interface)
      */
     public function addChild( $name, $value = NULL, array $attributes = array(), $close = FALSE ) {
@@ -156,7 +164,7 @@ class Writer extends Object {
      *
      * Otherwise the output will be returned 'as is'
      *
-     * @param Next\HTTP\Response|optional $response
+     * @param \Next\HTTP\Response|optional $response
      *
      *   <p>Response Object</p>
      *
@@ -233,7 +241,7 @@ class Writer extends Object {
     /**
      * Get XML Writer Options
      *
-     * @return Next\Components\Parameter
+     * @return \Next\Components\Parameter
      *  Parameter Object with merged options
      */
     public function getOptions() {

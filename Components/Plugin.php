@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Plugin Component Class | Components\Plugin.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components;
 
 use Next\Application\Application;                      # Application Interface
@@ -14,6 +22,13 @@ use Next\Components\Events\Listener;                   # Event Listener Class
 
 use Next\DB\Table\Manager;                             # Table Manager Class
 
+/**
+ * Defines the base of a Plugin Object, with intermediary routines
+ * before and after every action, from its installation in a
+ * \Next\Application\Application to their physical removal from the disk
+ *
+ * @package    Next\Components
+ */
 abstract class Plugin extends Object {
 
     /**
@@ -46,42 +61,42 @@ abstract class Plugin extends Object {
     /**
      * Event Handler Object
      *
-     * @var Next\Components\Events\Handler
+     * @var \Next\Components\Events\Handler
      */
     protected $eventHandler;
 
     /**
      * Application Object
      *
-     * @var Next\Application\Application $application
+     * @var \Next\Application\Application $application
      */
     protected $application;
 
     /**
      * Table Manager
      *
-     * @var Next\DB\Table\Manager $manager
+     * @var \Next\DB\Table\Manager $manager
      */
     protected $manager;
 
     /**
      * Request Object
      *
-     * @var Next\HTTP\Request $request
+     * @var \Next\HTTP\Request $request
      */
     protected $request;
 
     /**
      * Response Object
      *
-     * @var Next\HTTP\Response $response
+     * @var \Next\HTTP\Response $response
      */
     protected $response;
 
     /**
      * View Engine
      *
-     * @var Next\View\View $view
+     * @var \Next\View\View $view
      */
     protected $view;
 
@@ -120,7 +135,7 @@ abstract class Plugin extends Object {
      * property in order to build a richer GUI
      *
      * Note, however, that this will not create the route automatically and
-     * it should be prefixed with Next\Components\Plugin::$routesBaseURI
+     * it should be prefixed with \Next\Components\Plugin::$routesBaseURI
      * for the same reason as any other route
      *
      * @var string $configurationRoute
@@ -133,10 +148,10 @@ abstract class Plugin extends Object {
      * configures "shortcuts" to application resources, sets the Development Mode
      * flag and creates Event Handlers to be used within real Plugins
      *
-     * @param Next\Application\Application  $application
+     * @param \Next\Application\Application $application
      *  Application Object
      *
-     * @param Next\DB\Table\Manager|optional $manager
+     * @param \Next\DB\Table\Manager|optional $manager
      *  Table Manager to bridge Entity Repositories
      */
     public function __construct( Application $application, Manager $manager = NULL ) {
@@ -301,8 +316,8 @@ abstract class Plugin extends Object {
      *
      * Configurable Plugins doesn't mean necessarily Plugins' Objects Configuration.
      * Although this class' constructor has been overwritten,
-     * Next\Components\Object::__constructor() has been called under parent context
-     * and thus all resources, including those provided by Next\Components\Parameter
+     * \Next\Components\Object::__constructor() has been called under parent context
+     * and thus all resources, including those provided by \Next\Components\Parameter
      * are still available
      *
      * @return boolean
@@ -335,7 +350,7 @@ abstract class Plugin extends Object {
     /**
      * Get Event Handler Event Object
      *
-     * @return Next\Components\Events\Event
+     * @return \Next\Components\Events\Event
      *  The Event Object
      */
     public function getEvent() {
@@ -345,7 +360,7 @@ abstract class Plugin extends Object {
     /**
      * Get Event Handler Object
      *
-     * @return Next\Components\Events\Handler
+     * @return \Next\Components\Events\Handler
      *  The Event Handler
      */
     public function getEventHandler() {
@@ -369,16 +384,16 @@ abstract class Plugin extends Object {
      *                 these Exceptions or handle them as not stoppable errors
      *
      * All default Event Listeners are provided as implementation of
-     * Next\Components\Event\Listener and requires, additionally to the
+     * \Next\Components\Event\Listener and requires, additionally to the
      * Event Object passed automatically by Event Handler,
-     * an Object instance of Next\View\View and a string with the message
+     * an Object instance of \Next\View\View and a string with the message
      * in order to create the Template Variable (success, warning, error and info, respectively)
      *
      * Also, by default, both 'info' and 'error' Event Listeners have their propagation
      * stopped, so once they are handled by Event Handler, no other Listeners will
      * be further handled
      *
-     * @see Next\Components\Events\Handler::addListener()
+     * @see \Next\Components\Events\Handler::addListener()
      */
     private function addDefaultEventListeners() {
 

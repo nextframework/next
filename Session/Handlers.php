@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Sessions Handler Class | Session\Handlers.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Session;
 
 use Next\Components\Object;                     # Object Class
@@ -21,14 +29,14 @@ class Handlers extends Object {
     /**
      * Handlers Set
      *
-     * @var Next\Components\Collections\Set $handlers
+     * @var \Next\Components\Collections\Set $handlers
      */
     private $handlers;
 
     /**
      * Active Handler
      *
-     * @var Next\Session\Handlers\Handler $handler
+     * @var \Next\Session\Handlers\Handler $handler
      */
     private $handler;
 
@@ -42,10 +50,10 @@ class Handlers extends Object {
     /**
      * Session Handlers Constructor
      *
-     * @param Next\Session\Manager $session
+     * @param \Next\Session\Manager $session
      *  Session Object
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for the Session Handler
      */
     public function __construct( Manager $session, $options = NULL ) {
@@ -60,13 +68,13 @@ class Handlers extends Object {
     /**
      * Add a new Session Handler
      *
-     * @param Next\Session\Handlers\Handler $handler
+     * @param \Next\Session\Handlers\Handler $handler
      *  Session Handler
      *
      * @param boolean|optional $activate
      *  Flag to condition the immediate activation of Handler
      *
-     * @return Next\Session\Handlers
+     * @return \Next\Session\Handlers
      *  Session Handlers Object (Fluent Interface)
      */
     public function addHandler( Handler $handler, $activate = FALSE ) {
@@ -88,12 +96,12 @@ class Handlers extends Object {
     /**
      * Change current Session Handler
      *
-     * @param string|Next\Session\Handlers\Handler $handler
+     * @param string|\Next\Session\Handlers\Handler $handler
      *  Handler Object or Handler Name
      *
-     * @throws Next\Session\Handlers\HandlerException
+     * @throws \Next\Session\Handlers\HandlerException
      *  Changing Session Handler to a invalid Handler, characterized as
-     *  instance of Next\Session\Hndlers\Handler
+     *  instance of \Next\Session\Hndlers\Handler
      */
     public function changeHandler( $handler ) {
 
@@ -153,7 +161,7 @@ class Handlers extends Object {
     /**
      * Get active Session Handler
      *
-     * @return Next\Session\Handlers\Handler
+     * @return \Next\Session\Handlers\Handler
      */
     public function getHandler() {
         return $this -> handler;

@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Controllers Exception Class | Controller\ControllerException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Controller;
 
 use Next\HTTP\Request\RequestException;    # HTTP Request Exception
@@ -7,12 +15,16 @@ use Next\View\ViewException;               # View Exception
 use Next\Components\Object;                # Object Class
 
 /**
- * Controller Exception Class
+ * Defines wrapper static methods for all Exceptions thrown
+ * within the Controller Module
  *
- * @author        Bruno Augusto
+ * The ControllerException Class is also part of Error Standardization Concept
+ * through which all errors that must be sent to UI from the
+ * \Next\Controller\Controller is automatically done by
+ * \Next\Controller\Dispatcher\Dispatcher in charge, requiring the
+ * developer only to echo a Template Variable
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Controller
  */
 class ControllerException extends \Next\Components\Debug\Exception {
 
@@ -26,7 +38,7 @@ class ControllerException extends \Next\Components\Debug\Exception {
     /**
      * Invalid Controller
      *
-     * <p>Used by Next\Controller\Chain</p>
+     * <p>Used by \Next\Controller\Chain</p>
      *
      * @var integer
      */
@@ -66,12 +78,12 @@ class ControllerException extends \Next\Components\Debug\Exception {
      * Invalid Controller
      *
      * Given Object is not a valid Controller because it doesn't
-     * implements Next\Controller\Controller Interface
+     * implements \Next\Controller\Controller Interface
      *
-     * @param Next\Components\Object $object
+     * @param \Next\Components\Object $object
      *  Object used as Controller
      *
-     * @return Next\Controller\ControllerException
+     * @return \Next\Controller\ControllerException
      *  Exception for Invalid Controllers
      */
     public static function invalidController( Object $object ) {
@@ -100,7 +112,7 @@ class ControllerException extends \Next\Components\Debug\Exception {
      * And "private" properties should not have their existence tested,
      * because they are always in there.
      *
-     * @return Next\Controller\ControllerException
+     * @return \Next\Controller\ControllerException
      *  Exception for unnecessary tests being made
      */
     public static function unnecessaryTest() {
@@ -120,10 +132,10 @@ class ControllerException extends \Next\Components\Debug\Exception {
     /**
      * HTTP GET Param not found
      *
-     * @param Next\HTTP\Request\RequestException $e
+     * @param \Next\HTTP\Request\RequestException $e
      *     RequestException caught
      *
-     * @return Next\Controller\ControllerException
+     * @return \Next\Controller\ControllerException
      *  Exception for missing HTTP GET Param
      */
     public static function paramNotFound( RequestException $e ) {
@@ -139,10 +151,10 @@ class ControllerException extends \Next\Components\Debug\Exception {
     /**
      * Template Variable Assignment Failure
      *
-     * @param Next\View\ViewException $e
+     * @param \Next\View\ViewException $e
      *     ViewException caught
      *
-     * @return Next\Controller\ControllerException
+     * @return \Next\Controller\ControllerException
      *  Exception for Template Variable assignment failure
      */
     public static function assignmentFailure( ViewException $e ) {
@@ -158,10 +170,10 @@ class ControllerException extends \Next\Components\Debug\Exception {
     /**
      * Template Variable Removal Failure
      *
-     * @param Next\View\ViewException $e
+     * @param \Next\View\ViewException $e
      *     ViewException caught
      *
-     * @return Next\Controller\ControllerException
+     * @return \Next\Controller\ControllerException
      *  Exception for Template Variable removal failure
      */
     public static function removalFailure( ViewException $e ) {

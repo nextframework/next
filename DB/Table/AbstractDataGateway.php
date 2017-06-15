@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Database Gateway Abstract Class | DB\Table\AbstractDataGateway.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\DB\Table;
 
 use Next\DB\Query\Query;                 # Query Interface
@@ -20,7 +28,7 @@ abstract class AbstractDataGateway extends Object implements DataGateway {
     /**
      * Table Manager Object
      *
-     * @var Next\DB\Table\Manager $manager
+     * @var \Next\DB\Table\Manager $manager
      */
     protected $manager;
 
@@ -36,16 +44,16 @@ abstract class AbstractDataGateway extends Object implements DataGateway {
      *
      * Set Table Manager object and Data Source obtained from fetching processes
      *
-     * @param Next\DB\Table\Manager $manager
+     * @param \Next\DB\Table\Manager $manager
      *  Table Manager Object
      *
      * @param mixed $source
      *  Source Data to populate the Rowset
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for each DataGateway
      *
-     * @see Next\DB\Table\AbstractDataGateway::setSource()
+     * @see \Next\DB\Table\AbstractDataGateway::setSource()
      */
     public function __construct( Manager $manager, $source, $options = NULL ) {
 
@@ -107,7 +115,7 @@ abstract class AbstractDataGateway extends Object implements DataGateway {
     /**
      * Get Table Manager
      *
-     * @return Next\DB\Table\Manager
+     * @return \Next\DB\Table\Manager
      *  Table Manager Object
      */
     public function getManager() {

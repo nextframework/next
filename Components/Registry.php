@@ -1,21 +1,27 @@
 <?php
 
+/**
+ * Singleton-registry Component Class | Component\Registry.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components;
 
 /**
- * Registry Class
+ * Defines a Collection of resources perpetuated over the Request Flow
+ * through one single instance provided by the Singleton Pattern
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components
  */
 class Registry {
 
     /**
      * Registry Instance
      *
-     * @staticvar Next\Components\Registry $_instance
+     * @staticvar \Next\Components\Registry $_instance
      */
     private static $_instance;
 
@@ -39,7 +45,7 @@ class Registry {
     /**
      * Get Registry Instance
      *
-     * @return Next\Components\Registry
+     * @return \Next\Components\Registry
      *  Registry Instance
      */
     public static function getInstance() {
@@ -61,7 +67,7 @@ class Registry {
      * @param mixed $value
      *  Value to be stored
      *
-     * @return Next\Components\Registry
+     * @return \Next\Components\Registry
      *  Registry Object (Fluent Interface)
      */
     public function set( $key, $value ) {

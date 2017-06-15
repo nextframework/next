@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Controllers Abstract Class | Controller\AbstractController.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Controller;
 
 use Next\HTTP\Request\RequestException;    # HTTP Request Exception
@@ -9,69 +17,54 @@ use Next\Application\Application;          # Applications Interface
 use Next\Components\Object;                # Object Class
 
 /**
- * Controller Abstract Class
+ * Defines the base structure for a Controller to be used in
+ * conjunction with \Next\Application\Application created with Next Framework
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Controller
  */
 abstract class AbstractController extends Object implements Controller {
 
     /**
      * Application Object
      *
-     * @var Next\Application\Application $application
+     * @var \Next\Application\Application $application
      */
     protected $application;
 
     /**
      * Request Object
      *
-     * @var Next\HTTP\Request $request
+     * @var \Next\HTTP\Request $request
      */
     protected $request;
 
     /**
      * Response Object
      *
-     * @var Next\HTTP\Response $response
+     * @var \Next\HTTP\Response $response
      */
     protected $response;
 
     /**
      * View Engine
      *
-     * @var Next\View\View $view
+     * @var \Next\View\View $view
      */
     protected $view;
 
     /**
      * Controller Constructor
+     * Configures Controller Object with the Application Object provided, if any
      *
-     * <p>
-     *     If an Application Object is provided, the Controller will
-     *     be configured.
-     * </p>
+     * Application Objects are provided usually, but not restricted to, during Dispatching Process
      *
-     * <p>
-     *     An Application is not passed ONLY in concrete classes extending
-     *     Next\Application\AbstractApplication, when building
-     *     Application Chain
-     * </p>
+     * @param \Next\Application\Application|optional $application
+     *  Application Object
      *
-     * @param Next\Application\Application|optional $application
-     *
-     *   <p>Application Object</p>
-     *
-     *   <p>
-     *       With Standard Router, used only when
-     *       <em>DEVELOPMENT_MODE<em> is not <strong>2</strong>
-     *   </p>
+     * @param mixed|optional $options
+     *  Additional options
      */
     final public function __construct( Application $application = NULL, $options = NULL ) {
-
-        // If we have an Application (dispatching process), let's handle it
 
         if( ! is_null( $application ) ) {
 
@@ -101,7 +94,7 @@ abstract class AbstractController extends Object implements Controller {
     /**
      * Get Request Object
      *
-     * @return Next\HTTP\Request
+     * @return \Next\HTTP\Request
      *  Request Object
      */
     public function getRequest() {
@@ -111,7 +104,7 @@ abstract class AbstractController extends Object implements Controller {
     /**
      * Get Response Object
      *
-     * @return Next\HTTP\Response
+     * @return \Next\HTTP\Response
      *  Response Object
      */
     public function getResponse() {
@@ -121,7 +114,7 @@ abstract class AbstractController extends Object implements Controller {
     /**
      * Get Application Object
      *
-     * @return Next\Application\Application|NULL
+     * @return \Next\Application\Application|NULL
      *  Application Object if child classes have been fully constructed passing
      *  an Object to the Class Constructor and NULL otherwise
      */
@@ -141,9 +134,9 @@ abstract class AbstractController extends Object implements Controller {
      *
      * @return boolean
      *  TRUE if exists, FALSE otherwise OR if a
-     *  Next\HTTP\Request\RequestException is caught
+     *  \Next\HTTP\Request\RequestException is caught
      *
-     * @throws Next\Controller\ControllerException
+     * @throws \Next\Controller\ControllerException
      *  Testing existence of internal properties
      */
     public function __isset( $param ) {
@@ -175,11 +168,11 @@ abstract class AbstractController extends Object implements Controller {
      *
      * @return mixed Dynamic Param Value
      *
-     * @throws Next\Controller\ControllerException
+     * @throws \Next\Controller\ControllerException
      *  Trying to access internal properties prefixed with an underscore
      *  without use their correct accessors
      *
-     * @throws Next\Controller\ControllerException
+     * @throws \Next\Controller\ControllerException
      *  Trying to access non-existent param
      */
     public function __get( $param ) {
@@ -201,8 +194,8 @@ abstract class AbstractController extends Object implements Controller {
      *
      * <p>
      *     Allows to set a Template Variable directly from Controller
-     *     context, instead of using Next\View\View::assign() or
-     *     Next\View\View::__set() (if implemented)
+     *     context, instead of using \Next\View\View::assign() or
+     *     \Next\View\View::__set() (if implemented)
      * </p>
      *
      * <p>This method is slightly different of others.</p>
@@ -218,8 +211,8 @@ abstract class AbstractController extends Object implements Controller {
      * @param string $value
      *  Template Variable Value
      *
-     * @throws Next\Controller\ControllerException
-     *  A Next\View\ViewException was caught due a Template Variable
+     * @throws \Next\Controller\ControllerException
+     *  A \Next\View\ViewException was caught due a Template Variable
      *  forbiddenness, because it conflicts with a reserved (or internal)
      *  Template Variable name
      */
@@ -256,11 +249,11 @@ abstract class AbstractController extends Object implements Controller {
      * @param string $param
      *  Desired Template Variable
      *
-     * @throws Next\Controller\ControllerException
+     * @throws \Next\Controller\ControllerException
      *  Trying to unset an forbidden Template Variable,
      *  always prefixed with an unserscore.
      *
-     * @throws Next\Controller\ControllerException
+     * @throws \Next\Controller\ControllerException
      *  Trying to unset a nonexistent Template Variable
      */
     public function __unset( $param ) {

@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * IANA MIME-Type Validator Class | Validate\IANA\MIME.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Validate\IANA;
 
 use Next\Validate\Validator;    # Validator Interface

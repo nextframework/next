@@ -1,17 +1,22 @@
 <?php
 
+/**
+ * HTTP Stream Socket Adapter Class | HTTP\Stream\Adapter\Socket.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Stream\Adapter;
 
 use Next\HTTP\Stream\Context\Context;             # Stream Context Interface
 use Next\HTTP\Stream\Context\SocketContext;       # Stream Context Socket ContextClass
 
 /**
- * HTTP Stream Socket Adapter Class
+ * Defines an Adapter Class using regular FileSystem
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Stream
  */
 class Socket extends AbstractAdapter {
 
@@ -143,7 +148,7 @@ class Socket extends AbstractAdapter {
      *     Useful for advisory locks before attempt to modify the file.
      *
      *     E.g: A simplified but equivalent implementation of
-     *     Next\HTTP\Stream\Writer::write() that prevents a zero-length data to
+     *     \Next\HTTP\Stream\Writer::write() that prevents a zero-length data to
      *     be written, warning the user about possible data loss.
      *
      *     <code>
@@ -217,13 +222,13 @@ class Socket extends AbstractAdapter {
      * @param string|optional $mode
      *  Opening Mode
      *
-     * @param Next\HTTP\Stream\Context\Context|optional $context
+     * @param \Next\HTTP\Stream\Context\Context|optional $context
      *  Optional Stream Context to be used
      *
-     * @throws Next\HTTP\Stream\Adapter\AdapterException
+     * @throws \Next\HTTP\Stream\Adapter\AdapterException
      *  Chosen mode is invalid
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for Caching Schema
      */
     public function __construct( $filename, $mode = self::READ, Context $context = NULL, $options = NULL ) {
@@ -248,7 +253,7 @@ class Socket extends AbstractAdapter {
     /**
      * Open a File (or URL)
      *
-     * @throws Next\HTTP\Stream\Adapter\AdapterException
+     * @throws \Next\HTTP\Stream\Adapter\AdapterException
      *  Unable to open stream
      */
     public function open() {
@@ -307,7 +312,7 @@ class Socket extends AbstractAdapter {
      * @return boolean
      *  TRUE if EOF (End-of-File) was achieved and FALSE otherwise
      *
-     * @throws Next\HTTP\Stream\Adapter\AdapterException
+     * @throws \Next\HTTP\Stream\Adapter\AdapterException
      *  Stream is not opened
      */
     public function eof() {
@@ -325,7 +330,7 @@ class Socket extends AbstractAdapter {
      * @return integer|boolean
      *  Pointer position if it could be retrieved and FALSE otherwise
      *
-     * @throws Next\HTTP\Stream\Adapter\AdapterException
+     * @throws \Next\HTTP\Stream\Adapter\AdapterException
      *  Pointer position could be be retrieved
      */
     public function tell() {
@@ -350,7 +355,7 @@ class Socket extends AbstractAdapter {
      * @return integer|boolean
      *  Returns the length of the Stream if it's valid and FALSE otherwise
      *
-     * @see Next\HTTP\Stream\Adapter\Adapter::valid()
+     * @see \Next\HTTP\Stream\Adapter\Adapter::valid()
      */
     public function size() {
 
@@ -368,7 +373,7 @@ class Socket extends AbstractAdapter {
      *  Always TRUE, because if Stream is not opened an Exception
      *  will be thrown
      *
-     * @throws Next\HTTP\Stream\Adapter\AdapterException
+     * @throws \Next\HTTP\Stream\Adapter\AdapterException
      *  Stream is not a valid Resource.
      */
     public function isOpened() {
@@ -415,7 +420,7 @@ class Socket extends AbstractAdapter {
      *  If Stream is not valid, -1 will be returned, just as
      *  fomality
      *
-     * @throws Next\HTTP\Stream\Adapter\AdapterException
+     * @throws \Next\HTTP\Stream\Adapter\AdapterException
      *  Unable to seek a position in Stream
      */
     public function seek( $position ) {
@@ -514,7 +519,7 @@ class Socket extends AbstractAdapter {
      * This method is called after Iterator::rewind() and Iterator::next()
      * to check if the current position still valid
      *
-     * This a "Interface Alias" for Next\HTTP\Stream\Adapter\Adapter::eof()
+     * This a "Interface Alias" for \Next\HTTP\Stream\Adapter\Adapter::eof()
      *
      * @return boolean
      *  TRUE if EOF (End-of-File) was NOT achieved and FALSE otherwise
@@ -540,10 +545,10 @@ class Socket extends AbstractAdapter {
      * @return boolean
      *  Always TRUE, because on failure an Exception is thrown
      *
-     * @throws Next\HTTP\Stream\Adapter\AdapterException
+     * @throws \Next\HTTP\Stream\Adapter\AdapterException
      *  Stream is not readable and opening more requires readability
      *
-     * @throws Next\HTTP\Stream\Adapter\AdapterException
+     * @throws \Next\HTTP\Stream\Adapter\AdapterException
      *  Stream is not writable (nor its parnt directory) and opening mode
      *  required writability
      */

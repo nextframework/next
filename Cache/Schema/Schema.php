@@ -1,19 +1,26 @@
 <?php
 
+/**
+ * Caching Schemas Interface | Cache\Schema\Schema.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Cache\Schema;
 
 /**
- * Caching Schema Interface
+ * Defines the Caching Schema Type, with all methods that must be present
+ * in an Caching Schema, be it through \Next\Cache\Schema\AbstractSchema
+ * or the concrete implementations of it
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2017 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Cache\Schema
  */
 interface Schema {
 
     /**
-     * Caching Routine to be executed by Next\Controller\Front
+     * Caching Routine to be executed by \Next\Controller\Front
      */
     public function run();
 }

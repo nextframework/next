@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Pagination Style Class: Standard | Paginate\Style\Standard.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Paginate\Style;
 
 use Next\Paginate\Paginator;    # Paginator Class
@@ -34,7 +42,7 @@ class Standard implements Style {
      * @param integer $amount
      *  Number of Pages displayed before current page
      *
-     * @return Next\Paginate\Style\Style
+     * @return \Next\Paginate\Style\Style
      *  Paginate Style Object (Fluent Interface)
      */
     public function setBefore( $amount ) {
@@ -52,7 +60,7 @@ class Standard implements Style {
      * @param integer $amount
      *  Number of pages displayed after current page
      *
-     * @return Next\Paginate\Style\Style
+     * @return \Next\Paginate\Style\Style
      *  Paginate Style Object (Fluent Interface)
      */
     public function setAfter( $amount ) {
@@ -72,7 +80,7 @@ class Standard implements Style {
     /**
      * Build Pages Range
      *
-     * @param Next\Paginate\Paginator $paginator
+     * @param \Next\Paginate\Paginator $paginator
      *  Paginator Object
      *
      * @return array

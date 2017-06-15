@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * General File Tools Class | File\Tools.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\File;
 
 /**
@@ -48,10 +56,10 @@ class Tools {
     /**
      * Quotes a string, by wrapping it with given identifier
      *
-     * @param  string $string
+     * @param string $string
      *  String to quote
      *
-     * @param  string $identifier
+     * @param string $identifier
      *  Quote identifier
      *
      * @return string
@@ -70,7 +78,7 @@ class Tools {
      * @param integer $length
      *  The expected length after truncated
      *
-     * @param  string|optional $when
+     * @param string|optional $when
      *   Conditions to where the string will be truncated. It can be:
      *
      *   - after     => The string will be truncated in first space
@@ -80,7 +88,7 @@ class Tools {
      *   - center    => The string defined as separator will be interpolated
      *                  as close as possible to the middle of string
      *
-     * @param  string|optional $delimiter
+     * @param string|optional $delimiter
      *  The delimiter string, appended in the end of truncated string if
      *  <strong>$when</strong> is 'after' or 'before' and interpolated if
      *  <strong>$when</strong> is 'center'
@@ -139,7 +147,7 @@ class Tools {
      * Formats given file size to be more human readable, by converting bytes
      * to greater units and adding the proper acronym
      *
-     * @param  integer $size
+     * @param integer $size
      *   File szie to format
      *
      * @return string
@@ -156,7 +164,7 @@ class Tools {
     /**
      * Get file extension
      *
-     * @param  string $file
+     * @param string $file
      *  File to retrieve extension
      *
      * @return string|NULL
@@ -325,10 +333,10 @@ class Tools {
     /**
      * Copy files and folders recursively
      *
-     * @param  string $source
+     * @param string $source
      *  Path to the source file
      *
-     * @param  string $destination
+     * @param string $destination
      *  Destination path
      *
      * @return void

@@ -1,14 +1,20 @@
 <?php
 
+/**
+ * Extended Context Component Exception Class | Components\ContextException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components;
 
 /**
- * Components Exception Class
+ * Defines wrapper static methods for all Exceptions thrown
+ * within the Extended Context Concept Classes of the Components Module
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components
  */
 class ContextException extends \Next\Components\Debug\Exception {
 
@@ -58,9 +64,9 @@ class ContextException extends \Next\Components\Debug\Exception {
      * Resource not mimic-able
      *
      * @param mixed $resource
-     *  Resource trying to mimic a Next\Components\Object instance
+     *  Resource trying to mimic a \Next\Components\Object instance
      *
-     * @return Next\Components\ComponentsException
+     * @return \Next\Components\ComponentsException
      *  Resource not mimic-able
      */
     public static function notMimicable() {
@@ -80,7 +86,7 @@ class ContextException extends \Next\Components\Debug\Exception {
      * @param string $caller
      *  Object caller name
      *
-     * @return Next\Components\ComponentsException
+     * @return \Next\Components\ComponentsException
      *  Caller Object not found
      */
     public static function callerNotFound( $caller ) {
@@ -101,7 +107,7 @@ class ContextException extends \Next\Components\Debug\Exception {
      * @param string $method
      *  Method being called
      *
-     * @return Next\Components\ComponentsException
+     * @return \Next\Components\ComponentsException
      *  Method not found
      */
     public static function methodNotFound( $method ) {
@@ -126,7 +132,7 @@ class ContextException extends \Next\Components\Debug\Exception {
      * @param string $caller
      *  Object caller name
      *
-     * @return Next\Components\ComponentsException
+     * @return \Next\Components\ComponentsException
      *  Property not found
      */
     public static function propertyNotFound( $property, $caller ) {
@@ -158,7 +164,7 @@ class ContextException extends \Next\Components\Debug\Exception {
      *  If TRUE then the sentence will refer on property access.
      *  If FALSE then the sentence will refer on property change.
      *
-     * @return Next\Components\ComponentsException
+     * @return \Next\Components\ComponentsException
      *  Unable to access/modify property
      */
     public static function propertyFailure( $property, $caller, $isAccess = TRUE ) {

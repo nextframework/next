@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * View Engines Interface | View\View.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\View;
 
 use Next\View\Helper\Helper;    # View Helper Interface
@@ -88,7 +96,7 @@ interface View {
     /**
      * Add a new Composite View to be rendered
      *
-     * @param Next\View\View $view
+     * @param \Next\View\View $view
      *  Composite View to be added
      *
      * @param integer $priority
@@ -133,7 +141,7 @@ interface View {
     /**
      * Register a new Template View Helper
      *
-     * @param  Next\View\Helper\Helper $helper
+     * @param \Next\View\Helper\Helper $helper
      *  Template View Helper
      */
     public function registerHelper( Helper $helper );
@@ -270,7 +278,7 @@ interface View {
     /**
      * Get an specific Template Variable assigned
      *
-     * @param  string $tplVar
+     * @param string $tplVar
      *  The Template Variable
      */
     public function getVar( $tplVar );

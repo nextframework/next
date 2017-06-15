@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Errors and Exception Handlers Application Class | Components\Debug\Handlers\HandlersApplication.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components\Debug\Handlers;
 
 use Next\Application\AbstractApplication;           # Abstract Application Class
@@ -7,12 +15,9 @@ use Next\View\Standard as View;                     # View Engine
 use Next\Controller\Router\NullRouter as Router;    # Standard Router Class
 
 /**
- * Errors and Exception Handlers Application Class
+ * A \Next\Application\Application for our custom Error and Exception Handlers
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components\Debug
  */
 class HandlersApplication extends AbstractApplication {
 

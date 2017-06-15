@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Composite View Class | View\CompositeView.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\View;
 
 use Next\Components\Object;               # Object Class
@@ -19,19 +27,19 @@ class CompositeQueue extends Lists {
      * Check if given argument is acceptable as a Composite Views
      *
      * Check if given Object is acceptable in Composite Views Lists
-     * To be valid, the Object must implement Next\View\View Interface
+     * To be valid, the Object must implement \Next\View\View Interface
      *
-     * @param Next\Components\Object $object
+     * @param \Next\Components\Object $object
      *  An Object object
      *
-     *  The checking for Next\View\View Interface
+     *  The checking for \Next\View\View Interface
      *  will be done inside the method.
      *
      * @return boolean
      *  Always TRUE, because if given value is not a valid Composite View
      *  an Exception will be thrown
      *
-     * @throws Next\View\ViewException
+     * @throws \Next\View\ViewException
      *  Given argument is not acceptable as a Composite View
      */
     public function accept( Object $object ) {

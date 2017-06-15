@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Standard Controller Dispatcher Class | Controller\Dispatcher\Standard.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Controller\Dispatcher;
 
 use Next\Components\Debug\Exception;        # Exception Class
@@ -14,30 +22,38 @@ use Next\Components\Parameter;              # Parameter Class
 use Next\HTTP\Response;                     # HTTP Response Class
 
 /**
- * Standard Controller Dispatcher Class
+ * Standard Controller Dispatcher based on Reflection of
+ * Application Controllers, configuring their associated \Next\HTTP\Request
+ * and returning their \Next\HTTP\Response
  *
- * @author        Bruno Augusto
+ * Here is also where the Error Standardization Concept takes place,
+ * virtually resending the Response by invoking a callback defined
+ * within the \Next\Controller\ControllerException thrown
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * This handles even nested Exceptions but it's not bullet proof against
+ * infinity recursion created by the developer, redirecting the
+ * Response Flow too many times to the point soon or later the
+ * start point is reached again
+ *
+ * @package    Next\Controller\Dispatcher
  */
 class Standard extends AbstractDispatcher {
 
-    // Interface Method Implementation
+    // Dispatcher Interface Method Implementation
 
     /**
      * Dispatches the Controller
      *
-     * @param Next\Application\Application $application
+     * @param \Next\Application\Application $application
      *  Application to Configure
      *
-     * @param Next\Components\Parameter $data
+     * @param \Next\Components\Parameter $data
      *  Parameters to Configure Application
      *
-     * @return Next\HTTP\Response
+     * @return \Next\HTTP\Response
      *  Response Object
      *
-     * @throws Next\Controller\Dispatcher\DispatcherException
+     * @throws \Next\Controller\Dispatcher\DispatcherException
      *  ReflectionException was caught
      */
     public function dispatch( Application $application, Parameter $data ) {
@@ -70,11 +86,12 @@ class Standard extends AbstractDispatcher {
 
             /**
              * @internal
+             *
              * ControllerException come from Application Controllers
              * and, as part of Error Standardization Concept, should be thrown when
              * something is wrong
              *
-             * E.g.: Database Query results in FALSE instead of a Rowset Object
+             * E.g.: Database Query results in FALSE instead of a RowSet Object
              *
              * Doesn't matter the level of DEVELOPMENT MODE Constant, we'll
              * try to create a Template Variable and virtually re-send the Response,
@@ -110,8 +127,9 @@ class Standard extends AbstractDispatcher {
 
             /**
              * @internal
+             *
              * Catching ViewException grants a nice view for any sort of
-             * errors triggered by Next\View\View concrete classes, specially
+             * errors triggered by \Next\View\View concrete classes, specially
              * when they come from Magic Methods which is directly related
              * to Template Variables usage.
              *
@@ -134,10 +152,10 @@ class Standard extends AbstractDispatcher {
     /**
      * Handles a dispatchable Exception Callback
      *
-     * @param  Next\Application\Application $application
+     * @param \Next\Application\Application $application
      *  Application Object being dispatched
      *
-     * @param  Next\Components\Debug\Exception $e
+     * @param \Next\Components\Debug\Exception $e
      *  Exception thrown
      *
      * @return void
@@ -201,6 +219,7 @@ class Standard extends AbstractDispatcher {
 
             /**
              * @internal
+             *
              * If a ControllerException is caught here we handle any nested
              * ControllerException existing within the process
              *
@@ -221,6 +240,7 @@ class Standard extends AbstractDispatcher {
 
             /**
              * @internal
+             *
              * Same rules for when a ViewException is triggered during the
              * dispatching process, except here a ViewException is thrown
              * while handling any ControllerException thrown

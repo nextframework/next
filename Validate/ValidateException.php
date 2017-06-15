@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Validate Exception Class | Validate\ValidateException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Validate;
 
 use Next\Components\Object;    # Object Class
@@ -32,13 +40,13 @@ class ValidateException extends \Next\Components\Debug\Exception {
      * Invalid Chain Validator
      *
      * Given Object is not a valid Validator because it doesn't
-     * implements neither Next\Validate\Validator and/or
-     * Next\Components\Interfaces\Informational interfaces
+     * implements neither \Next\Validate\Validator and/or
+     * \Next\Components\Interfaces\Informational interfaces
      *
-     * @param Next\Components\Object $object
+     * @param \Next\Components\Object $object
      *  Object used as Validator
      *
-     * @return Next\Validate\ValidateException
+     * @return \Next\Validate\ValidateException
      *  Exception for Invalid Validators
      */
     public static function invalidChainValidator( Object $object ) {

@@ -1,13 +1,25 @@
 <?php
 
+/**
+ * HTTP Request Header Field Class: User-Agent | HTTP\Headers\Fields\Request\User-Agent.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Headers\Fields\Request;
 
-use Next\HTTP\Headers\Fields\Request;                # Request Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField;          # Header Field Abstract Class
-use Next\Validate\HTTP\Headers\Request\UserAgent;    # Request User-Agent Header Field Validator Class
+use Next\HTTP\Headers\Fields\Request;          # Request Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;    # Header Field Abstract Class
 
 /**
- * User-Agent Header Field Class
+ * Request 'User-Agent' Header Field Validator Class
+ */
+use Next\Validate\HTTP\Headers\Request\UserAgent as Validator;
+
+/**
+ * Request 'User-Agent' Header Field Class
  *
  * @author        Bruno Augusto
  *
@@ -24,11 +36,11 @@ class UserAgent extends AbstractField implements Request {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validator
+     * @return \Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new UserAgent( array( 'value' => $value ) );
+        return new Validator( array( 'value' => $value ) );
     }
 
     /**

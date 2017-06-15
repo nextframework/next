@@ -1,16 +1,22 @@
 <?php
 
+/**
+ * Decorator Exception Class | Decorators\DecoratorException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components\Decorators;
 
 use Next\Components\Object;    # Object Class
 
 /**
- * Decorator Exception Class
+ * Defines wrapper static methods for all Exceptions thrown
+ * within the Decorators Component Module
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components\Decorators
  */
 class DecoratorException extends \Next\Components\Debug\Exception {
 
@@ -24,7 +30,7 @@ class DecoratorException extends \Next\Components\Debug\Exception {
     /**
      * Invalid Decorator
      *
-     * <p>Used by Next\Components\Decorators\Chain</p>
+     * <p>Used by \Next\Components\Decorators\Chain</p>
      *
      * @var integer
      */
@@ -36,15 +42,15 @@ class DecoratorException extends \Next\Components\Debug\Exception {
      * Invalid Decorator
      *
      * Given Object is not a valid Decorator because it doesn't
-     * implements Next\Components\Decorators\Decorator
+     * implements \Next\Components\Decorators\Decorator
      *
-     * @param Next\Components\Object $object
+     * @param \Next\Components\Object $object
      *  Object assigned as Decorator
      *
-     * @return Next\Components\Decorators\DecoratorException
+     * @return \Next\Components\Decorators\DecoratorException
      *  Exception for invalid Decorators
      */
-    public static function invalidDecorators( Object $object ) {
+    public static function invalidDecorator( Object $object ) {
 
         return new self(
 

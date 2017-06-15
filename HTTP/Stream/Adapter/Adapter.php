@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP Stream Adapter Interface | HTTP\Stream\Adapter\Adapter.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Stream\Adapter;
 
 use Next\HTTP\Stream\Context\Context;    # Stream Context Interface
@@ -62,7 +70,7 @@ interface Adapter extends \SeekableIterator {
     /**
      * Set Adapter Context
      *
-     * @param Next\HTTP\Stream\Context\Context $context
+     * @param \Next\HTTP\Stream\Context\Context $context
      *  Stream Context
      */
     public function setContext( Context $context );

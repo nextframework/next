@@ -1,13 +1,25 @@
 <?php
 
+/**
+ * HTTP Response Header Field Class: Age | HTTP\Headers\Fields\Response\Age.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Headers\Fields\Response;
 
-use Next\HTTP\Headers\Fields\Response;          # Response Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField;     # Header Field Abstract Class
-use Next\Validate\HTTP\Headers\Response\Age;    # Response age Header Field Validator Class
+use Next\HTTP\Headers\Fields\Response;         # Response Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;    # Header Field Abstract Class
 
 /**
- * Age Header Field Class
+ * Response 'Age' Header Field Validator Class
+ */
+use Next\Validate\HTTP\Headers\Response\Age as Validator;
+
+/**
+ * Response 'Age' Header Field Class
  *
  * @author        Bruno Augusto
  *
@@ -24,11 +36,11 @@ class Age extends AbstractField implements Response {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validator
+     * @return \Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new Age( array( 'value' => $value ) );
+        return new Validator( array( 'value' => $value ) );
     }
 
     /**

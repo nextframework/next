@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Database Table RowSet Class | DB\Table\RowSet.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\DB\Table;
 
 use Next\Components\Utils\ArrayUtils;
@@ -164,17 +172,17 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
     /**
      * Checks whether or not an offset exists within the RowSet Data Source
      *
-     * @param  mixed|string|integer $offset
+     * @param mixed|string|integer $offset
      *  Offset to search
      *
      * @return boolean
      *  TRUE if given offset exists and FALSE otherwise
      *
-     * @throws Next\DB\Table\DataGatewayException
-     *  Thrown if trying to remove data from an empty Next\DB\Table\Table
+     * @throws \Next\DB\Table\DataGatewayException
+     *  Thrown if trying to remove data from an empty \Next\DB\Table\Table
      *
-     * @throws Next\DB\Table\DataGatewayException
-     *  Thrown if trying to test data of a Next\DB\Table\Table
+     * @throws \Next\DB\Table\DataGatewayException
+     *  Thrown if trying to test data of a \Next\DB\Table\Table
      *  from a RowSet with multiple records
      */
     public function offsetExists( $offset ) {
@@ -193,17 +201,17 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
     /**
      * Returns the value stored at given offset in the RowSet Data Source
      *
-     * @param  mixed|string|integer $offset
+     * @param mixed|string|integer $offset
      *  Offset to retrieve data from
      *
      * @return mixed|boolean
      *  Data stored at given offset if it exists and FALSE otherwise
      *
-     * @throws Next\DB\Table\DataGatewayException
-     *  Thrown if trying to access data from an empty Next\DB\Table\Table
+     * @throws \Next\DB\Table\DataGatewayException
+     *  Thrown if trying to access data from an empty \Next\DB\Table\Table
      *
-     * @throws Next\DB\Table\DataGatewayException
-     *  Thrown if trying to access data of a Next\DB\Table\Table column
+     * @throws \Next\DB\Table\DataGatewayException
+     *  Thrown if trying to access data of a \Next\DB\Table\Table column
      *  from a RowSet with multiple records
      */
     public function offsetGet( $offset ) {
@@ -226,14 +234,14 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
     /**
      * Assign a value to the specified offset in the RowSet Data Source
      *
-     * @param  mixed|string|integer $offset
+     * @param mixed|string|integer $offset
      *  Offset where new data will be stored
      *
      * @param mixed $data
      *  Data to add
      *
-     * @throws Next\DB\Table\DataGatewayException
-     *  Thrown if trying to modify data of a Next\DB\Table\Table
+     * @throws \Next\DB\Table\DataGatewayException
+     *  Thrown if trying to modify data of a \Next\DB\Table\Table
      *  from a RowSet with multiple records
      */
     public function offsetSet( $offset, $data ) {
@@ -248,14 +256,14 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
     /**
      * Removes an Object from RowSet Data Source at given offset
      *
-     * @param  mixed|string|integer $offset
+     * @param mixed|string|integer $offset
      *  Offset to unset
      *
-     * @throws Next\DB\Table\DataGatewayException
-     *  Thrown if trying to remove data from an empty Next\DB\Table\Table
+     * @throws \Next\DB\Table\DataGatewayException
+     *  Thrown if trying to remove data from an empty \Next\DB\Table\Table
      *
-     * @throws Next\DB\Table\DataGatewayException
-     *  Thrown if trying to remove data of a Next\DB\Table\Table
+     * @throws \Next\DB\Table\DataGatewayException
+     *  Thrown if trying to remove data of a \Next\DB\Table\Table
      *  from a RowSet with multiple records
      */
     public function offsetUnset( $offset ) {
@@ -281,7 +289,7 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
      */
 
     /**
-     * Return the value of a column of the first Next\DB\Table\Table defined as source
+     * Return the value of a column of the first \Next\DB\Table\Table defined as source
      *
      * @param mixed|string $column
      *  Column to be retrieved
@@ -289,7 +297,7 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
      * @return mixed|boolean
      *  The column value, if exists and FALSE otherwise
      *
-     * @see Next\DB\Table\Table::offsetGet()
+     * @see \Next\DB\Table\Table::offsetGet()
      */
     public function __get( $column ) {
         return $this -> offsetGet( $column );
@@ -297,7 +305,7 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
 
     /**
      * Sets a new value for a column of the first
-     * Next\DB\Table\Table defined as source
+     * \Next\DB\Table\Table defined as source
      *
      * If the column doesn't exist, it will be created in runtime
      *
@@ -307,7 +315,7 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
      * @param mixed $value
      *  New value
      *
-     * @see Next\DB\Table\Table::offsetSet()
+     * @see \Next\DB\Table\Table::offsetSet()
      */
     public function __set( $column, $value ) {
         $this -> offsetSet( $column, $value );
@@ -315,15 +323,15 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
 
     /**
      * Checks whether or not a column exists the first
-     * Next\DB\Table\Table defined as source
+     * \Next\DB\Table\Table defined as source
      *
-     * @param  mixed|string  $column
+     * @param mixed|string $column
      *  Column to check
      *
      * @return boolean
      *  TRUE if desired column exists and FALSE otherwise
      *
-     * @see Next\DB\Table\Table::offsetExists()
+     * @see \Next\DB\Table\Table::offsetExists()
      */
     public function __isset( $column ) {
         return $this -> offsetExists( $column );
@@ -332,10 +340,10 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
     /**
      * Removes given column from Data-source if it exists
      *
-     * @param  mixed|string  $column
+     * @param mixed|string $column
      *  Column to remove
      *
-     * @see Next\DB\Table\Table::offsetUnset()
+     * @see \Next\DB\Table\Table::offsetUnset()
      */
     public function __unset( $column ) {
         $this -> offsetUnset( $column );

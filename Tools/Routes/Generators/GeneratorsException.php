@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Routes Generators, Generators Exception Class | Tools\Generators\GeneratorsException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Tools\Routes\Generators;
 
 /**
@@ -72,7 +80,7 @@ class RoutesGeneratorException extends \Next\Components\Debug\Exception {
      * @param array $args
      *  Variable list of arguments to build final message
      *
-     * @return Next\Tools\RoutesGenerator\RoutesGeneratorException
+     * @return \Next\Tools\RoutesGenerator\RoutesGeneratorException
      *  Exception for an Action Methods without Routes
      */
     public static function noRoutes( array $args ) {
@@ -100,7 +108,7 @@ class RoutesGeneratorException extends \Next\Components\Debug\Exception {
      * @param array $args
      *  Variable list of arguments to build final message
      *
-     * @return Next\Tools\RoutesGenerator\RoutesGeneratorException
+     * @return \Next\Tools\RoutesGenerator\RoutesGeneratorException
      *  Exception for conceptual invalid Route structure
      */
     public static function invalidRouteStructure( array $args ) {
@@ -129,7 +137,7 @@ class RoutesGeneratorException extends \Next\Components\Debug\Exception {
      * @param array $args
      *  Variable list of arguments to build final message
      *
-     * @return Next\Tools\RoutesGenerator\RoutesGeneratorException
+     * @return \Next\Tools\RoutesGenerator\RoutesGeneratorException
      *  Exception for malformed Routes
      */
     public static function malformedRoute( array $args ) {
@@ -159,7 +167,7 @@ class RoutesGeneratorException extends \Next\Components\Debug\Exception {
      * @param array $args
      *  Variable list of arguments to build final message
      *
-     * @return Next\Tools\RoutesGenerator\RoutesGeneratorException
+     * @return \Next\Tools\RoutesGenerator\RoutesGeneratorException
      *  Exception for duplicated Routes
      */
     public static function duplicatedRoute( array $args ) {
@@ -189,7 +197,7 @@ class RoutesGeneratorException extends \Next\Components\Debug\Exception {
      * @param array $args
      *  Variable list of arguments to build final message
      *
-     * @return Next\Tools\RoutesGenerator\RoutesGeneratorException
+     * @return \Next\Tools\RoutesGenerator\RoutesGeneratorException
      *  Exception for conceptual invalid Route Arguments structure
      */
     public static function malformedArguments( array $args ) {

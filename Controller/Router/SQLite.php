@@ -1,18 +1,24 @@
 <?php
 
+/**
+ * SQLite Controller Router Class | Controller\Router\SQLite.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Controller\Router;
 
 use Next\Application\Application;                     # Application Interface
 use Next\HTTP\Request;                                # Request Class
 
 use Next\DB\Driver\PDO\Adapter\SQLite as Adapater;    # SQLite DB Adapter
+
 /**
- * Standard Controller Router Class
+ * Controller Router based on SQLite Databases
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Controller\Router
  */
 class SQLite extends Standard {
 
@@ -49,7 +55,7 @@ class SQLite extends Standard {
     /**
      * Finds a Route that matches to an Application AND current Request
      *
-     * @param Next\Application\Application $application
+     * @param \Next\Application\Application $application
      *  Application to iterate Controllers
      *
      * @return array|object|boolean
@@ -169,7 +175,7 @@ class SQLite extends Standard {
     /**
      * Establishes a Connection with the SQLITE Database File
      *
-     * @throws Next\Controller\Router\RouterException
+     * @throws \Next\Controller\Router\RouterException
      *  SQLITE Database File doesn't exist in defined directory
      */
     protected function connect() {
@@ -203,7 +209,7 @@ class SQLite extends Standard {
      * Extends SQLITE functionality adding a UDF (User Defined Function)
      * for REGEXP keyword use
      *
-     * @throws Next\Controller\Router\RouterException
+     * @throws \Next\Controller\Router\RouterException
      *  Current Database Connection Adapter doesn't have the
      *  sqliteCreateFunction() method
      */

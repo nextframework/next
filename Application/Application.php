@@ -1,17 +1,24 @@
 <?php
 
+/**
+ * Application Abstract Class | Application/AbstractApplication.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Application;
 
 use Next\HTTP\Request;     # Request Class
 use Next\HTTP\Response;    # Response Class
 
 /**
- * Application Interface
+ * Defines the Application Type, with all methods that must be present
+ * in an Application, be it through \Next\Application\AbstractApplication
+ * or the concrete implementations of it
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Application
  */
 interface Application {
 
@@ -25,7 +32,7 @@ interface Application {
     /**
      * Set Request Object
      *
-     * @param Next\HTTP\Request $request
+     * @param \\Next\HTTP\Request $request
      *  Request Object
      */
     public function setRequest( Request $request );
@@ -38,7 +45,7 @@ interface Application {
     /**
      * Set Response Object
      *
-     * @param Next\HTTP\Response $response
+     * @param \Next\HTTP\Response $response
      *  Response Object
      */
     public function setResponse( Response $response );

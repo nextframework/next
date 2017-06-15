@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Class Mapper: Standard Format (Arrays) | Tools\ClassMapper\Standard.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Tools\ClassMapper;
 
 use Next\Tools\ClassMapper\ClassMapperException;    # ClassMapper Exception Class
@@ -31,16 +39,16 @@ class Standard extends Object implements Mapper {
     /**
      * Additional Initialization. Check Options Integrity
      *
-     * @throws Next\Tools\ClassMapper\ClassMapperException
+     * @throws \Next\Tools\ClassMapper\ClassMapperException
      *  Output directory is not set
      *
-     * @throws Next\Tools\ClassMapper\ClassMapperException
+     * @throws \Next\Tools\ClassMapper\ClassMapperException
      *  Output directory doesn't exist or it's not a valid directory
      *
-     * @throws Next\Tools\ClassMapper\ClassMapperException
+     * @throws \Next\Tools\ClassMapper\ClassMapperException
      *  Output directory is not writable
      *
-     * @throws Next\Tools\ClassMapper\ClassMapperException
+     * @throws \Next\Tools\ClassMapper\ClassMapperException
      *  Filename is missing
      */
     protected function init() {

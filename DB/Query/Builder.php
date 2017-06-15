@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Database Query Builder Class | DB\Query\Builder.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\DB\Query;
 
 use Next\Components\Object;             # Object Class
@@ -9,23 +17,29 @@ use Next\DB\Query\Renderer\Renderer;    # Query Renderer
 
 use Next\DB\Table\Manager;                # Table Manager Object
 
+/**
+ * Defines the Query Builder Object responsible to assemble a
+ * Database Query through class' methods
+ *
+ * @package    Next\DB\Query
+ */
 class Builder extends Object {
 
     /**
      * Query Renderer
      *
-     * @var Next\DB\Query\Renderer\Renderer
+     * @var \Next\DB\Query\Renderer\Renderer
      */
     private $renderer;
 
     /**
      * Table Manager Object
-     * Injected through Extended Context from Next\DB\Table\Manager::__construct()
+     * Injected through Extended Context from \Next\DB\Table\Manager::__construct()
      *
-     * @var Next\DB\Table\Manager
+     * @var \Next\DB\Table\Manager
      *
-     * @see Next\DB\Table\Manager::__construct()
-     * @see Next\Components\Context::extend()
+     * @see \Next\DB\Table\Manager::__construct()
+     * @see \Next\Components\Context::extend()
      */
     protected $_manager;
 
@@ -109,10 +123,10 @@ class Builder extends Object {
     /**
      * Table Select Constructor
      *
-     * @param Next\DB\Query\Renderer $renderer
+     * @param \Next\DB\Query\Renderer $renderer
      *  Query Renderer to be used
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for the Query Builder
      */
     public function __construct( Renderer $renderer, $options = NULL ) {
@@ -133,7 +147,7 @@ class Builder extends Object {
      * @param array $fields
      *  Columns to be added in INSERT Statement
      *
-     * @return Next\DB\Table\Select
+     * @return \Next\DB\Table\Select
      *  Table Select Object (Fluent Interface)
      */
     public function insert( $table, array $fields ) {
@@ -154,7 +168,7 @@ class Builder extends Object {
      * @param array $fields
      *  Columns to be added in UPDATE Statement
      *
-     * @return Next\DB\Table\Select
+     * @return \Next\DB\Table\Select
      *  Table Select Object (Fluent Interface)
      */
     public function update( $table, array $fields ) {
@@ -172,7 +186,7 @@ class Builder extends Object {
      * @param string $table
      *  Table Name
      *
-     * @return Next\DB\Table\Select
+     * @return \Next\DB\Table\Select
      *  Table Select Object (Fluent Interface)
      */
     public function delete( $table ) {
@@ -187,10 +201,10 @@ class Builder extends Object {
     /**
      * Specify SELECT Statement Columns
      *
-     * @param Next\DB\Query\Expression|string|array|optional $columns
+     * @param \Next\DB\Query\Expression|string|array|optional $columns
      *  Columns to be included in SELECT Statement
      *
-     * @return Next\DB\Table\Select
+     * @return \Next\DB\Table\Select
      *  Table Select Object (Fluent Interface)
      */
     public function select( $columns = array() ) {
@@ -279,7 +293,7 @@ class Builder extends Object {
      * @param array|optional $tables
      *  One or more different tables to search
      *
-     * @return Next\DB\Table\Select
+     * @return \Next\DB\Table\Select
      *  Table Select Object (Fluent Interface)
      */
     public function from( $tables = array() ) {
@@ -291,11 +305,11 @@ class Builder extends Object {
          *
          * If only one table was informed, as string, it's not possible
          * to defined an alias and because the PRIMARY KEY, if properly defined
-         * in Next\DB\Table\Table, is automatically added, we need to enforce the
+         * in \Next\DB\Table\Table, is automatically added, we need to enforce the
          * alias used in here
          *
          * The same rules apply: The alias will be first character of the
-         * Next\DB\Table\Table
+         * \Next\DB\Table\Table
          */
         if( ! is_array( $tables ) ) {
 
@@ -323,14 +337,14 @@ class Builder extends Object {
             /**
              * @internal
              * If we have multiple tables listed we'll compare the table name
-             * coming from Next\DB\Table\Table::getTablename(), against the
+             * coming from \Next\DB\Table\Table::getTablename(), against the
              * tables included for the statement
              *
              * If found without a string alias, we'll enforce it to match the
              * automatically added PRIMARY KEY
              *
              * The same rules apply: The alias will be first character of the
-             * Next\DB\Table\Table
+             * \Next\DB\Table\Table
              */
             if( $pos = strpos( $table, $tablename ) !== FALSE ) {
 
@@ -357,7 +371,7 @@ class Builder extends Object {
     /**
      * Specify a DISTINCT Clause
      *
-     * @return Next\DB\Table\Select
+     * @return \Next\DB\Table\Select
      *  Table Select Object (Fluent Interface)
      */
     public function distinct() {
@@ -375,11 +389,12 @@ class Builder extends Object {
      * @param array|string $condition
      *  WHERE Clause
      *
-     * @param array|mixed|optional $values
+     * @param array|mixed|optional $replacements
      *  Value for Clause Placeholders, if any
      *
      *  If `$condition` has multiple possible values, `$replacements` must
      *  be an associative array led by that field name. E.g.:
+     *
      *  ````
      *  Array
      *  (
@@ -400,7 +415,7 @@ class Builder extends Object {
      *
      *  Defaults to 'AND'
      *
-     * @return Next\DB\Table\Select
+     * @return \Next\DB\Table\Select
      *  Table Select Object (Fluent Interface)
      *
      * @throws QueryException
@@ -504,7 +519,7 @@ class Builder extends Object {
      *  However there are no constraints about what it's accepted here because there are numerous
      *  valid aliases for this value
      *
-     * @return Next\DB\Table\Select
+     * @return \Next\DB\Table\Select
      *  Table Select Object (Fluent-Interface)
      */
     public function join( $table, $on, $type = Query::INNER_JOIN ) {
@@ -525,15 +540,15 @@ class Builder extends Object {
      * NOTE: In order to implicit maintainability, only the first index will be used.
      * For multiple HAVING conditions, call the method again
      *
-     * @param array|optional $value
-     *  Value for Clause Placeholders, if any
+     * @param array|optional $values
+     *  Values for Clause Placeholders, if any
      *
      * @param mixed|string|optional $type
      *  The HAVING Clause condition type, 'AND' or 'OR'.
      *
      *  Defaults to 'AND'
      *
-     * @return Next\DB\Table\Select
+     * @return \Next\DB\Table\Select
      *  Table Select Object (Fluent Interface)
      */
     public function having( $condition, $values = array(), $type = Query::SQL_AND ) {
@@ -551,7 +566,7 @@ class Builder extends Object {
      * @param string|array $fields
      *  Fields to group results
      *
-     * @return Next\DB\Table\Select
+     * @return \Next\DB\Table\Select
      *  Table Select Object (Fluent Interface)
      */
     public function group( $fields ) {
@@ -572,7 +587,7 @@ class Builder extends Object {
      *  Orientation, if <strong>$field</strong> is not an array: ASC or DESC.
      *  Defaults to ASC
      *
-     * @return Next\DB\Table\Select
+     * @return \Next\DB\Table\Select
      *  Table Select Object (Fluent Interface)
      */
     public function order( $field, $type = Query::ORDER_ASCENDING ) {
@@ -593,7 +608,7 @@ class Builder extends Object {
      *  Record offset to start.
      *  Defaults to 0 and it'll be forced to not be negative
      *
-     * @return Next\DB\Table\Select
+     * @return \Next\DB\Table\Select
      *  Table Select Object (Fluent Interface)
      */
     public function limit( $limit = 1, $offset = 0 ) {
@@ -673,10 +688,10 @@ class Builder extends Object {
     /**
      * Add Placeholders Replacements
      *
-     * @param mixed|array $placeholders
+     * @param mixed|array $replacements
      *  Query Placeholders Replacements
      *
-     * @return Next\DB\Query\Builder
+     * @return \Next\DB\Query\Builder
      *  Query Builder Instance (Fluent Interface)
      */
     public function addReplacements( $replacements ) {
@@ -694,10 +709,10 @@ class Builder extends Object {
      * Although all the property types can be predefined while defining them, by having such feature
      * we can flush them after used, which doesn't occur within this class scope
      *
-     * @return Next\Query\Builder
+     * @return \Next\Query\Builder
      *  Query Builder Object (Fluent-Interface)
      *
-     * @see Next\DB\Table\Manager::flush()
+     * @see \Next\DB\Table\Manager::flush()
      */
     public function reset() {
 
@@ -723,7 +738,7 @@ class Builder extends Object {
     /**
      * Get Entity Manager
      *
-     * @return Next\DB\Table\Manager
+     * @return \Next\DB\Table\Manager
      *  Entity Manager
      */
     public function getManager() {

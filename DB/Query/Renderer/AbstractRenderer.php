@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Database Query Renderer Abstract Class | DB\Query\Renderer\AbstractRenderer.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\DB\Query\Renderer;
 
 use Next\Components\Object;     # Object Class
@@ -28,7 +36,7 @@ abstract class AbstractRenderer extends Object implements Renderer {
      * @param string $quoteIdentifier
      *  Quote Identifier
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for the Query Expression
      */
     public function __construct( $quoteIdentifier, $options = NULL ) {
@@ -41,13 +49,13 @@ abstract class AbstractRenderer extends Object implements Renderer {
     /**
      * Quote a string using the quote identifier defined
      *
-     * @param  string $string
+     * @param string $string
      *  String to quote
      *
      * @return string
      *  Inout string, quote
      *
-     * @see Next\File\Tools::quote()
+     * @see \Next\File\Tools::quote()
      */
     public function quote( $string ) {
 

@@ -1,13 +1,25 @@
 <?php
 
+/**
+ * HTTP Response Header Field Class: Vary | HTTP\Headers\Fields\Response\Vary.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Headers\Fields\Response;
 
-use Next\HTTP\Headers\Fields\Response;           # Response Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField;      # Header Field Abstract Class;
-use Next\Validate\HTTP\Headers\Response\Vary;    # Response Vary Header Field Validator Class
+use Next\HTTP\Headers\Fields\Response;         # Response Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;    # Header Field Abstract Class;
 
 /**
- * Vary Header Field Class
+ * Response 'Vary' Header Field Validator Class
+ */
+use Next\Validate\HTTP\Headers\Response\Vary as Validator;
+
+/**
+ * Response 'Vary' Header Field Class
  *
  * @author        Bruno Augusto
  *
@@ -24,11 +36,11 @@ class Vary extends AbstractField implements Response {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validator
+     * @return \Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new Vary( array( 'value' => $value ) );
+        return new Validator( array( 'value' => $value ) );
     }
 
     /**

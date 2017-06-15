@@ -1,17 +1,23 @@
 <?php
 
+/**
+ * Routes Generators Classes' Actions Annotations Class | Tools\Routes\Generators\Annotations\Actions.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Tools\Routes\Generators\Annotations;
 
 use Next\Tools\Routes\Generators\GeneratorsException;    # Routes Generators Exception Class
 use Next\Components\Utils\ArrayUtils;                    # Array Utils Class
 
 /**
- * Routes Generator: Actions Annotations Analyzer
+ * Defines the Controller Actions Analyzer, filtering through data
+ * reflected and preparing structure for the Routes Generator process
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Tools\Routes\Generators
  */
 class Actions extends \FilterIterator implements Annotations {
 
@@ -46,10 +52,8 @@ class Actions extends \FilterIterator implements Annotations {
     /**
      * Controller Actions Annotations Constructor
      *
-     * @param Iterator $iterator
-     *  Actions Iterator
-     *
-     * @see https://bugs.php.net/bug.php?id=52560
+     * @param \ReflectionClass $reflector
+     *  ReflectionClass Object from where to retrieve the Action Methods and build an \ArrayIterator with
      */
     public function __construct( \ReflectionClass $reflector ) {
 
@@ -57,6 +61,9 @@ class Actions extends \FilterIterator implements Annotations {
 
         parent::__construct( new \ArrayIterator( $reflector -> getMethods() ) );
 
+        /**
+         * @see https://bugs.php.net/bug.php?id=52560
+         */
         $this -> rewind();
     }
 
@@ -68,7 +75,7 @@ class Actions extends \FilterIterator implements Annotations {
      * @return array
      *  Found annotations
      *
-     * @throws Next\Tools\Routes\Generators\GeneratorsException
+     * @throws \Next\Tools\Routes\Generators\GeneratorsException
      *  Route argument has less than 2 Components (a Name and a Type)
      */
     public function getAnnotations() {

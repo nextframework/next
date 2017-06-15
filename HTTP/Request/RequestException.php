@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP Request Exception Class | HTTP\Request\RequestException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Request;
 
 /**

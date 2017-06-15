@@ -1,16 +1,25 @@
 <?php
 
+/**
+ * Types Component Interface | Components\Types\Type.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Components\Types;
 
+use Next\Components\Interfaces\Prototypable;    # Prototypable Resource Class
+
 /**
- * Datatype Interface
+ * Defines the Data-type Type, with all methods that must be present
+ * in an Data-type, be it through \Next\Components\Types\AbstractTypes
+ * or the concrete implementations of it
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Components\Types
  */
-interface Type {
+interface Type extends Prototypable {
 
     /**
      * Set value

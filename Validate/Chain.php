@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Validator Chain Class | Validate\Chain.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Validate;
 
 use Next\Components\Interfaces\Informational;          # Informational Interface
@@ -20,10 +28,10 @@ class Chain extends AbstractCollection {
     /**
      * Executes all Validators added to the Chain
      *
-     * @return boolean|Next\Validate\Validator
+     * @return boolean|\Next\Validate\Validator
      *  TRUE if there's no Validator added to the Chain -OR- if the
      *  value is valid by all Validators on it and
-     *  Next\Validate\Validator Object otherwise
+     *  \Next\Validate\Validator Object otherwise
      */
     public function validate() {
 
@@ -49,10 +57,10 @@ class Chain extends AbstractCollection {
      * Check Object acceptance
      *
      * Check if given Validator is acceptable in Validator Chain
-     * To be valid, the Validator must implement both Next\Validate\Validator
-     * and Next\Components\Interfaces\Informational interfaces
+     * To be valid, the Validator must implement both \Next\Validate\Validator
+     * and \Next\Components\Interfaces\Informational interfaces
      *
-     * @param Next\Components\Object $object
+     * @param \Next\Components\Object $object
      *  An Object object
      *
      *  The checking for required interfaces will be inside the method
@@ -60,7 +68,7 @@ class Chain extends AbstractCollection {
      * @return boolean
      *  TRUE if given Object is acceptable by Validators Collection and FALSE otherwise
      *
-     * @throws Next\Validate\ValidateException
+     * @throws \Next\Validate\ValidateException
      *  Given Validator is not acceptable in the Validator Chain
      */
     public function accept( Object $object ) {

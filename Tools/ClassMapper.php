@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Class Mapper Tool | Tools\ClassMapper.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Tools;
 
 use Next\Tools\ClassMapper\ClassMapperException;          # ClassMapper Exception Class
@@ -95,7 +103,7 @@ class ClassMapper extends \FilterIterator {
      *
      *           </li>
      *
-     *           <li>A well formed Next\Components\Parameter Object</li>
+     *           <li>A well formed \Next\Components\Parameter Object</li>
      *
      *       </ul>
      *
@@ -108,7 +116,7 @@ class ClassMapper extends \FilterIterator {
      *       and by factored classes
      *   </p>
      *
-     * @see Next\Components\Parameter
+     * @see \Next\Components\Parameter
      *
      * @return mixed|void
      *  If chosen format allow the result to be returned, it will
@@ -116,7 +124,7 @@ class ClassMapper extends \FilterIterator {
      *
      *  Otherwise, nothing is returned
      *
-     * @throws Next\Tools\ClassMapper\ClassMapperException
+     * @throws \Next\Tools\ClassMapper\ClassMapperException
      *  Invalid or unsupported Mapping Format
      */
     public function build( $format, $options = NULL ) {

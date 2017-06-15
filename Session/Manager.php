@@ -1,16 +1,23 @@
 <?php
 
+/**
+ * Sessions Manager Class | Session\Manager.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Session;
 
 use Next\Session\SessionException;    # Session Exception Class
 
 /**
- * Session Manager Class
+ * Defines the Session Manager Class handling everything, from the
+ * Session initialization to its destruction, including
+ * with custom Session Handlers
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Session
  */
 class Manager {
 
@@ -52,7 +59,7 @@ class Manager {
     /**
      * Session Handlers Manager
      *
-     * @var Next\Session\Handlers $handlers
+     * @var \Next\Session\Handlers $handlers
      */
     private $handlers;
 
@@ -81,11 +88,11 @@ class Manager {
      * @return Session
      *  Session Instance
      *
-     * @throws Next\Session\SessionException
+     * @throws \Next\Session\SessionException
      *  Session has been already initialized, through a manually
      *  called session_start()
      */
-    public static function start( $name = NULL, $ID = NULL ) {
+    public static function start( $name = NULL, $id = NULL ) {
 
         if( NULL === self::$instance ) {
 
@@ -122,7 +129,7 @@ class Manager {
 
             // Effectivelly Initializes the Session
 
-            self::$instance -> init( $name, $ID );
+            self::$instance -> init( $name, $id );
         }
 
         return self::$instance;
@@ -138,10 +145,10 @@ class Manager {
      *  Optional Session ID.
      *  Mostly used by custom Session Handlers
      *
-     * @throws Next\Session\SessionException
+     * @throws \Next\Session\SessionException
      *  session_start() failed, returning FALSE
      */
-    public function init( $name = NULL, $ID = NULL ) {
+    public function init( $name = NULL, $id = NULL ) {
 
         // Setting Up Session Name
 
@@ -149,7 +156,7 @@ class Manager {
 
         // Setting up Session ID
 
-        self::setSessionID( empty( $ID ) ? self::$ID : $ID );
+        self::setSessionID( empty( $id ) ? self::$id : $id );
 
         // Initializing the Session
 
@@ -240,7 +247,7 @@ class Manager {
     /**
      * Get Handlers Management Object
      *
-     * @return Next\Session\Handlers
+     * @return \Next\Session\Handlers
      *  Session Handler Management Object
      */
     public function getHandlersManager() {

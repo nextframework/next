@@ -1,13 +1,25 @@
 <?php
 
+/**
+ * HTTP Response Header Field Class: X-XSS-Protection | HTTP\Headers\Fields\Response\XXSSProtection.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Headers\Fields\Response;
 
-use Next\HTTP\Headers\Fields\Response;                     # Response Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField;                # Header Field Abstract Class
-use Next\Validate\HTTP\Headers\Response\XXSSProtection;    # Response X-XSS-Protection Header Field Validator Class
+use Next\HTTP\Headers\Fields\Response;         # Response Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;    # Header Field Abstract Class
 
 /**
- * X-XSS-Protection Header Field Class
+ * Response 'X-XSS-Protection' Header Field Validator Class
+ */
+use Next\Validate\HTTP\Headers\Response\XXSSProtection as Validator;
+
+/**
+ * Response 'X-XSS-Protection' Header Field Class
  *
  * @author        Bruno Augusto
  *
@@ -24,11 +36,11 @@ class XXSSProtection extends AbstractField implements Response {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validator
+     * @return \Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new XXSSProtection( array( 'value' => $value ) );
+        return new Validator( array( 'value' => $value ) );
     }
 
     /**

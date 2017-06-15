@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP Stream Reader Exception Class | HTTP\Stream\Reader\ReaderException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Stream\Reader;
 
 /**
@@ -31,7 +39,7 @@ class ReaderException extends \Next\Components\Debug\Exception {
     /**
      * Unable to read bytes from opened Stream
      *
-     * @return Next\HTTP\Stream\Reader\ReaderException
+     * @return \Next\HTTP\Stream\Reader\ReaderException
      *  Exception for Stream readability failure
      */
     public static function readFailure() {

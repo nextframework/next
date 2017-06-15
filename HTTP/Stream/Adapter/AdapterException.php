@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP Stream Adapter Exception Class | HTTP\Stream\Adapter\AdapterException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Stream\Adapter;
 
 /**
@@ -80,7 +88,7 @@ class AdapterException extends \Next\Components\Debug\Exception {
      * @param array $validModes
      *  Valid Opening Modes
      *
-     * @return Next\HTTP\Stream\Adapter\AdapterException
+     * @return \Next\HTTP\Stream\Adapter\AdapterException
      *  Exception for invalid Stream Opening Mode
      */
     public static function invalidOpeningMode( array $validModes ) {
@@ -101,7 +109,7 @@ class AdapterException extends \Next\Components\Debug\Exception {
      * @param string $filename
      *  File/URL being opened
      *
-     * @return Next\HTTP\Stream\Adapter\AdapterException
+     * @return \Next\HTTP\Stream\Adapter\AdapterException
      *  Exception for Stream opening failure
      */
     public static function unableToOpen( $filename ) {
@@ -124,7 +132,7 @@ class AdapterException extends \Next\Components\Debug\Exception {
      * @param string $filename
      *  File being opened
      *
-     * @return Next\HTTP\Stream\Reader\ReaderException
+     * @return \Next\HTTP\Stream\Reader\ReaderException
      *  Exception for Stream readability failure
      */
     public static function unableToRead( $filename ) {
@@ -147,7 +155,7 @@ class AdapterException extends \Next\Components\Debug\Exception {
      * @param string $filename
      *  File being opened
      *
-     * @return Next\HTTP\Stream\Writer\WriterException
+     * @return \Next\HTTP\Stream\Writer\WriterException
      *  Exception for Stream writability failure
      */
     public static function unableToWrite( $filename ) {
@@ -170,7 +178,7 @@ class AdapterException extends \Next\Components\Debug\Exception {
      * @param string $filename
      *  File being opened
      *
-     * @return Next\HTTP\Stream\Writer\WriterException
+     * @return \Next\HTTP\Stream\Writer\WriterException
      *  Exception for Stream exclusive writability failure
      */
     public static function unableToExclusivelyWrite( $filename ) {
@@ -188,7 +196,7 @@ class AdapterException extends \Next\Components\Debug\Exception {
     /**
      * Unable to tell Stream Pointer position
      *
-     * @return Next\HTTP\Stream\Adapter\AdapterException
+     * @return \Next\HTTP\Stream\Adapter\AdapterException
      *  Exception for Stream Pointer retrieval failure
      */
     public static function unableToTell() {
@@ -204,7 +212,7 @@ class AdapterException extends \Next\Components\Debug\Exception {
     /**
      * Unable to seek to Stream Pointer to a position
      *
-     * @return Next\HTTP\Stream\Adapter\AdapterException
+     * @return \Next\HTTP\Stream\Adapter\AdapterException
      *  Exception for Stream Pointer seeking failure
      */
     public static function unableToSeek() {

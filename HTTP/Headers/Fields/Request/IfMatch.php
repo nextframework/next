@@ -1,13 +1,25 @@
 <?php
 
+/**
+ * HTTP Request Header Field Class: If-Match | HTTP\Headers\Fields\Request\IfMatch.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Headers\Fields\Request;
 
-use Next\HTTP\Headers\Fields\Request;              # Request Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField;        # Header Field Abstract Class
-use Next\Validate\HTTP\Headers\Request\IfMatch;    # Request If-Match Header Field Validator Class
+use Next\HTTP\Headers\Fields\Request;          # Request Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;    # Header Field Abstract Class
 
 /**
- * If-Match Header Field Class
+ * Request 'If-Match' Header Field Validator Class
+ */
+use Next\Validate\HTTP\Headers\Request\IfMatch as Validator;
+
+/**
+ * Request 'If-Match Header' Field Class
  *
  * @author        Bruno Augusto
  *
@@ -24,11 +36,11 @@ class IfMatch extends AbstractField implements Request {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validator
+     * @return \Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new IfMatch( array( 'value' => $value ) );
+        return new Validator( array( 'value' => $value ) );
     }
 
     /**

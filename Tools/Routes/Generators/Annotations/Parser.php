@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Routes Generator Annotations Parser Class | Tools\Routes\Generators\Annotation\Parser.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Tools\Routes\Generators\Annotations;
 
 use Next\Tools\Routes\Generators\GeneratorsException;    # Routes Generators Exception Class
@@ -8,12 +16,10 @@ use Next\Components\Object;                              # Object Class
 use Next\Components\Utils\ArrayUtils;                    # Array Utils Class
 
 /**
- * Routes Generator: Annotations Parser
+ * Defines the Routes Parser, listing, checking and preparing
+ * structure for the Routes Generator process
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Tools\Routes\Generators
  */
 class Parser extends Object {
 
@@ -55,13 +61,12 @@ class Parser extends Object {
      * @param string $method
      *  Method to whom belongs the Route(s)
      *
-     * @param string|optional
-     *  Route Domain, prepended to every route
+     * @param string|optional *  Route Domain, prepended to every route
      *
      * @param string|optional $basepath
      *  Routes Basepath, appended to every route
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for Annotations Parser
      */
     public function __construct( array $routes, array $args, $controller, $method, $domain = '', $basepath = '', $options = NULL ) {
@@ -105,14 +110,14 @@ class Parser extends Object {
      * @param string basepath
      *  Path to whom belongs the Route(s)
      *
-     * @throws Next\Tools\Routes\Generators\GeneratorsException
+     * @throws \Next\Tools\Routes\Generators\GeneratorsException
      *  Route has less than 2 Components (a Request Method and a Route)
      *
-     * @throws Next\Tools\Routes\Generators\GeneratorsException
+     * @throws \Next\Tools\Routes\Generators\GeneratorsException
      *  Routes defined as single slash (usually for homepages) DO have
      *  arguments (hierarchy concept)
      *
-     * @throws Next\Tools\Routes\Generators\GeneratorsException
+     * @throws \Next\Tools\Routes\Generators\GeneratorsException
      *  There is another Route with exactly the same definition, including
      *  the Request Method
      */

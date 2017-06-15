@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * JSON Writer Class | File\Tools\JSON\Writer.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\File\Tools\JSON;
 
 use Next\Components\Debug\Exception;            # Exception Class
@@ -11,6 +19,11 @@ use Next\HTTP\Stream\Adapter\Socket;            # HTTP Stream Socket Class
 
 use Next\File\Tools;                            # File Tools Class
 
+/**
+ * Defines a wrapper for JSON writing
+ *
+ * @package    Next\File\Tools\JSON
+ */
 class writer extends Object {
 
     const ERR_JSON_ERROR_NONE              = '';
@@ -43,10 +56,10 @@ class writer extends Object {
      * @param string|array $data
      *  Data to write
      *
-     * @param mixed|Next\Components\Object|Next\Components\Parameter|stdClass|array|optional $options
+     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for the JSON Writer
      *
-     * @throws Next\Components\Debug\Exception
+     * @throws \Next\Components\Debug\Exception
      *  Thrown if given data is a valid PHP resource
      */
     public function __construct( $file, $data, $options = NULL ) {
@@ -63,7 +76,7 @@ class writer extends Object {
     /**
      * Writes the JSON File
      *
-     * @param  integer|optional $options
+     * @param integer|optional $options
      *  Additional options to be passed to json_encode()
      *
      * @return void
@@ -104,7 +117,7 @@ class writer extends Object {
      * Converts json_last_error() to a human-readable string, pretty much like
      * json_last_error_msg(), but for older versions than PHP 5.5+
      *
-     * @param  integer  $error
+     * @param integer $error
      *  The error code returned by json_last_error()
      *
      * @return array

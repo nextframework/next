@@ -1,14 +1,19 @@
 <?php
 
+/**
+ * Routes Generator Annotations Interface | Tools\Routes\Generators\Annotations\Annotations.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Tools\Routes\Generators\Annotations;
 
 /**
- * Annotations Routes Generator: Annotations Interface
+ * Defines all methods that must present in a Routes Generator Analyzer
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Tools\Routes\Generators
  */
 interface Annotations {
 

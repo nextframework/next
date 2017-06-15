@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * File Upload with Method 'POST' Class | File\Upload\Methods\Post.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\File\Upload\Methods;
 
 use Next\File\Upload\UploadException;    # Upload Exception Class
@@ -11,6 +19,11 @@ use Next\Validate\File\Size;             # File Size Validation Class
 use Next\Validate\File\Extension;        # File Extensions Validation Class
 use Next\Validate\File\MimeType;         # File Type Validation Class
 
+/**
+ * Defines a File Uploading through different POST Request methods
+ *
+ * @package    Next\File\Upload
+ */
 class Post extends AbstractMethod {
 
     /**
@@ -57,7 +70,7 @@ class Post extends AbstractMethod {
     /**
      * Handles the uploading process
      *
-     * @return Next\File\Upload\Methods\Post
+     * @return \Next\File\Upload\Methods\Post
      *  Post Object (Fluent-Interface)
      */
     public function handle() {

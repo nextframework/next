@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP Response Headers Class | HTTP\Headers\ResponseHeaders.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Headers;
 
 /**
@@ -32,7 +40,7 @@ class ResponseHeaders extends AbstractHeaders {
      * This reverse logic is because there are two categories, Common and Entity,
      * with headers that can be common to Request and/or Response at same time
      *
-     * @param Next\HTTP\Headers\Fields\Field $field
+     * @param \Next\HTTP\Headers\Fields\Field $field
      *
      *  Header Field Object to have its acceptance in Response Headers Lists Collection checked
      *

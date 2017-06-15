@@ -1,16 +1,21 @@
 <?php
 
+/**
+ * Controller Dispatcher Abstract Class | Controller\Dispatcher\AbstractDispatcher.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\Controller\Dispatcher;
 
 use Next\Components\Object;    # Object Class
 
 /**
- * Controller Dispatcher Class
+ * Defines the base structure for a Controller Dispatcher
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Controller\Dispatcher
  */
 abstract class AbstractDispatcher extends Object implements Dispatcher {
 
@@ -35,7 +40,7 @@ abstract class AbstractDispatcher extends Object implements Dispatcher {
      * @param boolean $flag
      *  Defines whether or not the Controller was already dispatched
      *
-     * @return Next\Controller\Dispatcher\Dispatcher
+     * @return \Next\Controller\Dispatcher\Dispatcher
      *  Dispatcher Instance (Fluent Interface)
      */
     public function setDispatched( $flag ) {
@@ -61,7 +66,7 @@ abstract class AbstractDispatcher extends Object implements Dispatcher {
      * @param boolean $flag
      *  New state for the flag
      *
-     * @return Next\Controller\Dispatcher\Dispatcher
+     * @return \Next\Controller\Dispatcher\Dispatcher
      *  Dispatcher Instance (Fluent Interface)
      */
     public function returnResponse( $flag ) {

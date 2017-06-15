@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP Header Fields Exception Class | HTTP\Headers\Fields\FieldsException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ */
 namespace Next\HTTP\Headers\Fields;
 
 /**
@@ -34,7 +42,7 @@ class FieldsException extends \Next\Components\Debug\Exception {
      * @param string $header
      *  Header Name
      *
-     * @return Next\HTTP\Headers\Fields\FieldsException
+     * @return \Next\HTTP\Headers\Fields\FieldsException
      *  Exception for invalid header value(s)
      */
     public static function invalidHeaderValue( $header ) {
