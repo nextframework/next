@@ -3,7 +3,7 @@
 namespace Next\HTTP\Headers\Fields;
 
 use Next\Components\Interfaces\Parameterizable;    # Parameterizable Interface
-use Next\Validate\Validate;                        # Validate Interface
+use Next\Validate\Validator;                       # Validator Interface
 use Next\Validate\HTTP\Headers\Headers;            # Headers Validator Interface
 use Next\Components\Object;                        # Object Class
 use Next\Components\Parameter;                     # Parameter Class
@@ -209,11 +209,11 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
      *  Header Field has no well-formed name
      *
      * @throws Next\HTTP\Headers\Fields\FieldsException
-     *  Object defined as validator is not instance of Nex\Validate\Validate
+     *  Object defined as validator is not instance of Next\Validate\Validate
      *
      * @throws Next\HTTP\Headers\Fields\FieldsException
      *  Provided validator is not a Header Field Validator, characterized
-     *  as instance of Nex\Validate\HTTP\Headers\Headers
+     *  as instance of Next\Validate\HTTP\Headers\Headers
      */
     private function checkIntegrity() {
 
@@ -251,10 +251,10 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
          */
         $validator = $this -> getValidator( NULL );
 
-        if( ! $validator instanceof Validate ) {
+        if( ! $validator instanceof Validator ) {
 
             throw FieldsException::unfullfilledRequirements(
-                'Header Fields Validators must implement Validate Interface'
+                'Header Fields Validators must implement Validator Interface'
             );
         }
 

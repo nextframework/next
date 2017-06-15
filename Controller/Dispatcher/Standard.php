@@ -3,10 +3,14 @@
 namespace Next\Controller\Dispatcher;
 
 use Next\Components\Debug\Exception;        # Exception Class
-use Next\Controller\ControllerException;    # Controller Exception
+use Next\Controller\ControllerException;    # Controller Exception Class
 use Next\View\ViewException;                # View Exception Class
+
 use Next\Application\Application;           # Application Interface
-use Next\Components\Debug\Handlers;         # Exceptions Handlers
+
+use Next\Components\Debug\Handlers;         # Exceptions Handlers Class
+use Next\Components\Parameter;              # Parameter Class
+
 use Next\HTTP\Response;                     # HTTP Response Class
 
 /**
@@ -27,8 +31,8 @@ class Standard extends AbstractDispatcher {
      * @param Next\Application\Application $application
      *  Application to Configure
      *
-     * @param stdClass $data
-     *  Data to Configure Application
+     * @param Next\Components\Parameter $data
+     *  Parameters to Configure Application
      *
      * @return Next\HTTP\Response
      *  Response Object
@@ -36,7 +40,7 @@ class Standard extends AbstractDispatcher {
      * @throws Next\Controller\Dispatcher\DispatcherException
      *  ReflectionException was caught
      */
-    public function dispatch( Application $application, \stdClass $data ) {
+    public function dispatch( Application $application, Parameter $data ) {
 
         $response = $application -> getResponse();
 
@@ -46,7 +50,9 @@ class Standard extends AbstractDispatcher {
 
             // Adding Request Params
 
-            $application -> getRequest() -> setQuery( $data -> params );
+            $application -> getRequest() -> setQuery(
+                (array) $data -> getParameters() -> params -> getParameters()
+            );
 
             // Calling Action from Controller of defined Application
 

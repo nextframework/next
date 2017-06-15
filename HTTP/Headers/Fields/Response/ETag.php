@@ -2,8 +2,9 @@
 
 namespace Next\HTTP\Headers\Fields\Response;
 
-use Next\HTTP\Headers\Fields\Response;         # Response Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField;    # Header Field Abstract Class
+use Next\HTTP\Headers\Fields\Response;           # Response Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;      # Header Field Abstract Class
+use Next\Validate\HTTP\Headers\Response\ETag;    # response E-Tag Header Field Validator Class
 
 /**
  * ETag Header Field Class
@@ -23,13 +24,11 @@ class ETag extends AbstractField implements Response {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validate
+     * @return Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new \Next\Validate\HTTP\Headers\Response\ETag(
-            array( 'value' => $value )
-        );
+        return new ETag( array( 'value' => $value ) );
     }
 
     /**

@@ -2,8 +2,9 @@
 
 namespace Next\HTTP\Headers\Fields\Response;
 
-use Next\HTTP\Headers\Fields\Response;         # Response Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField;    # Header Field Abstract Class
+use Next\HTTP\Headers\Fields\Response;                # Response Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;           # Header Field Abstract Class
+use Next\Validate\HTTP\Headers\Response\SetCookie;    # Response Set-Cookie Header Field Validator Class
 
 /**
  * Set-Cookie Header Field Class
@@ -97,13 +98,11 @@ class SetCookie extends AbstractField implements Response {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validate
+     * @return Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new \Next\Validate\HTTP\Headers\Response\SetCookie(
-            array( 'value' => $value )
-        );
+        return new SetCookie( array( 'value' => $value ) );
     }
 
     /**

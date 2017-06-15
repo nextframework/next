@@ -2,8 +2,9 @@
 
 namespace Next\HTTP\Headers\Fields\Response;
 
-use Next\HTTP\Headers\Fields\Response;         # Response Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField;    # Header Field Abstract Class
+use Next\HTTP\Headers\Fields\Response;                      # Response Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;                 # Header Field Abstract Class
+use Next\Validate\HTTP\Headers\Response\XForwardedProto;    # Response X-Forwarded-Proto Header Field Validator Class
 
 /**
  * X-Forwarded-Proto Header Field Class
@@ -39,13 +40,11 @@ class XForwardedProto extends AbstractField implements Response {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validate
+     * @return Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new \Next\Validate\HTTP\Headers\Response\XForwardedProto(
-            array( 'value' => $value )
-        );
+        return new XForwardedProto( array( 'value' => $value ) );
     }
 
     /**

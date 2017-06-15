@@ -2,9 +2,9 @@
 
 namespace Next\Validate\ISO;
 
-use Next\Validate\Validate;    # Validate Interface
+use Next\Validate\Validator;    # Validator Interface
 
-use Next\Components\Object;    # Object Class
+use Next\Components\Object;     # Object Class
 
 /**
  * ISO-3166 Validation Class
@@ -14,7 +14,7 @@ use Next\Components\Object;    # Object Class
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class ISO3166 extends Object implements Validate {
+class ISO3166 extends Object implements Validator {
 
     /**
      * Content Language
@@ -44,7 +44,7 @@ class ISO3166 extends Object implements Validate {
         'VE', 'VN', 'VG', 'VI', 'WF', 'EH', 'YE', 'ZM', 'ZW',
     );
 
-    // Validate Interface Interface Methods
+    // Validator Interface Interface Methods
 
     /**
      * Validates given Country Code

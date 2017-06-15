@@ -2,8 +2,9 @@
 
 namespace Next\HTTP\Headers\Fields\Request;
 
-use Next\HTTP\Headers\Fields\Request;        # Request Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField;  # Header Field Abstract Class
+use Next\HTTP\Headers\Fields\Request;                     # Request Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;               # Header Field Abstract Class
+use Next\Validate\HTTP\Headers\Request\AcceptLanguage;    # Request Accept-Language Header field Validator Class
 
 /**
  * Accept-Language Header Field Class
@@ -68,13 +69,11 @@ class AcceptLanguage extends AbstractField implements Request {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validate
+     * @return Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new \Next\Validate\HTTP\Headers\Request\AcceptLanguage(
-            array( 'value' => $value )
-        );
+        return new AcceptLanguage( array( 'value' => $value ) );
     }
 
     /**

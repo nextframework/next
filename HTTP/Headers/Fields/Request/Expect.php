@@ -2,8 +2,9 @@
 
 namespace Next\HTTP\Headers\Fields\Request;
 
-use Next\HTTP\Headers\Fields\Request;        # Request Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField;  # Header Field Abstract Class
+use Next\HTTP\Headers\Fields\Request;             # Request Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;       # Header Field Abstract Class
+use Next\Validate\HTTP\Headers\Request\Expect;    # Request Expect Header Field Validator Class
 
 /**
  * Expect Header Field Class
@@ -23,13 +24,11 @@ class Expect extends AbstractField implements Request {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validate
+     * @return Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new \Next\Validate\HTTP\Headers\Request\Expect(
-            array( 'value' => $value )
-        );
+        return new Expect( array( 'value' => $value ) );
     }
 
     /**

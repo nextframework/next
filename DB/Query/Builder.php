@@ -375,11 +375,25 @@ class Builder extends Object {
      * @param array|string $condition
      *  WHERE Clause
      *
-     * NOTE: In order to implicit maintainability, only the first index will be used.
-     * For multiple WHERE conditions, call the method again
-     *
-     * @param array|optional $values
+     * @param array|mixed|optional $values
      *  Value for Clause Placeholders, if any
+     *
+     *  If `$condition` has multiple possible values, `$replacements` must
+     *  be an associative array led by that field name. E.g.:
+     *  ````
+     *  Array
+     *  (
+     *      [field] => Array
+     *          (
+     *              [0] => value_1
+     *              [1] => value_2
+     *              [2] => value_3
+     *          )
+     *  )
+     *  ````
+     *
+     * This helps not having to manually code a loop calling Build::where() for each
+     * one of them with potentially insecure workarounds for the multiplicity
      *
      * @param mixed|string|optional $type
      *  The WHERE Clause condition type, 'AND' or 'OR'.
@@ -388,12 +402,80 @@ class Builder extends Object {
      *
      * @return Next\DB\Table\Select
      *  Table Select Object (Fluent Interface)
+     *
+     * @throws QueryException
+     *  Thrown if trying to use multiple conditions at once in order to
+     *  implicit maintainability as for multiple WHERE conditions,
+     *  Builder::where() should be called again
+     *
+     * @throws QueryException
+     *  Thrown if trying to create a multiple possibilities condition with an
+     *  invalid or unexpected data-structure.
      */
-    public function where( $condition, $values = array(), $type = Query::SQL_AND ) {
+    public function where( $condition, $replacements = array(), $type = Query::SQL_AND ) {
 
-        $this -> where[ $type ][] = ( is_array( $condition ) ? array_shift( $condition ) : $condition );
+        if( is_array( $condition ) ) {
+            throw QueryException::multipleConditions( 'where' );
+        }
 
-        $this -> addReplacements( $values );
+        /**
+         * @internal
+         *
+         * Most of the times `$replacements` will be an array in the format
+         * `array( 'field' => 'value' )` being `field ` a matching column used
+         * on `$condition` so the checking is made over the number of replacements
+         *
+         * Anything greater than 1 (one) theoretically characterizes a multiple
+         * possibilities condition
+         */
+        if( count( $replacements, COUNT_RECURSIVE ) > 1 ) {
+
+            // Only the first array will be used as multiple replacements values list
+
+            $key = (array) array_keys( $replacements );
+            $key = array_shift( $key );
+
+            if( is_null( $key ) ) {
+
+                throw QueryException::wrongUse(
+                    'Multiple possibilities conditions expect all of them to be under an associative array'
+                );
+            }
+
+            if( strpos( $condition, $key ) === FALSE ) {
+
+                throw QueryException::wrongUse(
+                    'Invalid or unexpected data-structure for multiple possibilities condition'
+                );
+            }
+
+            foreach( $replacements[ $key ] as $value ) {
+
+                // Generating a unique ID for each field occurrence
+
+                $uniqid = bin2hex( openssl_random_pseudo_bytes( 12 ) );
+
+                // Replacing `$key` occurrences found in `$condition`
+
+                $this -> where[ $type ][] = str_replace(
+                    sprintf( ':%s', $key ), sprintf( ':%s_%s', $key, $uniqid ), $condition
+                );
+
+                // Adding a modified version of Replacements List for Query Renderer
+
+                $this -> addReplacements(
+                    array( sprintf( '%s_%s', $key, $uniqid ) => $value )
+                );
+            }
+
+        } else {
+
+            // Regular 1:1 conditions
+
+            $this -> where[ $type ][] = $condition;
+
+            $this -> addReplacements( $replacements );
+        }
 
         return $this;
     }

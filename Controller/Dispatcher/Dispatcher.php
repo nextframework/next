@@ -4,6 +4,8 @@ namespace Next\Controller\Dispatcher;
 
 use Next\Application\Application;    # Application Interface
 
+use Next\Components\Parameter;              # Parameter Class
+
 /**
  * Controller Dispatcher Interface
  *
@@ -20,8 +22,8 @@ interface Dispatcher {
      * @param Next\Application\Application $application
      *  Application to Configure
      *
-     * @param stdClass $data
-     *  Data to Configure Application
+     * @param Next\Components\Parameter $data
+     *  Parameters to Configure Application
      */
-    public function dispatch( Application $application, \stdClass $data );
+    public function dispatch( Application $application, Parameter $data );
 }

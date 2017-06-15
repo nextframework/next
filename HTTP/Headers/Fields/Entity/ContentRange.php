@@ -2,8 +2,9 @@
 
 namespace Next\HTTP\Headers\Fields\Entity;
 
-use Next\HTTP\Headers\Fields\Entity;        # Entity Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField; # Header Field Abstract Class
+use Next\HTTP\Headers\Fields\Entity;                   # Entity Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;            # Header Field Abstract Class
+use Next\Validate\HTTP\Headers\Entity\ContentRange;    # Content-Range Header Field Validator Class
 
 /**
  * Content-Range Header Field Class
@@ -23,13 +24,11 @@ class ContentRange extends AbstractField implements Entity {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validate
+     * @return Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new \Next\Validate\HTTP\Headers\Entity\ContentRange(
-            array( 'value' => $value )
-        );
+        return new ContentRange( array( 'value' => $value ) );
     }
 
     /**

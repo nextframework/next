@@ -2,8 +2,9 @@
 
 namespace Next\HTTP\Headers\Fields\Request;
 
-use Next\HTTP\Headers\Fields\Request;        # Request Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField;  # Header Field Abstract Class
+use Next\HTTP\Headers\Fields\Request;                        # Request Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;                  # Header Field Abstract Class
+use Next\Validate\HTTP\Headers\Request\IfUnmodifiedSince;    # Request If-Unmodified-Since Header Field Validator Class
 
 /**
  * If-Unmodified-Since Header Field Class
@@ -23,13 +24,11 @@ class IfUnmodifiedSince extends AbstractField implements Request {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validate
+     * @return Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new \Next\Validate\HTTP\Headers\Request\IfUnmodifiedSince(
-            array( 'value' => $value )
-        );
+        return new IfUnmodifiedSince( array( 'value' => $value ) );
     }
 
     /**

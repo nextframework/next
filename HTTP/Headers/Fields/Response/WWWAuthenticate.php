@@ -2,8 +2,9 @@
 
 namespace Next\HTTP\Headers\Fields\Response;
 
-use Next\HTTP\Headers\Fields\Response;         # Response Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField;    # Header Field Abstract Class
+use Next\HTTP\Headers\Fields\Response;                      # Response Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;                 # Header Field Abstract Class
+use Next\Validate\HTTP\Headers\Response\WWWAuthenticate;    # Response WWW-Authenticate Header Field Validator Class
 
 /**
  * WWW-Authenticate Header Field Class
@@ -23,13 +24,11 @@ class WWWAuthenticate extends AbstractField implements Response {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validate
+     * @return Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new \Next\Validate\HTTP\Headers\Response\WWWAuthenticate(
-            array( 'value' => $value )
-        );
+        return new WWWAuthenticate( array( 'value' => $value ) );
     }
 
     /**

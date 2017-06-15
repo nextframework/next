@@ -2,9 +2,9 @@
 
 namespace Next\Validate\IANA;
 
-use Next\Validate\Validate;    # Validate Interface
+use Next\Validate\Validator;    # Validator Interface
 
-use Next\Components\Object;    # Object Class
+use Next\Components\Object;     # Object Class
 
 /**
  * IANA Charset Validation Class
@@ -14,7 +14,7 @@ use Next\Components\Object;    # Object Class
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class Charset extends Object implements Validate {
+class Charset extends Object implements Validator {
 
     /**
      * Character Set Regular Expression
@@ -1261,7 +1261,7 @@ class Charset extends Object implements Validate {
         'TIS-620' => array()
     );
 
-    // Validate Interface Interface Methods
+    // Validator Interface Interface Methods
 
     /**
      * Validates given Character Set

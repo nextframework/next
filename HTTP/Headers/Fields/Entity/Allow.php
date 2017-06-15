@@ -2,8 +2,9 @@
 
 namespace Next\HTTP\Headers\Fields\Entity;
 
-use Next\HTTP\Headers\Fields\Entity;        # Entity Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField; # Header Field Abstract Class
+use Next\HTTP\Headers\Fields\Entity;            # Entity Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;     # Header Field Abstract Class
+use Next\Validate\HTTP\Headers\Entity\Allow;    # Allow Header Field Validator Class
 
 /**
  * Allow Header Field Class
@@ -39,13 +40,11 @@ class Allow extends AbstractField implements Entity {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validate
+     * @return Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new \Next\Validate\HTTP\Headers\Entity\Allow(
-            array( 'value' => $value )
-        );
+        return new Allow( array( 'value' => $value ) );
     }
 
     /**

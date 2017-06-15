@@ -20,11 +20,32 @@ class ComponentsException extends \Next\Components\Debug\Exception {
     protected $range = array( 0x000001CB, 0x000001FD );
 
     /**
+     * Array to Parameter Object Mapping
+     *
+     * @var integer
+     */
+    const MAPPING = 0x000001CB;
+
+    /**
      * Constructor Overwritten
      *
      * @var integer
      */
-    const CONSTRUCTOR_OVERWRITTEN = 0x000001CB;
+    const CONSTRUCTOR_OVERWRITTEN = 0x000001CC;
+
+    /**
+     * Exception for when something unexpected occurs while mapping
+     * an array into a Next\Components\Parameter Object recursively
+     *
+     * @param string $message
+     *  Message with the error occurred
+     *
+     * @return next\Components\ComponentsException
+     *  Exception for array to object mapping errors
+     */
+    public static function mapping( $message ) {
+        throw new self( $message, self::MAPPING );
+    }
 
     /**
      * Constructor of Object class has been overwritten and thus the extended

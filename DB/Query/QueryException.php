@@ -18,4 +18,34 @@ class QueryException extends \Next\Components\Debug\Exception {
      * @var array $range
      */
     protected $range = array( 0x000002FD, 0x0000032F );
+
+    /**
+     * General violations on data access (or manipulation)
+     *
+     * @var integer
+     */
+    const MULTIPLE_CONDITIONS = 0x000002FD;
+
+    // Exception Messages
+
+    /**
+     * Exception for when multiple conditions are being passed to a Query Builder method
+     *
+     * @param string $where
+     *  An hint of where the violation occurred
+     *
+     * @return Next\DB\Table\DataGatewayException
+     *  Exception for when multiple conditions are being passed to a Query Builder method
+     */
+    public static function multipleConditions( $where ) {
+
+        return new self(
+
+            'Multiple conditions are not allowed (Builder::%s)',
+
+            self::MULTIPLE_CONDITIONS,
+
+            (string) $where
+        );
+    }
 }

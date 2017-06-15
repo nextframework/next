@@ -89,11 +89,53 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      */
     public static function map( $param ) {
 
-        if( is_array( $param ) ) {
-            return (object) array_map( __METHOD__, $param );
+        $obj = new Parameter;
+
+        foreach( $param as $k => $v ) {
+
+            if( strlen( $k ) == 0 ) {
+
+                throw ComponentsException::mapping(
+                    'Although accepted as valid by PHP, all dimensions must have a key'
+                );
+            }
+
+            if( is_array( $v ) ) {
+
+                $keys = array_keys( $v );
+
+                $na = count( array_filter( $keys, 'is_string') );
+                $ni = count( array_filter( $keys, 'is_int') );
+
+                if( $na > 0 && $ni > 0 ) {
+
+                    throw ComponentsException::mapping(
+                        'Mixed associative and indexed content is not allowed'
+                    );
+                }
+
+                // Mapping associative arrays recursively
+
+                if( $na > 0 ) {
+
+                    $obj -> {$k} = self::map( $v );
+
+                } else {
+
+                    // Keeping indexed arrays as defined
+
+                    $obj -> {$k} = $v;
+                }
+
+            } else {
+
+                // Keeping non-array values untouched
+
+                $obj -> {$k} = $v;
+            }
         }
 
-        return $param;
+        return $obj;
     }
 
     // Accessors

@@ -2,9 +2,9 @@
 
 namespace Next\Validate\File;
 
-use Next\Validate\Validate;    # Validate Interface
+use Next\Validate\Validator;    # Validator Interface
 
-use Next\Components\Object;    # Object Class
+use Next\Components\Object;     # Object Class
 
 /**
  * File Size Validation Class
@@ -14,16 +14,16 @@ use Next\Components\Object;    # Object Class
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class Size extends Object implements Validate {
+class Size extends Object implements Validator {
 
     /**
      * Error Message
      *
-     * @var string $errorMessage
+     * @var string $_error
      */
-    protected $errorMessage = 'Maximum file size exceeded';
+    protected $_error = 'Maximum file size exceeded';
 
-    // Validate Interface Methods
+    // Validator Interface Methods
 
     /**
      * Validates given File Size

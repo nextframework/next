@@ -103,6 +103,10 @@ class ArrayUtils {
      */
     public static function map( $param ) {
 
+        if( is_array( $param ) || $param instanceof \stdClass ) {
+            return array_map( __METHOD__, (array) $param );
+        }
+
         if( is_object( $param ) ) {
 
             /**
@@ -131,10 +135,6 @@ class ArrayUtils {
 
                 $param[ $property -> getName() ] = $property -> getValue( $object );
             }
-        }
-
-        if( is_array( $param ) ) {
-            return array_map( __METHOD__, $param );
         }
 
         return $param;
@@ -211,69 +211,6 @@ class ArrayUtils {
                 )
             );
         }
-    }
-
-    /**
-     * Check if a value exists in array
-     *
-     * @param mixed $needle
-     *  The needle we are looking for
-     *
-     * @param array $haystack
-     *  The haystack to search
-     *
-     * @param boolean|optional $strict
-     *  Different of native in_array(), the strict flag here distinguishes
-     *  two different strings and not only two different types of data
-     *
-     * @return boolean
-     *  TRUE if given needle is present in given haystack, even if
-     *  multidimensional. FALSE otherwise.
-     */
-    public static function in( $needle, array $haystack, $strict = FALSE ) {
-
-        $iterator = new \RecursiveIteratorIterator( new \RecursiveArrayIterator( $haystack ) );
-
-        foreach( $iterator as $item ) {
-
-            // Nothing to compare against
-
-            if( is_null( $item ) ) continue;
-
-            if( ! $strict ) {
-
-                // Strings
-
-                if( is_string( $item ) && is_string( $needle ) ) {
-
-                    return ( strcasecmp( $item, $needle ) == 0 );
-
-                } elseif( is_object( $item ) && method_exists( $item, '__toString' ) ) {
-
-                    // Objects
-
-                    return ( strcasecmp( (string) $item, $needle ) == 0 );
-
-                } elseif( is_array( $item ) ) {
-
-                    // Arrays
-
-                    return ( serialize( $item ) == serialize( $needle ) );
-
-                } else {
-
-                    // Everything else
-
-                    return( $item == $needle );
-                }
-
-            } else {
-
-                return ( $item === $needle );
-            }
-        }
-
-        return FALSE;
     }
 
     /**

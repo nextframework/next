@@ -6,6 +6,11 @@ use Next\HTTP\Headers\Fields\Response;         # Response Headers Interface
 use Next\HTTP\Headers\Fields\AbstractField;    # Header Field Abstract Class
 
 /**
+ * Response X-Content-Type-Options Header Field Validator Class
+ */
+use Next\Validate\HTTP\Headers\Response\XContentTypeOptions;
+
+/**
  * X-Content-Type-Options Header Field Class
  *
  * @author        Bruno Augusto
@@ -39,13 +44,11 @@ class XContentTypeOptions extends AbstractField implements Response {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validate
+     * @return Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new \Next\Validate\HTTP\Headers\Response\XContentTypeOptions(
-            array( 'value' => $value )
-        );
+        return new XContentTypeOptions( array( 'value' => $value ) );
     }
 
     /**

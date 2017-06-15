@@ -2,7 +2,7 @@
 
 namespace Next\Validate\File;
 
-use Next\Validate\Validate;              # Validate Interface
+use Next\Validate\Validator;             # Validator Interface
 
 use Next\Components\Object;              # Object Class
 
@@ -16,16 +16,16 @@ use Next\Components\Utils\ArrayUtils;    # Array Utils Class
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class MimeType extends Object implements Validate {
+class MimeType extends Object implements Validator {
 
     /**
      * Error Message
      *
-     * @var string $errorMessage
+     * @var string $_error
      */
-    protected $errorMessage = 'Invalid file type';
+    protected $_error = 'Invalid file type';
 
-    // Validate Interface Methods
+    // Validator Interface Methods
 
     /**
      * Validates given File MimeType
@@ -39,8 +39,10 @@ class MimeType extends Object implements Validate {
 
         if( count( (array) $this -> options -> acceptedFileTypes ) == 0 ) return TRUE;
 
-        $type = ( is_array( $data ) ? $data[ 2 ] : $data );
+        $test = ArrayUtils::search(
+            (array) $this -> options -> acceptedFileTypes, $data
+        );
 
-        return ( ArrayUtils::in( $type, (array) $this -> options -> acceptedFileTypes ) );
+        return ( $test != -1 );
     }
 }

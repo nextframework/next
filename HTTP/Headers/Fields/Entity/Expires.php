@@ -2,8 +2,9 @@
 
 namespace Next\HTTP\Headers\Fields\Entity;
 
-use Next\HTTP\Headers\Fields\Entity;        # Entity Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField; # Header Field Abstract Class
+use Next\HTTP\Headers\Fields\Entity;              # Entity Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;       # Header Field Abstract Class
+use Next\Validate\HTTP\Headers\Entity\Expires;    # Expires Header Field Validator Class
 
 /**
  * Expires Header Field Class
@@ -23,13 +24,11 @@ class Expires extends AbstractField implements Entity {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validate
+     * @return Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new \Next\Validate\HTTP\Headers\Entity\Expires(
-            array( 'value' => $value )
-        );
+        return new Expires( array( 'value' => $value ) );
     }
 
     /**

@@ -132,20 +132,4 @@ class TableException extends \Next\Components\Debug\Exception {
     public static function execute( StatementException $e ) {
         return new self( $e -> getMessage(), self::EXECUTE );
     }
-
-    /**
-     * Data Access Violation
-     *
-     * @return Next\DB\Table\TableException
-     *  Data Access Violation Exception
-     */
-    public static function accessViolation() {
-
-        return new self(
-
-            'Data must not be directly manipulated',
-
-            self::ACCESS_VIOLATION
-        );
-    }
 }

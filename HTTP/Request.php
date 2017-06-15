@@ -385,11 +385,10 @@ class Request extends Object {
 
         $scheme = parse_url( $this -> uri, PHP_URL_SCHEME );
 
-        // Should we return the Requested URI untouched?
+        // Should we return the Requested URI (almost) untouched?
 
         if( ! $stripBasePath || ! is_null( $scheme ) ) {
-
-            return $this -> uri;
+            return trim( $this -> uri, '/' );
         }
 
         //$uri = trim( str_ireplace( $this -> basepath, '', $this -> uri ), '/' );

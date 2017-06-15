@@ -89,11 +89,11 @@ abstract class AbstractController extends Object implements Controller {
             // HTTP GET Params (a.k.a. Dynamic Params) as Template Variables
 
             $this -> view -> assign( $this -> request -> getQuery() );
+
+            // Constructing parent Object, which executes additional initialization routines
+
+            parent::__construct( $options );
         }
-
-        // Constructing parent Object, which executes additional initialization routines
-
-        parent::__construct( $options );
     }
 
     // Accessors

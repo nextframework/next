@@ -2,7 +2,7 @@
 
 namespace Next\File\Upload\Methods;
 
-use Next\Validate\Validate;                          # Validate Interface
+use Next\Validate\Validator;                         # Validator Interface
 use Next\File\Upload\PostProcessor\PostProcessor;    # Post Processor Interface
 
 interface Method {
@@ -13,11 +13,11 @@ interface Method {
     public function handle();
 
     /**
-     * Add an Object to Validators Chain
+     * Add an external Validator to the Chain
      *
-     * @param Next\Validate\Validate $validator
+     * @param Next\Validate\Validator $validator
      */
-    public function addValidator( Validate $validator );
+    public function addValidator( Validator $validator );
 
     /**
      * Get external Validators

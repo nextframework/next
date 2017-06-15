@@ -2,8 +2,8 @@
 
 namespace Next\Validate\HTTP\Headers;
 
-use Next\Validate\Validate;     # Validate Interface
-use Next\Validate\HTTP\HTTP;    # HTTP Protocol Interface
+use Next\Validate\Validatable;     # Validatable Interface
+use Next\Validate\HTTP\HTTP;       # HTTP Protocol Interface
 
 /**
  * HTTP Headers Validation Interface
@@ -13,7 +13,7 @@ use Next\Validate\HTTP\HTTP;    # HTTP Protocol Interface
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-interface Headers extends Validate, HTTP {
+interface Headers extends Validatable, HTTP {
 
     /**
      * Quality Factor Regular Expression

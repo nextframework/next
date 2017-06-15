@@ -2,8 +2,9 @@
 
 namespace Next\HTTP\Headers\Fields\Response;
 
-use Next\HTTP\Headers\Fields\Response;         # Response Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField;    # Header Field Abstract Class
+use Next\HTTP\Headers\Fields\Response;             # Response Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;        # Header Field Abstract Class
+use Next\Validate\HTTP\Headers\Response\Server;    # Response Server Header Field Validator Class
 
 /**
  * Server Header Field Class
@@ -23,13 +24,11 @@ class Server extends AbstractField implements Response {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validate
+     * @return Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new \Next\Validate\HTTP\Headers\Response\Server(
-            array( 'value' => $value )
-        );
+        return new Server( array( 'value' => $value ) );
     }
 
     /**

@@ -2,9 +2,9 @@
 
 namespace Next\Validate\IANA;
 
-use Next\Validate\Validate;    # Validate Interface
+use Next\Validate\Validator;    # Validator Interface
 
-use Next\Components\Object;    # Object Class
+use Next\Components\Object;     # Object Class
 
 /**
  * IANA Content Encoding Validation Class
@@ -14,7 +14,7 @@ use Next\Components\Object;    # Object Class
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class ContentEncoding extends Object implements Validate {
+class ContentEncoding extends Object implements Validator {
 
     /**
      * Valid Content Encodings
@@ -26,7 +26,7 @@ class ContentEncoding extends Object implements Validate {
      */
     const ENCODING = '(?:compress|deflate|exi|gzip|identity|pack200-gzip)';
 
-    // Validate Interface Methods
+    // Validator Interface Methods
 
     /**
      * Validates given Content Encoding

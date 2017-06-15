@@ -4,7 +4,7 @@ namespace Next\File\Upload\Methods;
 
 use Next\Components\Object;                                        # Object Class
 
-use Next\Validate\Validate;                                        # Next Validate Interface REMOVE
+use Next\Validate\Validator;                                       # Validator Interface
 
 use Next\Validate\Chain as ValidatorsChain;                        # Validator Chain
 use Next\File\Upload\PostProcessor\Chain as PostProcessorChain;    # Post-Processor Chain
@@ -71,15 +71,15 @@ abstract class AbstractMethod extends Object implements Method {
     // Method Interface Methods Implementations
 
     /**
-     * Add an external Validator
+     * Add an external Validator to the Chain
      *
-     * @param Next\Validate\Validate $validator
+     * @param Next\Validate\Validator $validator
      *  External Validator
      *
      * @return Next\File\Upload\Methods\Method
      *  Upload Method Object (Fluent-Interface)
      */
-    public function addValidator( Validate $validator ) {
+    public function addValidator( Validator $validator ) {
 
         $this -> validators -> add( $validator );
 

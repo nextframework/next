@@ -2,8 +2,9 @@
 
 namespace Next\HTTP\Headers\Fields\Request;
 
-use Next\HTTP\Headers\Fields\Request;        # Request Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField;  # Header Field Abstract Class
+use Next\HTTP\Headers\Fields\Request;             # Request Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;       # Header Field Abstract Class
+use Next\Validate\HTTP\Headers\Request\Accept;    # Request Accept Header Field Validator Class
 
 /**
  * Accept Header Field Class
@@ -23,13 +24,11 @@ class Accept extends AbstractField implements Request {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validate
+     * @return Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new \Next\Validate\HTTP\Headers\Request\Accept(
-            array( 'value' => $value )
-        );
+        return new Accept( array( 'value' => $value ) );
     }
 
     /**

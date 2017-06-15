@@ -2,7 +2,7 @@
 
 namespace Next\Cache\Schema;
 
-use Next\HTTP\Headers\Fields\Entity\ContentType;      # Content-Type Hader Class
+use Next\HTTP\Headers\Fields\Entity\ContentType;      # Content-Type Header Class
 use Next\HTTP\Headers\Fields\Entity\ContentLength;    # Content-Length Header Class
 use Next\HTTP\Headers\Fields\Entity\LastModified;     # Last-Modified Header Class
 use Next\HTTP\Headers\Fields\Common\CacheControl;     # Cache-Control Header Class
@@ -45,7 +45,7 @@ class Response extends AbstractSchema {
 
             // Static Files
 
-            'map', 'js', 'json', 'css', 'txt', 'xml'
+            'cur', 'map', 'js', 'json', 'css', 'txt', 'xml'
         ),
 
         'skip' => array()
@@ -60,18 +60,20 @@ class Response extends AbstractSchema {
 
         // Images
 
-        'png' => 'image/png', 'jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg',
-        'gif' => 'image/gif', 'svg' => 'image/svg+xml', 'ico' => 'image/x-icon',
+        'png' => 'image/png', 'jpg' => 'image/jpeg',    'jpeg' => 'image/jpeg',
+        'gif' => 'image/gif', 'svg' => 'image/svg+xml', 'ico'  => 'image/x-icon',
 
         // Fonts
 
-        'eot' => 'application/vnd.ms-fontobject', 'otf' => 'font/opentype',
+        'eot' => 'application/vnd.ms-fontobject',   'otf'   => 'font/opentype',
         'ttf' => 'font/ttf', 'woff' => 'font/woff', 'woff2' => 'font/woff2',
 
         // Static Files
 
-        'map' => 'application/json', 'js' => 'application/javascript', 'json' => 'application/json',
-        'css' => 'text/css', 'txt' => 'text/plain', 'xml' => 'application/xml'
+        'cur'  => 'application/x-win-bitmap',
+        'map'  => 'application/json', 'js' => 'application/javascript',
+        'json' => 'application/json', 'css' => 'text/css', 'txt' => 'text/plain',
+        'xml'  => 'application/xml'
     );
 
     /**
@@ -85,7 +87,7 @@ class Response extends AbstractSchema {
             (array) $this -> options -> cacheable, (array) $this -> options -> skip
         );
 
-        $regexp = sprintf( '/\.(%s)(?:\?.*?)?$/', implode( '|', $extensions ) );
+        $regexp = sprintf( '/\.(%s)(\?.*?)?$/', implode( '|', $extensions ) );
 
         if( preg_match( $regexp, $URI, $matches ) ) {
 
@@ -106,6 +108,28 @@ class Response extends AbstractSchema {
 
             $response = $this -> application -> getResponse();
 
+            /**
+             * @internal
+             *
+             * Removing all contents after URI, like static files
+             * versioning (i.e. file.css?v=1.2.3) so it can be found by
+             * PHP's file functions and thus filemtime won't file (hopefully >.<)
+             */
+            if( isset( $matches[ 2 ] ) ) {
+                $URI = str_replace( $matches[ 2 ], '', $URI );
+            }
+
+            // File not found
+
+            if( ! file_exists( $URI ) ) {
+
+                $response -> addHeader(
+                    new Raw( array( 'value' => 'HTTP/1.1 404 Not Found' ) )
+                );
+
+                $response -> send();
+            }
+
             // Timestamp of last modification
 
             $lm = filemtime( $URI );
@@ -119,7 +143,6 @@ class Response extends AbstractSchema {
             $response -> addHeader( new ETag( array( 'value' => $etag ) ) )
                       -> addHeader( new CacheControl( array( 'value' => 'public' ) ) );
 
-            //var_dump( $response -> getHeaders() );exit;
             // Ugliest shortening ever >.<
 
             $HIMS = ( isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) ? $_SERVER['HTTP_IF_MODIFIED_SINCE'] : FALSE );

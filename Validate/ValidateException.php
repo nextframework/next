@@ -32,7 +32,7 @@ class ValidateException extends \Next\Components\Debug\Exception {
      * Invalid Chain Validator
      *
      * Given Object is not a valid Validator because it doesn't
-     * implements neither Next\Validate\Validate and/or
+     * implements neither Next\Validate\Validator and/or
      * Next\Components\Interfaces\Informational interfaces
      *
      * @param Next\Components\Object $object

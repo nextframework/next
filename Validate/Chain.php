@@ -20,8 +20,10 @@ class Chain extends AbstractCollection {
     /**
      * Executes all Validators added to the Chain
      *
-     * @return boolean|Next\Validate\Validate
-     *  TRUE if valid by all Validators and Validator Object otherwise
+     * @return boolean|Next\Validate\Validator
+     *  TRUE if there's no Validator added to the Chain -OR- if the
+     *  value is valid by all Validators on it and
+     *  Next\Validate\Validator Object otherwise
      */
     public function validate() {
 
@@ -29,7 +31,13 @@ class Chain extends AbstractCollection {
 
         foreach( $this -> getIterator() as $validator ) {
 
-            if( $validator -> validate() === FALSE ) return $validator;
+            $results = $validator -> validate();
+
+            // Grouping any Informational Messages sent by each Validator
+
+            $this -> _info[ (string) $validator ] = $validator -> getInformationalMessage();
+
+            if( $results === FALSE ) return $validator;
         }
 
         return TRUE;
@@ -41,7 +49,7 @@ class Chain extends AbstractCollection {
      * Check Object acceptance
      *
      * Check if given Validator is acceptable in Validator Chain
-     * To be valid, the Validator must implement both Next\Validate\Validate
+     * To be valid, the Validator must implement both Next\Validate\Validator
      * and Next\Components\Interfaces\Informational interfaces
      *
      * @param Next\Components\Object $object
@@ -57,7 +65,7 @@ class Chain extends AbstractCollection {
      */
     public function accept( Object $object ) {
 
-        if( ! $object instanceof Validate || ! $object instanceof Informational ) {
+        if( ! $object instanceof Validator || ! $object instanceof Informational ) {
             throw ValidateException::invalidChainValidator( $object );
         }
 

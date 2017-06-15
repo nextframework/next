@@ -102,14 +102,14 @@ class ErrorController extends AbstractController {
 
                 $this -> view -> title = $this -> data[ $this -> code ]['title'];
                 $this -> view -> footnote = sprintf(
-                    $this -> data[ $this -> code ]['footnote'], $this -> request -> getRequestURI()
+                    $this -> data[ $this -> code ]['footnote'], $this -> request -> getRequestURI( FALSE )
                 );
 
             } else {
 
                 $this -> view -> title = NULL;
                 $this -> view -> footnote = sprintf(
-                    '<em>%s</em>', $this -> request -> getRequestURI()
+                    '<em>%s</em>', $this -> request -> getRequestURI( FALSE )
                 );
             }
 

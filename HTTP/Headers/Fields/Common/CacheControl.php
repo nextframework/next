@@ -2,7 +2,8 @@
 
 namespace Next\HTTP\Headers\Fields\Common;
 
-use Next\HTTP\Headers\Fields\AbstractField; # Header Field Abstract Class
+use Next\HTTP\Headers\Fields\AbstractField;           # Header Field Abstract Class
+use Next\Validate\HTTP\Headers\Common\CacheControl    # Cache Control Header Field Validator Class
 
 /**
  * Cache-Control Header Field Class
@@ -22,13 +23,11 @@ class CacheControl extends AbstractField {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validate
+     * @return Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new \Next\Validate\HTTP\Headers\Common\CacheControl(
-            array( 'value' => $value )
-        );
+        return new CacheControl( array( 'value' => $value ) );
     }
 
     /**

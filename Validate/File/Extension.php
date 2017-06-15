@@ -2,7 +2,7 @@
 
 namespace Next\Validate\File;
 
-use Next\Validate\Validate;              # Validate Interface
+use Next\Validate\Validator;             # Validator Interface
 
 use Next\Components\Object;              # Object Class
 
@@ -17,16 +17,16 @@ use Next\File\Tools;                     # File Tools Class
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class Extension extends Object implements Validate {
+class Extension extends Object implements Validator {
 
     /**
      * Error Message
      *
-     * @var string $errorMessage
+     * @var string $_error
      */
-    protected $errorMessage = 'Invalid file extension';
+    protected $_error = 'Invalid file extension';
 
-    // Validate Interface Methods
+    // Validator Interface Methods
 
     /**
      * Validates given File Extension
@@ -36,19 +36,17 @@ class Extension extends Object implements Validate {
      */
     public function validate() {
 
-        $data = $this -> options -> value;
-
         if( count( (array) $this -> options -> acceptedFileExtensions ) == 0 ) {
             return TRUE;
         }
 
-        $ext = ( is_array( $data ) ? $data[ 0 ] : $data );
+        $test = ArrayUtils::search(
 
-        return ArrayUtils::in(
+            (array) $this -> options -> acceptedFileExtensions,
 
-            Tools::getFileExtension( $ext ),
-
-            (array) $this -> options -> acceptedFileExtensions
+            Tools::getFileExtension( $this -> options -> value )
         );
+
+        return ( $test != -1 );
     }
 }

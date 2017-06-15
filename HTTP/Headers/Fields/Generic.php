@@ -2,6 +2,8 @@
 
 namespace Next\HTTP\Headers\Fields;
 
+use Next\Validate\HTTP\Headers\Generic;    # Generic Header Field Validator Class
+
 /**
  * Generic Header Field Class
  *
@@ -20,14 +22,11 @@ class Generic extends AbstractField {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validate
+     * @return Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-
-        return new \Next\Validate\HTTP\Headers\Generic(
-            array( 'value' => $value )
-        );
+        return new Generic( array( 'value' => $value ) );
     }
 
     /**

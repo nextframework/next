@@ -2,8 +2,9 @@
 
 namespace Next\HTTP\Headers\Fields\Entity;
 
-use Next\HTTP\Headers\Fields\Entity;        # Entity Headers Interface
-use Next\HTTP\Headers\Fields\AbstractField; # Header Field Abstract Class
+use Next\HTTP\Headers\Fields\Entity;                      # Entity Headers Interface
+use Next\HTTP\Headers\Fields\AbstractField;               # Header Field Abstract Class
+use Next\Validate\HTTP\Headers\Entity\ContentEncoding;    # Content-Encoding Header Field Validator Class
 
 /**
  * Content-Encoding Header Field Class
@@ -23,13 +24,11 @@ class ContentEncoding extends AbstractField implements Entity {
      * @param mixed|string $value
      *  Header value to be validated
      *
-     * @return Next\Validate\Validate
+     * @return Next\Validate\Validator
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new \Next\Validate\HTTP\Headers\Entity\ContentEncoding(
-            array( 'value' => $value )
-        );
+        return new ContentEncoding( array( 'value' => $value ) );
     }
 
     /**

@@ -169,9 +169,25 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
      *
      * @return boolean
      *  TRUE if given offset exists and FALSE otherwise
+     *
+     * @throws Next\DB\Table\DataGatewayException
+     *  Thrown if trying to remove data from an empty Next\DB\Table\Table
+     *
+     * @throws Next\DB\Table\DataGatewayException
+     *  Thrown if trying to test data of a Next\DB\Table\Table
+     *  from a RowSet with multiple records
      */
     public function offsetExists( $offset ) {
-        return ( $this -> source[ $offset ] !== FALSE );
+
+        $length = count( $this -> source );
+
+        if( $length ==  0 ) throw DataGatewayException::emptyDataSource();
+
+        if( $length > 1 ) {
+            throw DataGatewayException::accessViolation();
+        }
+
+        return isset( $this -> source[ 0 ] -> {$offset} );
     }
 
     /**
@@ -182,9 +198,29 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
      *
      * @return mixed|boolean
      *  Data stored at given offset if it exists and FALSE otherwise
+     *
+     * @throws Next\DB\Table\DataGatewayException
+     *  Thrown if trying to access data from an empty Next\DB\Table\Table
+     *
+     * @throws Next\DB\Table\DataGatewayException
+     *  Thrown if trying to access data of a Next\DB\Table\Table column
+     *  from a RowSet with multiple records
      */
     public function offsetGet( $offset ) {
-        return $this -> source[ $offset ];
+
+        $length = count( $this -> source );
+
+        if( $length ==  0 ) throw DataGatewayException::emptyDataSource();
+
+        if( $length > 1 ) {
+            throw DataGatewayException::accessViolation();
+        }
+
+        if( isset( $this -> source[ 0 ][ $offset ] ) ) {
+            return $this -> source[ 0 ][ $offset ];
+        }
+
+        return FALSE;
     }
 
     /**
@@ -196,11 +232,17 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
      * @param mixed $data
      *  Data to add
      *
-     * @throws Next\DB\Table\TableException
-     *  Always thrown as RowSet Data must not be added manually
+     * @throws Next\DB\Table\DataGatewayException
+     *  Thrown if trying to modify data of a Next\DB\Table\Table
+     *  from a RowSet with multiple records
      */
     public function offsetSet( $offset, $data ) {
-        throw TableException::accessViolation();
+
+        if( count( $this -> source ) > 1 ) {
+            throw DataGatewayException::accessViolation();
+        }
+
+        $this -> source[ 0 ] -> {$offset} = $data;
     }
 
     /**
@@ -209,11 +251,26 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
      * @param  mixed|string|integer $offset
      *  Offset to unset
      *
-     * @throws Next\DB\Table\TableException
-     *  Always thrown as RowSet Data must not be added manually
+     * @throws Next\DB\Table\DataGatewayException
+     *  Thrown if trying to remove data from an empty Next\DB\Table\Table
+     *
+     * @throws Next\DB\Table\DataGatewayException
+     *  Thrown if trying to remove data of a Next\DB\Table\Table
+     *  from a RowSet with multiple records
      */
     public function offsetUnset( $offset ) {
-        throw TableException::accessViolation();
+
+        $length = count( $this -> source );
+
+        if( $length ==  0 ) throw DataGatewayException::emptyDataSource();
+
+        if( $length > 1 ) {
+            throw DataGatewayException::accessViolation();
+        }
+
+        if( isset( $this -> source[ 0 ] -> {$offset} ) ) {
+            unset( $this -> source[ 0 ] -> {$offset} );
+        }
     }
 
     /**
@@ -229,29 +286,13 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
      * @param mixed|string $column
      *  Column to be retrieved
      *
-     * @return mixed|void
-     *  The column value, if exists and "nothing" otherwise
+     * @return mixed|boolean
+     *  The column value, if exists and FALSE otherwise
      *
-     * @throws Next\DB\Table\DataGatewayException
-     *  Throw if trying to access data of a Next\DB\Table\Table column
-     *  from a RowSet with multiple records
-     *
-     * @see Next\DB\Table\Table::offsetExists()
      * @see Next\DB\Table\Table::offsetGet()
      */
     public function __get( $column ) {
-
-        $length = count( $this -> source );
-
-        if( $length ==  0 ) return;
-
-        if( $length > 1 ) {
-            throw DataGatewayException::accessViolation();
-        }
-
-        if( isset( $this -> source[ 0 ][ $column ] ) ) {
-            return $this -> source[ 0 ][ $column ];
-        }
+        return $this -> offsetGet( $column );
     }
 
     /**
@@ -266,22 +307,10 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
      * @param mixed $value
      *  New value
      *
-     * @return void
-     *
-     * @throws Next\DB\Table\DataGatewayException
-     *  Throw if trying to modify data of a Next\DB\Table\Table
-     *  from a RowSet with multiple records
-     *
-     * @see Next\DB\Table\Table::offsetExists()
      * @see Next\DB\Table\Table::offsetSet()
      */
     public function __set( $column, $value ) {
-
-        if( count( $this -> source ) > 1 ) {
-            throw DataGatewayException::accessViolation();
-        }
-
-        $this -> source[ 0 ] -> {$column} = $value;
+        $this -> offsetSet( $column, $value );
     }
 
     /**
@@ -293,24 +322,22 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
      *
      * @return boolean
      *  TRUE if desired column exists and FALSE otherwise
-     *  If there's nothing defined as source, FALSE is also returned
-     *
-     * @throws Next\DB\Table\DataGatewayException
-     *  Throw if trying to test data of a Next\DB\Table\Table
-     *  from a RowSet with multiple records
      *
      * @see Next\DB\Table\Table::offsetExists()
      */
     public function __isset( $column ) {
+        return $this -> offsetExists( $column );
+    }
 
-        $length = count( $this -> source );
-
-        if( $length ==  0 ) return FALSE;
-
-        if( $length > 1 ) {
-            throw DataGatewayException::accessViolation();
-        }
-
-        return isset( $this -> source[ 0 ] -> {$column} );
+    /**
+     * Removes given column from Data-source if it exists
+     *
+     * @param  mixed|string  $column
+     *  Column to remove
+     *
+     * @see Next\DB\Table\Table::offsetUnset()
+     */
+    public function __unset( $column ) {
+        $this -> offsetUnset( $column );
     }
 }

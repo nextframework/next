@@ -17,7 +17,7 @@ class Parameter implements \Countable, \ArrayAccess {
     /**
      * Object Parameters
      *
-     * @var stdClass|Next\Components\Parameter $parameters
+     * @var stdClass $parameters
      */
     private $parameters;
 
@@ -45,22 +45,15 @@ class Parameter implements \Countable, \ArrayAccess {
 
         list( $common, $custom, $user ) = func_get_args() + array( NULL, NULL, NULL );
 
-        if( $common instanceof Parameter ) {
+        $this -> parameters = new \stdClass;
 
-            $this -> parameters = $common;
+        // Building Options (by merging them)
 
-        } else {
+        if( ! is_null( $common ) ) $this -> merge( $common );
 
-            $this -> parameters = new \stdClass;
+        if( ! is_null( $custom ) ) $this -> merge( $custom );
 
-            // Building Options (by merging them)
-
-            if( ! is_null( $common ) ) $this -> merge( $common );
-
-            if( ! is_null( $custom ) ) $this -> merge( $custom );
-
-            if( ! is_null( $user ) ) $this -> merge( $user );
-        }
+        if( ! is_null( $user ) )   $this -> merge( $user );
     }
 
     /**
@@ -95,25 +88,21 @@ class Parameter implements \Countable, \ArrayAccess {
 
         if( is_array( $param ) ) $param = Object::map( $param );
 
-        if( $param instanceof Object || $param instanceof \stdClass ) {
-
-            // Merging...
-
-            foreach( $param as $property => $value ) {
-
-                if( is_int( $property ) ) {
-
-                    throw new Exception(
-
-                        'All options must be an associative array'
-                    );
-
-                } else {
-
-                    $this -> parameters -> {$property} = $value;
-                }
-            }
+        if( $param instanceof Parameter ) {
+            return $this -> merge( $param -> getParameters() );
         }
+
+        // Merging...
+
+        foreach( $param as $property => $value ) {
+            $this -> parameters -> {$property} = $value;
+        }
+    }
+
+    // Accessors
+
+    public function getParameters() {
+        return $this -> parameters;
     }
 
     // Countable Interface Method Implementation
@@ -127,7 +116,7 @@ class Parameter implements \Countable, \ArrayAccess {
      * @see Countable::count()
      */
     public function count() {
-        return count( get_object_vars( $this ), TRUE );
+        return count( get_object_vars( $this -> parameters ) );
     }
 
     // ArrayAccess Interface Methods Implementation
@@ -140,21 +129,60 @@ class Parameter implements \Countable, \ArrayAccess {
      *
      * @param mixed $value
      *  Parameter value
-     *
-     * @throws Next\Components\Debug\Exception
-     *  Thrown if trying to add a value without an identifier for it, differently of
-     *  most implementations of ArrayAccess::offsetSet():
      */
     public function offsetSet( $identifier, $value ) {
 
-        if( is_null( $identifier ) ) {
+        if( is_array( $value ) ) {
 
-            throw new Exception(
-                'Parameter Objects require a string to serve as identifier for the value being added'
-            );
+            /**
+             * @internal
+             *
+             * The only way for Next\Components\Object::map() to handle the
+             * integrity checking below is to NOT condition Parameter::offsetSet()
+             * routine to be or not an array
+             *
+             * But removing this condition the innermost values of each individual
+             * parameter, the ones that really serves as configuration for something
+             * instead of just define a complex structure, *may* not be an array
+             * at some point and thus the foreach in Object::map() would fail
+             *
+             * Restrict Object::map() exclusively to traversable resources is not
+             * very reliable as well because this checking is based upon keys of
+             * an array and Traversable Objects may not have them
+             *
+             * In any event, it's safer repeating the checking here as well ;)
+             */
+            $keys = array_keys( $value );
+
+            $na = count( array_filter( $keys, 'is_string') );
+            $ni = count( array_filter( $keys, 'is_int') );
+
+            if( $na > 0 && $ni > 0 ) {
+
+                throw ComponentsException::mapping(
+                    'Mixed associative and indexed content is not allowed'
+                );
+            }
+
+            // Mapping associative arrays recursively
+
+            if( $na > 0 ) {
+
+                $this -> parameters -> {$identifier} = Object::map( $value );
+
+            } else {
+
+                // Keeping indexed arrays as defined
+
+                $this -> parameters -> {$identifier} = $value;
+            }
+
+        } else {
+
+            // Keeping non-array values untouched
+
+            $this -> parameters -> {$identifier} = $value;
         }
-
-        $this -> parameters -> {$identifier} = $value;
     }
 
     /**
@@ -167,7 +195,7 @@ class Parameter implements \Countable, \ArrayAccess {
      *  TRUE if Parameter Identifier exists and FALSE otherwise
      */
     public function offsetExists( $identifier ) {
-        return isset( $this -> parameters -> {$identifier} );
+        return ( isset( $this -> parameters -> {$identifier} ) );
     }
 
     /**
@@ -183,11 +211,11 @@ class Parameter implements \Countable, \ArrayAccess {
 
         if( ! isset( $this -> parameters -> {$identifier} ) ) {
 
-            throw new Exception(
+            throw Exception::logic(
 
-                sprintf(
-                    'Identifier <strong>%s</strong> doesn\'t exist and thus cannot be removed', $identifier
-                )
+                'Identifier <strong>%s</strong> doesn\'t exist and therefore cannot be removed',
+
+                array( $identifier )
             );
         }
 
@@ -204,7 +232,19 @@ class Parameter implements \Countable, \ArrayAccess {
      *  Parameter value
      */
     public function offsetGet( $identifier ) {
-        return ( isset( $this -> parameters -> {$identifier} ) ? $this -> parameters -> {$identifier} : NULL );
+
+        if( ! isset( $this -> parameters -> {$identifier} ) ) {
+            return NULL;
+        }
+
+        if( $this -> parameters -> {$identifier} instanceof Parameter ) {
+
+            return $this -> parameters -> {$identifier} -> getParameters();
+
+        } else {
+
+            return $this -> parameters -> {$identifier};
+        }
     }
 
     // Overloading
@@ -219,7 +259,7 @@ class Parameter implements \Countable, \ArrayAccess {
      *  TRUE if Parameter Identifier exists and FALSE otherwise
      */
     public function __isset( $identifier ) {
-        return ( isset( $this -> parameters -> {$identifier} ) );
+        return $this -> offsetExists( $identifier );
     }
 
     /**
@@ -232,18 +272,7 @@ class Parameter implements \Countable, \ArrayAccess {
      *  thrown if trying to remove a Identifier that doesn't exist
      */
     public function __unset( $identifier ) {
-
-        if( ! isset( $this -> parameters -> {$identifier} ) ) {
-
-            throw new Exception(
-
-                sprintf(
-                    'Identifier <strong>%s</strong> doesn\'t exist and thus cannot be removed', $identifier
-                )
-            );
-        }
-
-        unset( $this -> parameters -> {$identifier} );
+        $this -> offsetUnset( $identifier );
     }
 
     /**
@@ -256,7 +285,7 @@ class Parameter implements \Countable, \ArrayAccess {
      *  Parameter value
      */
     public function __set( $identifier, $value ) {
-        $this -> parameters -> {$identifier} = $value;
+        $this -> offsetSet( $identifier, $value );
     }
 
     /**
@@ -269,6 +298,6 @@ class Parameter implements \Countable, \ArrayAccess {
      *  Parameter value
      */
     public function __get( $identifier ) {
-        return ( isset( $this -> parameters -> {$identifier} ) ? $this -> parameters -> {$identifier} : NULL );
+        return $this -> offsetGet( $identifier );
     }
 }

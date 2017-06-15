@@ -111,9 +111,9 @@ class Standard extends AbstractRouter {
              * Setting Up Found Controller and its action to be used in View,
              * as part of findFilebySpec() method
              */
-            $this -> controller =& $data -> controller;
+            $this -> controller = $data -> controller;
 
-            $this -> method     =& $data -> method;
+            $this -> method     = $data -> method;
 
             // Analyzing Params
 

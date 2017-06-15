@@ -2,9 +2,9 @@
 
 namespace Next\Validate\ISO\ISO8601;
 
-use Next\Validate\Validate;    # Validate Interface
+use Next\Validate\Validator;    # Validator Interface
 
-use Next\Components\Object;    # Object Class
+use Next\Components\Object;     # Object Class
 
 /**
  * ISO-8601 Validation Class
@@ -14,7 +14,9 @@ use Next\Components\Object;    # Object Class
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class Period extends Object implements Validate {
+class Period extends Object implements Validator {
+
+    // Validator Interface Method Implementation
 
     /**
      * Validates a ISO 8601 Duration Format
