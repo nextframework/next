@@ -10,6 +10,8 @@
  */
 namespace Next\Tools\Routes\Generators;
 
+use Next\Tools\Routes\Generators\GeneratorsException;    # Routes Generator Exception Class
+
 /**
  * Routes Generator Tool: Annotations Generator
  *

@@ -31,7 +31,7 @@ class Manager {
     /**
      * Session ID
      *
-     * @staticvar string $ID
+     * @staticvar string $id
      */
     private static $ID = 'PHPSESSID';
 
@@ -156,7 +156,7 @@ class Manager {
 
         // Setting up Session ID
 
-        self::setSessionID( empty( $id ) ? self::$id : $id );
+        self::setSessionID( empty( $id ) ? self::$ID : $id );
 
         // Initializing the Session
 

@@ -143,12 +143,22 @@ class Front extends Object {
                         } catch( DispatcherException $e ) {
 
                             /**
-                             *  Since DispatcherException is thrown only if a
-                             *  ReflectionException is caught and catching this
-                             *  Exception is a mere formality, we can use
-                             *  HTTP Code 503 (Service Unavailable) safely
+                             *  If a DispatcherException should be
+                             *  thrown only when something irreversible
+                             *  happens it means we can safely use an
+                             *  HTTP Code 503 (Service Unavailable)
+                             *
+                             * But we'll condition this to the internal
+                             * constant DEVELOPMENT MODE. If it is defined
+                             * and its value is greater than '1' we'll
+                             * send DEvelopment Exception so the developer
+                             * can, possibly, understand why this is happening
                              */
-                            Handlers::response( 503 );
+                            if( ( defined( 'DEVELOPMENT_MODE' ) && DEVELOPMENT_MODE >= 1 ) ) {
+                                Handlers::development( $e, 503 );
+                            } else {
+                                Handlers::response( 503 );
+                            }
                         }
 
                         // So far, so good. Let's try to send the Response

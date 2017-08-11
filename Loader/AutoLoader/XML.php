@@ -12,8 +12,8 @@ namespace Next\Loader\AutoLoader;
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'AutoLoadable.php';    # AutoLoadable Interface
 
-use Next\Loader\LoaderException;            # Loader Exception Class
 use Next\Loader\AutoLoader\AutoLoadable;    # AutoLoadable Interface
+use Next\Loader\LoaderException;            # AutoLoader Exceptions Class
 
 /**
  * XML Class Map File AutoLoader
@@ -50,8 +50,6 @@ class XML implements AutoLoadable {
 
         if( ! is_file( $file ) ) {
 
-            require_once '/../LoaderException.php';
-
             throw LoaderException::unfullfilledRequirements(
 
                 'XML File File <strong>%s</strong> doesn\'t exists',
@@ -63,8 +61,6 @@ class XML implements AutoLoadable {
         // ... and must be readable
 
         if( ! is_readable( $file ) ) {
-
-            require_once __DIR__ . '/LoaderException.php';
 
             throw LoaderException::unfullfilledRequirements(
 
@@ -98,12 +94,13 @@ class XML implements AutoLoadable {
                 sprintf( "//class[@name='%s']", $classname )
             );
 
-            if( $xpath !== FALSE && count( $xpath ) > 0 ) {
-
-                $attributes = $xpath[0] -> attributes();
-
-                include (string) $attributes['path'];
+            if( $xpath === FALSE || count( $xpath ) <= 0 ) {
+                throw LoaderException::notFound( $classname );
             }
+
+            $attributes = $xpath[0] -> attributes();
+
+            include (string) $attributes['path'];
         };
     }
 }

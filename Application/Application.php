@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Application Abstract Class | Application/AbstractApplication.php
+ * Application Interface | Application/Application.php
  *
  * @author       Bruno Augusto
  *

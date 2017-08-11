@@ -331,7 +331,11 @@ class MySQL extends AbstractRenderer {
      * Render the ORDER BY Clause
      *
      * @param array $fields
-     *  An associative array, where keys are the fields and values orientations
+     *  An array with the ORDER BY rules:
+     *  - If an instance of NEXT\DB\Query\Expression, the raw expression "as is"
+     *  - If an associative array, as defined by
+     *    \Next\DB\Query\Builder::order(), keys are the fields and
+     *    values the orientations
      *
      * @return string
      *  ORDER BY Clause
@@ -342,12 +346,36 @@ class MySQL extends AbstractRenderer {
 
         foreach( $fields as $field ) {
 
-            $column = $this -> quote( key( $field ) );
+            if( $field instanceof Expression ) {
 
-            $clause[] = vsprintf(
+                $expression = $field -> getExpression();
 
-                '%s %s', array( $column, current( $field ) )
-            );
+                /**
+                 * @internal
+                 *
+                 * Should this Expression overwrite previously
+                 * defined ORDER BY Clauses?
+                 */
+                if( $field -> getOptions() -> overwrite !== FALSE ) {
+
+                    $clause = array( $expression );
+
+                } else {
+
+                    // OK, let's append it with them
+
+                    $clause[] = $expression;
+                }
+
+            } else {
+
+                $column = $this -> quote( key( $field ) );
+
+                $clause[] = vsprintf(
+
+                    '%s %s', array( $column, current( $field ) )
+                );
+            }
         }
 
         return sprintf( ' %s %s', self::ORDER_BY, implode( ', ', $clause ) );

@@ -579,9 +579,12 @@ class Builder extends Object {
     /**
      * Add ORDER BY Clause(s)
      *
-     * @param string|array $field
-     *  - As a string, the field to order</p>
-     *  - As an associative array, keys are the fields and values order types
+     * @param string|array|Next\DB\Query\Expression $field
+     *  - As a string, the field to order
+     *  - As an associative array, keys are the fields and values
+     *    order types
+     *  - As a Next\DB\Query\Expression, the Object itself to be
+     *    rendered "as is"
      *
      * @param string|optional $type
      *  Orientation, if <strong>$field</strong> is not an array: ASC or DESC.
@@ -592,7 +595,13 @@ class Builder extends Object {
      */
     public function order( $field, $type = Query::ORDER_ASCENDING ) {
 
-        $this -> order[] = ( is_array( $field ) ? $field : array( $field => $type ) );
+        if( $field instanceof Expression ) {
+
+            $this -> order[] = $field;
+
+        } else {
+            $this -> order[] = ( is_array( $field ) ? $field : array( $field => $type ) );
+        }
 
         return $this;
     }

@@ -28,46 +28,46 @@ class Handlers {
 
     /**
      * Handler Register
-     *
-     * @param string $which
-     *  Which Handler should be registered? Exception or Error
      */
-    public static function register( $which ) {
+    public static function register() {
 
-        switch( $which ) {
+        /**
+         * @internal
+         *
+         * Starting with PHP 7 all Errors and Exceptions are thrown
+         * through the new universal class \Error and because it's a
+         * class capture it is done directly with set_exception_handler()
+         * making this handler just a legacy for older versions
+         */
+        if( version_compare( PHP_VERSION, '7' ) < 0 ) {
 
-            case 'error':
+            /**
+             * @see Handlers::error()
+             */
+            set_error_handler( array( __CLASS__, 'error' ) );
 
-                set_error_handler( array( __CLASS__, 'error' ) );
+            register_shutdown_function( function() {
 
-                register_shutdown_function( function() {
+                $error = error_get_last();
 
-                    $error = error_get_last();
+                if( ! is_null( $error ) ) {
 
-                    if( ! is_null( $error ) ) {
+                    if( ob_get_length() ) ob_clean();
 
-                        if( ob_get_length() ) ob_clean();
-
-                        self::error( $error['type'], $error['message'], $error['file'], $error['line'] );
-                    }
-                });
-
-            break;
-
-            case 'exception':
-
-                set_exception_handler(
-
-                    ( defined( 'DEVELOPMENT_MODE' ) && DEVELOPMENT_MODE >= 1 ?
-
-                        array( __CLASS__, 'development' ) :
-
-                        array( __CLASS__, 'production' )
-                    )
-                );
-
-            break;
+                    self::error( $error['type'], $error['message'], $error['file'], $error['line'] );
+                }
+            });
         }
+
+        set_exception_handler(
+
+            ( defined( 'DEVELOPMENT_MODE' ) && DEVELOPMENT_MODE >= 1 ?
+
+                array( __CLASS__, 'development' ) :
+
+                array( __CLASS__, 'production' )
+            )
+        );
     }
 
     // Error & Exception Response-related Methods
@@ -75,21 +75,44 @@ class Handlers {
     /**
      * Development Mode Exception Handler
      *
-     * @param Exception $e
+     * @param \ErrorException|\Exception|\Error|\Throwable|\Next\Components\Debug\Exception $e
      *  Exception thrown
+     *
+     * @param integer|optional $code
+     *  An alternative HTTP Response Code to be sent
      */
-    public static function development( \Exception $e ) {
+    public static function development( $e, $code = 500 ) {
 
-        // Enforcing Error Handler
+        /**
+         * @internal
+         *
+         * With PHP 7 we have the Throwable interface implemented by
+         * all Exception classes as well by the new universal
+         * error/exception class \Error
+         *
+         * Use\Throwable as type-hinting would be better but
+         * would also prevent older PHP versions to use the framework,
+         * so we condition it here, as some form of legacy
+         */
+        if( $e instanceof \Exception || ( version_compare( PHP_VERSION, '7' ) >= 0 && $e instanceof \Throwable ) ) {
 
-        if( $e instanceof ErrorException ) {
-            return self::error( 2, $e -> getMessage(), $e -> getFile(), $e -> getLine() );
+            $e = new Exception( $e -> getMessage(), Exception::PHP_ERROR );
+
+        } elseif( is_string( $e ) ) {
+
+            /**
+             * @internal
+             *
+             * Just in case if something comes out of nowhere
+             * and is caught by register_shutdown_functions()
+             *
+             * @var Exception
+             */
+            $e = new Exception( $e, Exception::UNKNOWN );
         }
 
-        $code = 500; // Default Code NOT ACCEPTABLE
-
-        if( method_exists( $e, 'getResponseCode' ) ) {
-            $code = $e -> getResponseCode();
+        if( method_exists( $e, 'getResponseCode' ) && (int) ( $c = $e -> getResponseCode() ) !== 0 ) {
+            $code = $c;
         }
 
         self::handle(
@@ -103,15 +126,28 @@ class Handlers {
     /**
      * Production Mode Exception Handler
      *
-     * @param Exception $e
+     * @param \ErrorException|\Exception|\Error|\Throwable|\Next\Components\Debug\Exception $e
      *  Exception thrown
+     *
+     * @param integer|optional $code
+     *  An alternative HTTP Response Code to be sent
      */
-    public static function production( \Exception $e ) {
+    public static function production( $e, $code = 500 ) {
 
-        $code = 500; // Default Code NOT ACCEPTABLE
+        /**
+         * @see Handlers::development() for further explanations
+         */
+        if( $e instanceof \Exception || ( version_compare( PHP_VERSION, '7' ) >= 0 && $e instanceof \Throwable ) ) {
 
-        if( method_exists( $e, 'getResponseCode' ) ) {
-            $code = $e -> getResponseCode();
+            $e = new Exception( $e -> getMessage(), Exception::PHP_ERROR );
+
+        } elseif( is_string( $e ) ) {
+
+            $e = new Exception( $e, Exception::UNKNOWN );
+        }
+
+        if( method_exists( $e, 'getResponseCode' ) && (int) ( $c = $e -> getResponseCode() ) !== 0 ) {
+            $code = $c;
         }
 
         self::handle(
@@ -123,10 +159,14 @@ class Handlers {
     }
 
     /**
-     * Error Response
+     * Wrapper method for Error Responses in which just the
+     * HTTP Response Code is passed and the message comes
+     * from a predefined list
      *
      * @param integer $code
      *  Response Code
+     *
+     * @see Next\HTTP\Response
      */
     public static function response( $code ) {
 
@@ -139,7 +179,7 @@ class Handlers {
     }
 
     /**
-     * Error Exception
+     * Error Handler Wrapper
      *
      * @param integer $severity
      *  Exception Severity
@@ -222,9 +262,10 @@ class Handlers {
                  * @internal
                  *
                  * If we can't send the Response, there is a
-                 * Internal Server Error, but it'll only be sent if we're still
-                 * able to send headers, which is not the case of very specific scenarios,
-                 * when the current buffer length cannot determined and thus, cleansed.
+                 * Internal Server Error, but it'll only be sent if
+                 * we're still able to send headers, which is not the
+                 * case of very specific scenarios, when the current
+                 * buffer length cannot determined and thus, cleansed.
                  *
                  * Otherwise, this would cause an infinite loop
                  */

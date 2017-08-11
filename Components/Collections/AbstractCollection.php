@@ -322,8 +322,8 @@ abstract class AbstractCollection extends Object
 
             $hash = $reference -> getHash();
 
-            if( array_key_exists( $hash, $this -> references ) ) {
-                return $this -> references[ $hash ];
+            if( ( $offset = ArrayUtils::search( $this -> references, $hash, 'hash' ) ) !== -1 ) {
+                return $offset;
             }
 
             return  -1;

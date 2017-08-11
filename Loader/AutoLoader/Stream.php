@@ -13,6 +13,7 @@ namespace Next\Loader\AutoLoader;
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'AutoLoadable.php';        # AutoLoadable Interface
 
 use Next\Loader\AutoLoader\AutoLoadable;    # AutoLoadable Interface
+use Next\Loader\LoaderException;            # AutoLoader Exceptions Class
 
 /**
  * Stream AutoLoader
@@ -36,15 +37,16 @@ class Stream implements AutoLoadable {
 
         return function( $classname ) {
 
-            $classname = stream_resolve_include_path(
+            $resolvedClassname = stream_resolve_include_path(
 
                 str_replace( '\\', DIRECTORY_SEPARATOR, $classname ) . '.php'
             );
 
-            if( $classname !== FALSE ) {
-
-                include $classname;
+            if( $resolvedClassname === FALSE ) {
+                throw LoaderException::notFound( $classname );
             }
+
+            include $resolvedClassname;
         };
     }
 }

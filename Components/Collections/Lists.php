@@ -40,11 +40,42 @@ class Lists extends AbstractCollection implements \ArrayAccess {
         $index = $this -> find( $reference );
 
         if( $index !== FALSE && $index != -1 && array_key_exists( $index, $this -> collection ) ) {
-
             return $this -> collection[ $index ];
         }
 
         return FALSE;
+    }
+
+    /**
+     * Get Collection Neighbors
+     *
+     * @param  integer|optional $offset
+     *  An Object offset within the Collection to serve as start point
+     *
+     * @param  integer|optional $limit
+     *  A limit for how many neighbors before and after given offset
+     *  will be retrieved
+     *
+     * @return array
+     *  A slice of Object Collection with the elements
+     *
+     * @throws \OutOfRangeException
+     *  Thrown if give offset is greater than the number of Objects
+     *  in the Collection
+     *
+     * @todo Check the possibility of `$end` returns a negative value
+     * @todo Replace the OutOfRangeException with internal Next Debug Component
+     */
+    public function getNeighbors( $offset = 0, $limit = 1 ) {
+
+        if( $offset >= $this -> count() ) {
+            throw new \OutOfRangeException( 'Requested offset exceeds the size of Collection' );
+        }
+
+        $start = ( $offset - $limit ) >= 0 ? ( $offset - $limit ) : 0;
+        $end   = $offset - $start + $limit + 1;
+
+        return array_slice( $this -> collection, $start, $end, TRUE );
     }
 
     // ArrayAccess Interface Methods Implementation

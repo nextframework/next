@@ -12,8 +12,8 @@ namespace Next\Loader\AutoLoader;
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'AutoLoadable.php';        # AutoLoadable Interface
 
-use Next\Loader\LoaderException;            # Loader Exception Class
 use Next\Loader\AutoLoader\AutoLoadable;    # AutoLoadable Interface
+use Next\Loader\LoaderException;            # AutoLoader Exceptions Class
 
 /**
  * PHP-Array Class Map File AutoLoader
@@ -50,8 +50,6 @@ class Standard implements AutoLoadable {
 
         if( ! is_file( $file ) ) {
 
-            require_once '/../LoaderException.php';
-
             throw LoaderException::unfullfilledRequirements(
 
                 'PHP-Array File <strong>%s</strong> doesn\'t exists',
@@ -63,8 +61,6 @@ class Standard implements AutoLoadable {
         // ... and must be readable
 
         if( ! is_readable( $file ) ) {
-
-            require_once __DIR__ . '/LoaderException.php';
 
             throw LoaderException::unfullfilledRequirements(
 
@@ -93,10 +89,11 @@ class Standard implements AutoLoadable {
 
         return function( $classname ) use( $map ) {
 
-            if( array_key_exists( $classname, $map ) ) {
-
-                include $map[ $classname ];
+            if( ! array_key_exists( $classname, $map ) ) {
+                throw LoaderException::notFound( $classname );
             }
+
+            include $map[ $classname ];
         };
     }
 }
