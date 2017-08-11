@@ -6,7 +6,7 @@
  * @author       Bruno Augusto
  *
  * @copyright    Copyright (c) 2017 Next Studios
- * @license      https://creativecommons.org/licenses/by-sa/4.0 Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+ * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
 namespace Next\Validate\HTTP\Headers\Response;
 
