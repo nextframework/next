@@ -105,11 +105,6 @@ abstract class AbstractTypes extends Object implements Type {
      */
     abstract protected function accept( $value );
 
-    /**
-     * Prototype resources to object
-     */
-    abstract protected function prototype();
-
     // Overloading
 
     /**

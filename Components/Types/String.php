@@ -12,6 +12,7 @@ namespace Next\Components\Types;
 
 use Next\Components\Types\String\AlphaID;    # AlphaID Prototype
 use Next\Components\Types\String\GUID;       # GUID Prototype Class
+use Next\Components\Types\String\Truncate;   # Truncate String Prototype Class
 
 /**
  * Defines the String Data-type Type and prototypes some o PHP String
@@ -21,6 +22,16 @@ use Next\Components\Types\String\GUID;       # GUID Prototype Class
  * @package    Next\Components\Types
  */
 final class String extends AbstractTypes {
+
+    /**
+     * Truncate Prototyped resource controlling constants
+     *
+     * @var string
+     */
+    const TRUNCATE_BEFORE = 1;
+    const TRUNCATE_AFTER  = 2;
+    const TRUNCATE_CENTER = 3;
+    const TRUNCATE_DEFAULT_REPLACEMENT = '...';
 
     // Abstract Methods Implementation
 
@@ -42,7 +53,7 @@ final class String extends AbstractTypes {
      *
      * @return void
      */
-    protected function prototype() {
+    public function prototype() {
 
         // Prototypes that doesn't require an initial base value to work with
 
@@ -74,7 +85,16 @@ final class String extends AbstractTypes {
 
             // Custom Prototypes
 
-            $this -> implement( 'alphaID', new AlphaID, $this -> _value );
+            $this -> implement( 'alphaID',  new AlphaID,  $this -> _value )
+                  -> implement( 'truncate', new Truncate, $this -> _value );
+
+            $this -> implement( 'getFileExtension', function() {
+
+                return new String( pathinfo( func_get_arg( 0 ), PATHINFO_EXTENSION ) );
+
+                return ( ! empty( $extension ) ? $extension : FALSE );
+
+            }, $this -> value);
         }
     }
 }

@@ -95,6 +95,8 @@ class Tools {
      *
      * @return string
      *  Truncated string
+     *
+     * @note Marked for Removal
      */
     public static function truncate( $string, $length, $when = 'before', $delimiter = '(...)' ) {
 

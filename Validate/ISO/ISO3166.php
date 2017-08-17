@@ -10,9 +10,10 @@
  */
 namespace Next\Validate\ISO;
 
-use Next\Validate\Validator;    # Validator Interface
+use Next\Validate\Validator;            # Validator Interface
 
-use Next\Components\Object;     # Object Class
+use Next\Validate\ValidateException;    # Validator Exception Class
+use Next\Components\Object;             # Object Class
 
 /**
  * ISO-3166 Validation Class
@@ -29,7 +30,7 @@ class ISO3166 extends Object implements Validator {
      *
      * @staticvar array $codes
      *
-     * @see http://www.iso.org/iso/country_codes/iso_3166_code_lists.htm
+     * @link https://pt.wikipedia.org/wiki/ISO_3166-1
      */
     private static $codes = array(
 
@@ -62,9 +63,44 @@ class ISO3166 extends Object implements Validator {
      */
     public function validate() {
 
-        $data = $this -> options -> value;
+        $value = $this -> options -> value;
 
-        return ( strlen( $data ) == 2 && in_array( $data, self::$codes ) );
+        if( ! is_string( $value ) ) {
+
+            $this -> _error = vsprintf(
+
+                'Validator <strong>%s</strong> expects a string, %s given',
+
+                [
+                  $this -> getClass() -> getNamespaceName(), gettype( $value )
+                ]
+            );
+
+            return FALSE;
+        }
+
+        /**
+         * @internal
+         *
+         * Removing non-English characters and modifying input data
+         * letter case
+         */
+        $value = strtoupper(
+            preg_replace('/[^\00-\255]+/u', '', trim( $value ) )
+        );
+
+        /**
+         * @internal
+         *
+         * Providing cleaned and treated input value to be
+         * accessed outside the Validator
+         *
+         * This way the routine above doesn't need to be done again if,
+         * whoever called this Validator needs the input value treated
+         */
+        $this -> _info = $value;
+
+        return ( strlen( $value ) == 2 && in_array( $value, self::$codes ) );
     }
 
     // Accessors

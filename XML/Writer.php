@@ -229,7 +229,7 @@ class Writer extends Object {
         }
     }
 
-    // Parabeterizable Interface Methods Implementation
+    // Parameterizable Interface Methods Implementation
 
     /**
      * Set Up XML Writer Options

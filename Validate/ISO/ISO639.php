@@ -58,9 +58,44 @@ class ISO639 extends Object implements Validator {
      */
     public function validate() {
 
-        $data = $this -> options -> value;
+        $value = $this -> options -> value;
 
-        return ( strlen( $data ) == 2 && in_array( $data, self::$codes ) );
+        if( ! is_string( $value ) ) {
+
+            $this -> _error = vsprintf(
+
+                'Validator <strong>%s</strong> expects a string, %s given',
+
+                [
+                  $this -> getClass() -> getNamespaceName(), gettype( $value )
+                ]
+            );
+
+            return FALSE;
+        }
+
+        /**
+         * @internal
+         *
+         * Removing non-English characters and modifying input data
+         * letter case
+         */
+        $value = mb_strtolower(
+            preg_replace('/[^\00-\255]+/u', '', $value )
+        );
+
+        /**
+         * @internal
+         *
+         * Providing cleaned and treated input value to be
+         * accessed outside the Validator
+         *
+         * This way the routine above doesn't need to be done again if,
+         * whoever called this Validator needs the input value treated
+         */
+        $this -> _info = $value;
+
+        return ( strlen( $value ) == 2 && in_array( $value, self::$codes ) );
     }
 
     // Accessors
