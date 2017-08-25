@@ -39,7 +39,7 @@ class Handlers {
          * class capture it is done directly with set_exception_handler()
          * making this handler just a legacy for older versions
          */
-        if( version_compare( PHP_VERSION, '7' ) < 0 ) {
+        if( version_compare( PHP_VERSION, '7', '<' ) ) {
 
             /**
              * @see Handlers::error()
@@ -86,30 +86,16 @@ class Handlers {
         /**
          * @internal
          *
-         * With PHP 7 we have the Throwable interface implemented by
-         * all Exception classes as well by the new universal
-         * error/exception class \Error
+         * We - accidentally - got a low level error being handled here
+         * instead of by the Error Handler or even by the
+         * register_shutdown_function() when defining a type-hinting
+         * for `$e` argument forcing it to be an instance of native
+         * Exception Class
          *
-         * Use\Throwable as type-hinting would be better but
-         * would also prevent older PHP versions to use the framework,
-         * so we condition it here, as some form of legacy
+         * For now, just in case something like it appears again,
+         * "out of nowhere", let's create a valid Exception Object
          */
-        if( $e instanceof \Exception || ( version_compare( PHP_VERSION, '7' ) >= 0 && $e instanceof \Throwable ) ) {
-
-            $e = new Exception( $e -> getMessage(), Exception::PHP_ERROR );
-
-        } elseif( is_string( $e ) ) {
-
-            /**
-             * @internal
-             *
-             * Just in case if something comes out of nowhere
-             * and is caught by register_shutdown_functions()
-             *
-             * @var Exception
-             */
-            $e = new Exception( $e, Exception::UNKNOWN );
-        }
+        if( ! $e instanceof \Exception && ! $e instanceof \Error ) $e = new Exception( (string) $e );
 
         if( method_exists( $e, 'getResponseCode' ) && (int) ( $c = $e -> getResponseCode() ) !== 0 ) {
             $code = $c;
@@ -137,14 +123,7 @@ class Handlers {
         /**
          * @see Handlers::development() for further explanations
          */
-        if( $e instanceof \Exception || ( version_compare( PHP_VERSION, '7' ) >= 0 && $e instanceof \Throwable ) ) {
-
-            $e = new Exception( $e -> getMessage(), Exception::PHP_ERROR );
-
-        } elseif( is_string( $e ) ) {
-
-            $e = new Exception( $e, Exception::UNKNOWN );
-        }
+        if( ! $e instanceof \Exception && ! $e instanceof \Error ) $e = new Exception( (string) $e );
 
         if( method_exists( $e, 'getResponseCode' ) && (int) ( $c = $e -> getResponseCode() ) !== 0 ) {
             $code = $c;

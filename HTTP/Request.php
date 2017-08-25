@@ -13,9 +13,12 @@ namespace Next\HTTP;
 use Next\HTTP\Request\RequestException;             # Request Exception Classes
 use Next\HTTP\Stream\Adapter\AdapterException;      # Adapter Exception Class
 use Next\HTTP\Headers\Fields\FieldsException;       # Headers Fields Exception Class
+
 use Next\HTTP\Headers\Fields\Field;                 # Header Fields Interface
 use Next\HTTP\Stream\Adapter\Adapter;               # HTTP Stream Adapter Interface
+
 use Next\Components\Object;                         # Object Class
+use Next\Components\Parameter;                      # Parameter Object
 use Next\Components\Invoker;                        # Invoker Class
 use Next\HTTP\Stream\Adapter\Socket;                # HTTP Stream Socket Adapter Class
 use Next\HTTP\Stream\Context\SocketContext;         # HTTP Stream Socket Context Class
@@ -231,6 +234,39 @@ class Request extends Object {
      */
     public function init() {
 
+        /**
+         * HTTP Request Class default Options
+         *
+         * @internal
+         *
+         * Because, obviously, variables can't be used outside class
+         * methods, differently than all other classes adept of the
+         * Parameterizable Concept, HTTP Request Class' Parameter Object
+         * is manually built during the Additional Initialization stage
+         *
+         * It's a small price to pay instead of defining these default
+         * variables every time, everywhere the Request Object is needed
+         *
+         * \Next\Components\Object::setOptions() is being used, but
+         * without a particular reason, after all the Request
+         * shouldn't derive any other
+         *
+         * And, the great trick (^_^). The third "argument'
+         * for \Next\Components\Parameter, holding the options entered
+         * when instantiating the Object comes through Object::$options
+         * itself because one way or another its procedures were done
+         */
+        $this -> options = new Parameter(
+
+            [
+                'uri'    => $_SERVER['REQUEST_URI'],
+                'host'   => $_SERVER['HTTP_HOST'],
+                'method' => $_SERVER['REQUEST_METHOD']
+            ],
+
+            NULL, $this -> options
+        );
+
         // Cookies Management Object
 
         $this -> cookies = new Cookies;
@@ -253,36 +289,32 @@ class Request extends Object {
 
         //---------------------------
 
-        list( $mixed, $host, $method ) =
-            func_get_args() +
-            array( $_SERVER['REQUEST_URI'], $_SERVER['HTTP_HOST'], $_SERVER['REQUEST_METHOD'] );
+        $this -> checkIntegrity();
 
         // Setting Up Basic Informations
 
             // Do we have an HTTP Stream Adapter?
 
-        if( $mixed instanceof Adapter ) {
+        if( isset( $this -> options -> adapter ) ) {
 
-            $this -> adapter =& $mixed;
+            $this -> adapter = $this -> options -> adapter;
 
-            // If so, let's use its file/url as URI
-
-            $this -> uri = $mixed -> getFilename();
+            $this -> uri = $this -> options -> adapter -> getFilename();
 
         } else {
 
-            // No? So let's use first argument as URI
+            // No? Then it'll be treated as an internal (routed) Request
 
-            $this -> uri =& $mixed;
+            $this -> uri = $this -> options -> uri;
         }
 
             // Request Host
 
-        $this -> host = $host;
+        $this -> host = $this -> options -> host;
 
             // Request Method
 
-        $this -> method = strtoupper( $method );
+        $this -> method = strtoupper( $this -> options -> method );
 
         //---------------------------
 
@@ -294,7 +326,7 @@ class Request extends Object {
 
         if( array_key_exists( 'scheme', $data ) ) {
 
-            // Protocol... "name"
+            // Protocol scheme
 
             $this -> protocol -> name = $data['scheme'];
 
@@ -318,12 +350,10 @@ class Request extends Object {
             preg_match( self::PROTOCOL_REGEXP, $_SERVER['SERVER_PROTOCOL'], $match );
 
             if( array_key_exists( 'protocol', $match ) ) {
-
                 $this -> protocol -> name = strtolower( $match['protocol'] );
             }
 
             if( array_key_exists( 'version', $match ) ) {
-
                 $this -> protocol -> version = $match['version'];
             }
 
@@ -495,54 +525,11 @@ class Request extends Object {
      */
     public function getProtocol( $includeVersion = FALSE ) {
 
-        if( $includeVersion !== FALSE ) {
-
-            $this -> protocol -> version = $this -> getProtocolVersion();
-
-            return $this -> protocol;
+        if( ! isset( $this -> protocol -> version ) && $includeVersion !== FALSE ) {
+            $this -> getProtocolVersion();
         }
 
-        return $this -> protocol -> name;
-    }
-
-    /**
-     * Get Request Protocol Version
-     *
-     * We are detecting the Protocol Version here, instead of detect in Request Constructor,
-     * because get_headers() function does another Request to target Server, and since
-     * this is not an extremely useful information, this routine is executed only when required
-     *
-     * @return integer|NULL
-     *  Protocol version if able to match and NULL otherwise
-     */
-    public function getProtocolVersion() {
-
-        /**
-         * @internal
-         * Internal Requests are more able to provide a Server Protocol
-         * So if we have it, let's deliver it
-         */
-        if( isset( $this -> protocol -> version ) ) {
-            return $this -> protocol -> version;
-        }
-
-        // If we don't have it, we're gonna find out
-
-        $headers = get_headers( $this -> uri );
-
-        if( $headers !== FALSE ) {
-
-            $data = array_shift( $headers );
-
-            preg_match( self::PROTOCOL_REGEXP, $data, $match );
-
-            if( array_key_exists( 'version', $match ) ) {
-
-                return $match['version'];
-            }
-        }
-
-        return NULL;
+        return $this -> protocol;
     }
 
     /**
@@ -1097,6 +1084,51 @@ class Request extends Object {
     }
 
     // Auxiliary Methods
+
+    private function checkintegrity() {
+
+        if( isset( $this -> options-> adapter ) ) {
+
+            if( ! $this -> options -> adapter instanceof Adapter ) {
+                throw new RequestException( 'Invalid Stream Adapter' );
+            }
+        }
+    }
+
+    /**
+     * Get Request Protocol Version
+     *
+     * @internal
+     *
+     * In case the Request Protocol can't be detected during the
+     * Additional Initialization stage -AND- while requesting its
+     * data through `Request::getProtocol()` the full spec is
+     * requested (i.e. setting method's argument to TRUE) we'll try
+     * to detect it AGAIN here.
+     *
+     * This delay is only because get_headers() function does another
+     * Request to target Server and Request Protocol isn't an extremely
+     * useful information nowadays
+     *
+     * @return integer|NULL
+     *  Protocol version if able to match and NULL otherwise
+     */
+    private function getProtocolVersion() {
+
+        $headers = get_headers( $this -> uri );
+
+        if( $headers !== FALSE ) {
+
+            $data = array_shift( $headers );
+
+            preg_match( self::PROTOCOL_REGEXP, $data, $match );
+
+            if( array_key_exists( 'version', $match ) ) {
+
+                $this -> protocol -> version = $match['version'];
+            }
+        }
+    }
 
     /**
      * Add Default Headers

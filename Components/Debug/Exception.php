@@ -253,7 +253,13 @@ class Exception extends \Exception {
      *  Translated Exception Message
      */
     private function _getMessage( $message ) {
-        return vsprintf( $message, $this -> replacements );
+
+        return vsprintf(
+
+            preg_replace( '/(\%(?![0-9\.]{0,}[bcdeEufFgGsxX]))/', '%$1', $message ),
+
+            $this -> replacements
+        );
     }
 
     /**

@@ -140,11 +140,18 @@ p.label {
 
     </p>
 
+    <?php
+
+        $trace = $this -> e -> getTrace();
+
+        if( count( $trace ) > 0 ) :
+
+    ?>
     <p class="trace">
         <strong>Call Trace</strong>
     </p>
 
-    <?php foreach( $this -> e -> getTrace() as $index => $trace ) : ?>
+    <?php foreach( $trace as $index => $trace ) : ?>
 
     <div>
 
@@ -215,6 +222,8 @@ p.label {
         </div>
 
         <?php endforeach; ?>
+
+    <?php endif; ?>
 
 </div>
 

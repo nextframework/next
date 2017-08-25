@@ -70,7 +70,7 @@ class ComponentsException extends \Next\Components\Debug\Exception {
 
         return new self(
 
-            'Method <strong>%s</strong> is not known by <strong>%s</strong>
+            'Method %s not known by <strong>%s</strong>
             and was not trapped by <em>Object::__call()</em>
 
             Could you possibly overwrote <em>Object::__construct()</em>
@@ -78,7 +78,7 @@ class ComponentsException extends \Next\Components\Debug\Exception {
 
             self::CONSTRUCTOR_OVERWRITTEN,
 
-            array( $method, $object )
+            array( ( ! empty( $method ) ? sprintf( '<strong>%s</strong>' ) : '' ), $object )
         );
     }
 

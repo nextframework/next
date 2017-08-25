@@ -89,11 +89,9 @@ class Object extends Prototype implements Contextualizable, Informational, Param
 
         $this -> options = new Parameter( $this -> defaultOptions, $this -> setOptions(), $options );
 
-        $this -> init();
-
-        // Filtering Object if needed
-
         if( $this instanceof Filterable ) $this -> filter();
+
+        $this -> init();
     }
 
     /**
@@ -209,7 +207,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
     final public function extend( Invoker $invoker, $methods = NULL, $properties = NULL ) {
 
         if( is_null( $this -> context ) ) {
-            throw ComponentsException::extendedContextFailure( $this );
+            throw ComponentsException::extendedContextFailure( '', $this );
         }
 
         $this -> context -> extend( $invoker, $methods, $properties );

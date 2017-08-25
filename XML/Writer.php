@@ -109,8 +109,6 @@ class Writer extends Object {
     /**
      * Add a new child node in XML
      *
-     * Add a new child node in XML
-     *
      * @param string $name
      *  Child Node Name
      *
@@ -123,10 +121,16 @@ class Writer extends Object {
      * @param boolean|optional $close
      *  If TRUE closes the first parent node of the child
      *
+     * @param boolean|optional $addCDATABlock
+     *  Defines whether or not the Node value will be written as plain
+     *  text or wrapped in a CDATA Block
+     *
      * @return \Next\XML\Writer
      *  XML Writer Object (Fluent Interface)
+     *
+     * @link http://wikipedia.org/wiki/CDATA
      */
-    public function addChild( $name, $value = NULL, array $attributes = array(), $close = FALSE ) {
+    public function addChild( $name, $value = NULL, array $attributes = array(), $close = FALSE, $addCDATABlock = FALSE ) {
 
         // Creating Node
 
@@ -141,7 +145,11 @@ class Writer extends Object {
 
         // Adding its value...
 
-        $this -> text( $value );
+        if( $addCDATABlock !== FALSE ) {
+            $this -> writeCdata( $value );
+        } else {
+            $this -> text( $value );
+        }
 
         // ... and finishing it
 
@@ -227,25 +235,6 @@ class Writer extends Object {
 
             return $output;
         }
-    }
-
-    // Parameterizable Interface Methods Implementation
-
-    /**
-     * Set Up XML Writer Options
-     *
-     * Not used, but overwritable
-     */
-    public function setOptions() {}
-
-    /**
-     * Get XML Writer Options
-     *
-     * @return \Next\Components\Parameter
-     *  Parameter Object with merged options
-     */
-    public function getOptions() {
-        return $this -> options;
     }
 
     // Auxiliary Methods

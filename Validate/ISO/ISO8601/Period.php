@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ISO-8601 Validator Class | Validate\ISO\ISO8601.php
+ * ISO-8601 Validator Class | Validate\ISO\ISO8601\Period.php
  *
  * @author       Bruno Augusto
  *
@@ -38,7 +38,7 @@ class Period extends Object implements Validator {
 
         $regex = '/P(([1-9][0-9]+[YMDW])+)?(T([1-9][0-9]+[HMS])+)?/';
 
-        preg_match( $regex, strval( $$this -> options -> value ), $matches );
+        preg_match( $regex, strval( $this -> options -> value ), $matches );
 
         // Shifting the required 'P'
 
