@@ -10,8 +10,8 @@
  */
 namespace Next\Loader;
 
-use Next\Loader\LoaderException;            # Loader Exception Class
-use Next\Loader\AutoLoader\AutoLoadable;    # AutoLoadable Interface
+use Next\Loader\LoaderException;                                  # Loader Exception Class
+use Next\Loader\AutoLoaders\AutoLoader as AutoLoaderInterface;    # AutoLoadader Interface
 
 /**
  * AutoLoader Class
@@ -41,18 +41,18 @@ class AutoLoader {
     }
 
     /**
-     * Register a new AutoLoadable Object
+     * Register a new AutoLoader Object
      *
-     * @param \Next\Loader\AutoLoader\AutoLoadable $autoloader
+     * @param \Next\Loader\AutoLoader\AutoLoader $autoloader
      *  The AutoLoader Object to be registered
      *
      * @return \Next\AutoLoader
      *  AutoLoader Instance (Fluent Interface)
      *
      * @throws \Next\LoaderException
-     *  Trying to register an already registred AutoLoadable Object
+     *  Trying to register an already registered AutoLoader Object
      */
-    public function registerAutoLoader( AutoLoadable $autoloader ) {
+    public function registerAutoLoader( AutoLoaderInterface $autoloader ) {
 
         if( $this -> autoloaders -> contains( $autoloader ) ) {
 
@@ -69,18 +69,18 @@ class AutoLoader {
     }
 
     /**
-     * Unregister an AutoLoadable Object
+     * Unregister an AutoLoader Object
      *
-     * @param \Next\Loader\AutoLoader\AutoLoadable $autoloader
+     * @param \Next\Loader\AutoLoader\AutoLoader $autoloader
      *  The AutoLoader Object to be registered
      *
      * @return \Next\AutoLoader
      *  AutoLoader Instance (Fluent Interface)
      *
      * @throws \Next\LoaderException
-     *  Trying to unregister a non registered AutoLoadable Object
+     *  Trying to unregister a non registered AutoLoader Object
      */
-    public function unregisterAutoLoader( AutoLoadable $autoloader ) {
+    public function unregisterAutoLoader( AutoLoaderInterface $autoloader ) {
 
         if( ! $this -> autoloaders -> contains( $autoloader ) ) {
 

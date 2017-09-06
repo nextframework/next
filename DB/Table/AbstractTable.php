@@ -185,8 +185,15 @@ abstract class AbstractTable extends Object implements Table {
      *
      * @return mixed
      *  Data stored in given Table Column
+     *
+     * @see AbstractTable::getPrimaryKey()
      */
     public function offsetGet( $offset ) {
+
+        if( $offset == $this -> _primary ) {
+            return $this -> getPrimaryKey( $value ); return;
+        }
+
         return $this -> {$offset};
     }
 
@@ -198,8 +205,15 @@ abstract class AbstractTable extends Object implements Table {
      *
      * @param mixed $value
      *  Data do assign
+     *
+     * @see AbstractTable::setPrimaryKey()
      */
     public function offsetSet( $offset, $value ) {
+
+        if( $offset == $this -> _primary ) {
+            $this -> setPrimaryKey( $value ); return;
+        }
+
         $this -> {$offset} = $value;
     }
 

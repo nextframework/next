@@ -41,13 +41,6 @@ class LoaderException extends \Next\Components\Debug\Exception {
      */
     const UNKNOWN       = 0x0000062E;
 
-    /**
-     * Class not Found
-     *
-     * @var integer
-     */
-    const NOT_FOUND     = 0x0000062F;
-
     // Exception Messages
 
     /**
@@ -79,25 +72,6 @@ class LoaderException extends \Next\Components\Debug\Exception {
             'This AutoLoader was not registered yet!',
 
             self::UNKNOWN
-        );
-    }
-
-    /**
-     * Class not Found
-     *
-     * @param string $classname
-     *  Class trying to be loaded
-     *
-     * @return \Next\LoaderException
-     *  Exception for not found classes
-     */
-    public static function notFound( $classname ) {
-
-        return new self(
-
-            'Class <strong>%s</strong> not found',
-
-            self::NOT_FOUND, array( $classname )
         );
     }
 }

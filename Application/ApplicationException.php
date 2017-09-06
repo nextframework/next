@@ -34,21 +34,28 @@ class ApplicationException extends \Next\Components\Debug\Exception {
      *
      * @var integer
      */
-    const INVALID_APPLICATION    = 0x00000033;
+    const INVALID_APPLICATION        = 0x00000033;
 
     /**
      * Application has no View Engine assigned
      *
      * @var integer
      */
-    const INVALID_ROUTER         = 0x00000034;
+    const INVALID_ROUTER             = 0x00000034;
 
     /**
      * Application has an invalid View Engine
      *
      * @var integer
      */
-    const INVALID_VIEW_ENGINE    = 0x00000035;
+    const INVALID_VIEW_ENGINE        = 0x00000035;
+
+    /**
+     * Application has an invalid Session Manager
+     *
+     * @var integer
+     */
+    const INVALID_SESSION_MANAGER    = 0x00000036;
 
     // Exceptions Messages
 
@@ -115,6 +122,25 @@ class ApplicationException extends \Next\Components\Debug\Exception {
             'View Engines must implement View Interface (Next\View\View)',
 
             self::INVALID_VIEW_ENGINE
+        );
+    }
+
+    /**
+     * Invalid Session Manager
+     *
+     * Assigned Session Manager is not valid because, currently, only
+     * Objects instance of \Next\Session\Manager are accepted
+     *
+     * @return \Next\Application\ApplicationException
+     *  Exception for Applications with invalid Session Manager
+     */
+    public static function invalidSessionManager() {
+
+        return new self(
+
+            'Session Manager must be an instance of \Next\Session\Manager',
+
+            self::INVALID_SESSION_MANAGER
         );
     }
 }

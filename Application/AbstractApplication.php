@@ -10,6 +10,7 @@
  */
 namespace Next\Application;
 
+use Next\Components\Debug\Exception;             # Exception Class
 use Next\Controller\Router\RouterException;      # Router Exception Class
 use Next\Controller\ControllerException;         # Controller Chain Exception Class
 use Next\Cache\CacheException;                   # Cache Exception Class
@@ -24,6 +25,8 @@ use Next\HTTP\Response;                          # Response Class
 use Next\Controller\Chain as ControllerChain;    # Controllers Chain Class
 use Next\View\View;                              # View Interface
 use Next\Cache\Schema\Chain as CachingChain;     # Controllers Chain Class
+
+use Next\Session\Manager as Session;             # Session Manager
 
 /**
  * Defines the base structure for an Application created with Next Framework
@@ -82,6 +85,13 @@ abstract class AbstractApplication extends Object implements Application {
     protected $cache;
 
     /**
+     * Session Manager
+     *
+     * @var \Next\Session\Manager $session
+     */
+    protected $session;
+
+    /**
      * Constructor Overwriting.
      * Sets up a type-hinted Application Object for all Caching Schema
      *
@@ -95,7 +105,6 @@ abstract class AbstractApplication extends Object implements Application {
             // Request and Response Objects
 
         $this -> request  = new Request;
-
         $this -> response = new Response;
 
             // Router
@@ -105,6 +114,34 @@ abstract class AbstractApplication extends Object implements Application {
             // Database Adapters
 
         $this -> setupDatabase();
+
+            /**
+             * Session
+             *
+             * @internal
+             *
+             * Session Manager is initialized before View Engine because
+             * View Engines *should* provide a way of Templates to
+             * access Session Environment Data, but if a Session is not
+             * yet available that wouldn't be possible
+             *
+             * If an Exception is caught here we'll rethrow it as a
+             * \Next\Application\ApplicationException. Because this is
+             * the lowest possible Exception in the Request/Response Flow,
+             * while on Production Mode, - i.e DEVELOMENT_MODE constant
+             * is not defined or set to zero - only a simple message
+             * would appear
+             */
+        try {
+
+            $this -> session = $this -> initSession();
+
+        } catch( Exception $e ) {
+
+            throw new ApplicationException(
+                $e -> getMessage(), NULL, NULL, $e -> getResponseCode()
+            );
+        }
 
             // View Engine
 
@@ -120,7 +157,7 @@ abstract class AbstractApplication extends Object implements Application {
 
         $this -> cache = new CachingChain;
 
-        $this -> setupCache();
+        $this -> initCache();
 
             // Additional Initialization
 
@@ -162,12 +199,20 @@ abstract class AbstractApplication extends Object implements Application {
     protected function setupView() {}
 
     /**
-     * Caching Setup.
+     * Caching Initialization.
      *
      * It's **not** abstract because not all the Applications require
      * a Caching System
      */
-    protected function setupCache() {}
+    protected function initCache() {}
+
+    /**
+     * Session Initialization.
+     *
+     * It's **not** abstract because not all the Applications require
+     * a Session interaction
+     */
+    protected function initSession() {}
 
     // Application Interface Methods Implementation
 
@@ -275,6 +320,16 @@ abstract class AbstractApplication extends Object implements Application {
         return $this -> cache;
     }
 
+    /**
+     * Get Session Manager
+     *
+     * @return \Next\Session\Manager
+     *  Session Manager Object
+     */
+    public function getSession() {
+        return $this -> session;
+    }
+
     // Abstract Methods Definition
 
     /**
@@ -310,6 +365,13 @@ abstract class AbstractApplication extends Object implements Application {
         if( ! $this -> view instanceof View ) {
 
             throw ApplicationException::invalidViewEngine();
+        }
+
+        // Checking if assigned Session Manager is Valid
+
+        if( ! is_null( $this -> session ) && ! $this -> session instanceof Session ) {
+
+            throw ApplicationException::invalidSessionManager();
         }
     }
 }

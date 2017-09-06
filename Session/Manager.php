@@ -29,39 +29,32 @@ class Manager {
     protected static $instance;
 
     /**
-     * Session ID
-     *
-     * @staticvar string $id
-     */
-    private static $ID = 'PHPSESSID';
-
-    /**
-     * Session Name
-     *
-     * @staticvar string $name
-     */
-    private static $name = 'Session';
-
-    /**
      * Session Save Path
      *
      * @var string $savePath
      */
-    private $savePath;
+    protected $savePath;
 
     /**
      * Session Max Lifetime
      *
      * @staticvar integer $lifetime
      */
-    private static $lifetime = 180;
+    protected static $lifetime = 180;
 
     /**
      * Session Handlers Manager
      *
      * @var \Next\Session\Handlers $handlers
      */
-    private $handlers;
+    protected $handlers;
+
+    /**
+     * Default Session Environment
+     *
+     * @var \Next\Session\Environment $environment
+     */
+    protected $environment;
 
     /**
      * Enforcing Singleton. Disallow cloning
@@ -127,7 +120,7 @@ class Manager {
                 );
             }
 
-            // Effectivelly Initializes the Session
+            // Effectively Initializes the Session
 
             self::$instance -> init( $name, $id );
         }
@@ -152,20 +145,27 @@ class Manager {
 
         // Setting Up Session Name
 
-        self::setSessionName( empty( $name ) ? self::$name : $name );
+        if( ! empty( $name ) ) {
+            self::setSessionName( $name );
+        }
 
         // Setting up Session ID
 
-        self::setSessionID( empty( $id ) ? self::$ID : $id );
+        if( ! empty( $id ) ) {
+            self::setSessionID( $id );
+        }
 
         // Initializing the Session
 
         $test = session_start();
 
         if( ! $test ) {
-
             throw SessionException::initializationFailure();
         }
+
+        // Initializing the Default Session Environment
+
+        $this -> environment = new Environment( session_name(), TRUE );
     }
 
     /**
@@ -179,13 +179,13 @@ class Manager {
 
         // Removing Session Cookie
 
-        if( isset( $_COOKIE[ self::$name ] ) ) {
+        if( isset( $_COOKIE[ session_name() ] ) ) {
 
             $params = session_get_cookie_params();
 
             setcookie(
 
-                self::$name,
+                session_name(),
 
                 FALSE,
 
@@ -198,10 +198,6 @@ class Manager {
         // Resetting Session Properties
 
         self::$instance = NULL;
-
-        self::$name = NULL;
-
-        self::$ID = NULL;
 
         $this -> savePath = NULL;
 
@@ -219,8 +215,6 @@ class Manager {
     public function regenerateID() {
 
         session_regenerate_id();
-
-        self::$ID = session_id();
 
         return $this;
     }
@@ -254,6 +248,16 @@ class Manager {
         return $this -> handlers;
     }
 
+    /**
+     * Get default Session Environment
+     *
+     * @return \Next\Session\Environment
+     *  Default Session Environment
+     */
+    public function getEnvironment() {
+        return $this -> environment;
+    }
+
     // Getters / Setters
 
     /**
@@ -263,7 +267,7 @@ class Manager {
      *  Session Name
      */
     public function getSessionName() {
-        return self::$name;
+        return session_name();
     }
 
     /**
@@ -273,9 +277,6 @@ class Manager {
      *  Session Name
      */
     public static function setSessionName( $sessionName ) {
-
-        self::$name =& $sessionName;
-
         session_name( $sessionName );
     }
 
@@ -286,7 +287,7 @@ class Manager {
      *  Session ID
      */
     public function getSessionID() {
-        return self::$ID;
+        return session_id();
     }
 
     /**
@@ -296,9 +297,6 @@ class Manager {
      *  Session ID
      */
     public static function setSessionID( $id ) {
-
-        self::$ID =& $id;
-
         session_id( $id );
     }
 

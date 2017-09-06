@@ -938,6 +938,7 @@ class Response extends Object {
 
         /**
          * @internal
+         *
          * By default, $url used for Absolute URLs is the same
          * of the informed destination...
          */
@@ -965,7 +966,7 @@ class Response extends Object {
         } catch( FieldsException $e ) {
 
             /**
-             *  If an FieldsException is caught, we have a Relative URI so
+             *  If a FieldsException is caught, we have a Relative URI so
              *  we'll send it as a Raw Header
              */
             $this -> headers -> addHeader(

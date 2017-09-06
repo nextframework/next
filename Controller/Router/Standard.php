@@ -238,7 +238,7 @@ class Standard extends AbstractRouter {
 
             function( $current ) use( $URI ) {
 
-                preg_match( sprintf( '/\/%s\/.+\/?/', $current['name'] ), $URI, $matches );
+                preg_match( sprintf( '/\/%s(?:\/|\?).+\/?/', $current['name'] ), $URI, $matches );
 
                 // Required argument is not present in URL and neither in GET superglobal?
 
@@ -269,9 +269,7 @@ class Standard extends AbstractRouter {
 
         // Do we have something to work with?
 
-        if( count( $params ) == 0 ) {
-            return;
-        }
+        if( count( $params ) == 0 ) return;
 
         $token = self::SEPARATOR_TOKEN;
 
@@ -284,9 +282,12 @@ class Standard extends AbstractRouter {
                 // Finding argument value
 
                 preg_match(
-
-                    sprintf( '/\/%s\/([^\/]+)\/?/', $current['name'] ), $URI, $value
+                    sprintf( '/\/%s(?:\/|\?)([^\/]+)\/?/', $current['name'] ), $URI, $value
                 );
+
+                // No values to check
+
+                if( count( $value ) == 0 ) return TRUE;
 
                 // Validating parameter value with a predefined REGEXP
 

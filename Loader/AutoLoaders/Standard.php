@@ -10,10 +10,10 @@
  */
 namespace Next\Loader\AutoLoader;
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'AutoLoadable.php';        # AutoLoadable Interface
+require_once __DIR__ . '/AutoLoader.php';    # AutoLoader Interface
 
-use Next\Loader\AutoLoader\AutoLoadable;    # AutoLoadable Interface
-use Next\Loader\LoaderException;            # AutoLoader Exceptions Class
+use Next\Loader\AutoLoaders\AutoLoader;      # AutoLoader Interface
+use Next\Loader\LoaderException;             # AutoLoader Exceptions Class
 
 /**
  * PHP-Array Class Map File AutoLoader
@@ -23,7 +23,7 @@ use Next\Loader\LoaderException;            # AutoLoader Exceptions Class
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class Standard implements AutoLoadable {
+class Standard implements AutoLoader {
 
     /**
      * Map Data
@@ -75,7 +75,7 @@ class Standard implements AutoLoadable {
         self::$map = include_once $file;
     }
 
-    // Interface Method Implementation
+    // AutoLoader Interface Method Implementation
 
     /**
      * AutoLoading Function
@@ -89,11 +89,12 @@ class Standard implements AutoLoadable {
 
         return function( $classname ) use( $map ) {
 
-            if( ! array_key_exists( $classname, $map ) ) {
-                throw LoaderException::notFound( $classname );
-            }
+            if( array_key_exists( $classname, $map ) ) {
 
-            include $map[ $classname ];
+                include $map[ $classname ];
+
+                return TRUE;
+            }
         };
     }
 }

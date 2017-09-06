@@ -116,7 +116,8 @@ class Standard extends Object implements View {
 
         // Internal resources (auto-assigned Variables)
 
-        'request'
+        'request',
+        'session'
     );
 
     /**
@@ -245,6 +246,11 @@ class Standard extends Object implements View {
     public function resetDefaults() {
 
         $this -> _tplVars[ 'request' ]  = $this -> _application -> getRequest();
+
+        if( ( $session = $this -> _application -> getSession() ) !== NULL && session_status() == PHP_SESSION_ACTIVE ) {
+
+            $this -> _tplVars[ 'session' ]  = $session -> getEnvironment();
+        }
 
         // Unregistering any possible Exception Message
 
@@ -780,6 +786,19 @@ class Standard extends Object implements View {
     public function disableRender() {
 
         $this -> _shouldRender = FALSE;
+
+        return $this;
+    }
+
+    /**
+     * (Re-)Enables Rendering process
+     *
+     * @return \Next\View\View
+     *  View Object (Fluent Interface)
+     */
+    public function enableRender() {
+
+        $this -> _shouldRender = TRUE;
 
         return $this;
     }

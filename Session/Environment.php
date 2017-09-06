@@ -82,9 +82,6 @@ class Environment extends Object {
      *
      * @return \Next\Session\Environment
      *  Environment Object (Fluent Interface)
-     *
-     * @throws \Next\Session\Environment\EnvironmentException
-     *  Environment has been explicitly destroyed
      */
     public function lock() {
 
@@ -100,9 +97,6 @@ class Environment extends Object {
      *
      * @return \Next\Session\Environment
      *  Environment Object (Fluent Interface)
-     *
-     * @throws \Next\SessionEnvironmentEnvironmentException
-     *  Environment has been explicitly destroyed
      */
     public function unlock() {
 
@@ -118,23 +112,9 @@ class Environment extends Object {
      *
      * @return boolean
      *  TRUE if Locked. FALSE otherwise
-     *
-     * @throws \Next\Session\Environment\EnvironmentException
-     *  Environment has been explicitly destroyed.
-     *
-     * @throws \Next\Session\Environment\EnvironmentException
-     *  Environment is locked
      */
     public function isLocked() {
-
-        if( ! $this -> isDestroyed() ) {
-
-            if( $this -> locked !== FALSE ) {
-                throw EnvironmentException::locked( $this -> environment );
-            }
-        }
-
-        return FALSE;
+        return ( ! $this -> isDestroyed() && $this -> locked !== FALSE );
     }
 
     // Environment Manipulation-related Methods
@@ -147,9 +127,6 @@ class Environment extends Object {
      *
      * @return \Next\Session\Environment
      *  Environment Object (Fluent Interface)
-     *
-     * @throws \Next\Session\Environment\EnvironmentException
-     *  Environment has been explicitly destroyed
      */
     public function destroy() {
 
@@ -165,17 +142,9 @@ class Environment extends Object {
      *
      * @return boolean
      *  TRUE if Destroyed. FALSE otherwise
-     *
-     * @throws \Next\Session\Environment\EnvironmentException
-     *  Environment has been destroyed</p>
      */
     public function isDestroyed() {
-
-        if( ! array_key_exists( $this -> environment, $_SESSION ) ) {
-            throw EnvironmentException::destroyed( $this -> environment );
-        }
-
-        return FALSE;
+        return ( ! array_key_exists( $this -> environment, $_SESSION ) );
     }
 
     // Environment Content Manipulation-related Methods
@@ -196,17 +165,17 @@ class Environment extends Object {
     /**
      * Get everything assigned to Environment
      *
-     * @return array
-     *   $_SESSION slice of current Environment
-     *
-     * @throws \Next\Session\Environment\EnvironmentException
-     *  Environment has been explicitly destroyed
+     * @return array|NULL
+     *   Return the $_SESSION slice corresponding to the current Environment
+     *   if it hasn't been explicitly destroyed, otherwise returns NULL
      */
     public function getAll() {
 
         if( ! $this -> isDestroyed() ) {
             return $_SESSION[ $this -> environment ];
         }
+
+        return NULL;
     }
 
     /**
@@ -264,10 +233,8 @@ class Environment extends Object {
      *  Index to be searched in Environment and returned, if exists
      *
      * @return mixed
-     *  Desired value from current Environment
-     *
-     * @throws \Next\Session\Environment\EnvironmentException
-     *  Environment has been explicitly destroyed
+     *  Desired value from current Environment if it hasn't
+     *  been explicitly destroyed, otherwise nothing is returned
      *
      * @throws \Next\Session\Environment\EnvironmentException
      *  Requested index doesn't exists
@@ -279,7 +246,6 @@ class Environment extends Object {
             $name = (string) $name;
 
             if( ! array_key_exists( $name, (array) $_SESSION[ $this -> environment ] ) ) {
-
                 throw EnvironmentException::undefinedIndex( $name, $this -> environment );
             }
 
@@ -315,16 +281,16 @@ class Environment extends Object {
      *  Index to be searched
      *
      * @return boolean
-     *  TRUE if desired argument exists and FALSE otherwise
-     *
-     * @throws \Next\Session\Environment\EnvironmentException
-     *  Environment has been explicitly destroyed
+     *  TRUE if desired argument exists and FALSE otherwise.
+     *  If Environment has been explicitly destroyed return FALSE as well
      */
     public function __isset( $name ) {
 
         if( ! $this -> isDestroyed() ) {
             return array_key_exists( (string) $name, (array) $_SESSION[ $this -> environment ] );
         }
+
+        return FALSE;
     }
 
     /**
@@ -334,9 +300,6 @@ class Environment extends Object {
      *
      * @param string $name
      *  Index to be removed
-     *
-     * @throws \Next\Session\Environment\EnvironmentException
-     *  Environment has been explicitly destroyed
      *
      * @throws \Next\Session\Environment\EnvironmentException
      *  Requested index doesn't exists

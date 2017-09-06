@@ -53,6 +53,13 @@ abstract class AbstractController extends Object implements Controller {
     protected $view;
 
     /**
+     * Session Manager
+     *
+     * @var \Next\Session\Manager $session
+     */
+    protected $session;
+
+    /**
      * Controller Constructor
      * Configures Controller Object with the Application Object provided, if any
      *
@@ -78,6 +85,12 @@ abstract class AbstractController extends Object implements Controller {
             // Application's View Engine
 
             $this -> view = $application -> getView();
+
+            // Session Manager
+
+            if( ( $session = $application -> getSession() ) !== NULL && session_status() == PHP_SESSION_ACTIVE ) {
+                $this -> session = $session;
+            }
 
             // HTTP GET Params (a.k.a. Dynamic Params) as Template Variables
 
