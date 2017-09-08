@@ -35,9 +35,9 @@ class DNT extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        DNT = "DNT" ":" 1*( 1 | 0 )
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

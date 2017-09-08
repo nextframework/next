@@ -85,13 +85,10 @@ abstract class AbstractApplication extends Object implements Application {
     protected $session;
 
     /**
-     * Constructor Overwriting.
+     * Additional Initialization.
      * Sets up a type-hinted Application Object for all Caching Schema
-     *
-     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
-     *  Optional Configuration Options for Caching Schema
      */
-    public function __construct( $options = NULL ) {
+    protected function init() {
 
         // Setting Up Application's Resources...
 
@@ -152,15 +149,9 @@ abstract class AbstractApplication extends Object implements Application {
 
         $this -> initCache();
 
-            // Additional Initialization
-
-        $this -> init();
-
         // Checking Application's Integrity
 
         $this -> checkIntegrity();
-
-        parent::__construct( $options );
     }
 
     /**

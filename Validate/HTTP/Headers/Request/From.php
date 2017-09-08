@@ -28,9 +28,9 @@ class From extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        From   = "From" ":" mailbox
-     * </code>
+     * ````
      *
      * <p>Where mailbox is an e-mail address</p>
      *

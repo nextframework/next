@@ -28,9 +28,9 @@ class MaxForwards extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Max-Forwards   = "Max-Forwards" ":" 1*DIGIT
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

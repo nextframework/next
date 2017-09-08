@@ -28,9 +28,9 @@ class IfNoneMatch extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        If-None-Match = "If-None-Match" ":" ( "*" | 1#entity-tag )
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

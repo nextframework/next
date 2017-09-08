@@ -30,9 +30,9 @@ class XRequestedWith extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        X-Requested-With = "X-Requested-With" ":" 1*( token )
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

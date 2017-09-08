@@ -35,9 +35,9 @@ class Host extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Host = "Host" ":" host [ ":" port ] ;
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

@@ -28,9 +28,9 @@ class Upgrade extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Upgrade = "Upgrade" ":" 1#product
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

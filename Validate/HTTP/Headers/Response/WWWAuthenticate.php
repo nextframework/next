@@ -28,9 +28,9 @@ class WWWAuthenticate extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        WWW-Authenticate  = "WWW-Authenticate" ":" 1#challenge
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

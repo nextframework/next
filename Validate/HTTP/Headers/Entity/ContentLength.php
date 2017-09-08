@@ -28,9 +28,9 @@ class ContentLength extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Content-Length    = "Content-Length" ":" 1*DIGIT
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

@@ -32,12 +32,12 @@ class XXSSProtection extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        X-XSS-Protection = "X-XSS-Protection" ":"
      *                           #1 [ params ]
      *
      *        params           = ";" token "=" token
-     * </code>
+     * ````
      *
      * @note So far only "mode=block" (without quotes) is accepted as valid param
      *

@@ -28,10 +28,10 @@ class ContentMD5 extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Content-MD5   = "Content-MD5" ":" md5-digest
      *        md5-digest   = <base64 of 128 bit MD5 digest as per RFC 1864>
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

@@ -29,11 +29,11 @@ class Connection extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Connection = "Connection" ":" 1#(connection-token)
      *
      *        connection-token = token
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

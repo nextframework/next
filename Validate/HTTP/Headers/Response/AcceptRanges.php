@@ -28,11 +28,11 @@ class AcceptRanges extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Accept-Ranges     = "Accept-Ranges" ":" acceptable-ranges
      *
      *        acceptable-ranges = 1#range-unit | "none"
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

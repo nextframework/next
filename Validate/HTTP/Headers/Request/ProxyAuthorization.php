@@ -28,9 +28,9 @@ class ProxyAuthorization extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Proxy-Authorization     = "Proxy-Authorization" ":" credentials
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

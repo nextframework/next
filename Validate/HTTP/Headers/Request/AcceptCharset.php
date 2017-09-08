@@ -29,12 +29,12 @@ class AcceptCharset extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Accept-Charset = "Accept-Charset" ":"
      *           1#( ( charset | "*" )[ ";" "q" "=" qvalue ] )
      *
      *        If Quality Value is not present, then 1 is assumed
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

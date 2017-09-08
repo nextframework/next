@@ -29,10 +29,10 @@ class TE extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        TE        = "TE" ":" #( t-codings )
      *        t-codings = "trailers" | ( transfer-extension [ accept-params ] )
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

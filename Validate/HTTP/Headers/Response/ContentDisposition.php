@@ -33,7 +33,7 @@ class ContentDisposition extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Content-Disposition = "Content-Disposition" ":"
      *                              disposition-type
      *                              *(";" disposition-param)
@@ -63,7 +63,7 @@ class ContentDisposition extends Object implements Headers {
      *        quoted-date-time := quoted-string
      *                         ; contents MUST be an RFC 822 `date-time'
      *                         ; numeric timezones (+HHMM or -HHMM) MUST be used
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

@@ -28,9 +28,9 @@ class XDoNotTrack extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *         X-Do-Not-Track = "X-Do-Not-Track" ":" 1*( 1 | 0 )
-     * </code>
+     * ````
      *
      * <p>
      *     This is not a RFC header BUT is only accepted just as one

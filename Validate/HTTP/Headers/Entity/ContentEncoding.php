@@ -29,9 +29,9 @@ class ContentEncoding extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Content-Encoding  = "Content-Encoding" ":" 1#content-coding
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

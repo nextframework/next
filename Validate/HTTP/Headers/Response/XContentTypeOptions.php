@@ -32,9 +32,9 @@ class XContentTypeOptions extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        X-Content-Type-Options = "X-Content-Type-Options" ":" nosniff
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

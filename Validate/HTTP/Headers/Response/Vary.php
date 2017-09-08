@@ -28,9 +28,9 @@ class Vary extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Vary  = "Vary" ":" ( "*" | 1#field-name )
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

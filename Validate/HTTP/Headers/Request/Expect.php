@@ -28,7 +28,7 @@ class Expect extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *
      *        Expect       =  "Expect" ":" 1#expectation
      *
@@ -37,7 +37,7 @@ class Expect extends Object implements Headers {
      *                                 *expect-params ]
      *
      *        expect-params =  ";" token [ "=" ( token | quoted-string ) ]
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

@@ -29,12 +29,12 @@ class AcceptEncoding extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Accept-Encoding  = "Accept-Encoding" ":"
      *                           1#( codings [ ";" "q" "=" qvalue ] )
      *
      *        codings          = ( content-coding | "*" )
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

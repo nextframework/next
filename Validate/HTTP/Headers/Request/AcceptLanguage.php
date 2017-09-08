@@ -30,12 +30,12 @@ class AcceptLanguage extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Accept-Language = "Accept-Language" ":"
      *                          1#( language-range [ ";" "q" "=" qvalue ] )
      *
      *        language-range  = ( ( 1*8ALPHA *( "-" 1*8ALPHA ) ) | "*" )
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

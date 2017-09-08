@@ -30,9 +30,9 @@ class XPoweredBy extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        X-Powered-By = "X-Powered-By" ":" ( text )
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

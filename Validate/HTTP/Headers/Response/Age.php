@@ -28,11 +28,11 @@ class Age extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Age = "Age" ":" age-value
      *
      *        age-value = delta-seconds
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

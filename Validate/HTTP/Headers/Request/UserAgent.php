@@ -28,9 +28,9 @@ class UserAgent extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        User-Agent = "User-Agent" ":" 1*( product | comment )
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

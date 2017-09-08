@@ -10,6 +10,7 @@
  */
 namespace Next\Cache\Schema;
 
+use Next\Components\Object;                           # Object Class
 use Next\HTTP\Headers\Fields\Entity\ContentType;      # Content-Type Header Class
 use Next\HTTP\Headers\Fields\Entity\ContentLength;    # Content-Length Header Class
 use Next\HTTP\Headers\Fields\Entity\LastModified;     # Last-Modified Header Class
@@ -27,7 +28,7 @@ use Next\HTTP\Headers\Fields\Raw;                     # Raw Header Field Class
  *
  * @package    Next\Cache\Schema
  */
-class Response extends AbstractSchema {
+class Response extends Object implements Schema {
 
     /**
      * Default MIME Type
@@ -42,6 +43,8 @@ class Response extends AbstractSchema {
      * @var array $defaultOptions
      */
     protected $defaultOptions = [
+
+        'application' => [ 'type' => 'Next\Application\Application', 'required' => TRUE ],
 
         'cacheable'  => [
 
@@ -91,7 +94,7 @@ class Response extends AbstractSchema {
      */
     public function run() {
 
-        $URI = $this -> application -> getRequest() -> getRequestURI();
+        $URI = $this -> options -> application -> getRequest() -> getRequestURI();
 
         $extensions = array_merge(
             (array) $this -> options -> cacheable, (array) $this -> options -> skip
@@ -111,12 +114,12 @@ class Response extends AbstractSchema {
                  * If not we'll tell Application's Router to abort its flow,
                  * so the FrontController can keep going
                  */
-                $this -> application -> getRouter() -> abortFlow();
+                $this -> options -> application -> getRouter() -> abortFlow();
 
                 return;
             }
 
-            $response = $this -> application -> getResponse();
+            $response = $this -> options -> application -> getResponse();
 
             /**
              * @internal

@@ -28,10 +28,10 @@ class ContentLocation extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Content-Location = "Content-Location" ":"
      *                           ( absoluteURI | relativeURI )
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

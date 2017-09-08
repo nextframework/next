@@ -28,9 +28,9 @@ class Location extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Location       = "Location" ":" absoluteURI
-     * </code>
+     * ````
      *
      * <p><strong>Absolute URI Definition</strong></p>
      *

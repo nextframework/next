@@ -28,13 +28,13 @@ class Pragma extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Pragma            = "Pragma" ":" 1#pragma-directive
      *
      *        pragma-directive  = "no-cache" | extension-pragma
      *
      *        extension-pragma  = token [ "=" ( token | quoted-string ) ]
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

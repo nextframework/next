@@ -247,15 +247,13 @@ abstract class AbstractController extends Object implements Controller {
      * Allows to unset a Template Variable from Controller context,
      * instead of using:
      *
-     * <code>
-     *   $this -> view -> remove( 'variable' );
+     * `$this -> view -> remove( 'variable' );`
      *
-     *   // OR
+     * Or maybe then:
      *
-     *  unset( $this -> view -> variable );
-     * </code>
+     * `unset( $this -> view -> variable );`
      *
-     * This method is slightly different of others. While __get() and __isset()
+     * This method is slightly different of others. While `__get()` and `__isset()`
      * work over the HTTP GET Params (a.k.a Dynamic Params) this one works over
      * Template Variables
      *

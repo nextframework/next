@@ -47,7 +47,7 @@ class CacheControl extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      * Cache-Control   = "Cache-Control" ":" 1#cache-directive
      *
      *        cache-directive = cache-request-directive
@@ -76,7 +76,7 @@ class CacheControl extends Object implements Headers {
      *             | cache-extension
      *
      *        cache-extension = token [ "=" ( token | quoted-string ) ]
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

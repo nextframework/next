@@ -28,7 +28,7 @@ class RetryAfter extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Retry-After  = "Retry-After" ":" ( HTTP-date | delta-seconds )
      *
      *        HTTP-date    = rfc1123-date
@@ -50,7 +50,7 @@ class RetryAfter extends Object implements Headers {
      *        month       = "Jan" | "Feb" | "Mar" | "Apr"
      *                    | "May" | "Jun" | "Jul" | "Aug"
      *                    | "Sep" | "Oct" | "Nov" | "Dec"
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

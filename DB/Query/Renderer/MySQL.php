@@ -434,7 +434,9 @@ class MySQL extends AbstractRenderer {
              * the placeholder name matches the column name the quoting above
              * would produce something like:
              *
-             * <code>`column` = :`column`</code>
+             * ````
+             * `column` = :`column`
+             * ````
              *
              * Which must be undone otherwise the Statement Class used may not
              * recognize the value after the '=' as a placeholder

@@ -28,7 +28,7 @@ class Range extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Content-Range = "Content-Range" ":" content-range-spec
      *
      *        content-range-spec      = byte-content-range-spec
@@ -41,7 +41,7 @@ class Range extends Object implements Headers {
      *                                       | "*"
      *
      *        instance-length           = 1*DIGIT
-     * </code>
+     * ````
      *
      * @param string $data
      *  Data to validate

@@ -29,7 +29,7 @@ class Accept extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Accept            = "Accept" ":"
      *                            #( media-range [ accept-params ] )
      *
@@ -41,7 +41,7 @@ class Accept extends Object implements Headers {
      *        accept-params     = ";" "q" "=" qvalue *( accept-extension )
      *
      *        accept-extension  = ";" token [ "=" ( token | quoted-string ) ]
-     * </code>
+     * ````
      *
      * There is a little difference in the first "Media Range" possibility in order
      * to make it compatible with Doc Comment Syntax

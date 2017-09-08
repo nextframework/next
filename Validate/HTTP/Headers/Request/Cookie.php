@@ -30,13 +30,13 @@ class Cookie extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Cookie: cookiename[ "=" cookievalue ];
      *
      *        cookiename  = token
      *
      *        cookievalue = token
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

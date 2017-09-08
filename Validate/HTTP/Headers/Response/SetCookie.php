@@ -33,7 +33,7 @@ class SetCookie extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Set-Cookie: "Set-Cookie:" cookies
      *
      *        cookies         =       1#cookie
@@ -46,7 +46,7 @@ class SetCookie extends Object implements Headers {
      *                        |       "Path" "=" value
      *                        |       "Secure"
      *                        |       "Version" "=" 1*DIGIT
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

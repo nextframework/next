@@ -29,9 +29,9 @@ class TransferEncoding extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Transfer-Encoding       = "Transfer-Encoding" ":" 1#transfer-coding
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

@@ -28,7 +28,7 @@ class Via extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Via =  "Via" ":" 1#( received-protocol received-by [ comment ] )
      *
      *        received-protocol = [ protocol-name "/" ] protocol-version
@@ -36,7 +36,7 @@ class Via extends Object implements Headers {
      *        protocol-version  = token
      *        received-by       = ( host [ ":" port ] ) | pseudonym
      *        pseudonym         = token
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

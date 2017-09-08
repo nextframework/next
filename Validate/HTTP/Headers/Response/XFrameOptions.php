@@ -32,9 +32,9 @@ class XFrameOptions extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        X-Frame-Options = "X-Frame-Options" ":" ( deny | sameorigin )
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

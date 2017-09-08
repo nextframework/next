@@ -28,7 +28,7 @@ class Warning extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Warning    = "Warning" ":" 1#warning-value
      *
      *        warning-value = warn-code SP warn-agent SP warn-text [SP warn-date]
@@ -61,7 +61,7 @@ class Warning extends Object implements Headers {
      *        month       = "Jan" | "Feb" | "Mar" | "Apr"
      *                    | "May" | "Jun" | "Jul" | "Aug"
      *                    | "Sep" | "Oct" | "Nov" | "Dec"
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

@@ -151,8 +151,7 @@ class Socket extends AbstractAdapter {
      *     \Next\HTTP\Stream\Writer::write() that prevents a zero-length data to
      *     be written, warning the user about possible data loss.
      *
-     *     <code>
-     *
+     *     ````
      *         function write( $string, $length = NULL ) {
      *
      *             $handler = fopen( './file.txt', 'w' );
@@ -183,8 +182,7 @@ class Socket extends AbstractAdapter {
      *
      *             echo $e -> getMessage();
      *         }
-     *
-     *     </code>
+     *     ````
      *
      * Because of the WRITE mode (w) the code above will output the Exception
      * message, but the file named <strong>file.txt</strong> will already be emptied

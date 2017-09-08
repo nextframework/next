@@ -28,9 +28,9 @@ class IfMatch extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        If-Match = "If-Match" ":" ( "*" | 1#entity-tag )
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

@@ -28,9 +28,9 @@ class Referer extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Referer        = "Referer" ":" ( absoluteURI | relativeURI )
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

@@ -30,7 +30,7 @@ class Link extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Link           = "Link" ":" #link-value
      *
      *        link-value     = "<" URI-Reference ">" *( ";" link-param )
@@ -72,7 +72,7 @@ class Link extends Object implements Headers {
      *        reg-rel-type   = LOALPHA *( LOALPHA | DIGIT | "." | "-" )
      *
      *        ext-rel-type   = URI
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

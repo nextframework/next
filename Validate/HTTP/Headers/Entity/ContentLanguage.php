@@ -30,9 +30,9 @@ class ContentLanguage extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Content-Language  = "Content-Language" ":" 1#language-tag
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

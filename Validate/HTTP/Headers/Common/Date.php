@@ -34,7 +34,7 @@ class Date extends Object implements Headers {
      *
      * <p><strong>RFC Specification</strong></p>
      *
-     * <code>
+     * ````
      *        Date  = "Date" ":" HTTP-date
      *
      *        HTTP-date    = rfc1123-date
@@ -56,7 +56,7 @@ class Date extends Object implements Headers {
      *        month       = "Jan" | "Feb" | "Mar" | "Apr"
      *                    | "May" | "Jun" | "Jul" | "Aug"
      *                    | "Sep" | "Oct" | "Nov" | "Dec"
-     * </code>
+     * ````
      *
      * @return boolean
      *  TRUE if valid and FALSE otherwise

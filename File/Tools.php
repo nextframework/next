@@ -30,9 +30,7 @@ class Tools {
      *
      * <p><strong>Usage:</strong></p>
      *
-     * <code>
-     *  Tools::cleanAndInvertPath( '   path\with\backslashes' ) // path/with/backslashes (without left spaces)
-     * </code>
+     * `Tools::cleanAndInvertPath( '   path\with\backslashes' ) // path/with/backslashes (without left spaces)`
      *
      * @param string $path
      *  Path to work with
@@ -188,7 +186,7 @@ class Tools {
      *
      * <strong>Usage:</strong>
      *
-     * <code>
+     * ````
      *   // Delete all files but keep given directory empty
      *
      *  Tools::delete( 'path/to/delete/files' )
@@ -204,7 +202,7 @@ class Tools {
      *   // Delete all files and remove empty directory
      *
      *  Tools::delete( 'path/to/delete/files', [], TRUE )
-     * </code>
+     * ````
      *
      * @param string $path
      *  Directory to work with
