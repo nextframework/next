@@ -37,12 +37,14 @@ final class Boolean extends AbstractTypes {
         return is_bool( $value );
     }
 
+    // Prototypable Method Implementation
+
     /**
-     * Prototype resources to object
-     *
-     * @return void
+     * Prototypes a custom, and maybe complex, routine to one of
+     * the available types by proxying, treating and handling
+     * the mixed arguments received
      */
-    protected function prototype() {
+    public function prototype() {
 
         // Prototypes that requires a value to work with
 

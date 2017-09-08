@@ -14,22 +14,30 @@ use Next\Components\Interfaces\Contextualizable;    # Contextualizable Interface
 use Next\Components\Interfaces\Informational;       # Informational Interface
 use Next\Components\Interfaces\Parameterizable;     # Parameterizable Interface
 use Next\Components\Interfaces\Filterable;          # Filterable Interface
+use Next\Components\Interfaces\Verifiable;          # Verifiable Interface
 
 /**
- * The Object is the base Class of (almost) every class in Next Framework.
+ * The Object is the base Class of (almost) all classes in Next Framework.
  *
- * It implements the **Extended Context** Concept defined by Contextualizable
- * Interface through which an Object can bridge methods of multiple
- * classes to themselves, simulating multiple inheritance.
+ * It implements the **Extended Context** Concept defined by
+ * Contextualizable Interface through which an Object can bridge methods
+ * of multiple classes to themselves, simulating multiple inheritance.
  *
  * It also implements the **Informational Messages Concept** defined by
- * Informational Interface through which an Object can pass on
- * Error, Information and Success Messages.
+ * Informational Interface through which an Object can retrieve passed
+ * Error, Information and/or Success Messages.
  *
- * Last but not least, it implements the **Parameterizable Concept** through
- * which an Object can have multiple Class Parameters without the need of
- * constructor overwriting (pretty much like JavaScript Object arguments),
+ * Objects implements the **Parameterizable Concept** through which an
+ * Object can have multiple Parameters Options replacing arguments
+ * usually defined in the Constructor without the need of
+ * overwrite it, similarly to JavaScript Object arguments,
  * reinforcing the **Additional Initialization Concept**
+ *
+ * Last but not least, the **Verifiable Concept** defined by
+ * Verifiable Interface through which an Object enforces an integrity
+ * checking of any sorts, but usually to reinforce the
+ * Parameterizable Concept that (currently) lacks the typed verifications
+ * the way type-hinting does
  *
  * @package    Next\Components
  */
@@ -92,6 +100,8 @@ class Object extends Prototype implements Contextualizable, Informational, Param
         if( $this instanceof Filterable ) $this -> filter();
 
         $this -> init();
+
+        if( $this instanceof Verifiable ) $this -> verify();
     }
 
     /**
@@ -159,7 +169,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
         return $obj;
     }
 
-    // Accessors
+    // Accessory Methods
 
     /**
      * Retrieves a Reflection instance for the Object
@@ -227,7 +237,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
          return $this -> context -> getCallables();
     }
 
-    // Informational Interfaces Methods Implementation
+    // Informational Interface Methods Implementation
 
     /**
      * Get success message
@@ -259,7 +269,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
         return $this -> _info;
     }
 
-    // Parameterizable Methods Interfaces
+    // Parameterizable Interface Methods Implementation
 
     /**
      * Get Class Options

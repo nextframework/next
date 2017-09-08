@@ -56,4 +56,17 @@ class ContentLocation extends Object implements Headers {
 
         return ( $match != 0 );
     }
+
+    // Parameterizable Interface Method Overriding
+
+    /**
+     * Set Class Options.
+     * Defines which Parameter Options are known by the Validator Class
+     *
+     * @return array
+     *  An array with Custom Options overriding or complementing Object defaults
+     */
+    public function setOptions() {
+        return [ 'value' => [ 'required' => TRUE ] ];
+    }
 }

@@ -1,11 +1,28 @@
 <?php
 
+/**
+ * Interval Equations Abstract Class | Math\Equations\Intervals\AbstractInterval.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
+ */
 namespace Next\Math\Equations\Intervals;
 
-use Next\Math\Equations\Equation;
-use Next\Math\MathException;
-use Next\Components\Object;
+use Next\Math\Equations\Equation;    # Equations Interface
+use Next\Math\MathException;         # Math Exception Class
+use Next\Components\Object;          # Object Class
 
+/**
+ * Abstracts the common components of Interval Equations
+ *
+ * @package    Next\Math
+ *
+ * @uses       \Next\Math\Equations\Equation,
+ *             \Next\Math\Equations\Intervals\Interval,
+ *             \Next\Math\MathException, \Next\Components\Object,
+ */
 abstract class AbstractInterval extends Object implements Equation, Interval {
 
     /**

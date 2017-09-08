@@ -10,14 +10,14 @@
  */
 namespace Next\Components;
 
-use Next\Components\Debug\Exception;      # Exception Class
+use Next\Components\Interfaces\Verifiable;
 
 /**
  * Defines a data-structure for Class Options as part of the Parameterizable Concept
  *
  * @package    Next\Components
  */
-class Parameter implements \Countable, \ArrayAccess {
+class Parameter implements Verifiable, \Countable, \ArrayAccess {
 
     /**
      * Object Parameters
@@ -27,93 +27,191 @@ class Parameter implements \Countable, \ArrayAccess {
     private $parameters;
 
     /**
+     * Default Options.
+     * Default Options are usually defined in abstract classes being
+     * available for all its children
+     *
+     * @var array|Next\Components\Parameter
+     */
+    private $defaultOptions;
+
+    /**
+     * Custom Options.
+     * Custom Options are defined in concrete children classes affecting
+     * individually the working mode of each class
+     *
+     * @var array|Next\Components\Parameter
+     */
+    private $customOptions;
+
+    /**
+     * Instance Options.
+     * These are defined when the Object is instantiated, allowing the
+     * User to modify any of the already defined Options
+     *
+     * @var array|Next\Components\Parameter
+     */
+    private $instanceOptions;
+
+    /**
      * Parameter Object Constructor
-     *
-     *  - Common Options
-     *
-     *  Usually defined in abstract classes these options will be available
-     *  for all its children
-     *
-     *  - Children Options
-     *
-     *  Defined in concrete classes these options will affect individually
-     *  the working mode of each class.
-     *
-     *  These options can sometimes overwrite Common Options too.
-     *
-     *  - User Options
-     *
-     *  Defined in class constructor, when instantiating the object, allow
-     *  user to change one or all of the options.
+     * Lists possible Parameter Options to build recursively the
+     * combined structure verifying its integrity after that
      */
     public function __construct() {
 
-        list( $common, $custom, $user ) = func_get_args() + array( NULL, NULL, NULL );
+        list( $this -> defaultOptions, $this -> customOptions, $this -> instanceOptions ) =
+            func_get_args() + array( NULL, NULL, NULL );
 
         $this -> parameters = new \stdClass;
 
-        // Building Options (by merging them)
+        // Merging Parameter Options
 
-        if( ! is_null( $common ) ) $this -> merge( $common );
+        $this -> merge( $this -> defaultOptions );
 
-        if( ! is_null( $custom ) ) $this -> merge( $custom );
+        $this -> merge( $this -> customOptions );
 
-        if( ! is_null( $user ) )   $this -> merge( $user );
+        $this -> merge( $this -> instanceOptions );
+
+        // Verifying Parameter Options Integrity
+
+        $this -> verify();
+
+        // Discarding unused informations
+
+        $this -> discard();
     }
 
     /**
      * Merge Options
      *
-     * @param mixed $param
+     * @param array|Next\Components\Parameter $parameter
+     *  An associative array with Parameter Options or a full formed Parameter Object
      *
-     *  Argument to merge as Parameter Options
-     *
-     *  Acceptable values are:
-     *
-     *   <ul>
-     *
-     *       <li>Array</li>
-     *
-     *       <li>
-     *
-     *           An {@link http://php.net/manual/en/reserved.classes.php stdClass Object}
-     *       </li>
-     *
-     *       <li>\Next\Components\Object object</li>
-     *
-     *   </ul>
-     *
-     * @throws \Next\Components\Debug\Exception
-     *  Any option is not an associative array, because
-     *  doesn't make sense to have a public property just to store NULL
+     * @throws Next\Components\Exception\InvalidArgumentException
+     *  Thrown if a Parameter Option predefined to be of an specific
+     *  Object instance it of a different type, simulating type-hinting
      */
-    public function merge( $param ) {
+    public function merge( $parameter ) {
 
-        // Converting, if needed
+        if( $parameter === NULL ) return;
 
-        if( is_array( $param ) ) $param = Object::map( $param );
+        if( is_array( $parameter ) ) $parameter = Object::map( $parameter );
 
-        if( $param instanceof Parameter ) {
-            return $this -> merge( $param -> getParameters() );
+        if( $parameter instanceof Parameter ) {
+            return $this -> merge( $parameter -> getParameters() );
         }
 
         // Merging...
 
-        foreach( $param as $property => $value ) {
-            $this -> parameters -> {$property} = $value;
+        foreach( $parameter as $name => $value ) {
+
+            if( isset( $this -> parameters -> {$name} ) ) {
+
+                /**
+                 * @internal
+                 *
+                 * Because Instance Options are the last ones to be
+                 * added to the Parameters Object, overwriting any
+                 * Options with the same name, it's possible to
+                 * simulate a type-hinting by defining a structure
+                 * with a FQCN namespace as its value.
+                 *
+                 * For example, considering a class children of
+                 * \Next\Components\Object having overwritten
+                 * Object::$defaultOptions as follows:
+                 *
+                 * ````
+                 * <?php
+                 *
+                 * class User extends Object {
+                 *
+                 *     protected $defaultOptions = [
+                 *        'UserName' => [ 'type' => Next\Components\Types\String' ]
+                 *     ];
+                 * }
+                 * ````
+                 *
+                 * When this Object is instantiated, if a Parameter Option
+                 * named 'UserName' is defined like this:
+                 *
+                 * ````
+                 * $user = new User( [ 'UserName' => new String( 'Rumplestiltskin' ) ] );
+                 * ````
+                 *
+                 * The Parameter Option will be accepted because the
+                 * value passed is indeed an instance of
+                 * \Next\Components\Types\String
+                 *
+                 * But if it's instead created like this:
+                 *
+                 * ````
+                 * $user = new User( [ 'UserName' => 'Rumplestiltskin' ] );
+                 * ````
+                 *
+                 * Even though 'Rumplestiltskin' is a string it's not
+                 * an Object instance of the expected class and thus
+                 * won't be accepted throwing an InvalidArgumentException
+                 */
+                if( isset( $this -> parameters -> {$name} -> type ) ) {
+
+                    if( ! $value instanceof $this -> parameters -> {$name} -> type ) {
+
+                        throw Exception\InvalidArgumentException::type(
+                            $name, $this -> parameters -> {$name} -> type
+                        );
+                    }
+                }
+            }
+
+            $this -> parameters -> {$name} = $value;
         }
     }
 
     // Accessors
 
     /**
-     * Get all Parameters
+     * Get all Parameters as structurally defined
      *
      * @return stdClass
      *  All Parameters merged together in a stdClass structure
      */
     public function getParameters() {
         return $this -> parameters;
+    }
+
+    // Verifiable Interface Method Implementation
+
+    /**
+     * Verify Parameter Options Integrity
+     *
+     * @throws Next\Components\Exception\LogicException
+     *  Thrown if a Parameter Option marked as 'required' wasn't
+     *  overwrote with the real value
+     *
+     * @throws Next\Components\Exception\UnexpectedValueException
+     *  Thrown if an extraneous Parameter Option, unknown by Parent
+     *  or Children classes is being set, preventing the Instance Options
+     *  to produce unneeded Options
+     */
+    public function verify() {
+
+        foreach( $this-> parameters as $name => $parameter ) {
+
+            // Are all required Options set?
+
+            if( isset( $parameter -> required ) && $parameter -> required !== FALSE ) {
+                throw Exception\LogicException::missing( $name );
+            }
+
+            // Are all Options known?
+
+            if( ! array_key_exists( $name, (array) $this -> defaultOptions ) &&
+                    ! array_key_exists( $name, (array) $this -> customOptions ) ) {
+
+                throw Exception\UnexpectedValueException::extra( $name );
+            }
+        }
     }
 
     // Countable Interface Method Implementation
@@ -148,20 +246,23 @@ class Parameter implements \Countable, \ArrayAccess {
             /**
              * @internal
              *
-             * The only way for \Next\Components\Object::map() to handle the
-             * integrity checking below is to NOT condition Parameter::offsetSet()
-             * routine to be or not an array
+             * The only way for \Next\Components\Object::map() to
+             * handle the integrity checking below is to NOT condition
+             * Parameter::offsetSet() routine to be or not an array
              *
-             * But removing this condition the innermost values of each individual
-             * parameter, the ones that really serves as configuration for something
-             * instead of just define a complex structure, *may* not be an array
-             * at some point and thus the foreach in Object::map() would fail
+             * But removing this condition the innermost values of each
+             * individual parameter, the ones that really serves as
+             * configuration for something instead of just define a
+             * complex structure, *may* not be an array at some point
+             * and thus the foreach in Object::map() would fail
              *
-             * Restrict Object::map() exclusively to traversable resources is not
-             * very reliable as well because this checking is based upon keys of
-             * an array and Traversable Objects may not have them
+             * By restricting Object::map() exclusively to traversable
+             * resources is not very reliable as well because this
+             * checking is based upon keys of an array and
+             * Traversable Objects may not have them
              *
-             * In any event, it's safer repeating the checking here as well ;)
+             * In any event, it's safer repeating the checking
+             * here as well ;)
              */
             $keys = array_keys( $value );
 
@@ -244,9 +345,7 @@ class Parameter implements \Countable, \ArrayAccess {
      */
     public function offsetGet( $identifier ) {
 
-        if( ! isset( $this -> parameters -> {$identifier} ) ) {
-            return NULL;
-        }
+        if( ! isset( $this -> parameters -> {$identifier} ) ) return NULL;
 
         if( $this -> parameters -> {$identifier} instanceof Parameter ) {
 
@@ -310,5 +409,45 @@ class Parameter implements \Countable, \ArrayAccess {
      */
     public function __get( $identifier ) {
         return $this -> offsetGet( $identifier );
+    }
+
+    // Auxiliary Methods
+
+    /**
+     * Discards pseudo-type-hinting informations from optional
+     * Parameter Options - otherwise Parameter::merge() would've raised
+     * an Exception - overwriting them with a Default Value, if provided
+     * otherwise with NULL
+     *
+     * @throws Next\Components\Exception\UnexpectedValueException
+     *  Throws if an \Exception is caught when instantiating the object
+     *  defined in 'type' entry
+     */
+    private function discard() {
+
+        foreach( $this -> parameters as $name => $parameter ) {
+
+            if( isset( $parameter -> type ) ) {
+
+                $default = $parameter -> default;
+
+                /**
+                 * @internal
+                 *
+                 * If default value is NULL then... it's NULL
+                 */
+                if( $default === NULL ) {
+                    $this -> parameters -> {$name} = NULL; continue;
+                }
+
+                try {
+
+                    $this -> parameters -> {$name} = new $parameter -> type( $default );
+
+                } catch( \Exception $e ) {
+                    throw Exception\UnexpectedValueException::rethrow( $e );
+                }
+            }
+        }
     }
 }

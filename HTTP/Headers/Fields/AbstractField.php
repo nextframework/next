@@ -27,7 +27,7 @@ use Next\Components\Parameter;                     # Parameter Class
 abstract class AbstractField extends Object implements Parameterizable, Field {
 
     /**
-     * Headers Fields Default Options
+     * Headers Fields Default/Known Options
      *
      * @var array $defaultOptions
      */
@@ -49,7 +49,12 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
          * Defines whether or not whitespaces should preserved before validation
          * Defaults to FALSE
          */
-        'preserveWhitespace' => FALSE
+        'preserveWhitespace' => FALSE,
+
+        /**
+         * The value to validated and added as HTTP Header
+         */
+        'value' => [ 'required'=> TRUE ]
     );
 
     /**

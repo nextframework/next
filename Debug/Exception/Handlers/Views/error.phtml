@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>Next Diagnostics</title>
+
+<style type="text/css" media="screen">
+
+<!--
+
+* {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    list-style-type: none;
+}
+
+a:link, a:active, a:visited {
+    color: #0000FF;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+body {
+    background-color: #141414;
+    color: #2C2C2C;
+    font: 12px Verdana;
+    text-align: center;
+}
+
+#exception {
+    background-color: #FAFAFA;
+    border: 3px solid #CCCCCC;
+    margin: 5% 5% 0 5%;
+    padding: 15px;
+    text-align: left;
+}
+
+#footer {
+    color: #FFF;
+}
+
+p {
+    line-height: 35px;
+}
+
+p.trace {
+    margin-right: 2%;
+}
+
+.details {
+    display: none;
+    margin: 0 0 0 2%;
+}
+
+p.label {
+    display: inline-block;
+    font-weight: bold;
+    padding-right: 10px;
+    text-align: right;
+    width: 80px;
+}
+
+.details a.args {
+    color: #2C2C2C;
+}
+
+.details a.args:hover {
+    color: #2C2C2C;
+}
+
+.details pre {
+    border: 1px solid #000;
+    display: none;
+    font-size: 10px;
+    margin: 1% 0 2% 0;
+    padding:  10px;
+    overflow: auto;
+}
+
+-->
+
+</style>
+
+</head>
+
+<body>
+
+<div id="exception">
+
+    <p><h2><?php echo $this -> e; ?></h2></p>
+
+    <br />
+
+    <p>
+        <strong>Message:</strong> <?php echo utf8_encode( $this -> e -> getMessage() ); ?>
+    </p>
+
+    <p>
+        <strong>File:</strong> <?php echo $this -> e -> getFile(); ?> at
+        <strong>Line:</strong> <?php echo $this -> e -> getLine(); ?>
+    </p>
+
+</div>
+
+<div id="footer">
+    <?php
+
+    // xDebug
+
+    if( function_exists( 'xdebug_time_index' ) ) {
+        echo '<br /><br />Runtime: ' . xdebug_time_index();
+    }
+
+    ?>
+</div>
+
+</body>
+</html>

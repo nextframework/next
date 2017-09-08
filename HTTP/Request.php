@@ -1085,6 +1085,13 @@ class Request extends Object {
 
     // Auxiliary Methods
 
+    /**
+     * Checks Parameter Options Integrity
+     *
+     * @throws \Next\HTTp\Request\RequestException
+     *  Thrown if Parameter Option 'adapter', if defined, isn't
+     *  an instance of \Next\HTTP\Stream\Adapter\Adapter
+     */
     private function checkintegrity() {
 
         if( isset( $this -> options-> adapter ) ) {

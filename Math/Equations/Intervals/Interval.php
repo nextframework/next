@@ -1,9 +1,25 @@
 <?php
 
+/**
+ * HTTP Request Class | HTTP\Request.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
+ */
 namespace Next\Math\Equations\Intervals;
 
-use Next\Components\Interfaces\Boundable;
+use Next\Components\Interfaces\Boundable;    # Boundable Interface
 
+/**
+ * The Interval Type describes the implementation of a
+ * Mathematical Interval Algorithm defining all publicly available methods
+ *
+ * @package    Next\Math
+ *
+ * @uses       \Next\Components\Interfaces\Boundable
+ */
 interface Interval extends Boundable {
 
     /**

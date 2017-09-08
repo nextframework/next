@@ -356,21 +356,19 @@ abstract class AbstractApplication extends Object implements Application {
 
         // Checking if assigned Router is valid
 
-        if( ! $this -> router instanceof Router ) {
+        if( ! is_null( $this -> router ) && ! $this -> router instanceof Router ) {
             throw ApplicationException::invalidRouter();
         }
 
         // Checking if assigned View Engine is Valid
 
-        if( ! $this -> view instanceof View ) {
-
+        if( ! is_null( $this -> view ) && ! $this -> view instanceof View ) {
             throw ApplicationException::invalidViewEngine();
         }
 
         // Checking if assigned Session Manager is Valid
 
         if( ! is_null( $this -> session ) && ! $this -> session instanceof Session ) {
-
             throw ApplicationException::invalidSessionManager();
         }
     }

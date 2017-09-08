@@ -45,13 +45,15 @@ final class String extends AbstractTypes {
      *  TRUE if given value is of the type string and FALSE otherwise
      */
     protected function accept( $value ) {
-        return is_string( $value );
+        return ( ! is_null( $value ) && is_string( $value ) );
     }
 
+    // Prototypable Method Implementation
+
     /**
-     * Prototype resources to object
-     *
-     * @return void
+     * Prototypes a custom, and maybe complex, routine to one of
+     * the available types by proxying, treating and handling
+     * the mixed arguments received
      */
     public function prototype() {
 

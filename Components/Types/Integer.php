@@ -36,12 +36,14 @@ final class Integer extends Number {
         return ( is_int( $value ) && ! is_float( $value ) );
     }
 
+    // Prototypable Method Implementation
+
     /**
-     * Prototype resources to object
-     *
-     * @return void
+     * Prototypes a custom, and maybe complex, routine to one of
+     * the available types by proxying, treating and handling
+     * the mixed arguments received
      */
-    protected function prototype() {
+    public function prototype() {
 
         // Copying parent's prototypes
 

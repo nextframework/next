@@ -44,12 +44,9 @@ abstract class AbstractTypes extends Object implements Type {
 
         parent::__construct( $options );
 
-        if( $value !== NULL ) {
-
-            $this -> set(
-                ( $value instanceof Type ? $value -> get() : $value )
-            );
-        }
+        $this -> set(
+            ( $value instanceof Type ? $value -> get() : $value )
+        );
 
         // Prototyping
 
@@ -74,9 +71,14 @@ abstract class AbstractTypes extends Object implements Type {
 
         if( $this -> accept( $value ) === FALSE ) {
 
-            throw new \InvalidArgumentException(
+            throw new \Next\Debug\Exception\Exception(
 
-                'Argument is not a ' . $this
+                sprintf(
+
+                    'Argument <strong>%s</strong> is not a valid <em>%s</em>',
+
+                    ( $value !== NULL ? $value : 'NULL' ), $this -> getClass() -> getName()
+                )
             );
         }
 

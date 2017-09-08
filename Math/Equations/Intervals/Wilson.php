@@ -1,7 +1,24 @@
 <?php
 
+/**
+ * Wilson Score Interval Equation Class | Math\Equations\Intervals\Wilson.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
+ */
 namespace Next\Math\Equations\Intervals;
 
+/**
+ * Implementation of Wilson Score Interval Algorithm
+ *
+ * @package    Next\Math
+ *
+ * @uses       \Next\Math\Equations\Intervals\AbstractInterval
+ *
+ * @see        https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval
+ */
 class Wilson extends AbstractInterval {
 
     // Boundable Interface Methods Implementation
