@@ -37,7 +37,7 @@ abstract class AbstractDataGateway extends Object implements DataGateway {
      *
      * @var array $source
      */
-    protected $source = array();
+    protected $source = [];
 
     /**
      * Data Gateway Constructor.

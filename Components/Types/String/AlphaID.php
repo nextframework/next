@@ -52,8 +52,7 @@ class AlphaID implements Prototypable {
      */
     public function prototype() {
 
-        list( $string, $index ) =
-            func_get_arg( 0 ) + array( '', self::SET );
+        list( $string, $index ) = func_get_arg( 0 ) + [ '', self::SET ];
 
         if( $string instanceof String ) $string = $string -> get();
 

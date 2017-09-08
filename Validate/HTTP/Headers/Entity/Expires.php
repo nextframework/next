@@ -64,9 +64,7 @@ class Expires extends Object implements Headers {
      */
     public function validate() {
 
-        $date = new Date(
-            array( 'value' => $this -> options -> value )
-        );
+        $date = new Date( [ 'value' => $this -> options -> value ] );
 
         return $date -> validate();
     }
@@ -75,7 +73,7 @@ class Expires extends Object implements Headers {
 
     /**
      * Set Class Options.
-     * Defines which Parameter Options are known by the Validator Class
+     * Defines Parameter Options requirements rules
      *
      * @return array
      *  An array with Custom Options overriding or complementing Object defaults

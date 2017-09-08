@@ -21,13 +21,6 @@ namespace Next\Session\Handlers;
 class HandlersException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x000006F9, 0x0000072B );
-
-    /**
      * Unknown Session Handler
      *
      * @var integer

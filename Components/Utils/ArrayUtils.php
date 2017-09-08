@@ -35,7 +35,7 @@ class ArrayUtils {
      * @param array|optional $b
      *  Second Array
      */
-    public static function equalize( array &$a = array(), array &$b = array() ) {
+    public static function equalize( array &$a = [], array &$b = [] ) {
 
         $l1 = count( $a );
         $l2 = count( $b );
@@ -129,7 +129,7 @@ class ArrayUtils {
                 \ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED
             );
 
-            $param = array();
+            $param = [];
 
             foreach( $properties as $property ) {
 
@@ -209,12 +209,7 @@ class ArrayUtils {
 
                 $b, $offset, count( $b ),
 
-                array_merge(
-
-                    array( $value ),
-
-                    array_slice( $b, $offset )
-                )
+                array_merge( [ $value ], array_slice( $b, $offset ) )
             );
         }
     }

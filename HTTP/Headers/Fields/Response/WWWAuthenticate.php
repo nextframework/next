@@ -40,7 +40,7 @@ class WWWAuthenticate extends AbstractField implements Response {
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new Validator( array( 'value' => $value ) );
+        return new Validator( [ 'value' => $value ] );
     }
 
     /**
@@ -50,6 +50,6 @@ class WWWAuthenticate extends AbstractField implements Response {
      *  Header Field Validation Options
      */
     public function setOptions() {
-        return array( 'name' => 'WWW-Authenticate', 'preserveWhitespace' => TRUE );
+        return [ 'name' => 'WWW-Authenticate', 'preserveWhitespace' => TRUE ];
     }
 }

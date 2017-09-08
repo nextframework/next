@@ -48,7 +48,7 @@ class MySQL extends AbstractRenderer {
 
             // Table Fields
 
-            implode( ', ', array_map( array( $this, 'quote' ), $fields ) ),
+            implode( ', ', array_map( [ $this, 'quote' ], $fields ) ),
 
             // Fields Values
 
@@ -257,9 +257,8 @@ class MySQL extends AbstractRenderer {
      * Render the JOIN Clause
      *
      * @param string|array $table
-     *  - A string with the JOIN Table
-     *  - An associative single-index array for JOIN Table and its alias. E.g.:
-     *  <code>array( 'm' => 'members' )</code>
+     *  A string with the JOIN Table or an associative single-index
+     *  array for JOIN Table and its alias. E.g.: `[ 'm' => 'members' ]`
      *
      * @param string $on
      *  The ON Clause
@@ -342,7 +341,7 @@ class MySQL extends AbstractRenderer {
      */
     public function order( array $fields ) {
 
-        $clause = array();
+        $clause = [];
 
         foreach( $fields as $field ) {
 
@@ -358,7 +357,7 @@ class MySQL extends AbstractRenderer {
                  */
                 if( $field -> getOptions() -> overwrite !== FALSE ) {
 
-                    $clause = array( $expression );
+                    $clause = [ $expression ];
 
                 } else {
 
@@ -373,7 +372,7 @@ class MySQL extends AbstractRenderer {
 
                 $clause[] = vsprintf(
 
-                    '%s %s', array( $column, current( $field ) )
+                    '%s %s', [ $column, current( $field ) ]
                 );
             }
         }
@@ -423,7 +422,7 @@ class MySQL extends AbstractRenderer {
 
                 $matches['column'],
 
-                array_map( array( $this, 'quote' ), $matches['column'] ),
+                array_map( [ $this, 'quote' ], $matches['column'] ),
 
                 $condition
             );

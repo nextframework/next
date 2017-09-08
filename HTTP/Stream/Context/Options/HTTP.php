@@ -43,11 +43,10 @@ class HTTP extends AbstractOptions {
      */
     public function accept( $option ) {
 
-        $valid = array(
-
+        $valid = [
             'method', 'header', 'user_agent', 'content', 'proxy', 'request_fulluri',
             'follow_location', 'max_redirects', 'protocol_version', 'timeout','ignore_errors'
-        );
+        ];
 
         return ( in_array( $option, $valid ) );
     }

@@ -19,15 +19,6 @@ namespace Next\Components\Debug;
 class Exception extends \Exception {
 
     /**
-     * Exception Code Range, overwritten in child classes
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x00000000, 0x00000032 );
-
-    // Base Exception Codes
-
-    /**
      * Unknown or PHP Internal Exception Code
      *
      * @var integer
@@ -88,7 +79,7 @@ class Exception extends \Exception {
      *
      * @var array $replacements
      */
-    private $replacements = array();
+    private $replacements = [];
 
     /**
      * Default HTTP Response Code
@@ -119,7 +110,7 @@ class Exception extends \Exception {
         // Listing Additional Exception Components
 
         list( $code, $replacements, $responseCode, $callback ) =
-            $args + array( self::UNKNOWN, array(), 500, array() );
+            $args + [ self::UNKNOWN, [], 500, [] ];
 
         // Checking Exception Components...
 
@@ -155,7 +146,7 @@ class Exception extends \Exception {
      * @return \Next\Components\Debug
      *  Exception for Unfulfilled requirements
      */
-    public static function unfullfilledRequirements( $message, array $args = array() ) {
+    public static function unfullfilledRequirements( $message, array $args = [] ) {
         return new static( $message, self::UNFULFILLED_REQUIREMENTS, $args );
     }
 
@@ -174,7 +165,7 @@ class Exception extends \Exception {
      * @return \Next\Components\Debug
      *  Exception for Unfulfilled requirements
      */
-    public static function logic( $message, array $args = array() ) {
+    public static function logic( $message, array $args = [] ) {
         return new static( $message, self::LOGIC_ERROR, $args );
     }
 
@@ -192,7 +183,7 @@ class Exception extends \Exception {
      * @return \Next\Components\Debug
      *  Exception for Unfulfilled requirements
      */
-    public static function wrongUse( $message, array $args = array() ) {
+    public static function wrongUse( $message, array $args = [] ) {
         return new static( $message, self::WRONG_USE, $args );
     }
 
@@ -339,7 +330,7 @@ class Exception extends \Exception {
 
         if( $code > 0x00000032 ) {
 
-            list( $min, $max ) = $this -> range + array( 0x00000000, 0x00000032 );
+            list( $min, $max ) = $this -> range + [ 0x00000000, 0x00000032 ];
 
             if( $code < $min || $code > $max ) {
 
@@ -349,7 +340,7 @@ class Exception extends \Exception {
 
                         '[0x%08X]: Exception Code <strong>0x%08X</strong> is Out of <strong>%s</strong> Range',
 
-                        array( self::OUT_OF_RANGE, $code, $classname )
+                        [ self::OUT_OF_RANGE, $code, $classname ]
                     )
                 );
             }

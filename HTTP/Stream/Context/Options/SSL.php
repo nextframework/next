@@ -43,12 +43,11 @@ class SSL extends AbstractOptions {
      */
     public function accept( $option ) {
 
-        $valid = array(
-
+        $valid = [
             'verify_peer', 'allow_self_signed', 'cafile', 'capath', 'local_cert',
             'passphrase', 'CN_match', 'verify_depth', 'ciphers', 'capture_peer_cert',
             'capture_peer_cert_chain', 'SNI_enabled', 'SNI_server_name'
-        );
+        ];
 
         return ( in_array( $option, $valid ) );
     }

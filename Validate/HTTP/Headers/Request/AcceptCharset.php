@@ -63,12 +63,10 @@ class AcceptCharset extends Object implements Headers {
             // Validating against IANA's Registry Common Names and its Aliases
 
             $IANA = new IANA(
-                array( 'value' => ( array_key_exists( 'charset', $match ) ? $match['charset'] : NULL ) )
+                [ 'value' => ( array_key_exists( 'charset', $match ) ? $match['charset'] : NULL ) ]
             );
 
-            if( $IANA -> validate() ) {
-                return TRUE;
-            }
+            if( $IANA -> validate() !== FALSE ) return TRUE;
         }
 
         return FALSE;
@@ -78,7 +76,7 @@ class AcceptCharset extends Object implements Headers {
 
     /**
      * Set Class Options.
-     * Defines which Parameter Options are known by the Validator Class
+     * Defines Parameter Options requirements rules
      *
      * @return array
      *  An array with Custom Options overriding or complementing Object defaults

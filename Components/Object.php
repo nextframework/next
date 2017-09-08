@@ -48,7 +48,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      *
      * @var array $defaultOptions
      */
-    protected $defaultOptions = array();
+    protected $defaultOptions = [];
 
     /**
      * Success Message
@@ -308,7 +308,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      *  Object Constructor was overwritten without invoking it through
      *  parent context instead of using the \Next\Components\Object::init()
      */
-    public function __call( $method, array $args = array() ) {
+    public function __call( $method, array $args = [] ) {
 
         if( is_null( $this -> context ) ) {
             throw ComponentsException::extendedContextFailure( $method, $this );

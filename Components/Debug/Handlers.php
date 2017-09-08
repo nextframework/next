@@ -44,7 +44,7 @@ class Handlers {
             /**
              * @see Handlers::error()
              */
-            set_error_handler( array( __CLASS__, 'error' ) );
+            set_error_handler( [ __CLASS__, 'error' ] );
 
             register_shutdown_function( function() {
 
@@ -63,9 +63,9 @@ class Handlers {
 
             ( defined( 'DEVELOPMENT_MODE' ) && DEVELOPMENT_MODE >= 1 ?
 
-                array( __CLASS__, 'development' ) :
+                [ __CLASS__, 'development' ] :
 
-                array( __CLASS__, 'production' )
+                [ __CLASS__, 'production' ]
             )
         );
     }
@@ -105,7 +105,7 @@ class Handlers {
 
             'Next\Components\Debug\Handlers\Controllers\ExceptionController',
 
-            'development', array( 'e' => $e ), $code
+            'development', [ 'e' => $e ], $code
         );
     }
 
@@ -133,7 +133,7 @@ class Handlers {
 
             'Next\Components\Debug\Handlers\Controllers\ExceptionController',
 
-            'production', array( 'e' => $e ), $code
+            'production', [ 'e' => $e ], $code
         );
     }
 
@@ -153,7 +153,7 @@ class Handlers {
 
             'Next\Components\Debug\Handlers\Controllers\ErrorController', 'status',
 
-            array( 'code' => $code ), $code
+            [ 'code' => $code ], $code
         );
     }
 
@@ -178,7 +178,7 @@ class Handlers {
 
             'Next\Components\Debug\Handlers\Controllers\ErrorController', 'error',
 
-            array( 'e' => new ErrorException( $message, $severity, $file, $line ) ), 500
+            [ 'e' => new ErrorException( $message, $severity, $file, $line ) ], 500
         );
     }
 
@@ -199,7 +199,7 @@ class Handlers {
      * @param integer|mixed|optional
      *  An HTTP Status Code to be sent as Response Header
      */
-    private static function handle( $controller, $action, array $query = array(), $code = NULL ) {
+    private static function handle( $controller, $action, array $query = [], $code = NULL ) {
 
         try {
 
@@ -216,7 +216,7 @@ class Handlers {
 
             // Dispatching Controller
 
-            call_user_func( array( new $controller( $application ), $action ) );
+            call_user_func( [ new $controller( $application ), $action ] );
 
             // Adding Response Code
 

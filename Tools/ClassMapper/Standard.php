@@ -29,12 +29,12 @@ class Standard extends Object implements Mapper {
      *
      * @var array $defaultOptions
      */
-    protected $defaultOptions = array(
+    protected $defaultOptions = [
 
         'filename'          => 'map.php',
         'save'              => FALSE,
         'outputDirectory'   => ''
-    );
+    ];
 
     /**
      * Additional Initialization. Check Options Integrity

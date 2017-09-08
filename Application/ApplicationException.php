@@ -21,13 +21,6 @@ use Next\Components\Object;    # Object Class
 class ApplicationException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x00000033, 0x00000065 );
-
-    /**
      * Invalid Application.
      *
      * <p>Used by \Next\Application\Chain</p>

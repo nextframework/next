@@ -135,6 +135,6 @@ class writer extends Object {
             default:                        $msg = self::ERR_JSON_ERROR_NONE;           break;
         }
 
-        return array( $error, $msg );
+        return [ $error, $msg ];
     }
 }

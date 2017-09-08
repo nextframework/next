@@ -53,7 +53,7 @@ class Statement extends \PDOStatement {
      * @return boolean TRUE on success and FALSE on failure
      */
     public function execute( $input_parameters = NULL ) {
-        return $this -> adapter -> execute( array( $input_parameters ) );
+        return $this -> adapter -> execute( [ $input_parameters ] );
     }
 
     /**
@@ -114,9 +114,11 @@ class Statement extends \PDOStatement {
          * compatibility with the functionality provided by Statement::fetch()
          * and other methods with variable number of arguments
          */
-        list( $fetch_style, $fetch_argument, $ctor_args ) = func_get_arg( 0 ) + array( NULL, NULL, NULL );
+        list( $fetch_style, $fetch_argument, $ctor_args ) = func_get_arg( 0 ) + [ NULL, NULL, NULL ];
 
-        return $this -> adapter -> fetchAll( $fetch_style, $fetch_argument, $ctor_args );
+        return $this -> adapter -> fetchAll(
+            $fetch_style, $fetch_argument, $ctor_args
+        );
     }
 
     /**

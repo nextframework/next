@@ -27,10 +27,10 @@ class Mongo extends Object implements Handler {
      *
      * @var array $defaultOptions
      */
-    protected $defaultOptions = array(
+    protected $defaultOptions = [
         'database'  => 'Mongo',
         'savePath'  => 'mongodb://localhost:27017'
-    );
+    ];
 
     /**
      * Mongo Object
@@ -101,14 +101,10 @@ class Mongo extends Object implements Handler {
     public function read( $id ) {
 
         $data = $this -> collection -> findOne(
-
-            array( '_id' => $id ),
-
-            array( 'serialized' )
+            [ '_id' => $id ], [ 'serialized' ]
         );
 
         if ( isset( $data['serialized'] ) && ( $data['serialized'] instanceof \MongoBinData ) ) {
-
             return gzuncompress( $data[ 'serialized' ] -> bin );
         }
 
@@ -136,24 +132,27 @@ class Mongo extends Object implements Handler {
 
             $this -> collection -> save(
 
-                array(
-
+                [
                     '_id' => $id,
 
                     'data' => eval(
 
-                        sprintf( 'return %s;', preg_replace( array( '/\w+::__set_state\(/', '/\)\)/' ),
+                        sprintf(
 
-                        array( NULL , ')' ), var_export( $_SESSION , TRUE ) )
-                    )
-                ),
+                            'return %s;',
 
-                'serialized' => new \MongoBinData(
+                            preg_replace( [ '/\w+::__set_state\(/', '/\)\)/' ],
 
-                    gzcompress( $data ) ),
+                            [ NULL , ')' ], var_export( $_SESSION , TRUE ) )
+                        )
+                    ),
+
+                    'serialized' => new \MongoBinData(
+                        gzcompress( $data )
+                    ),
 
                     'expires' => new \MongoDate( time() + $expires )
-                )
+                ]
             );
         }
 
@@ -170,7 +169,7 @@ class Mongo extends Object implements Handler {
      *  TRUE on success and FALSE on failure
      */
     public function destroy( $id ) {
-        return $this -> collection -> remove( array( '_id' => $id ) );
+        return $this -> collection -> remove( [ '_id' => $id ] );
     }
 
     /**
@@ -190,14 +189,11 @@ class Mongo extends Object implements Handler {
 
         return $this -> collection
                      -> remove(
-
-                            array(
-
+                            [
                                 'expires' => array(
-
                                     '$lte' => new \MongoDate( $expireTime )
                                 )
-                            )
+                            ]
                         );
     }
 }

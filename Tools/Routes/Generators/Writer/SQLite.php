@@ -60,7 +60,7 @@ class SQLite extends Object implements Writer {
         // Entity Manager
 
         $this -> manager = new Manager(
-            new Adapter( array( 'dbPath' => $this -> options -> dbPath ) )
+            new Adapter( [ 'dbPath' => $this -> options -> dbPath ] )
         );
     }
 
@@ -121,7 +121,7 @@ class SQLite extends Object implements Writer {
 
                             throw OutputWriterException::recordingFailure(
 
-                                array( $d['route'], $controller, $method, $e -> getMessage() )
+                                [ $d['route'], $controller, $method, $e -> getMessage() ]
                             );
                         }
                     }

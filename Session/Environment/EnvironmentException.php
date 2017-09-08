@@ -21,13 +21,6 @@ namespace Next\Session\Environment;
 class EnvironmentException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x000006C6, 0x000006F8 );
-
-    /**
      * Invalid Environment
      *
      * @var integer
@@ -135,7 +128,7 @@ class EnvironmentException extends \Next\Components\Debug\Exception {
 
             self::UNDEFINED_INDEX,
 
-            array( $index, $environmentName )
+            [ $index, $environmentName ]
         );
     }
 }

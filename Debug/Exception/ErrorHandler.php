@@ -89,7 +89,7 @@ class ErrorHandler implements Handler {
 
                     // Dispatching Controller
 
-                    call_user_func( array( new ErrorHandlerController( $application ), 'error' ) );
+                    call_user_func( [ new ErrorHandlerController( $application ), 'error' ] );
 
                     // Adding Response Code
 

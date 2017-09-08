@@ -29,12 +29,12 @@ abstract class AbstractDriver extends Object implements Driver {
      *
      * @var array $defaultOptions
      */
-    protected $defaultOptions = array(
+    protected $defaultOptions = [
 
         'host'     => 'localhost',
         'username' => 'root',
-        'password' => ''
-    );
+        'password' => '',
+    ];
 
     /**
      * Connection Object

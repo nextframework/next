@@ -21,13 +21,6 @@ namespace Next\DB\Entity;
 class EntityException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x00000330, 0x00000362 );
-
-    /**
      * Invalid Repository
      *
      * @var integer
@@ -74,7 +67,7 @@ class EntityException extends \Next\Components\Debug\Exception {
 
             All Repository Classes must be an instance of Next\\DB\Entity\Repository',
 
-            self::INVALID_REPOSITORY, array( $repositoryClass )
+            self::INVALID_REPOSITORY, [ $repositoryClass ]
         );
     }
 
@@ -93,7 +86,7 @@ class EntityException extends \Next\Components\Debug\Exception {
 
             'Repository Class <strong>%s</strong> doesn\'t exist',
 
-            self::REPOSITORY_NOT_EXISTS, array( $repositoryClass )
+            self::REPOSITORY_NOT_EXISTS, [ $repositoryClass ]
         );
     }
 

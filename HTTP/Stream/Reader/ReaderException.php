@@ -21,13 +21,6 @@ namespace Next\HTTP\Stream\Reader;
 class ReaderException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x00000561, 0x00000593 );
-
-    /**
      * Unable to Read Data
      *
      * @var integer

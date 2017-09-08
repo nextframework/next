@@ -42,6 +42,6 @@ class Phar extends AbstractOptions {
      *  TRUE if Context Options is acceptable and FALSE otherwise
      */
     public function accept( $option ) {
-        return ( in_array( $option, array( 'compress', 'metadata' ) ) );
+        return ( in_array( $option, [ 'compress', 'metadata' ] ) );
     }
 }

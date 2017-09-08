@@ -29,13 +29,6 @@ use Next\Components\Object;                # Object Class
 class ControllerException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x00000198, 0x000001CA );
-
-    /**
      * Invalid Controller
      *
      * <p>Used by \Next\Controller\Chain</p>

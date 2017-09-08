@@ -56,7 +56,7 @@ class XFrameOptions extends AbstractField implements Response {
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new Validator( array( 'value' => $value ) );
+        return new Validator( [ 'value' => $value ] );
     }
 
     /**
@@ -66,6 +66,6 @@ class XFrameOptions extends AbstractField implements Response {
      *  Header Field Validation Options
      */
     public function setOptions() {
-        return array( 'name' => 'X-Frame-Options' );
+        return [ 'name' => 'X-Frame-Options' ];
     }
 }

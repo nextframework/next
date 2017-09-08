@@ -61,7 +61,7 @@ class Standard extends Object implements Writer {
 
         set_time_limit( 0 );
 
-        $structure = array();
+        $structure = [];
 
         foreach( $data as $application => $controllersData ) {
 
@@ -71,7 +71,7 @@ class Standard extends Object implements Writer {
 
                     foreach( $data as $d ) {
 
-                        $structure[] = array(
+                        $structure[] = [
 
                             'requestMethod'    => $d['requestMethod'],
                             'application'      => $application,
@@ -80,7 +80,7 @@ class Standard extends Object implements Writer {
                             'URI'              => $d['route'],
                             'requiredParams'   => serialize( $d['params']['required'] ),
                             'optionalParams'   => serialize( $d['params']['optional'] )
-                        );
+                        ];
                     }
                 }
             }
@@ -109,7 +109,7 @@ class Standard extends Object implements Writer {
                  */
                 include $this -> options -> filePath;
 
-                $structure = array_merge( $structure, ( isset( $routes ) ? $routes : array() ) );
+                $structure = array_merge( $structure, ( isset( $routes ) ? $routes : [] ) );
             }
 
             $writer -> write(
@@ -124,7 +124,7 @@ class Standard extends Object implements Writer {
 
             throw OutputWriterException::recordingFailure(
 
-                array( $d['route'], $controller, $method, $e -> getMessage() )
+                [ $d['route'], $controller, $method, $e -> getMessage() ]
             );
 
         } catch( AdapterException $e ) {
@@ -133,7 +133,7 @@ class Standard extends Object implements Writer {
 
             throw OutputWriterException::recordingFailure(
 
-                array( $d['route'], $controller, $method, $e -> getMessage() )
+                [ $d['route'], $controller, $method, $e -> getMessage() ]
             );
         }
 

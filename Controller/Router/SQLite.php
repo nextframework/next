@@ -27,9 +27,9 @@ class SQLite extends Standard {
      *
      * @var array $defaultOptions
      */
-    protected $defaultOptions = array(
+    protected $defaultOptions = [
         'dbPath' => 'data/routes.sqlite'
-    );
+    ];
 
     /**
      * SQLite Connection Resource
@@ -90,14 +90,14 @@ class SQLite extends Standard {
 
         $stmt -> execute(
 
-            array(
+            [
 
                 $application -> getClass() -> getName(),
 
                 $request -> getRequestMethod(),
 
                 $URI
-            )
+            ]
         );
 
         $data = $stmt -> fetch();
@@ -190,14 +190,12 @@ class SQLite extends Standard {
 
                 RouterException::CONNECTION_FAILED,
 
-                array( $this -> options -> dbPath )
+                [ $this -> options -> dbPath ]
             );
         }
 
         $adapter = new Adapter(
-           array(
-               'dbPath' => $this -> options -> dbPath
-           )
+           [ 'dbPath' => $this -> options -> dbPath ]
        );
 
         $this -> dbh = $adapter -> getConnection();

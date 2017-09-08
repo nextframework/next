@@ -63,7 +63,7 @@ class Adapter extends AbstractStatement {
      *
      * @return boolean TRUE on success and FALSE on failure
      */
-    public function execute( array $params = array() ) {
+    public function execute( array $params = [] ) {
         return $this -> invoke( 'execute', $params );
     }
 
@@ -161,7 +161,7 @@ class Adapter extends AbstractStatement {
      *  TRUE on success and FALSE otherwise
      */
     public function setFetchMode( $mode, $params = NULL ) {
-        return $this -> invoke( 'setFetchMode', array( $mode, $params ) );
+        return $this -> invoke( 'setFetchMode', [ $mode, $params ] );
     }
 
     // Miscellaneous Methods
@@ -197,7 +197,7 @@ class Adapter extends AbstractStatement {
      * @throws \Next\DB\Statement\StatementException
      *  A PDOException was caught
      */
-    private function invoke( $method, $args = array() ) {
+    private function invoke( $method, $args = [] ) {
 
         try{
 

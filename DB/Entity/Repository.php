@@ -112,7 +112,7 @@ class Repository extends Object {
         }
 
         $this -> manager -> select()
-                         -> from( array( $this -> table ) )
+                         -> from( [ $this -> table ] )
                          -> where( sprintf( '%1$s = :%1$s', key( $id ) ), $id );
 
         return $this -> manager -> fetch();
@@ -186,7 +186,7 @@ class Repository extends Object {
 
         if( ! is_null( $limit ) ) {
 
-            list( $count, $offset ) = (array) $limit + array( NULL, NULL );
+            list( $count, $offset ) = (array) $limit + [ NULL, NULL ];
 
             $this -> manager -> limit( $count, $offset );
         }

@@ -31,8 +31,7 @@ class ISO639 extends Object implements Validator {
      *
      * @see http://www.loc.gov/standards/iso639-2/php/code_list.php
      */
-    private static $codes = array(
-
+    const CODES = [
         'aa', 'ab', 'af', 'ak', 'sq', 'am', 'ar', 'an', 'hy', 'as', 'av', 'ae', 'ay', 'az', 'ba', 'bm',
         'eu', 'be', 'bn', 'bh', 'bi', 'bo', 'bs', 'br', 'bg', 'my', 'ca', 'cs', 'ch', 'ce', 'zh', 'cu',
         'cv', 'kw', 'co', 'cr', 'cy', 'cs', 'da', 'de', 'dv', 'nl', 'dz', 'el', 'en', 'eo', 'et', 'eu',
@@ -46,7 +45,7 @@ class ISO639 extends Object implements Validator {
         'sm', 'sn', 'sd', 'so', 'st', 'es', 'sq', 'sc', 'sr', 'ss', 'su', 'sw', 'sv', 'ty', 'ta', 'tt',
         'te', 'tg', 'tl', 'th', 'bo', 'ti', 'to', 'tn', 'ts', 'tk', 'tr', 'tw', 'ug', 'uk', 'ur', 'uz',
         've', 'vi', 'vo', 'cy', 'wa', 'wo', 'xh', 'yi', 'yo', 'za', 'zh', 'zu'
-    );
+    ];
 
     // Validator Interface Interface Methods
 
@@ -95,18 +94,19 @@ class ISO639 extends Object implements Validator {
          */
         $this -> _info = $value;
 
-        return ( strlen( $value ) == 2 && in_array( $value, self::$codes ) );
+        return ( strlen( $value ) == 2 && in_array( $value, self::CODES ) );
     }
 
-    // Accessors
+    // Parameterizable Interface Method Overriding
 
     /**
-     * Get ISO-639 Language Abbreviations List
+     * Set Class Options.
+     * Defines Parameter Options requirements rules
      *
      * @return array
-     *  ISO 639 Codes
+     *  An array with Custom Options overriding or complementing Object defaults
      */
-    public static function getCodes() {
-        return self::$codes;
+    public function setOptions() {
+        return [ 'value' => [ 'required' => TRUE ] ];
     }
 }

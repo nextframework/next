@@ -27,7 +27,7 @@ abstract class AbstractOptions extends Object implements Option {
      *
      * @var array $values
      */
-    private $values = array();
+    private $values = [];
 
     /**
      * Context Options Constructor

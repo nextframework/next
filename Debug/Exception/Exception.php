@@ -148,7 +148,7 @@ class Exception extends \Exception implements Verifiable {
          * value 500 because it was explicitly set as NULL
          */
         list( $this -> code, $this -> responseCode, $this -> callback, $this -> file, $this -> line, $this -> severity ) =
-            $args + array( self::UNKNOWN, 500, array(), $this -> getFile(), $this -> getLine(), $this -> getSeverity() );
+            $args + [ self::UNKNOWN, 500, [], $this -> getFile(), $this -> getLine(), $this -> getSeverity() ];
 
         // Verifying Exception Object Integrity
 

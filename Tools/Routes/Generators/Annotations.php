@@ -34,7 +34,7 @@ class Annotations extends AbstractGenerator {
      */
     public function find() {
 
-        $results = array();
+        $results = [];
 
         foreach( $this -> applications as $applications ) {
 
@@ -47,14 +47,14 @@ class Annotations extends AbstractGenerator {
             $path = $annotations -> offsetGet( 'path');
             $annotations -> offsetUnset( 'path');   // Not elegant, but ...
 
-            $foundAnnotations = array();
+            $foundAnnotations = [];
 
             foreach( $annotations as $classname => $annotations ) {
 
                 foreach( $annotations as $method => $data ) {
 
                     if( count( $data['routes'] ) == 0 ) {
-                        throw GeneratorsException::noRoutes( array( $classname, $method ) );
+                        throw GeneratorsException::noRoutes( [ $classname, $method ] );
                     }
 
                     // Parsing Routes...

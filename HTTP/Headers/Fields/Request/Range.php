@@ -40,7 +40,7 @@ class Range extends AbstractField implements Request {
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new Validator( array( 'value' => $value ) );
+        return new Validator( [ 'value' => $value ] );
     }
 
     /**
@@ -50,6 +50,6 @@ class Range extends AbstractField implements Request {
      *  Header Field Validation Options
      */
     public function setOptions() {
-        return array( 'name' => 'Range', 'preserveWhitespace' => TRUE );
+        return [ 'name' => 'Range', 'preserveWhitespace' => TRUE ];
     }
 }

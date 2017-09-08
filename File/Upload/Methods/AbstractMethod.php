@@ -53,14 +53,14 @@ abstract class AbstractMethod extends Object implements Method {
      *
      * @var array $succeed
      */
-    protected $succeed    = array();
+    protected $succeed    = [];
 
     /**
      * Files unsuccessfully uploaded
      *
      * @var array $failed
      */
-    protected $failed     = array();
+    protected $failed     = [];
 
     /**
      * Upload Method Constructor

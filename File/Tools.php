@@ -157,7 +157,7 @@ class Tools {
      */
     public static function readableFilesize( $size ) {
 
-        $units = array( 'B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+        $units = [ 'B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB' ];
         $power = $size > 0 ? floor( log( $size, 1024 ) ) : 0;
 
         return number_format( $size / pow( 1024, $power ), 2, '.', ',' ) . ' ' . $units[ $power ];
@@ -195,15 +195,15 @@ class Tools {
      *
      *   // Delete 'file1.txt' and 'file2.txt' from given directory if exists
      *
-     *  Tools::delete( 'path/to/delete/files', array( 'file1.txt', 'file2.txt' ) )
+     *  Tools::delete( 'path/to/delete/files', [ 'file1.txt', 'file2.txt' ] )
      *
      *   // Delete 'file1.txt' and 'file2.txt', if exists, from and inside 'TXT' subdirectory yif exists
      *
-     *  Tools::delete( 'path/to/delete/files', array( 'TXT' => array( 'file1.txt', 'file2.txt' ) ) )
+     *  Tools::delete( 'path/to/delete/files', [ 'TXT' => [ 'file1.txt', 'file2.txt' ] ] )
      *
      *   // Delete all files and remove empty directory
      *
-     *  Tools::delete( 'path/to/delete/files', array, TRUE )
+     *  Tools::delete( 'path/to/delete/files', [], TRUE )
      * </code>
      *
      * @param string $path
@@ -219,7 +219,7 @@ class Tools {
      * @return boolean
      *  TRUE on success and FALSE otherwise
      */
-    public static function delete( $path, array $files = array(), $destroy = FALSE ) {
+    public static function delete( $path, array $files = [], $destroy = FALSE ) {
 
         if( ! file_exists( $path ) ) {
             return TRUE;

@@ -19,13 +19,6 @@ namespace Next\Components;
 class ComponentsException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x000001CB, 0x000001FD );
-
-    /**
      * Array to Parameter Object Mapping
      *
      * @var integer
@@ -78,7 +71,7 @@ class ComponentsException extends \Next\Components\Debug\Exception {
 
             self::CONSTRUCTOR_OVERWRITTEN,
 
-            array( ( ! empty( $method ) ? sprintf( '<strong>%s</strong>' ) : '' ), $object )
+            [ ( ! empty( $method ) ? sprintf( '<strong>%s</strong>' ) : '' ), $object ]
         );
     }
 
@@ -108,9 +101,7 @@ class ComponentsException extends \Next\Components\Debug\Exception {
             Could you possibly overwrote <em>Object::__construct()</em>
             without invoke it under parent context?',
 
-            self::CONSTRUCTOR_OVERWRITTEN,
-
-            array( $property, $object )
+            self::CONSTRUCTOR_OVERWRITTEN, [ $property, $object ]
         );
     }
 
@@ -140,9 +131,7 @@ class ComponentsException extends \Next\Components\Debug\Exception {
             Could you possibly overwrote <em>Object::__construct()</em>
             without invoke it under parent context?',
 
-            self::CONSTRUCTOR_OVERWRITTEN,
-
-            array( $property, $object )
+            self::CONSTRUCTOR_OVERWRITTEN, [ $property, $object ]
         );
     }
 }

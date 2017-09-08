@@ -79,14 +79,9 @@ class ContentType extends Object implements Headers {
              */
             if( preg_match( sprintf( '@^%s$@', IANA::MIME ), $match['range'], $mime ) != 0 ) {
 
-                $IANA = new IANA( array( 'value' => $mime[ 0 ] ) );
+                $IANA = new IANA( [ 'value' => $mime[ 0 ] ] );
 
-                if( $IANA -> validate() ) {
-
-                    // Valid as Full MIME
-
-                    return TRUE;
-                }
+                if( $IANA -> validate() !== FALSE ) return TRUE;
 
                 // Invalid as Full MIME
 
@@ -107,7 +102,7 @@ class ContentType extends Object implements Headers {
 
     /**
      * Set Class Options.
-     * Defines which Parameter Options are known by the Validator Class
+     * Defines Parameter Options requirements rules
      *
      * @return array
      *  An array with Custom Options overriding or complementing Object defaults

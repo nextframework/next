@@ -40,7 +40,7 @@ class XDoNotTrack extends AbstractField implements Request {
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new Validator( array( 'value' => $value ) );
+        return new Validator( [ 'value' => $value ] );
     }
 
     /**
@@ -50,6 +50,6 @@ class XDoNotTrack extends AbstractField implements Request {
      *  Header Field Validation Options
      */
     public function setOptions() {
-        return array( 'name' => 'X-Do-Not-Track' );
+        return [ 'name' => 'X-Do-Not-Track' ];
     }
 }

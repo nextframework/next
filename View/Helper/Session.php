@@ -45,7 +45,9 @@ class Session extends Object implements Helper {
 
         $this -> environment = new Environment( 'session_helper' );
 
-        $this -> extend( new Invoker( $this, $this -> environment, array( 'getEnvironment', 'getAll' ) ) );
+        $this -> extend(
+            new Invoker( $this, $this -> environment, [ 'getEnvironment', 'getAll' ] )
+        );
     }
 
     /**

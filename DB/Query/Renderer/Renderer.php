@@ -138,7 +138,7 @@ interface Renderer extends Query {
      * @param string|array $table
      *  - A string with the JOIN Table
      *  - An associative single-index array for JOIN Table and its alias. E.g.:
-     *  <code>array( 'm' => 'members' )</code>
+     *  `[ 'm' => 'members' ]`
      *
      * @param string $on
      *  The ON Clause

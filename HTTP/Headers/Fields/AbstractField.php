@@ -31,7 +31,7 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
      *
      * @var array $defaultOptions
      */
-    protected $defaultOptions = array(
+    protected $defaultOptions = [
 
         /**
          * Defines whether or not Headers accept multiple values at same time
@@ -50,12 +50,7 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
          * Defaults to FALSE
          */
         'preserveWhitespace' => FALSE,
-
-        /**
-         * The value to validated and added as HTTP Header
-         */
-        'value' => [ 'required'=> TRUE ]
-    );
+    ];
 
     /**
      * Header Value
@@ -122,7 +117,7 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
 
         //--------------------------
 
-        $valid = array();
+        $valid = [];
 
         // The Header accepts multiple values?
 

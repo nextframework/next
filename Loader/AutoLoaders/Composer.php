@@ -96,7 +96,7 @@ class Composer implements AutoLoader {
 
         return function( $classname ) {
 
-            $loader = call_user_func( array( $this -> autoLoaderClass, 'getLoader' ) );
+            $loader = call_user_func( [ $this -> autoLoaderClass, 'getLoader' ] );
 
             return $loader -> loadClass( $classname );
         };

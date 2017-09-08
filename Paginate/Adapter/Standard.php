@@ -27,7 +27,7 @@ class Standard extends Object implements Adapter {
      *
      * @var array $source
      */
-    private $source = array();
+    private $source = [];
 
     /**
      * Standard Adapter Constructor

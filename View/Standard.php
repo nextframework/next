@@ -72,25 +72,25 @@ class Standard extends Object implements View {
      *
      * @var array $_helpers
      */
-    private $_helpers = array(
+    private $_helpers = [
 
         'route' => 'Next\View\Helper\Route',
         'session' => 'Next\View\Helper\Session'
-    );
+    ];
 
     /**
      * Template Variables
      *
      * @var array $_tplVars
      */
-    private $_tplVars = array();
+    private $_tplVars = [];
 
     /**
      * Forbidden Template Variables Names
      *
      * @var array $_forbiddenTplVars
      */
-    private $_forbiddenTplVars = array(
+    private $_forbiddenTplVars = [
 
         // Internal Class Properties
 
@@ -118,7 +118,7 @@ class Standard extends Object implements View {
 
         'request',
         'session'
-    );
+    ];
 
     /**
      * Template Variables Behavior
@@ -153,7 +153,7 @@ class Standard extends Object implements View {
      *
      * @var array $_paths
      */
-    private $_paths = array();
+    private $_paths = [];
 
     /**
      * Flag to define whether or not the FileSpec will be used
@@ -966,7 +966,7 @@ class Standard extends Object implements View {
      * @throws \Next\View\ViewException
      *  Thrown if View Helper cannot be recognized among registered ones
      */
-    public function __call( $helper, array $args = array() ) {
+    public function __call( $helper, array $args = [] ) {
 
         if( ! array_key_exists( $helper, $this -> _helpers ) ) {
             throw ViewException::unknownHelper( $helper );
@@ -1125,7 +1125,7 @@ class Standard extends Object implements View {
 
         $subpath = str_replace(
 
-                       array( $application, self::CONTROLLERS_KEYWORD, $controllerBasename ),
+                       [ $application, self::CONTROLLERS_KEYWORD, $controllerBasename ],
 
                        '', $controller
                    );
@@ -1144,10 +1144,7 @@ class Standard extends Object implements View {
 
         $action = str_replace(
 
-            array(
-
-                self::ACTION_METHOD_SUFFIX_VIEW, self::ACTION_METHOD_SUFFIX_ACTION
-            ),
+            [ self::ACTION_METHOD_SUFFIX_VIEW, self::ACTION_METHOD_SUFFIX_ACTION ],
 
             '', $action
         );
@@ -1158,13 +1155,9 @@ class Standard extends Object implements View {
 
                     str_replace(
 
-                        array(
-                            self::APPLICATION, self::CONTROLLER, self::ACTION, self::SUBPATH
-                        ),
+                        [ self::APPLICATION, self::CONTROLLER, self::ACTION, self::SUBPATH ],
 
-                        array(
-                            $application, $controller, $action, $subpath
-                        ),
+                        [ $application, $controller, $action, $subpath ],
 
                         $this -> _fileSpec ),
 

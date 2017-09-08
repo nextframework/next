@@ -62,7 +62,7 @@ class AcceptLanguage extends Object implements Headers {
              * General Format is correct
              * Let's check chosen Language Abbreviation against ISO 639 Standards
              */
-            $ISO = new ISO639( array( 'value' => $match['abbr'] ) );
+            $ISO = new ISO639( [ 'value' => $match['abbr'] ] );
 
             if( $ISO -> validate() ) {
 
@@ -73,11 +73,9 @@ class AcceptLanguage extends Object implements Headers {
                  */
                 if( isset( $match['country'] ) ) {
 
-                    $ISO = new ISO3166( array( 'value' => $match['country'] ) );
+                    $ISO = new ISO3166( [ 'value' => $match['country'] ] );
 
-                    if( $ISO -> validate() ) {
-                        return TRUE;
-                    }
+                    if( $ISO -> validate() !== FALSE ) return TRUE;
                 }
 
                 // Valid, but without Country Code
@@ -99,7 +97,7 @@ class AcceptLanguage extends Object implements Headers {
 
     /**
      * Set Class Options.
-     * Defines which Parameter Options are known by the Validator Class
+     * Defines Parameter Options requirements rules
      *
      * @return array
      *  An array with Custom Options overriding or complementing Object defaults

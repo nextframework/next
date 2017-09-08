@@ -113,27 +113,21 @@ class ContentDisposition extends Object implements Headers {
 
         if( isset( $matches['creation'] ) ) {
 
-            $date = new Date(
-                array( 'value' => $matches['creation'] )
-            );
+            $date = new Date( [ 'value' => $matches['creation'] ] );
 
             if( ! $date -> validate() ) return FALSE;
         }
 
         if( isset( $matches['modification'] ) ) {
 
-            $date = new Date(
-                array( 'value' => $matches['modification'] )
-            );
+            $date = new Date( [ 'value' => $matches['modification'] ] );
 
             if( ! $date -> validate() ) return FALSE;
         }
 
         if( isset( $matches['read'] ) ) {
 
-            $date = new Date(
-                array( 'value' => $matches['read'] )
-            );
+            $date = new Date( [ 'value' => $matches['read'] ] );
 
             if( ! $date -> validate() ) return FALSE;
         }
@@ -147,7 +141,7 @@ class ContentDisposition extends Object implements Headers {
 
     /**
      * Set Class Options.
-     * Defines which Parameter Options are known by the Validator Class
+     * Defines Parameter Options requirements rules
      *
      * @return array
      *  An array with Custom Options overriding or complementing Object defaults

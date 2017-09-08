@@ -43,11 +43,10 @@ class Curl extends AbstractOptions {
      */
     public function accept( $option ) {
 
-        $valid = array(
-
+        $valid = [
             'method', 'header', 'user_agent', 'content', 'proxy',
             'max_redirects', 'curl_verify_ssl_host', 'curl_verify_ssl_peer'
-        );
+        ];
 
         return ( in_array( $option, $valid ) );
     }

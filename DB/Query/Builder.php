@@ -55,21 +55,21 @@ class Builder extends Object {
      *
      * @var array $replacements
      */
-    private $replacements = array();
+    private $replacements = [];
 
     /**
      * Columns to be include in SELECT Statement
      *
      * @var array $columns
      */
-    private $columns = array();
+    private $columns = [];
 
     /**
      * Tables to be searched
      *
      * @var array $tables
      */
-    private $tables = array();
+    private $tables = [];
 
     /**
      * DISTINCT Flag
@@ -83,21 +83,21 @@ class Builder extends Object {
      *
      * @var array $where
      */
-    private $where = array();
+    private $where = [];
 
     /**
      * JOIN Clauses
      *
      * @var array $joins
      */
-    private $joins = array();
+    private $joins = [];
 
     /**
      * HAVING Clauses
      *
      * @var array $having
      */
-    private $having = array();
+    private $having = [];
 
     /**
      * GROUP BY Fields
@@ -111,14 +111,14 @@ class Builder extends Object {
      *
      * @var array $order
      */
-    private $order = array();
+    private $order = [];
 
     /**
      * LIMIT Clause
      *
      * @var array $limit
      */
-    private $limit = array();
+    private $limit = [];
 
     /**
      * Table Select Constructor
@@ -207,7 +207,7 @@ class Builder extends Object {
      * @return \Next\DB\Table\Select
      *  Table Select Object (Fluent Interface)
      */
-    public function select( $columns = array() ) {
+    public function select( $columns = [] ) {
 
         // Is the SELECT Column an single Expression?
 
@@ -225,12 +225,12 @@ class Builder extends Object {
          *
          * Fixing common mistakes in method arguments:
          *
-         * - array()                        <empty array>
-         * - array( '*' )                   <single index array with a SQL wildcard
-         * - ''                             <an empty string>
-         * - array('')                      <single-index array with an empty string>
-         * - array( 'something' => '' )     <single-index associative array with an empty string>
-         * - array( 'something' => '*' )    <single-index associative array with a SQL wildcard>
+         * - []                        <empty array>
+         * - [ '*' ]                   <single index array with a SQL wildcard
+         * - ''                        <an empty string>
+         * - [ '' ]                    <single-index array with an empty string>
+         * - [ 'something' => '' ]     <single-index associative array with an empty string>
+         * - [ 'something' => '*' ]    <single-index associative array with a SQL wildcard>
          */
         $c   = $columns; // Need some shortening u.u'
         $cnt = count( $columns );
@@ -247,10 +247,10 @@ class Builder extends Object {
          *
          * More fixes. This time some cleanup:
          *
-         * - array( '          somefield' )
-         * - array( 'somefield', '', 'anotherfield' )
+         * - [ '          somefield' ]
+         * - [ 'somefield', '', 'anotherfield' ]
          *
-         * Also, we'll get the Expression value, if any
+         * We'll also get the Expression value, if any
          */
         $columns = array_filter(
 
@@ -267,17 +267,17 @@ class Builder extends Object {
         /**
          * Usage:
          *
-         * <code>
-         *  array( 'username' => 'long_and_complex_field_for_username' )
-         * </code>
+         * ````
+         *  [ 'username' => 'long_and_complex_field_for_username' ]
+         * ````
          *
          * Will become, after built the Statement:
          *
-         * <code>
+         * ````
          *  SELECT `long_and_complex_field_for_username` AS `username`
-         * </code>
+         * ````
          *
-         * And your favorite Fetch Mode will use the Field Alias
+         * And your favourite Fetch Mode will use the Field Alias
          * as index (or property)
          */
         foreach( $columns as $alias => $column ) {
@@ -296,7 +296,7 @@ class Builder extends Object {
      * @return \Next\DB\Table\Select
      *  Table Select Object (Fluent Interface)
      */
-    public function from( $tables = array() ) {
+    public function from( $tables = [] ) {
 
         $tablename = $this -> _manager -> getTable() -> getTableName();
 
@@ -314,21 +314,18 @@ class Builder extends Object {
         if( ! is_array( $tables ) ) {
 
             if( strpos( $this -> columns[ 0 ], '.' ) !== FALSE ) {
-
-                $tables = array(
-                    strtolower( substr( $tablename, 0, 1 ) ) => $tables
-                );
+                $tables = [ strtolower( substr( $tablename, 0, 1 ) ) => $tables ];
             }
         }
 
         /**
          * Usage:
          *
-         * <code>array( 'm' => 'members' )</code>
+         * ````[ 'm' => 'members' ]````
          *
          * Will become, after built the Statement:
          *
-         * <code>SELECT fields FROM `members` m</code>
+         * ````SELECT fields FROM `members` m````
          *
          * If an alias is not defined as element index, it will not exist (obviously)
          */
@@ -427,7 +424,7 @@ class Builder extends Object {
      *  Thrown if trying to create a multiple possibilities condition with an
      *  invalid or unexpected data-structure.
      */
-    public function where( $condition, $replacements = array(), $type = Query::SQL_AND ) {
+    public function where( $condition, $replacements = [], $type = Query::SQL_AND ) {
 
         if( is_array( $condition ) ) {
             throw QueryException::multipleConditions( 'where' );
@@ -437,7 +434,7 @@ class Builder extends Object {
          * @internal
          *
          * Most of the times `$replacements` will be an array in the format
-         * `array( 'field' => 'value' )` being `field ` a matching column used
+         * `[ 'field' => 'value' ]` being `field ` a matching column used
          * on `$condition` so the checking is made over the number of replacements
          *
          * Anything greater than 1 (one) theoretically characterizes a multiple
@@ -479,7 +476,7 @@ class Builder extends Object {
                 // Adding a modified version of Replacements List for Query Renderer
 
                 $this -> addReplacements(
-                    array( sprintf( '%s_%s', $key, $uniqid ) => $value )
+                    [ sprintf( '%s_%s', $key, $uniqid ) => $value ]
                 );
             }
 
@@ -502,7 +499,7 @@ class Builder extends Object {
      *  - A string with the JOIN Table
      *  - A single-index array with JOIN Table and its alias as key. E.g.:
      *
-     *  <code>array( 'm' => 'members' )</code>
+     *  ````[ 'm' => 'members' ]````
      *
      *  NOTE: In order to implicit maintainability, only the first index will be used.
      *  For multiple JOINS, call the method again
@@ -551,7 +548,7 @@ class Builder extends Object {
      * @return \Next\DB\Table\Select
      *  Table Select Object (Fluent Interface)
      */
-    public function having( $condition, $values = array(), $type = Query::SQL_AND ) {
+    public function having( $condition, $values = [], $type = Query::SQL_AND ) {
 
         $this -> having[ $type ][] = ( is_array( $condition ) ? array_shift( $condition ) : $condition );
 
@@ -600,7 +597,7 @@ class Builder extends Object {
             $this -> order[] = $field;
 
         } else {
-            $this -> order[] = ( is_array( $field ) ? $field : array( $field => $type ) );
+            $this -> order[] = ( is_array( $field ) ? $field : [ $field => $type ] );
         }
 
         return $this;
@@ -625,12 +622,12 @@ class Builder extends Object {
         $limit  = (int) $limit;
         $offset = (int) $offset;
 
-        $this -> limit = array(
+        $this -> limit = [
 
             ( $offset >= 0 ? $offset : 0 ),
 
             ( $limit > 0 ? $limit : 1 )
-        );
+        ];
 
         return $this;
     }
@@ -726,20 +723,20 @@ class Builder extends Object {
     public function reset() {
 
         $this -> query = NULL;
-        $this -> replacements = array();
+        $this -> replacements = [];
 
-        $this -> columns = array();
-        $this -> tables = array();
+        $this -> columns = [];
+        $this -> tables = [];
 
         $this -> distinct = FALSE;
 
-        $this -> where = array();
-        $this -> joins = array();
-        $this -> having = array();
+        $this -> where = [];
+        $this -> joins = [];
+        $this -> having = [];
 
         $this -> group = NULL;
-        $this -> order = array();
-        $this -> limit = array();
+        $this -> order = [];
+        $this -> limit = [];
 
         return $this;
     }

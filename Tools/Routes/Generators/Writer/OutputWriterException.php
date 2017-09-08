@@ -21,13 +21,6 @@ namespace Next\Tools\Routes\Generators\Writer;
 class OutputWriterException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x00000792, 0x000007C4 );
-
-    /**
      * Missing required option
      *
      * @var integer

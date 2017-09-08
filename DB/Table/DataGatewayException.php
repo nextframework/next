@@ -21,13 +21,6 @@ namespace Next\DB\Table;
 class DataGatewayException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x000003C9, 0x000003FB );
-
-    /**
      * General violations on data access (or manipulation)
      *
      * @var integer

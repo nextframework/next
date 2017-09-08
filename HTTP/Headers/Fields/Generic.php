@@ -34,7 +34,7 @@ class Generic extends AbstractField {
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new Validator( array( 'value' => $value ) );
+        return new Validator( [ 'value' => $value ] );
     }
 
     /**
@@ -44,6 +44,6 @@ class Generic extends AbstractField {
      *  Header Field Validation Options
      */
     public function setOptions() {
-        return array( 'name' => 'Generic', 'acceptMultiples' => TRUE, 'preserveWhitespace' => TRUE );
+        return [ 'name' => 'Generic', 'acceptMultiples' => TRUE, 'preserveWhitespace' => TRUE ];
     }
 }

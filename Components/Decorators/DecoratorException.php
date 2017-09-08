@@ -21,13 +21,6 @@ use Next\Components\Object;    # Object Class
 class DecoratorException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x000008C4, 0x000008F6 );
-
-    /**
      * Invalid Decorator
      *
      * <p>Used by \Next\Components\Decorators\Chain</p>

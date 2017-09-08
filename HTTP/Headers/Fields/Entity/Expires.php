@@ -40,7 +40,7 @@ class Expires extends AbstractField implements Entity {
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new Validator( array( 'value' => $value ) );
+        return new Validator( [ 'value' => $value ] );
     }
 
     /**
@@ -50,6 +50,6 @@ class Expires extends AbstractField implements Entity {
      *  Header Field Validation Options
      */
     public function setOptions() {
-        return array( 'name' => 'Expires', 'preserveWhitespace' => TRUE );
+        return [ 'name' => 'Expires', 'preserveWhitespace' => TRUE ];
     }
 }

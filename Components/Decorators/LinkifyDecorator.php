@@ -51,9 +51,9 @@ class LinkifyDecorator extends AbstractDecorator {
      *
      * @var array $rules
      */
-    private $rules = array(
+    private $rules = [
 
-        'namespace' => array(
+        'namespace' => [
 
             /**
              * @internal
@@ -63,14 +63,14 @@ class LinkifyDecorator extends AbstractDecorator {
              * Next\Application\Application translates to
              *     next.application.application.html
              */
-            'Next\\\\' => array(
+            'Next\\\\' => [
 
                 'url'      => 'http://nextframework.github.io/api',
                 'format'   => '<a href="%1$s/%4$s.html">%2$s</a>'
-            ),
-        ),
+            ],
+        ],
 
-        'full' => array(
+        'full' => [
 
             /**
              * @internal
@@ -80,13 +80,13 @@ class LinkifyDecorator extends AbstractDecorator {
              * Next\Application\Application::getRouter() translates to
              *     next.application.application.html#method_getRouter
              */
-            'Next\\\\' => array(
+            'Next\\\\' => [
 
                 'url'      => 'http://nextframework.github.io/api',
                 'format'   => '<a href="%1$s/%4$s.html#method_%3$s">%2$s::%3$s()</a>'
-            ),
-        ),
-    );
+            ],
+        ],
+    ];
 
     /**
      * List of PHP Function and/or resources with hotlinks
@@ -94,7 +94,7 @@ class LinkifyDecorator extends AbstractDecorator {
      *
      * @var array $functions
      */
-    private $functions = array();
+    private $functions = [];
 
     /**
      * Additional Initialization.
@@ -108,11 +108,11 @@ class LinkifyDecorator extends AbstractDecorator {
 
         $this -> functions = array_merge( $functions,
 
-            array(
+            [
                 '__halt_compiler()', 'array', 'die', 'echo', 'empty', 'eval',
                 'exit', 'include', 'include_once', 'isset', 'list', 'print',
                 'require', 'require_once', 'return', 'unset'
-            )
+            ]
         );
     }
 

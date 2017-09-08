@@ -82,7 +82,7 @@ class SetCookie extends AbstractField implements Response {
 
         // But, at least so far, we have correctable a side-effect
 
-        return str_replace( array( ';~', '; ~' ), array( ';', '~ ' ), $data );
+        return str_replace( [ ';~', '; ~' ], [ ';', '~ ' ], $data );
     }
 
     /**
@@ -114,7 +114,7 @@ class SetCookie extends AbstractField implements Response {
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new Validator( array( 'value' => $value ) );
+        return new Validator( [ 'value' => $value ] );
     }
 
     /**
@@ -124,12 +124,6 @@ class SetCookie extends AbstractField implements Response {
      *  Header Field Validation Options
      */
     public function setOptions() {
-
-        return array(
-
-            'name'                  => 'Set-Cookie',
-            'acceptMultiples'       => TRUE,
-            'multiplesSeparator'    => '~',
-        );
+        return [ 'name' => 'Set-Cookie', 'acceptMultiples' => TRUE, 'multiplesSeparator'    => '~' ];
     }
 }

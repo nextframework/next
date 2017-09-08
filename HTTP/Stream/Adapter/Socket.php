@@ -399,11 +399,8 @@ class Socket extends AbstractAdapter {
      */
     public function getMetaData() {
 
-        if( $this -> valid() ) {
-            return stream_get_meta_data( $this -> stream );
-        }
-
-        return array();
+        return ( $this -> valid() ?
+            stream_get_meta_data( $this -> stream ) : [] );
     }
 
     // SeekableIterator Interface Method Implementation

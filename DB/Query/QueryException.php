@@ -21,13 +21,6 @@ namespace Next\DB\Query;
 class QueryException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x000002FD, 0x0000032F );
-
-    /**
      * General violations on data access (or manipulation)
      *
      * @var integer

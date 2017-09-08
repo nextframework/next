@@ -21,13 +21,6 @@ namespace Next\Loader;
 class LoaderException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x0000062D, 0x0000065F );
-
-    /**
      * Duplicated AutoLoader
      *
      * @var integer

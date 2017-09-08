@@ -34,19 +34,19 @@ class Writer extends Object {
      *
      * @var array $defaultOptions
      */
-    protected $defaultOptions = array(
+    protected $defaultOptions = [
 
         'addPrologue' => TRUE,
         'version'     => '1.0',
         'charset'     => 'utf-8',
 
-        'indent'      => array(
+        'indent'      => [
 
             'enabled'     => TRUE,
             'char'        => "\t",
             'repeat'      => 1
-        ),
-    );
+        ],
+    ];
 
     /**
      * Additional initialization
@@ -93,7 +93,7 @@ class Writer extends Object {
      * @return \Next\XML\Writer
      *  XML Writer Object (Fluent Interface)
      */
-    public function addParent( $name, array $attributes = array() ) {
+    public function addParent( $name, array $attributes = [] ) {
 
         // Starting Parent Node. This node is closed automatically
 
@@ -130,7 +130,7 @@ class Writer extends Object {
      *
      * @link http://wikipedia.org/wiki/CDATA
      */
-    public function addChild( $name, $value = NULL, array $attributes = array(), $close = FALSE, $addCDATABlock = FALSE ) {
+    public function addChild( $name, $value = NULL, array $attributes = [], $close = FALSE, $addCDATABlock = FALSE ) {
 
         // Creating Node
 
@@ -206,7 +206,9 @@ class Writer extends Object {
 
             try {
 
-                $response -> addHeader( new ContentType( array( 'value' => 'text/xml' ) ) );
+                $response -> addHeader(
+                    new ContentType( [ 'value' => 'text/xml' ] )
+                );
 
             } catch( ResponseException $e ) {
 

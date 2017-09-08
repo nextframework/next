@@ -30,7 +30,7 @@ interface Prototypical  {
      * @param array $args
      *  Default arguments available to callable resource
      */
-    public function implement( $name, $callable, $args = array() );
+    public function implement( $name, $callable, $args = [] );
 
     /**
      * Get Prototyped Resources

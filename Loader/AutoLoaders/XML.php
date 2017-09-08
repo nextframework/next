@@ -54,7 +54,7 @@ class XML implements AutoLoader {
 
                 'XML File File <strong>%s</strong> doesn\'t exists',
 
-                array( $file )
+                [ $file ]
             );
         }
 
@@ -66,9 +66,7 @@ class XML implements AutoLoader {
 
                 'XML File <strong>%s</strong> is not readable',
 
-                LoaderException::UNFULFILLED_REQUIREMENTS,
-
-                $file
+                [ $file ]
             );
         }
 

@@ -36,13 +36,6 @@ use Next\Session\Manager as Session;             # Session Manager
 abstract class AbstractApplication extends Object implements Application {
 
     /**
-     * Default Options
-     *
-     * @var array $defaultOptions
-     */
-    protected $defaultOptions = array();
-
-    /**
      * Request Object
      *
      * @var \Next\HTTP\Request $request

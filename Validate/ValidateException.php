@@ -23,13 +23,6 @@ use Next\Components\Object;    # Object Class
 class ValidateException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x0000082B, 0x0000085D );
-
-    /**
      * Invalid Chain Validator
      *
      * @var integer

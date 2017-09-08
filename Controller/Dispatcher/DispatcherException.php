@@ -19,13 +19,6 @@ namespace Next\Controller\Dispatcher;
 class DispatcherException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x00000132, 0x00000164 );
-
-    /**
      * ReflectionException caught
      *
      * Usually 'method not found' related, but anything reported

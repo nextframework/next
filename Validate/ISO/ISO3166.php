@@ -32,8 +32,7 @@ class ISO3166 extends Object implements Validator {
      *
      * @link https://pt.wikipedia.org/wiki/ISO_3166-1
      */
-    private static $codes = array(
-
+    const CODES = [
         'AF', 'AX', 'AL', 'DZ', 'AS', 'AD', 'AO', 'AI', 'AQ', 'AG', 'AR', 'AM', 'AW', 'AU', 'AT',
         'AZ', 'BS', 'BH', 'BD', 'BB', 'BY', 'BE', 'BZ', 'BJ', 'BM', 'BT', 'BO', 'BQ', 'BA', 'BW',
         'BV', 'BR', 'IO', 'BN', 'BG', 'BF', 'BI', 'KH', 'CM', 'CA', 'CV', 'KY', 'CF', 'TD', 'CL',
@@ -51,7 +50,7 @@ class ISO3166 extends Object implements Validator {
         'SD', 'SR', 'SJ', 'SZ', 'SE', 'CH', 'SY', 'TW', 'TJ', 'TZ', 'TH', 'TL', 'TG', 'TK', 'TO',
         'TT', 'TN', 'TR', 'TM', 'TC', 'TV', 'UG', 'UA', 'AE', 'GB', 'US', 'UM', 'UY', 'UZ', 'VU',
         'VE', 'VN', 'VG', 'VI', 'WF', 'EH', 'YE', 'ZM', 'ZW',
-    );
+    ];
 
     // Validator Interface Interface Methods
 
@@ -100,18 +99,19 @@ class ISO3166 extends Object implements Validator {
          */
         $this -> _info = $value;
 
-        return ( strlen( $value ) == 2 && in_array( $value, self::$codes ) );
+        return ( strlen( $value ) == 2 && in_array( $value, self::CODES ) );
     }
 
-    // Accessors
+    // Parameterizable Interface Method Overriding
 
     /**
-     * Get ISO-3166 Country Codes List
+     * Set Class Options.
+     * Defines Parameter Options requirements rules
      *
      * @return array
-     *  ISO 3166 Codes
+     *  An array with Custom Options overriding or complementing Object defaults
      */
-    public static function getCodes() {
-        return self::$codes;
+    public function setOptions() {
+        return [ 'value' => [ 'required' => TRUE ] ];
     }
 }

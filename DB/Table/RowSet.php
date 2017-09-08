@@ -52,7 +52,7 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
             $primary = $records -> getPrimaryKey();
 
             $this -> manager -> where(
-                sprintf( '%1$s = :%1$s', $primary ), array( $primary => $records -> {$primary} )
+                sprintf( '%1$s = :%1$s', $primary ), [ $primary => $records -> {$primary} ]
             );
 
             $count += $this -> manager -> update() -> rowCount();
@@ -78,7 +78,7 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
             $primary = $records -> getPrimaryKey();
 
             $this -> manager -> where(
-                sprintf( '%1$s = :%1$s', $primary ), array( $primary => $records -> {$primary} )
+                sprintf( '%1$s = :%1$s', $primary ), [ $primary => $records -> {$primary} ]
             );
 
             $count += $this -> manager -> delete() -> rowCount();

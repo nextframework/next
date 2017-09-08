@@ -50,4 +50,17 @@ class ContentEncoding extends Object implements Validator {
 
         return ( $test != 0 );
     }
+
+    // Parameterizable Interface Method Overriding
+
+    /**
+     * Set Class Options.
+     * Defines Parameter Options requirements rules
+     *
+     * @return array
+     *  An array with Custom Options overriding or complementing Object defaults
+     */
+    public function setOptions() {
+        return [ 'value' => [ 'required' => TRUE ] ];
+    }
 }

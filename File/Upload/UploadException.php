@@ -23,13 +23,6 @@ use Next\Components\Object;    # Object Class
 class UploadException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x00000396, 0x000003C8 );
-
-    /**
      * Invalid Chain Post-Processor
      *
      * @var integer

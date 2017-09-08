@@ -28,7 +28,7 @@ interface Statement {
      * @param array|optional $params
      *  Values to bind to parameter placeholders.
      */
-    public function execute( array $params = array() );
+    public function execute( array $params = [] );
 
     /**
      * Fetch the next row from a ResultSet

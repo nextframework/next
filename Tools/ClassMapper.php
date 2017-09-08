@@ -28,7 +28,7 @@ class ClassMapper extends \FilterIterator {
      *
      * @var array $available
      */
-    private $available = array( 'Standard', 'XML' );
+    private $available = [ 'Standard', 'XML' ];
 
     /**
      * Class Map Generator Constructor

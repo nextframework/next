@@ -40,7 +40,7 @@ class Accept extends AbstractField implements Request {
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new Validator( array( 'value' => $value ) );
+        return new Validator( [ 'value' => $value ] );
     }
 
     /**
@@ -50,6 +50,6 @@ class Accept extends AbstractField implements Request {
      *  Header Field Validation Options
      */
     public function setOptions() {
-        return array( 'name' => 'Accept', 'acceptMultiples' => TRUE );
+        return [ 'name' => 'Accept', 'acceptMultiples' => TRUE ];
     }
 }

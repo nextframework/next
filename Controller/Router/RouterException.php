@@ -19,13 +19,6 @@ namespace Next\Controller\Router;
 class RouterException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x00000165, 0x00000197 );
-
-    /**
      * Database doesn't Exists
      *
      * @var integer
@@ -73,7 +66,7 @@ class RouterException extends \Next\Components\Debug\Exception {
      * @return \Next\Controller\Router\RouterException
      *  Exception for Connection failure
      */
-    public static function connectionFailure( $message, $code, array $args = array() ) {
+    public static function connectionFailure( $message, $code, array $args = [] ) {
         return new self( $message, $code, $args );
     }
 
@@ -98,7 +91,7 @@ class RouterException extends \Next\Components\Debug\Exception {
      * @return \Next\Controller\Router\RouterException
      *  Exception for data reading failure
      */
-    public static function dataReadingFailure( $message, $code, array $args = array() ) {
+    public static function dataReadingFailure( $message, $code, array $args = [] ) {
         return new self( $message, $code, $args );
     }
 

@@ -31,13 +31,13 @@ class XML extends Object implements Mapper {
      *
      * @var array $defaultOptions
      */
-    protected $defaultOptions = array(
+    protected $defaultOptions = [
 
         'rootNode'          => 'map',
         'filename'          => 'map.xml',
         'save'              => FALSE,
         'outputDirectory'   => ''
-    );
+    ];
 
     /**
      * XML Writer Object
@@ -86,7 +86,7 @@ class XML extends Object implements Mapper {
         foreach( $map as $class => $path ) {
 
             $this -> writer -> addChild(
-                'class', NULL, array( 'name' => $class, 'path' => $path )
+                'class', NULL, [ 'name' => $class, 'path' => $path ]
             );
         }
 

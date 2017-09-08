@@ -27,22 +27,22 @@ class ErrorController extends AbstractController {
      *
      * @var array $data
      */
-    private $data = array(
+    private $data = [
 
-        '403' => array(
+        '403' => [
 
             'title'    => '(403) Forbidden',
             'footnote' => 'Access Denied to <em>%1$s</em>',
 
-            'phrases' => array()
-        ),
+            'phrases' => []
+        ],
 
-        '404' => array(
+        '404' => [
 
             'title'    => '(404) Not Found',
             'footnote' => 'Unable to find <em>%1$s</em>',
 
-            'phrases'  => array(
+            'phrases'  => [
 
                 'Chuck Norris said this page doesn\'t exist and I definitely won\'t argue\n\nWill you?',
 
@@ -65,33 +65,33 @@ class ErrorController extends AbstractController {
                 // Bluegg.co.uk (http://bluegg.co.uk)
 
                 'Ahhhhhhhhhhh! This page doesn\'t exist'
-            )
-        ),
+            ]
+        ],
 
-        '405' => array(
+        '405' => [
 
             'title'    => '(405) Method Not Allowed',
             'footnote' => 'Invalid access method to <em>%1$s</em>',
 
-            'phrases' => array()
-        ),
+            'phrases' => []
+        ],
 
-        '500' => array(
+        '500' => [
 
             'title'    => '(500) Internal Server Error',
             'footnote' => 'Internal Error while accessing <em>%1$s</em>',
 
-            'phrases' => array()
-        ),
+            'phrases' => []
+        ],
 
-        '503' => array(
+        '503' => [
 
             'title'    => '(503) Service Unavailable',
             'footnote' => '<em>%1$s</em> is not available at moment',
 
-            'phrases' => array()
-        )
-    );
+            'phrases' => []
+        ]
+    ];
 
     /**
      * Status Code Error Action Handler

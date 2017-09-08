@@ -11,7 +11,6 @@
 namespace Next\Validate\IANA;
 
 use Next\Validate\Validator;    # Validator Interface
-
 use Next\Components\Object;     # Object Class
 
 /**
@@ -29,28 +28,34 @@ class MIME extends Object implements Validator {
      *
      * @var string
      */
-    const RANGE      = '(?:\*/\*|                                                                          # */*
-                         (?:application|audio|image|message|model|multipart|text|video)/\*|                # IANAs MIME Types "Categories" /*
-                         (?:application|audio|image|message|model|multipart|text|video)/[A-Za-z0-9._+-]+   # IANAs MIME Types "Categories"/(Alpha, hyphen and plus)
-                        )';
+    const RANGE = '(?:\*/\*| # */*
+
+                    # MIME Types "Categories"/* (i.e. text/*)
+
+                    (?:application|audio|image|message|model|multipart|text|video)/\*|
+
+                    # MIME Types "Categories"/[Alpha, hyphen and plus] (i.e text/plain)
+
+                    (?:application|audio|image|message|model|multipart|text|video)/[A-Za-z0-9._+-]+
+                   )';
 
     /**
      * MIME Types
      *
      * @var string
      */
-    const MIME       = '(?:application|audio|example|image|message|model|multipart|text|video)/[A-Za-z0-9._+-]+';
+    const MIME = '(?:application|audio|example|image|message|model|multipart|text|video)/[A-Za-z0-9._+-]+';
 
     /**
      * MIME Types
      *
-     * @staticvar array $mimes
+     * @var array
      *
      * @see http://www.iana.org/assignments/media-types/index.html
      */
-    private static $mimes = array(
+    CONST MIMES_LIST = [
 
-        'application'  => array(
+        'application'  => [
 
             'x-www-form-urlencoded',  // It's not valid, but it's widely accepted
 
@@ -504,9 +509,9 @@ class MIME extends Object implements Validator {
             'xhtml+xml', 'xml', 'xml-dtd', 'xml-external-parsed-entity',
             'xmpp+xml', 'xop+xml', 'xslt+xml', 'xv+xml', 'yang',
             'yin+xml', 'zip'
-        ),
+        ],
 
-        'audio'        => array(
+        'audio' => [
 
             '1d-interleaved-parityfec', '32kadpcm', '3gpp',
             '3gpp2', 'ac3', 'AMR', 'AMR-WB', 'amr-wb+', 'asc',
@@ -539,9 +544,9 @@ class MIME extends Object implements Validator {
             'vnd.nuera.ecelp9600', 'vnd.octel.sbc', 'vnd.qcelp',
             'vnd.rhetorex.32kadpcm', 'vnd.rip',
             'vnd.sealedmedia.softseal.mpeg', 'vnd.vmx.cvsd', 'vorbis',
-        ),
+        ],
 
-        'image'        => array(
+        'image' => [
 
             'cgm', 'example', 'fits', 'g3fax', 'gif', 'ief',
             'jp2', 'jpeg', 'jpm', 'jpx', 'ktx', 'naplps', 'png',
@@ -555,9 +560,9 @@ class MIME extends Object implements Validator {
             'vnd.sealed.png', 'vnd.sealedmedia.softseal.gif',
             'vnd.sealedmedia.softseal.jpg', 'vnd.svf', 'vnd.wap.wbmp',
             'vnd.xiff'
-        ),
+        ],
 
-        'message'      => array(
+        'message' => [
 
             'CPIM', 'delivery-status',
             'disposition-notification', 'example', 'external-body',
@@ -565,26 +570,26 @@ class MIME extends Object implements Validator {
             'global-disposition-notification', 'global-headers', 'http',
             'imdn+xml', 'news', 'partial', 'rfc822', 's-http', 'sip',
             'sipfrag', 'tracking-status', 'vnd.si.simp'
-        ),
+        ],
 
-        'model'        => array(
+        'model' => [
 
             'example', 'iges', 'mesh', 'vnd.collada+xml',
             'vnd.dwf', 'vnd.flatland.3dml', 'vnd.gdl', 'vnd.gs-gdl',
             'vnd.gtw', 'vnd.moml+xml', 'vnd.mts',
             'vnd.parasolid.transmit.binary',
             'vnd.parasolid.transmit.text', 'vnd.vtu', 'vrml'
-        ),
+        ],
 
-        'multipart'    => array(
+        'multipart' => [
 
             'alternative', 'appledouble', 'byteranges',
             'digest', 'encrypted', 'example', 'form-data', 'header-set',
             'mixed', 'parallel', 'related', 'report', 'signed',
             'voice-message'
-        ),
+        ],
 
-        'text'         => array(
+        'text' => [
 
             '1d-interleaved-parityfec', 'calendar', 'css',
             'csv', 'directory', 'dns', 'ecmascript', 'enriched',
@@ -604,9 +609,9 @@ class MIME extends Object implements Validator {
             'vnd.sun.j2me.app-descriptor', 'vnd.trolltech.linguist',
             'vnd.wap.si', 'vnd.wap.sl', 'vnd.wap.wml',
             'vnd.wap.wmlscript', 'xml', 'xml-external-parsed-entity'
-        ),
+        ],
 
-        'video'        => array(
+        'video' => [
 
             '1d-interleaved-parityfec', '3gpp', '3gpp2',
             '3gpp-tt', 'BMPEG', 'BT656', 'CelB', 'DV', 'example', 'H261',
@@ -630,8 +635,8 @@ class MIME extends Object implements Validator {
             'vnd.objectvideo', 'vnd.sealed.mpeg1', 'vnd.sealed.mpeg4',
             'vnd.sealed.swf', 'vnd.sealedmedia.softseal.mov',
             'vnd.uvvu.mp4', 'vnd.vivo'
-        )
-    );
+        ]
+    ];
 
     // Validator Interface Interface Methods
 
@@ -653,28 +658,27 @@ class MIME extends Object implements Validator {
 
         // Splitting operation must result a two-indexes array
 
-        if( count( $data ) != 2 ) {
-            return FALSE;
-        }
+        if( count( $data ) != 2 ) Return FALSE;
 
         // Second index must reflect one of valid parts of MIME Types (defined in $mimes keys)
 
-        if( ! array_key_exists( $data[ 0 ], self::$mimes ) ) {
+        if( ! array_key_exists( $data[ 0 ], self::MIMES_LIST ) ) {
             return FALSE;
         }
 
-        return in_array( $data[ 1 ], self::$mimes[ $data[ 0 ] ] );
+        return in_array( $data[ 1 ], self::MIMES_LIST[ $data[ 0 ] ] );
     }
 
-    // Accessors
+    // Parameterizable Interface Method Overriding
 
     /**
-     * Get Charset Registry
+     * Set Class Options.
+     * Defines Parameter Options requirements rules
      *
      * @return array
-     *  MIME Types List
+     *  An array with Custom Options overriding or complementing Object defaults
      */
-    public static function getMimeTypes() {
-        return self::$mimes;
+    public function setOptions() {
+        return [ 'value' => [ 'required' => TRUE ] ];
     }
 }

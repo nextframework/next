@@ -21,13 +21,6 @@ namespace Next\HTTP\Headers;
 class HeadersException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x00000462, 0x00000494 );
-
-    /**
      * All Header Fields are invalid
      *
      * @var integer

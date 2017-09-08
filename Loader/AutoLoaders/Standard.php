@@ -54,7 +54,7 @@ class Standard implements AutoLoader {
 
                 'PHP-Array File <strong>%s</strong> doesn\'t exists',
 
-                array( $file )
+                [ $file ]
             );
         }
 
@@ -66,9 +66,7 @@ class Standard implements AutoLoader {
 
                 'PHP-Array File <strong>%s</strong> is not readable',
 
-                LoaderException::UNFULFILLED_REQUIREMENTS,
-
-                $file
+                [ $file ]
             );
         }
 

@@ -23,13 +23,6 @@ use Next\Components\Object;    # Object Class;
 class ViewException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x0000085E, 0x00000890 );
-
-    /**
      * Invalid Partial View Object
      *
      * @var integer
@@ -189,7 +182,7 @@ class ViewException extends \Next\Components\Debug\Exception {
 
             self::INVALID_PRIORITY,
 
-            array( (string) $partialView, $priority, View::PRIORITY )
+            [ (string) $partialView, $priority, View::PRIORITY ]
         );
     }
 

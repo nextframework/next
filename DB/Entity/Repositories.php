@@ -36,7 +36,7 @@ class Repositories extends Object {
      *
      * @var array $repositories
      */
-    private $repositories = array();
+    private $repositories = [];
 
     /**
      * Add a new Entity Repository

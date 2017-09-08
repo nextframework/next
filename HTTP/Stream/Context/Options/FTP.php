@@ -42,6 +42,6 @@ class FTP extends AbstractOptions {
      *  TRUE if Context Options is acceptable and FALSE otherwise
      */
     public function accept( $option ) {
-        return ( in_array( $option, array( 'overwrite', 'resume_pos', 'proxy' ) ) );
+        return ( in_array( $option, [ 'overwrite', 'resume_pos', 'proxy' ] ) );
     }
 }

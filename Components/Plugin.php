@@ -179,8 +179,10 @@ abstract class Plugin extends Object {
             $this -> manager = $manager;
 
             $this -> extend(
+
                 new Invoker( $this, $this -> manager ),
-                array( 'addRepository', 'getRepository', 'getRepositories' )
+
+                [ 'addRepository', 'getRepository', 'getRepositories' ]
             );
         }
 
@@ -194,7 +196,7 @@ abstract class Plugin extends Object {
      * @param array|optional $args
      *  Additional arguments for execution
      */
-    public function onBeforeActivate( array $args = array() ) {}
+    public function onBeforeActivate( array $args = [] ) {}
 
     /**
      * Routines to be performed after the Plugin can be activated.
@@ -203,7 +205,7 @@ abstract class Plugin extends Object {
      * @param array|optional $args
      *  Additional arguments for execution
      */
-    public function onAfterActivate( array $args = array() ) {}
+    public function onAfterActivate( array $args = [] ) {}
 
     /**
      * Routines to be performed before the Plugin can be unregistered.
@@ -212,7 +214,7 @@ abstract class Plugin extends Object {
      * @param array|optional $args
      *  Additional arguments for execution
      */
-    public function onBeforeDeactivate( array $args = array() ) {}
+    public function onBeforeDeactivate( array $args = [] ) {}
 
     /**
      * Routines to be performed after the Plugin can be unregistered.
@@ -221,7 +223,7 @@ abstract class Plugin extends Object {
      * @param array|optional $args
      *  Additional arguments for execution
      */
-    public function onAfterDeactivate( array $args = array() ) {}
+    public function onAfterDeactivate( array $args = [] ) {}
 
     /**
      * Routines to be performed before the Plugin can be deleted
@@ -230,7 +232,7 @@ abstract class Plugin extends Object {
      * @param array|optional $args
      *  Additional arguments for execution
      */
-    public function onBeforeRemove( array $args = array() ) {}
+    public function onBeforeRemove( array $args = [] ) {}
 
     /**
      * Routines to be performed after the Plugin can be deleted.
@@ -239,7 +241,7 @@ abstract class Plugin extends Object {
      * @param array|optional $args
      *  Additional arguments for execution
      */
-    public function onAfterRemove( array $args = array() ) {}
+    public function onAfterRemove( array $args = [] ) {}
 
     /**
      * Routines to be performed before the Plugin can be edited.
@@ -248,7 +250,7 @@ abstract class Plugin extends Object {
      * @param array|optional $args
      *  Additional arguments for execution
      */
-    public function onBeforeEdit( array $args = array() ) {}
+    public function onBeforeEdit( array $args = [] ) {}
 
     /**
      * Routines to be performed after the Plugin can be edited.
@@ -257,7 +259,7 @@ abstract class Plugin extends Object {
      * @param array|optional $args
      *  Additional arguments for execution
      */
-    public function onAfterEdit( array $args = array() ) {}
+    public function onAfterEdit( array $args = [] ) {}
 
     /**
      * Routines to be performed before the Plugin is executed.
@@ -267,7 +269,7 @@ abstract class Plugin extends Object {
      * @param array|optional $args
      *  Additional arguments for execution
      */
-    public function onBeforeRun( array $args = array() ) {}
+    public function onBeforeRun( array $args = [] ) {}
 
     /**
      * The main routine, with all the logics of the Plugin,
@@ -276,7 +278,7 @@ abstract class Plugin extends Object {
      * @param array|optional $args
      *  Additional arguments for execution
      */
-    public function run( array $args = array() ) {}
+    public function run( array $args = [] ) {}
 
     /**
      * Routines to be performed after the Plugin is executed.
@@ -286,7 +288,7 @@ abstract class Plugin extends Object {
      * @param array|optional $args
      *  Additional arguments for execution
      */
-    public function onAfterRun( array $args = array() ) {}
+    public function onAfterRun( array $args = [] ) {}
 
     /**
      * Routines to be performed before the Plugin is tested.
@@ -298,7 +300,7 @@ abstract class Plugin extends Object {
      * @param array|optional $args
      *  Additional arguments for execution
      */
-    public function onBeforeTest( array $args = array() ) {}
+    public function onBeforeTest( array $args = [] ) {}
 
     /**
      * The test routine, that ensures whatever the main routine did
@@ -307,7 +309,7 @@ abstract class Plugin extends Object {
      * @param array|optional $args
      *  Additional arguments for execution
      */
-    public function test( array $args = array() ) {}
+    public function test( array $args = [] ) {}
 
     // Accessors
 

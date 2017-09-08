@@ -27,7 +27,7 @@ abstract class Prototype implements Prototypical {
      *
      * @var array $prototypes
      */
-    private static $prototypes = array();
+    private static $prototypes = [];
 
     /**
      * Implement a new callable resource, prototyping it to Object
@@ -44,9 +44,9 @@ abstract class Prototype implements Prototypical {
      * @return \Next\Components\Prototype
      *  Prototype Instance (Fluent Interface)
      */
-    public function implement( $name, $callable, $args = array() ) {
+    public function implement( $name, $callable, $args = [] ) {
 
-        self::$prototypes[ (string) $name ] = array( $callable, (array) $args );
+        self::$prototypes[ (string) $name ] = [ $callable, (array) $args ];
 
         return $this;
     }
@@ -69,7 +69,7 @@ abstract class Prototype implements Prototypical {
      * @throws \Next\Components\Debug\Exception
      *  Called resource is not known as a prototype nor as a extended method
      */
-    public function call( Object $caller, $method, array $args = array() ) {
+    public function call( Object $caller, $method, array $args = [] ) {
 
         if( isset( self::$prototypes[ $method ] ) ) {
 
@@ -120,7 +120,7 @@ abstract class Prototype implements Prototypical {
             'Method <strong>%s</strong> could not be matched against any
             methods in extended Context or prototyped functions',
 
-            array( $method )
+            [ $method ]
         );
     }
 

@@ -27,7 +27,7 @@ class Expression extends Object {
      *
      * @var array $defaultOptions
      */
-    protected $defaultOptions = array(
+    protected $defaultOptions = [
 
         /**
          * @internal
@@ -50,7 +50,7 @@ class Expression extends Object {
          * the developer
          */
         'overwrite' => FALSE
-    );
+    ];
 
     /**
      * SQL raw Expression

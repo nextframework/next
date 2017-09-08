@@ -21,13 +21,6 @@ namespace Next\HTTP\Cookies;
 class CookiesException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x000003FC, 0x0000042E );
-
-    /**
      * All Cookies are invalid
      *
      * @var integer

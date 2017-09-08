@@ -41,9 +41,9 @@ class Response extends AbstractSchema {
      *
      * @var array $defaultOptions
      */
-    protected $defaultOptions = array(
+    protected $defaultOptions = [
 
-        'cacheable'  => array(
+        'cacheable'  => [
 
             // Images
 
@@ -56,17 +56,17 @@ class Response extends AbstractSchema {
             // Static Files
 
             'cur', 'map', 'js', 'json', 'css', 'txt', 'xml'
-        ),
+        ],
 
-        'skip' => array()
-    );
+        'skip' => []
+    ];
 
     /**
      * Cacheable Extension => MIME-Type List
      *
      * @var array $mime
      */
-    private $mime = array(
+    private $mime = [
 
         // Images
 
@@ -84,7 +84,7 @@ class Response extends AbstractSchema {
         'map'  => 'application/json', 'js' => 'application/javascript',
         'json' => 'application/json', 'css' => 'text/css', 'txt' => 'text/plain',
         'xml'  => 'application/xml'
-    );
+    ];
 
     /**
      * Caching Routine to be executed by \Next\Controller\Front
@@ -134,7 +134,7 @@ class Response extends AbstractSchema {
             if( ! file_exists( $URI ) ) {
 
                 $response -> addHeader(
-                    new Raw( array( 'value' => 'HTTP/1.1 404 Not Found' ) )
+                    new Raw( [ 'value' => 'HTTP/1.1 404 Not Found' ] )
                 );
 
                 $response -> send();
@@ -147,11 +147,14 @@ class Response extends AbstractSchema {
             $etag = md5_file( $URI );
 
             $response -> addHeader(
-                new LastModified( array( 'value' => gmdate( 'D, d M Y H:i:s', $lm ) .' GMT' ) )
+
+                new LastModified(
+                    [ 'value' => sprintf( '%s GMT', gmdate( 'D, d M Y H:i:s', $lm ) ) ]
+                )
             );
 
-            $response -> addHeader( new ETag( array( 'value' => $etag ) ) )
-                      -> addHeader( new CacheControl( array( 'value' => 'public' ) ) );
+            $response -> addHeader( new ETag( [ 'value' => $etag ] ) )
+                      -> addHeader( new CacheControl( [ 'value' => 'public' ] ) );
 
             // Ugliest shortening ever >.<
 
@@ -163,7 +166,7 @@ class Response extends AbstractSchema {
                 // File has not changed
 
                 $response -> addHeader(
-                    new Raw( array( 'value' => 'HTTP/1.1 304 Not Modified' ) )
+                    new Raw( [ 'value' => 'HTTP/1.1 304 Not Modified' ] )
                 );
 
             } elseif( $HINM !== FALSE && $HINM == $etag ) {
@@ -171,7 +174,7 @@ class Response extends AbstractSchema {
                 // File has not changed
 
                 $response -> addHeader(
-                    new Raw( array( 'value' => 'HTTP/1.1 304 Not Modified' ) )
+                    new Raw( [ 'value' => 'HTTP/1.1 304 Not Modified' ] )
                 );
 
             } else  {
@@ -181,18 +184,26 @@ class Response extends AbstractSchema {
                 if( array_key_exists( $matches[ 1 ], $this -> mime ) ) {
 
                     $response -> addHeader(
-                        new ContentType( array( 'value' => $this -> mime[ $matches[ 1 ] ] ) )
+
+                        new ContentType(
+                            [ 'value' => $this -> mime[ $matches[ 1 ] ] ]
+                        )
                     );
 
                 } else {
 
                     $response -> addHeader(
-                        new ContentType( array( 'value' => self::DEFAULT_CTYPE ) )
+                        new ContentType( [ 'value' => self::DEFAULT_CTYPE ] )
                     );
                 }
 
                 $response -> cleanupMarkup( FALSE )
-                          -> addHeader( new ContentLength( array( 'value' => strlen( $data ) ) ) )
+                          -> addHeader(
+                                new ContentLength(
+
+                                    [ 'value' => strlen( $data ) ]
+                                )
+                             )
                           -> appendBody( $data );
             }
 

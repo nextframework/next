@@ -30,7 +30,7 @@ class Registry {
      *
      * @var array $registry
      */
-    private $registry = array();
+    private $registry = [];
 
     /**
      * Enforcing Singleton. Disallow Cloning

@@ -80,15 +80,15 @@ class Actions extends \FilterIterator implements Annotations {
      */
     public function getAnnotations() {
 
-        $data = array();
+        $data = [];
 
-        $labels = array( 'name', 'type', 'acceptable', 'default', 'regex' );
+        $labels = [ 'name', 'type', 'acceptable', 'default', 'regex' ];
 
         foreach( $this as $current ) {
 
             // Preparing Arguments Structure right now
 
-            $args = array();
+            $args = [];
 
             foreach( $this -> findActionAnnotations( $current, self::ARGS_PREFIX ) as $index => $arg ) {
 
@@ -100,7 +100,7 @@ class Actions extends \FilterIterator implements Annotations {
 
                     throw GeneratorsException::malformedArguments(
 
-                        array( $current -> class, $current -> name )
+                        [ $current -> class, $current -> name ]
                     );
                 }
 
@@ -127,11 +127,11 @@ class Actions extends \FilterIterator implements Annotations {
 
             // Saving Data
 
-            $data[ $current -> name ] = array(
+            $data[ $current -> name ] = [
 
                 'routes'    =>  $this -> findActionAnnotations( $current, self::ROUTE_PREFIX ),
                 'args'      =>  $args
-            );
+            ];
         }
 
         return $data;

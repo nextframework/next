@@ -21,13 +21,6 @@ namespace Next\Tools\ClassMapper;
 class ClassMapperException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x0000075F, 0x00000791 );
-
-    /**
      * Unknown Mapping Strategy
      *
      * @var integer

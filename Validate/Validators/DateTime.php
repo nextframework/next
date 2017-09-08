@@ -42,7 +42,7 @@ class DateTime extends Object implements Validator {
          *
          * @see http://php.net/manual/en/datetime.createfromformat.php
          */
-        $formats = array(
+        $formats = [
 
             'Y',        // Year only. E.g. 1997
             'Y-m',      // Year and month. E.g. 1997-07
@@ -99,7 +99,7 @@ class DateTime extends Object implements Validator {
              * E.g. 1997-07-16T19:20:30.45+01:00
              */
             'Y-m-d\TH:i:s.uT'
-        );
+        ];
 
         foreach( $formats as $format ) {
 

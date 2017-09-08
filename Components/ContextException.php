@@ -19,13 +19,6 @@ namespace Next\Components;
 class ContextException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x000001FE, 0x00000230 );
-
-    /**
      * Resource is not mimic-able
      *
      * @var integer
@@ -97,7 +90,7 @@ class ContextException extends \Next\Components\Debug\Exception {
 
             self::CALLER_NOT_FOUND,
 
-            array( $caller )
+            [ $caller ]
         );
     }
 
@@ -119,7 +112,7 @@ class ContextException extends \Next\Components\Debug\Exception {
 
             self::METHOD_NOT_FOUND,
 
-            array( $method )
+            [ $method ]
         );
     }
 
@@ -144,7 +137,7 @@ class ContextException extends \Next\Components\Debug\Exception {
 
             self::PROPERTY_NOT_FOUND,
 
-            array( $property, $caller )
+            [ $property, $caller ]
         );
     }
 
@@ -181,7 +174,7 @@ class ContextException extends \Next\Components\Debug\Exception {
 
             self::PROPERTY_CHANGES_FAILED,
 
-            array( $property, ( $isAccess ? 'accessed' : 'set' ), $caller )
+            [ $property, ( $isAccess ? 'accessed' : 'set' ), $caller ]
         );
     }
 }

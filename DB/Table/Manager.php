@@ -174,7 +174,7 @@ class Manager extends Object {
 
         $data = $this -> execute() -> fetch( $fetchStyle, array_slice( func_get_args(), 1 ) );
 
-        $rowset = new RowSet( $this, ( $data !== FALSE ? array( $data ) : array() ) );
+        $rowset = new RowSet( $this, ( $data !== FALSE ? [ $data ] : [] ) );
 
         $this -> flush();
 
@@ -197,7 +197,7 @@ class Manager extends Object {
 
         $data = $this -> execute() -> fetchAll( func_get_args() );
 
-        $rowset = new RowSet( $this, ( $data !== FALSE ? $data : array() ) );
+        $rowset = new RowSet( $this, ( $data !== FALSE ? $data : [] ) );
 
         $this -> flush();
 

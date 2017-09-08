@@ -18,14 +18,4 @@ namespace Next\Math;
  *
  * @uses       \Next\Components\Debug\Exception
  */
-class MathException extends \Next\Components\Debug\Exception {
-
-    /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     *
-     * @todo Remove or change for different values
-     */
-    protected $range = array( 0x00000033, 0x00000065 );
-}
+class MathException extends \Next\Components\Debug\Exception {}

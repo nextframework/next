@@ -32,7 +32,7 @@ class ISO4217 extends Object implements Validator {
      *
      * @link https://en.wikipedia.org/wiki/ISO_4217#Active_codes
      */
-    private static $currencies = array(
+    const CURRENCIES = [
 
         'AED', 'AFN', 'ALL', 'AMD', 'ANG', 'AOA', 'ARS', 'AUD', 'AWG',
         'AZN', 'BAM', 'BBD', 'BDT', 'BGN', 'BHD', 'BIF', 'BMD', 'BND',
@@ -54,7 +54,7 @@ class ISO4217 extends Object implements Validator {
         'VEF', 'VND', 'VUV', 'WST', 'XAF', 'XAG', 'XAU', 'XBA', 'XBB',
         'XBC', 'XBD', 'XCD', 'XDR', 'XOF', 'XPD', 'XPF', 'XPT', 'XSU',
         'XTS', 'XUA', 'XXX', 'YER', 'ZAR', 'ZMW', 'ZWL'
-    );
+    ];
 
     // Validator Interface Interface Methods
 
@@ -103,18 +103,19 @@ class ISO4217 extends Object implements Validator {
          */
         $this -> _info = $value;
 
-        return ( strlen( $value ) == 3 && in_array( $value, self::$currencies ) );
+        return ( strlen( $value ) == 3 && in_array( $value, self::CURRENCIES ) );
     }
 
-    // Accessors
+    // Parameterizable Interface Method Overriding
 
     /**
-     * Get ISO-4217 Country Codes List
+     * Set Class Options.
+     * Defines Parameter Options requirements rules
      *
      * @return array
-     *  ISO 4217 Codes
+     *  An array with Custom Options overriding or complementing Object defaults
      */
-    public static function getCodes() {
-        return self::$codes;
+    public function setOptions() {
+        return [ 'value' => [ 'required' => TRUE ] ];
     }
 }

@@ -38,7 +38,7 @@ class ContentType extends AbstractField implements Entity {
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new Validator( array( 'value' => $value ) );
+        return new Validator( [ 'value' => $value ] );
     }
 
     /**
@@ -48,6 +48,6 @@ class ContentType extends AbstractField implements Entity {
      *  Header Field Validation Options
      */
     public function setOptions() {
-        return array( 'name' => 'Content-Type' );
+        return [ 'name' => 'Content-Type' ];
     }
 }

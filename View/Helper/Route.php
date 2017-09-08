@@ -35,7 +35,7 @@ class Route implements Helper {
      *  If <strong>$text</strong> is provided a full formed HTML anchor tag
      *  with built Route will be returned. Otherwise only the Route itself will.
      */
-    public function __invoke( $route, array $params = array(), $text = NULL ) {
+    public function __invoke( $route, array $params = [], $text = NULL ) {
 
         array_walk( $params, function( &$v, $k ) {
             $v = sprintf( '%s/%s', trim( $k ), trim( $v ) );

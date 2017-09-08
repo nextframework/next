@@ -40,7 +40,7 @@ class LastModified extends AbstractField implements Entity {
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new Validator( array( 'value' => $value ) );
+        return new Validator( [ 'value' => $value ] );
     }
 
     /**
@@ -50,6 +50,6 @@ class LastModified extends AbstractField implements Entity {
      *  Header Field Validation Options
      */
     public function setOptions() {
-        return array( 'name' => 'Last-Modified', 'preserveWhitespace' => TRUE );
+        return [ 'name' => 'Last-Modified', 'preserveWhitespace' => TRUE ];
     }
 }

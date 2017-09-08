@@ -106,17 +106,17 @@ class Manager {
 
                 session_set_save_handler(
 
-                    array( $handler, 'open' ),
+                    [ $handler, 'open' ],
 
-                    array( $handler, 'close' ),
+                    [ $handler, 'close' ],
 
-                    array( $handler, 'read' ),
+                    [ $handler, 'read' ],
 
-                    array( $handler, 'write' ),
+                    [ $handler, 'write' ],
 
-                    array( $handler, 'destroy' ),
+                    [ $handler, 'destroy' ],
 
-                    array( $handler, 'renew' )
+                    [ $handler, 'renew' ]
                 );
             }
 
@@ -175,7 +175,7 @@ class Manager {
 
         // This should be done manually, through Environment::unsetAll(), but in any case...
 
-        $_SESSION = array();
+        $_SESSION = [];
 
         // Removing Session Cookie
 

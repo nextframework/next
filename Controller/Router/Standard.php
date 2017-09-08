@@ -27,9 +27,9 @@ class Standard extends AbstractRouter {
      *
      * @var array $defaultOptions
      */
-    protected $defaultOptions = array(
+    protected $defaultOptions = [
         'filePath' => 'data/routes.php'
-    );
+    ];
 
     // RegExp and String Delimiter Constants
 
@@ -196,7 +196,7 @@ class Standard extends AbstractRouter {
 
                 RouterException::CONNECTION_FAILED,
 
-                array( $this -> options -> filePath )
+                [ $this -> options -> filePath ]
             );
         }
     }
@@ -218,7 +218,7 @@ class Standard extends AbstractRouter {
      * @throws \Next\Controller\Router\RouterException
      *  Any of the Required Parameters is missing or has no value
      */
-    protected function lookup( array $params, $URI, array $queryData = array() ) {
+    protected function lookup( array $params, $URI, array $queryData = [] ) {
 
         /**
          * Merging manually defined GET query so they can
@@ -228,7 +228,7 @@ class Standard extends AbstractRouter {
 
             foreach( $queryData as $key => $value ) {
 
-                $params[] = array( 'name' => $key );
+                $params[] = [ 'name' => $key ];
             }
         }
 
@@ -340,11 +340,9 @@ class Standard extends AbstractRouter {
 
         // Do we have something to work with?
 
-        if( count( $params ) == 0 ) {
-            return array();
-        }
+        if( count( $params ) == 0 ) return [];
 
-        $pairs = array();
+        $pairs = [];
 
         foreach( $params as $param ) {
 

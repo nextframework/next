@@ -39,7 +39,7 @@ class Upgrade extends AbstractField {
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new Validator( array( 'value' => $value ) );
+        return new Validator( [ 'value' => $value ] );
     }
 
     /**
@@ -49,6 +49,6 @@ class Upgrade extends AbstractField {
      *  Header Field Validation Options
      */
     public function setOptions() {
-        return array( 'name' => 'Upgrade' );
+        return [ 'name' => 'Upgrade' ];
     }
 }

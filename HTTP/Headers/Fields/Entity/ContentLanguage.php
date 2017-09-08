@@ -77,7 +77,7 @@ class ContentLanguage extends AbstractField implements Entity {
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new Validator( array( 'value' => $value ) );
+        return new Validator( [ 'value' => $value ] );
     }
 
     /**
@@ -87,6 +87,6 @@ class ContentLanguage extends AbstractField implements Entity {
      *  Header Field Validation Options
      */
     public function setOptions() {
-        return array( 'name' => 'Accept-Language', 'acceptMultiples' => TRUE );
+        return [ 'name' => 'Accept-Language', 'acceptMultiples' => TRUE ];
     }
 }

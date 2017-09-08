@@ -35,7 +35,7 @@ abstract class AbstractGenerator extends Object implements Generator {
      *
      * @var array $results
      */
-    protected $results = array();
+    protected $results = [];
 
     /**
      * Time Elapsed

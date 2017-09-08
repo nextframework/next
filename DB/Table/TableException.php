@@ -24,13 +24,6 @@ use Next\DB\Statement\StatementException;    # Statement Exception Class
 class TableException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x00000396, 0x000003C8 );
-
-    /**
      * Missing PRIMARY KEY
      *
      * @var integer
@@ -89,7 +82,7 @@ class TableException extends \Next\Components\Debug\Exception {
 
             'PRIMARY KEY has not been defined for Table Class <strong>%s</strong> (<em>%s</em>)',
 
-            self::MISSING_PK, array( (string) $table, $table -> getClass() -> getName() )
+            self::MISSING_PK, [ (string) $table, $table -> getClass() -> getName() ]
         );
     }
 

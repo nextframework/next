@@ -21,13 +21,6 @@ namespace Next\HTTP\Stream\Writer;
 class WriterException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x00000594, 0x000005C6 );
-
-    /**
      * Unable to Write Data
      *
      * @var integer

@@ -109,9 +109,7 @@ class SetCookie extends Object implements Headers {
 
         if( isset( $matches['expires'] ) ) {
 
-            $date = new Date(
-                array( 'value' => $matches['expires'] )
-            );
+            $date = new Date( [ 'value' => $matches['expires'] ] );
 
             if( ! $date -> validate() ) return FALSE;
         }
@@ -123,7 +121,7 @@ class SetCookie extends Object implements Headers {
 
     /**
      * Set Class Options.
-     * Defines which Parameter Options are known by the Validator Class
+     * Defines Parameter Options requirements rules
      *
      * @return array
      *  An array with Custom Options overriding or complementing Object defaults

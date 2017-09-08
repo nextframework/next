@@ -19,13 +19,6 @@ namespace Next\Components\Events;
 class EventsException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x00000231, 0x00000263 );
-
-    /**
      * Unknown Listener
      *
      * @var integer
@@ -89,7 +82,7 @@ class EventsException extends \Next\Components\Debug\Exception {
 
             The following error was returned: %s',
 
-            self::LISTENER_EXECUTION_ERROR, array( $name, $event, $e -> getMessage() )
+            self::LISTENER_EXECUTION_ERROR, [ $name, $event, $e -> getMessage() ]
         );
     }
 

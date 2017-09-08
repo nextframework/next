@@ -40,7 +40,7 @@ class ContentRange extends AbstractField implements Entity {
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new Validator( array( 'value' => $value ) );
+        return new Validator( [ 'value' => $value ] );
     }
 
     /**
@@ -50,6 +50,6 @@ class ContentRange extends AbstractField implements Entity {
      *  Header Field Validation Options
      */
     public function setOptions() {
-        return array( 'name' => 'Content-Range', 'preserveWhitespace' => TRUE );
+        return [ 'name' => 'Content-Range', 'preserveWhitespace' => TRUE ];
     }
 }

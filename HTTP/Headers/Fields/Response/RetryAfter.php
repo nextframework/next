@@ -40,7 +40,7 @@ class RetryAfter extends AbstractField implements Response {
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new Validator( array( 'value' => $value ) );
+        return new Validator( [ 'value' => $value ] );
     }
 
     /**
@@ -50,6 +50,6 @@ class RetryAfter extends AbstractField implements Response {
      *  Header Field Validation Options
      */
     public function setOptions() {
-        return array( 'name' => 'Retry-After', 'preserveWhitespace' => TRUE );
+        return [ 'name' => 'Retry-After', 'preserveWhitespace' => TRUE ];
     }
 }

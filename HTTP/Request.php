@@ -199,21 +199,21 @@ class Request extends Object {
      *
      * @var array $queryData
      */
-    private $queryData = array();
+    private $queryData = [];
 
     /**
      * POST Data (a.k.a. POST Params)
      *
      * @var array $postData
      */
-    private $postData = array();
+    private $postData = [];
 
     /**
      * RAW POST Data (a.k.a. non URLEncoded POST Params)
      *
      * @var array $rawPostData
      */
-    private $rawPostData = array();
+    private $rawPostData = [];
 
     /**
      * Additional Initialization
@@ -973,7 +973,7 @@ class Request extends Object {
 
                 new SocketContext(
 
-                    array( 'http' => array( 'method' => $this -> method ) )
+                    [ 'http' => [ 'method' => $this -> method ] ]
                 )
             );
         }
@@ -985,14 +985,7 @@ class Request extends Object {
         // Request Method
 
         $context -> setOptions(
-
-            array(
-
-                'http' => array(
-
-                    'method' => $this -> method
-                )
-            )
+            [ 'http' => [ 'method' => $this -> method ] ]
         );
 
         //---------------
@@ -1043,13 +1036,9 @@ class Request extends Object {
 
         $context -> setOptions(
 
-            array(
-
-                'http' => array(
-
-                    'header' => $this -> headers -> getHeaders( TRUE )
-                )
-            )
+            [ 'http' => [
+                'header' => $this -> headers -> getHeaders( TRUE ) ]
+            ]
         );
 
         // Building Response
@@ -1245,9 +1234,7 @@ class Request extends Object {
         if( ! empty( $POSTDATA ) ) {
 
             $this -> adapter -> getContext() -> setOptions(
-                array(
-                    'http' => array(  'content' => $POSTDATA )
-                )
+                [ 'http' => [ 'content' => $POSTDATA ] ]
             );
 
             /**
@@ -1260,7 +1247,7 @@ class Request extends Object {
                 try {
 
                     $this-> headers -> addHeader(
-                        new ContentType( array( 'value' => 'application/x-www-form-urlencoded' ) )
+                        new ContentType( [ 'value' => 'application/x-www-form-urlencoded' ] )
                     );
 
                 } catch( FieldsException $e ) {

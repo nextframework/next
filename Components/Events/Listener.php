@@ -78,7 +78,7 @@ class Listener extends Object {
 
                 $this -> callback[ 0 ],
 
-                array_merge( array( $event ), array_shift( $args ) )
+                array_merge( [ $event ], array_shift( $args ) )
             );
 
         } else {
@@ -86,7 +86,7 @@ class Listener extends Object {
             $reflector = new \ReflectionFunction( $this -> callback );
 
             return $reflector -> invokeArgs(
-                array_merge( array( $event ), array_shift( $args ) )
+                array_merge( [ $event ], array_shift( $args ) )
             );
         }
     }

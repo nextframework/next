@@ -50,7 +50,7 @@ abstract class AbstractHeaders extends Object {
      *
      * @var array $known
      */
-    private $known = array(
+    private $known = [
 
         // Common Headers
 
@@ -125,7 +125,7 @@ abstract class AbstractHeaders extends Object {
         'XFrameOptions'       => 'Response\XFrameOptions',
         'XPoweredBy'          => 'Response\XPoweredBy',
         'XXSSProtection'      => 'Response\XXSSProtection',
-    );
+    ];
 
     /**
      * Additional Initialization
@@ -259,7 +259,7 @@ abstract class AbstractHeaders extends Object {
 
                         // ...and trying to add it
 
-                        $object = new $class( array( 'value' => $value ) );
+                        $object = new $class( [ 'value' => $value ] );
 
                         if( $this -> accept( $object ) ) {
                             $this -> headers -> add( $object );
@@ -288,7 +288,7 @@ abstract class AbstractHeaders extends Object {
                  * Generic Header don't need to be accepted
                  */
                 $this -> addHeader(
-                    new Generic( array( 'value' => sprintf( '%s: %s', $header, $value ) ) )
+                    new Generic( [ 'value' => sprintf( '%s: %s', $header, $value ) ] )
                 );
             }
         }
@@ -394,7 +394,7 @@ abstract class AbstractHeaders extends Object {
                 return TRUE;
             },
 
-            array( $iterator )
+            [ $iterator ]
         );
 
         return rtrim( $headerString, "\r\n" );

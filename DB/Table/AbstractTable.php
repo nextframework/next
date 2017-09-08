@@ -141,7 +141,7 @@ abstract class AbstractTable extends Object implements Table {
             }
         );
 
-        $fields = array();
+        $fields = [];
 
         // Building Fields Structure
 

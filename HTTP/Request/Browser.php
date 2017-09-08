@@ -447,11 +447,12 @@ class Browser extends Object {
         // Detecting Browser if not detected yet
 
         if( is_null( $this -> info -> browser ) || is_null( $this -> info -> version ) ) {
-
             $this -> detectBrowser();
         }
 
-        return ( $includeVersion ? array( $this -> info -> browser, $this -> info -> version ) : $this -> info -> browser );
+        return ( $includeVersion ?
+            [ $this -> info -> browser, $this -> info -> version ] :
+                $this -> info -> browser );
     }
 
     // Auxiliary Methods
@@ -481,14 +482,14 @@ class Browser extends Object {
      */
     private function detectIP() {
 
-        $headers = array(
+        $headers = [
 
             'CLIENT_IP', 'FORWARDED', 'FORWARDED_FOR', 'FORWARDED_FOR_IP', 'HTTP_CLIENT_IP',
             'HTTP_FORWARDED', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED_FOR_IP', 'HTTP_PC_REMOTE_ADDR',
             'HTTP_PROXY_CONNECTION', 'HTTP_VIA', 'HTTP_X_FORWARDED', 'HTTP_X_FORWARDED_FOR',
             'HTTP_X_FORWARDED_FOR_IP', 'HTTP_X_IMFORWARDS', 'HTTP_XROXY_CONNECTION', 'VIA',
             'X_FORWARDED', 'X_FORWARDED_FOR', 'REMOTE_ADDR'
-        );
+        ];
 
         foreach( $headers as $header ) {
 
@@ -529,7 +530,7 @@ class Browser extends Object {
      */
     private function detectPlatform() {
 
-        $platforms = array(
+        $platforms = [
 
             'windows'        => self::WINDOWS,       'iPad'           => self::IPAD,
             'iPod'           => self::IPOD,          'iPhone'         => self::IPHONE,
@@ -539,7 +540,7 @@ class Browser extends Object {
             'OpenBSD'        => self::OPENBSD,       'OpenSolaris'    => self::OPENSOLARIS,
             'SunOS'          => self::SUNOS,         'OS\/2'          => self::OS2,
             'BeOS'           => self::BEOS,          'win'            => self::WINDOWS
-        );
+        ];
 
         foreach( $platforms as $search => $platform ) {
 
@@ -576,7 +577,7 @@ class Browser extends Object {
          */
         $methodsIterator = new \ArrayIterator(
 
-            array(
+            [
 
                 'WebTv', 'InternetExplorer', 'Opera', 'Galeon',
                 'NetscapeNavigator', 'Firefox', 'Chrome', 'OmniWeb',
@@ -602,16 +603,16 @@ class Browser extends Object {
                 // Mozilla is such an open standard that you must check it last
 
                 'Mozilla'
-            )
+            ]
         );
 
         while( $methodsIterator -> valid() ) {
 
-            $result = (bool) call_user_func( array( $this, $methodsIterator -> current() ) );
+            $result = (bool) call_user_func(
+                [ $this, $methodsIterator -> current() ]
+            );
 
-            if( $result !== FALSE ) {
-                break;
-            }
+            if( $result !== FALSE ) break;
 
             $methodsIterator -> next();
         }
@@ -674,23 +675,17 @@ class Browser extends Object {
 
             // Version
 
-            $occurrence = strstr( $this -> info -> agent, '/' );
+            $version = strstr( $this -> info -> agent, '/' );
 
-            if( in_array( $occurrence, array( 308, 425, 426, 474, '0b1', '0B1' ) ) ) {
-
-                $this -> info -> version = '1.5';
-
-            } else {
-
-                $this -> info -> version = '1.0';
-            }
+            $this -> info -> version = ( in_array( $version, [ 308, 425, 426, 474, '0b1', '0B1' ] ) ? '1.5' : '1.0' );
 
             return TRUE;
         }
 
         // Test for versions > 1.5
 
-        else if( stripos( $this -> info -> agent, 'msie' ) !== FALSE && stripos( $this -> info -> agent, 'opera' ) === FALSE ) {
+        else if( stripos( $this -> info -> agent, 'msie' ) !== FALSE &&
+                    stripos( $this -> info -> agent, 'opera' ) === FALSE ) {
 
             // Check for the odd MSN Explorer
 
@@ -700,22 +695,29 @@ class Browser extends Object {
 
                 // Version
 
-                $occurrence = explode( ' ', stristr( str_replace( ';', '; ', $this -> info -> agent ), 'MSN' ) );
+                $version = explode( ' ', stristr(
+                    str_replace( ';', '; ', $this -> info -> agent ), 'MSN' )
+                );
 
-                if( isset( $occurrence[ 1 ] ) ) {
-                    $this -> info -> version = str_replace( array( '(', ')', ';'), '', $occurrence[ 1 ] );
+                if( isset( $version[ 1 ] ) ) {
+                    $this -> info -> version = str_replace( [ '(', ')', ';' ], '', $version[ 1 ] );
                 }
 
             } else {
 
-                $occurrence = explode( ' ', stristr( str_replace( ';', '; ', $this -> info -> agent ), 'msie' ) );
+                $version = explode( ' ', stristr(
+                    str_replace( ';', '; ', $this -> info -> agent ), 'msie' )
+                );
 
                 $this -> info -> browser = self::IE;
 
                 // Version
 
-                if( isset( $occurrence[ 1 ] ) ) {
-                    $this -> info -> version = str_replace( array( '(', ')', ';' ), '', $occurrence[ 1 ] );
+                if( isset( $version[ 1 ] ) ) {
+
+                    $this -> info -> version = str_replace(
+                        [ '(', ')', ';' ], '', $version[ 1 ]
+                    );
                 }
             }
 
@@ -1404,7 +1406,9 @@ class Browser extends Object {
 
                 $version = explode(' ',$version[ 1 ] );
 
-                $this -> info -> version = str_replace( array( '(', ')', ';' ), '', $version[ 0 ] );
+                $this -> info -> version = str_replace(
+                    [ '(', ')', ';' ], '', $version[ 0 ]
+                );
             }
 
             return TRUE;

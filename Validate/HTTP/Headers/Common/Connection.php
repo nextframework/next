@@ -43,14 +43,14 @@ class Connection extends Object implements Headers {
      *  RFC 2616 Section 14.10
      */
     public function validate() {
-        return in_array( $this -> options -> value, array( 'close', 'keep-alive' ) );
+        return in_array( $this -> options -> value, [ 'close', 'keep-alive' ] );
     }
 
     // Parameterizable Interface Method Overriding
 
     /**
      * Set Class Options.
-     * Defines which Parameter Options are known by the Validator Class
+     * Defines Parameter Options requirements rules
      *
      * @return array
      *  An array with Custom Options overriding or complementing Object defaults

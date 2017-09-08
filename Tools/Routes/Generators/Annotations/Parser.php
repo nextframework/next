@@ -132,8 +132,7 @@ class Parser extends Object {
             if( count( $components ) < 2 ) {
 
                 throw GeneratorsException::invalidRouteStructure(
-
-                    array( $route, basename( $controller ), $method )
+                    [ $route, basename( $controller ), $method ]
                 );
             }
 
@@ -157,7 +156,7 @@ class Parser extends Object {
 
                 throw GeneratorsException::malformedRoute(
 
-                    array( $URI, basename( $controller ), $method )
+                    [ $URI, basename( $controller ), $method ]
                 );
             }
 
@@ -202,11 +201,11 @@ class Parser extends Object {
 
             // Adding an always optional parameter reserved for Localization
 
-            $optional[] = array(
-                    'name'      => self::LOCALE_PARAM,
-                    'type'      => 'optional',
-                    'default'   => 'en'
-            );
+            $optional[] = [
+                'name'      => self::LOCALE_PARAM,
+                'type'      => 'optional',
+                'default'   => 'en'
+            ];
 
             // Searching for Duplicates
 
@@ -224,14 +223,14 @@ class Parser extends Object {
 
                     throw GeneratorsException::duplicatedRoute(
 
-                        array( $requestMethod, $URI, basename( $controller ), $method )
+                        [ $requestMethod, $URI, basename( $controller ), $method ]
                     );
                 }
             }
 
             // Preparing Parsed Route to be recorded
 
-            $this -> results[] = array(
+            $this -> results[] = [
 
                 'requestMethod'    => $requestMethod,
                 'route'            => $URI,
@@ -240,7 +239,7 @@ class Parser extends Object {
                     'required' => $required,
                     'optional' => $optional
                 ),
-            );
+            ];
         }
     }
 

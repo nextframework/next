@@ -57,7 +57,7 @@ class NullRouter extends AbstractRouter {
      * @param array|optional $queryData
      *  Manually set GET parameters to be considered as validatable arguments too
      */
-    protected function lookup( array $params, $uri, array$queryData = array() ) {}
+    protected function lookup( array $params, $uri, array$queryData = [] ) {}
 
     /**
      * Check if Required Parameters are present

@@ -21,13 +21,6 @@ use Next\Components\Object;    # Object Class
 class CacheException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x00000099, 0x000000CB );
-
-    /**
      * Metadata reading impossibility
      *
      * @var integer

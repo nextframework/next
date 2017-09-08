@@ -21,13 +21,6 @@ namespace Next\HTTP\Stream\Adapter;
 class AdapterException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x000004FB, 0x0000052D );
-
-    /**
      * Invalid Opening Mode
      *
      * @var integer

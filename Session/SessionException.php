@@ -21,13 +21,6 @@ namespace Next\Session;
 class SessionException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x0000072C, 0x0000075E );
-
-    /**
      * Session was already initialized
      *
      * @var integer

@@ -28,7 +28,7 @@ class Context implements Contextualizable {
      *
      * @var array $callables
      */
-    private $callables = array();
+    private $callables = [];
 
     /**
      * Register a new Invoker Object to be used as context extension
@@ -69,11 +69,11 @@ class Context implements Contextualizable {
 
         // Restricting access to methods of some classes to avoid infinite loops
 
-        $methods = array_filter( $methods, array( $this, 'filter' ) );
+        $methods = array_filter( $methods, [ $this, 'filter' ] );
 
         // Listing only method names
 
-        $methods = array_map( array( $this, 'simplify' ), $methods );
+        $methods = array_map( [ $this, 'simplify' ], $methods );
 
         // Properties
 
@@ -81,9 +81,9 @@ class Context implements Contextualizable {
             $properties = $reflector -> getProperties( \ReflectionProperty::IS_PROTECTED );
         }
 
-        $properties = array_filter( $properties, array( $this, 'filter' ) );
+        $properties = array_filter( $properties, [ $this, 'filter' ] );
 
-        $properties = array_map( array( $this, 'simplify' ), $properties );
+        $properties = array_map( [ $this, 'simplify' ], $properties );
 
         // Injecting Caller Object into Callee
 
@@ -101,9 +101,9 @@ class Context implements Contextualizable {
 
         // Building Context Structure
 
-        $this -> callables[ $caller -> getClass() -> getName() ][] = array(
+        $this -> callables[ $caller -> getClass() -> getName() ][] = [
             ( $callee instanceof Mimicker ? $callee -> getMimicker() : $callee ), $methods, $properties
-        );
+        ];
 
         return $this;
     }
@@ -128,7 +128,7 @@ class Context implements Contextualizable {
      * @throws \Next\Components\Debug\Exception
      *  Called resource is not known as an extended method
      */
-    public function call( Object $caller, $method, array $args = array() ) {
+    public function call( Object $caller, $method, array $args = [] ) {
 
         $caller = $caller -> getClass() -> getName();
 
@@ -233,7 +233,7 @@ class Context implements Contextualizable {
 
                 'Object <strong>%s</strong> could not be recognized as a valid extended context',
 
-                array( $caller )
+                [ $caller ]
             );
         }
     }

@@ -64,7 +64,7 @@ class ContentLanguage extends Object implements Headers {
              * Let's check chosen Language Abbreviation against ISO 639 Standards
              */
             $ISO = new ISO639(
-                array( 'value' => ( array_key_exists( 'abbr', $match ) ? $match['abbr'] : NULL ) )
+                [ 'value' => ( array_key_exists( 'abbr', $match ) ? $match['abbr'] : NULL ) ]
             );
 
             if( $ISO -> validate() ) {
@@ -77,7 +77,7 @@ class ContentLanguage extends Object implements Headers {
                  */
                 if( isset( $match['country'] ) ) {
 
-                    $ISO = new ISO3166( array( 'value' => $match['country'] ) );
+                    $ISO = new ISO3166( [ 'value' => $match['country'] ] );
 
                     if( $ISO -> validate() ) return TRUE;
                 }
@@ -101,7 +101,7 @@ class ContentLanguage extends Object implements Headers {
 
     /**
      * Set Class Options.
-     * Defines which Parameter Options are known by the Validator Class
+     * Defines Parameter Options requirements rules
      *
      * @return array
      *  An array with Custom Options overriding or complementing Object defaults

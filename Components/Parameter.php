@@ -61,7 +61,7 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
     public function __construct() {
 
         list( $this -> defaultOptions, $this -> customOptions, $this -> instanceOptions ) =
-            func_get_args() + array( NULL, NULL, NULL );
+            func_get_args() + [ NULL, NULL, NULL ];
 
         $this -> parameters = new \stdClass;
 
@@ -188,28 +188,13 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
      * @throws Next\Components\Exception\LogicException
      *  Thrown if a Parameter Option marked as 'required' wasn't
      *  overwrote with the real value
-     *
-     * @throws Next\Components\Exception\UnexpectedValueException
-     *  Thrown if an extraneous Parameter Option, unknown by Parent
-     *  or Children classes is being set, preventing the Instance Options
-     *  to produce unneeded Options
      */
     public function verify() {
 
         foreach( $this-> parameters as $name => $parameter ) {
 
-            // Are all required Options set?
-
             if( isset( $parameter -> required ) && $parameter -> required !== FALSE ) {
                 throw Exception\LogicException::missing( $name );
-            }
-
-            // Are all Options known?
-
-            if( ! array_key_exists( $name, (array) $this -> defaultOptions ) &&
-                    ! array_key_exists( $name, (array) $this -> customOptions ) ) {
-
-                throw Exception\UnexpectedValueException::extra( $name );
             }
         }
     }
@@ -327,7 +312,7 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
 
                 'Identifier <strong>%s</strong> doesn\'t exist and therefore cannot be removed',
 
-                array( $identifier )
+                [ $identifier ]
             );
         }
 

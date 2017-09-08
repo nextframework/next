@@ -40,7 +40,7 @@ class XXSSProtection extends AbstractField implements Response {
      *  Associated Validator
      */
     protected function getValidator( $value ) {
-        return new Validator( array( 'value' => $value ) );
+        return new Validator( [ 'value' => $value ] );
     }
 
     /**
@@ -50,6 +50,6 @@ class XXSSProtection extends AbstractField implements Response {
      *  Header Field Validation Options
      */
     public function setOptions() {
-        return array( 'name' => 'X-XSS-Protection' );
+        return [ 'name' => 'X-XSS-Protection' ];
     }
 }

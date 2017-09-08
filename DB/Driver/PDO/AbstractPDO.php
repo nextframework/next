@@ -64,15 +64,11 @@ abstract class AbstractPDO extends AbstractDriver {
 
                 \PDO::ATTR_STATEMENT_CLASS,
 
-                array(
+                [
+                  'Next\DB\Statement\PDO\Statement',
 
-                    'Next\DB\Statement\PDO\Statement',
-
-                    array(
-
-                        new \Next\DB\Statement\PDO\Adapter( $this )
-                    )
-                )
+                  [ new \Next\DB\Statement\PDO\Adapter( $this ) ]
+                ]
             );
 
             // Adapter Extra Initialization

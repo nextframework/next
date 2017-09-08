@@ -21,13 +21,6 @@ namespace Next\DB\Driver;
 class DriverException extends \Next\Components\Debug\Exception {
 
     /**
-     * Exception Codes Range
-     *
-     * @var array $range
-     */
-    protected $range = array( 0x00000297, 0x000002C9 );
-
-    /**
      * PDOException
      *
      * @var integer

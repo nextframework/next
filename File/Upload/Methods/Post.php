@@ -31,7 +31,7 @@ class Post extends AbstractMethod {
      *
      * @var array $errorMessages
      */
-    private $errorMessages = array(
+    private $errorMessages = [
 
         'UNKNOWN'                 => 'Unknown upload error',
 
@@ -48,7 +48,7 @@ class Post extends AbstractMethod {
         // Throwable Errors
 
         'uploadFailure'           => 'Upload failed'
-    );
+    ];
 
     /**
      * Additional initialization
@@ -87,7 +87,7 @@ class Post extends AbstractMethod {
 
         if( reset( $files ) !== FALSE && ! is_array( $files[ key( $files ) ] ) ) {
 
-            $files = array( $files );
+            $files = [ $files ];
 
         } else {
 
@@ -119,12 +119,12 @@ class Post extends AbstractMethod {
 
                 $errOffset = ( array_key_exists( $error, $this -> errorMessages ) ? $error : 'UNKNOWN' );
 
-                $this -> failed = array(
+                $this -> failed = [
 
                     'name' => $name, 'size' => Tools::readableFilesize( $size ), 'type' => $type,
 
                     'reason' => $this -> errorMessages[ $errOffset ],
-                );
+                ];
             }
         }
 
@@ -161,16 +161,16 @@ class Post extends AbstractMethod {
 
         // Validating Uploaded File
 
-        $validation = $this -> validators -> validate( array( $file, $size, $type, $temp ) );
+        $validation = $this -> validators -> validate( [ $file, $size, $type, $temp ] );
 
         if( $validation !== TRUE ) {
 
-            $this -> failed[] = array(
+            $this -> failed[] = [
 
                 'name' => $file, 'size' => $readableFilesize, 'type' => $type,
 
                 'reason' => $validation -> getErrorMessage()
-            );
+            ];
 
             return;
         }
@@ -187,31 +187,31 @@ class Post extends AbstractMethod {
 
             if( $postProcess !== TRUE ) {
 
-                $this -> failed[] = array(
+                $this -> failed[] = [
 
                     'name' => $file, 'size' => $readableFilesize, 'type' => $type,
 
                     'reason' => $postProcess -> getErrorMessage()
-                );
+                ];
 
                 return;
 
             } else {
 
-                $this -> succeed[] = array(
+                $this -> succeed[] = [
 
                     'name' => $file, 'type' => $type, 'size' => $readableFilesize
-                );
+                ];
             }
 
         } else {
 
-            $this -> failed[] = array(
+            $this -> failed[] = [
 
                 'name' => $file, 'size' => $readableFilesize, 'type' => $type,
 
                 'reason' => $this -> errorMessages['uploadFailure']
-            );
+            ];
         }
     }
 

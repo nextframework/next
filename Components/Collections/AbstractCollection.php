@@ -67,9 +67,9 @@ abstract class AbstractCollection extends Object
      */
     public function clear() {
 
-        $this -> collection = array();
+        $this -> collection = [];
 
-        $this -> references = array();
+        $this -> references = [];
 
         $this -> iterator   = 'ArrayIterator';
 
@@ -104,11 +104,11 @@ abstract class AbstractCollection extends Object
 
             $this -> collection[ $offset ] = $object;
 
-            $this -> references[ $offset ] = array(
+            $this -> references[ $offset ] = [
 
                 'name' => (string) $object,
                 'hash' => $object -> getHash()
-            );
+            ];
 
         } else {
 
@@ -116,11 +116,11 @@ abstract class AbstractCollection extends Object
 
             $this -> collection[] = $object;
 
-            $this -> references[] = array(
+            $this -> references[] = [
 
                 'name' => (string) $object,
                 'hash' => $object -> getHash()
-            );
+            ];
         }
 
         return $this;
@@ -149,10 +149,7 @@ abstract class AbstractCollection extends Object
 
             $this -> references,
 
-            array(
-                'name' => (string) $object,
-                'hash' => $object -> getHash()
-            )
+            [ 'name' => (string) $object, 'hash' => $object -> getHash() ]
         );
 
         return $this;
@@ -452,7 +449,7 @@ abstract class AbstractCollection extends Object
     public function serialize() {
 
         return serialize(
-            array( $this -> collection, $this -> references, $this -> iterator )
+            [ $this -> collection, $this -> references, $this -> iterator ]
         );
     }
 

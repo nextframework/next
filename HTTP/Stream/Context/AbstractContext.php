@@ -34,7 +34,7 @@ abstract class AbstractContext implements Context {
      *
      * @var array $options
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * Stream Context Constructor
@@ -42,7 +42,7 @@ abstract class AbstractContext implements Context {
      * @param array|optional $options
      *  Initial Context Options
      */
-    public function __construct( array $options = array() ) {
+    public function __construct( array $options = [] ) {
 
         // Setting Options, if any...
 

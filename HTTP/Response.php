@@ -719,7 +719,7 @@ class Response extends Object {
      * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for the Response Object
      */
-    public function __construct( $data = NULL, array $metaData = array(), $options = NULL ) {
+    public function __construct( $data = NULL, array $metaData = [], $options = NULL ) {
 
         parent::__construct( $options );
 
@@ -873,7 +873,7 @@ class Response extends Object {
                      * in replacements array
                      */
                     ArrayUtils::insert(
-                        array( 3 => str_repeat( ' ', $indentSize ) ), $matches
+                        [ 3 => str_repeat( ' ', $indentSize ) ], $matches
                     );
 
                     return vsprintf( "%s%s\n%s<%s>", array_slice( $matches, 1, 4 ) );
@@ -961,7 +961,7 @@ class Response extends Object {
 
             // Location Header should be sent ONLY with Absolute URIs
 
-            $this -> headers -> addHeader( new Location( array( 'value' => $url ) ) );
+            $this -> headers -> addHeader( new Location( [ 'value' => $url ] ) );
 
         } catch( FieldsException $e ) {
 
@@ -970,8 +970,7 @@ class Response extends Object {
              *  we'll send it as a Raw Header
              */
             $this -> headers -> addHeader(
-
-                new Raw( array( 'value' => sprintf( 'Location: %s', $to ) ) )
+                new Raw( [ 'value' => sprintf( 'Location: %s', $to ) ] )
             );
         }
 
@@ -1108,7 +1107,7 @@ class Response extends Object {
                 'Cannot modify headers Information.
                 Header was already sent in file <strong>%s</strong> at line <strong>%s</strong>',
 
-                array( $file, $line )
+                [ $file, $line ]
             );
 
             return FALSE;
@@ -1200,7 +1199,7 @@ class Response extends Object {
 
             try {
 
-                $this -> headers -> addHeader( new Raw( array( 'value' => $message ) ) );
+                $this -> headers -> addHeader( new Raw( [ 'value' => $message ] ) );
 
            } catch( FieldsException $e ) {}
 

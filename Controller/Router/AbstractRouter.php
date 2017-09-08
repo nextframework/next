@@ -39,7 +39,7 @@ abstract class AbstractRouter extends Object implements Router {
      *
      * @var array $params
      */
-    protected $params = array();
+    protected $params = [];
 
     /**
      * Match Controller
@@ -149,7 +149,7 @@ abstract class AbstractRouter extends Object implements Router {
      * @param array|optional $queryData
      *  Manually set GET parameters to be considered as validatable arguments too
      */
-    abstract protected function lookup( array $params, $uri, array $queryData = array() );
+    abstract protected function lookup( array $params, $uri, array $queryData = [] );
 
     /**
      * Check if Required Parameters are present

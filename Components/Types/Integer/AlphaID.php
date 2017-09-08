@@ -52,7 +52,7 @@ class AlphaID implements Prototypable {
     public function prototype() {
 
         list( $integer, $index ) =
-            func_get_arg( 0 ) + array( NULL, self::SET );
+            func_get_arg( 0 ) + [ NULL, self::SET ];
 
         if( $integer instanceof Integer ) $integer = $integer -> get();
 

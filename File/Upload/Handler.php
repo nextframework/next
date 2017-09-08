@@ -33,15 +33,15 @@ class Handler extends Object {
      *
      * @var array $defaultOptions
      */
-    protected $defaultOptions = array(
+    protected $defaultOptions = [
 
         'uploadDir'                 => 'uploads',
         'name'                      => 'files',
-        'acceptedFileExtensions'    => array(),      // All extensions allowed
-        'acceptedFileTypes'         => array(),      // All filetypes allowed
+        'acceptedFileExtensions'    => [],           // All extensions allowed
+        'acceptedFileTypes'         => [],           // All filetypes allowed
         'maxFileSize'               => 1000000,      // 1MB
         'maxConcurrentFiles'        => 2
-    );
+    ];
 
     /**
      * Request Object

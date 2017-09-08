@@ -26,7 +26,7 @@ class Handler extends Object {
      *
      * @var array $listeners
      */
-    protected $listeners = array();
+    protected $listeners = [];
 
     /**
      * The Event Object
@@ -40,7 +40,7 @@ class Handler extends Object {
      *
      * @var array $results
      */
-    protected $results = array();
+    protected $results = [];
 
     /**
      * Events Handler Constructor

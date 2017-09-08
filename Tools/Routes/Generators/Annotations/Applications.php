@@ -104,7 +104,7 @@ class Applications implements Annotations {
                 return TRUE;
             },
 
-            array( $actions )
+            [ $actions ]
         );
 
         return $data;

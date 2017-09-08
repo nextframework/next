@@ -157,7 +157,7 @@ class Environment extends Object {
      */
     public function unsetAll() {
 
-        $_SESSION[ $this -> environment ] = array();
+        $_SESSION[ $this -> environment ] = [];
 
         return $this;
     }

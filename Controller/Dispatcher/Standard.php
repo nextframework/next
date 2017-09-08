@@ -171,11 +171,11 @@ class Standard extends AbstractDispatcher {
              *
              * @var $codes array
              */
-            $codes = array(
+            $codes = [
 
                 Response::OK, Response::CREATED, Response::ACCEPTED,
                 Response::NO_CONTENT, Response::PARTIAL_CONTENT, Response::NOT_MODIFIED
-            );
+            ];
 
             $view = $application -> getView();
 
