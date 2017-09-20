@@ -10,8 +10,9 @@
  */
 namespace Next\DB\Driver\PDO\Adapter;
 
-use Next\DB\Driver\DriverException;    # Driver Exception Class
-use Next\DB\Driver\PDO\AbstractPDO;    # PDO Abstract Class
+use Next\DB\Driver\DriverException;              # Driver Exception Class
+use Next\DB\Driver\PDO\AbstractPDO;              # PDO Abstract Class
+use Next\DB\Query\Renderer\MySQL as Renderer;    # MySQL Query Renderer Class
 
 /**
  * MySQL Connection Adapter Class
@@ -98,6 +99,6 @@ class MySQL extends AbstractPDO {
      *  MySQL Renderer Object
      */
     public function getRenderer() {
-        return new \Next\DB\Query\Renderer\MySQL( "`" );
+        return new Renderer( [ 'quoteIdentifier' => '`' ] );
     }
 }

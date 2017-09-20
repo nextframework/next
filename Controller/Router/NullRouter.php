@@ -24,15 +24,12 @@ use Next\Application\Application;    # Application Interface
 class NullRouter extends AbstractRouter {
 
     /**
-     * Finds a match Route
-     *
-     * @param \Next\Application\Application $application
-     *  Application to iterate Controllers
+     * Finds a matching Route for the Application -AND- current Request URI
      *
      * @return boolean
      *  Always FALSE because this Router does nothing
      */
-    public function find( Application $application ) {
+    public function find() {
         return FALSE;
     }
 

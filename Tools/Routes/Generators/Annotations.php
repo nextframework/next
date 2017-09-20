@@ -111,7 +111,7 @@ class Annotations extends AbstractGenerator {
      *  Found Routes
      *
      * @return array
-     *  Routes Data Source now sorted, from the longest to the shortest
+     *  Routes Data-source now sorted, from the longest to the shortest
      */
     private function sort( array $routes ) {
 

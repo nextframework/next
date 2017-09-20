@@ -60,7 +60,7 @@ class SQLite extends Object implements Writer {
         // Entity Manager
 
         $this -> manager = new Manager(
-            new Adapter( [ 'dbPath' => $this -> options -> dbPath ] )
+            [ 'driver' => new Adapter( [ 'dbPath' => $this -> options -> dbPath ] ) ]
         );
     }
 

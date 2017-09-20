@@ -1,21 +1,21 @@
 <?php
 
 /**
- * Debug Component Error Exception Standard Class | Debug\Exception\ErrorException.php
+ * Debug Component Error Exception Standard Class | Exception\ErrorException.php
  *
  * @author       Bruno Augusto
  *
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace Next\Debug\Exception;
+namespace Next\Exception;
 
 /**
  * Defines a variation our own Exception Class with focused on triggered errors
  *
- * @package    Next\Debug
+ * @package    Next\Exception
  *
- * @uses       Next\Debug\Exception\Exception
+ * @uses       Next\Exception
  */
 class ErrorException extends Exception {
 

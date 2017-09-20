@@ -43,10 +43,15 @@ class Session extends Object implements Helper {
 
         SessionManager::start();
 
-        $this -> environment = new Environment( 'session_helper' );
+        $this -> environment = new Environment(
+            [ 'name' => 'session_helper' ]
+        );
 
         $this -> extend(
-            new Invoker( $this, $this -> environment, [ 'getEnvironment', 'getAll' ] )
+
+            new Invoker( $this, $this -> environment ),
+
+            [ 'getEnvironment', 'getAll' ]
         );
     }
 
@@ -95,5 +100,16 @@ class Session extends Object implements Helper {
      */
     public function getHelperName() {
         return 'session';
+    }
+
+    // OverLoading
+
+    /**
+     * Get the Helper name to be registered by View Engine
+     *
+     * @return string
+     */
+    public function __toString() {
+        return $this -> getHelperName();
     }
 }

@@ -26,9 +26,12 @@ class HandlersApplication extends AbstractApplication {
      */
     public function setupView() {
 
-        $this -> view = new View( $this );
-
-        $this -> view -> setBasepath( sprintf( '%s/Views', dirname( __FILE__ ) ) );
+        return new View(
+            [
+                'application' => $this,
+                'basepath'    => sprintf( '%s/Views', __DIR__ )
+            ]
+        );
     }
 
     // Application Interface Method Implementation
@@ -37,7 +40,7 @@ class HandlersApplication extends AbstractApplication {
      * Router Setup
      */
     public function setupRouter() {
-        $this -> router = new Router( $this );
+        $this -> router = new Router( [ 'application' =>$this] );
     }
 
     // Abstract Methods Implementation

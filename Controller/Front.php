@@ -10,16 +10,10 @@
  */
 namespace Next\Controller;
 
-use Next\Controller\Dispatcher\Dispatcher;             # Controllers Dispatcher Interface
-
 use Next\Controller\Router\RouterException;            # Router Exception Class
 use Next\Controller\Dispatcher\DispatcherException;    # Dispatcher Exception Class
 
-use Next\HTTP\Headers\Fields\FieldsException;          # Header Fields Exception Class
-use Next\HTTP\Response\ResponseException;              # Response Exception Class
-
 use Next\Components\Object;                            # Object Class
-use Next\Application\Chain as Applications;            # Applications Chain
 use Next\Controller\Dispatcher\Standard;               # Standard Dispatcher Class
 
 use Next\Components\Debug\Handlers;                    # Errors & Exceptions Handlers
@@ -49,37 +43,27 @@ use Next\HTTP\Response;                                # Response Class
 class Front extends Object {
 
     /**
-     * Controller Dispatcher Object
+     * Parameter Options Definition
      *
-     * @var \Next\Controller\Dispatcher\Dispatcher $dispatcher
+     * @var array $parameters
      */
-    private $dispatcher;
+    protected $parameters = [
+
+        'applications' => [ 'type' => 'Next\Application\Chain', 'required' => TRUE ],
+        'dispatcher'   => [ 'type' => 'Next\Controller\Dispatcher\Dispatcher', 'required' => FALSE ]
+    ];
 
     /**
-     * Applications Chain
-     *
-     * @var \Next\Application\Chain $applications
+     * Additional Initialization.
+     * Assigns a default Controller Dispatcher if none has been provided
      */
-    private $applications;
+    protected function init() {
 
-    /**
-     * Front Controller Constructor
-     *
-     * @param \Next\Application\Chain $applications
-     *  Applications Chain
-     *
-     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
-     *  Optional Configuration Options for the Front Controller
-     */
-    public function __construct( Applications $applications, $options = NULL ) {
+        // Setting up a default Dispatcher Object
 
-        parent::__construct( $options );
-
-        $this -> applications = $applications;
-
-        // Setting Dispatcher Object
-
-        $this -> dispatcher = new Standard;
+        if( $this -> options -> dispatcher === NULL ) {
+            $this -> options -> dispatcher = new Standard;
+        }
     }
 
     /**
@@ -91,34 +75,28 @@ class Front extends Object {
      */
     public function dispatch() {
 
-        foreach( $this -> applications as $application ) {
+        foreach( $this -> options -> applications as $application ) {
 
             $response = $application -> getResponse();
             $router   = $application -> getRouter();
 
-            // Do we have any Caching Schema to run?
+            // Running Caching Schemas, if any
 
-            $caching = $application -> getCache();
+            foreach( $application -> getCache() as $schema ) $schema -> run();
 
-            if( count( $caching ) > 0 ) {
-                foreach( $caching as $schema ) $schema -> run();
-            }
-
-            // Aborting the flow if there's not Router for the Application
+            // Aborting the flow if there's no Router assigned for the Application
 
             if( $router === FALSE ) return FALSE;
 
             // Leaving the Flow if we shouldn't route (i.e. direct access to files)
 
-            if( ! $router -> shouldRoute() ) {
-                return FALSE;
-            }
+            if( ! $router -> shouldRoute() ) return FALSE;
 
             try {
 
                 // Trying to find a matching Route
 
-                $match = $router -> find( $application );
+                $match = $router -> find(/* $application */);
 
                 if( $match !== FALSE ) {
 
@@ -127,16 +105,17 @@ class Front extends Object {
                      * Dispatching Controller, if nothing was wrongly
                      * dispatched before
                      */
-                    if( ! $this -> dispatcher -> isDispatched() ) {
+                    if( ! $this -> options -> dispatcher -> isDispatched() ) {
 
                         try {
 
-                            $dispatched = $this -> dispatcher
+                            $dispatched = $this -> options
+                                                -> dispatcher
                                                 -> dispatch( $application, $match );
 
                             // Should we return what was dispatched?
 
-                            if( $this -> dispatcher -> shouldReturn() ) {
+                            if( $this -> options -> dispatcher -> shouldReturn() ) {
                                 return $dispatched;
                             }
 
@@ -175,7 +154,7 @@ class Front extends Object {
 
             } catch( RouterException $e ) {
 
-                $this -> dispatcher -> setDispatched( TRUE );
+                $this -> options -> dispatcher -> setDispatched( TRUE );
 
                 /**
                  * @internal
@@ -195,36 +174,10 @@ class Front extends Object {
          * Instead of send 404 header we'll display the Error Template File
          * only if we still allowed to do it
          */
-        if( ! $this -> dispatcher -> isDispatched() &&
-            ! $this -> dispatcher -> shouldReturn() ) {
+        if( ! $this -> options -> dispatcher -> isDispatched() &&
+            ! $this -> options -> dispatcher -> shouldReturn() ) {
 
             Handlers::response( 404 );
         }
-    }
-
-    /**
-     * Set a Dispatcher Object
-     *
-     * @param \Next\Controller\Dispatcher\Dispatcher $dispatcher
-     *  Dispatcher Object
-     *
-     * @return \Next\Controller\Front
-     *  Front Controller Instance (Fluent Interface)
-     */
-    public function setDispatcher( Dispatcher $dispatcher ) {
-
-        $this -> dispatcher =& $dispatcher;
-
-        return $this;
-    }
-
-    /**
-     * Get Dispatcher Object
-     *
-     * @return \Next\Controller\Dispatcher\Dispatcher
-     *  Dispatcher Object
-     */
-    public function getDispatcher() {
-        return $this -> dispatcher;
     }
 }

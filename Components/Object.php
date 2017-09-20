@@ -44,11 +44,11 @@ use Next\Components\Interfaces\Verifiable;          # Verifiable Interface
 class Object extends Prototype implements Contextualizable, Informational, Parameterizable {
 
     /**
-     * Default Options. Must be overwritten
+     * Parameter Options Definition
      *
-     * @var array $defaultOptions
+     * @var array $parameters
      */
-    protected $defaultOptions = [];
+    protected $parameters = [];
 
     /**
      * Success Message
@@ -86,7 +86,15 @@ class Object extends Prototype implements Contextualizable, Informational, Param
     protected $options;
 
     /**
-     * Object Constructor
+     * Object Constructor.
+     *
+     * - Creates the Extended Context
+     * - Merges all Parameter Options in one
+     * - Calls \Next\Components\Interfaces\Filterable::filter if needed
+     * - Runs Additional Initialization
+     * - Calls \Next\Components\Interfaces\Verifiable::verify() if needed
+     *
+     * Phew!
      *
      * @param mixed|optional $options
      *  Child class additional options
@@ -95,7 +103,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
 
         $this -> context = new Context;
 
-        $this -> options = new Parameter( $this -> defaultOptions, $this -> setOptions(), $options );
+        $this -> options = new Parameter( $this -> parameters, $this -> setOptions(), $options );
 
         if( $this instanceof Filterable ) $this -> filter();
 
@@ -196,7 +204,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
     // Contextualizable Interface Methods Implementation
 
     /**
-     * Register a new Invoker Object to be used as context extension
+     * Registers a new Invoker Object to be used as context extension
      *
      * @param \Next\Components\Invoker $invoker
      *  Invoker Object

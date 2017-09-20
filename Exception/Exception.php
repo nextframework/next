@@ -1,23 +1,23 @@
 <?php
 
 /**
- * Extended Exception Class | Debug\Exception\Exception.php
+ * Extended Exception Class | Exception\Exception.php
  *
  * @author       Bruno Augusto
  *
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace Next\Debug\Exception;
+namespace Next\Exception;
 
 use Next\Components\Interfaces\Verifiable;    # Verifiable Interface Class
 use Next\Validate\HTTP\Headers\Code;          # HTTP Status Code Validator Class
 
 /**
  * Defines a variation of native Exception Class with native support
- * for placeholded messages and, in the future, translation
+ * for messages with placeholders and, in the future, translation
  *
- * @package    Next\Debug
+ * @package    Next\Exception
  *
  * @uses       \Exception
  */

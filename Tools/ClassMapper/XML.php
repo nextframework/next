@@ -27,11 +27,11 @@ use Next\XML\Writer;                                # XML Writer Class
 class XML extends Object implements Mapper {
 
     /**
-     * Default Options
+     * Parameter Options Definition
      *
-     * @var array $defaultOptions
+     * @var array $parameters
      */
-    protected $defaultOptions = [
+    protected $parameters = [
 
         'rootNode'          => 'map',
         'filename'          => 'map.xml',

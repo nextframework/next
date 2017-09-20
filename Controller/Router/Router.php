@@ -22,12 +22,9 @@ use Next\Application\Application;    # Application Interface
 interface Router {
 
     /**
-     * Finds a match Route
-     *
-     * @param \Next\Application\Application $application
-     *  Application to iterate Controllers
+     * Finds a matching Route for the Application -AND- current Request URI
      */
-    public function find( Application $application );
+    public function find();
 
     // Accessors
 

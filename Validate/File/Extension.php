@@ -13,9 +13,8 @@ namespace Next\Validate\File;
 use Next\Validate\Validator;             # Validator Interface
 
 use Next\Components\Object;              # Object Class
-
+use Next\FileSystem\Path;                # FileSystem Path Data-type Class
 use Next\Components\Utils\ArrayUtils;    # Array Utils Class
-use Next\File\Tools;                     # File Tools Class
 
 /**
  * File Extensions Validation Class
@@ -48,11 +47,19 @@ class Extension extends Object implements Validator {
             return TRUE;
         }
 
+        $extension = new Path(
+            [ 'value' => $this -> options -> value ]
+        );
+
+        // Unable to find an extension
+
+        if( $extension === NULL ) return FALSE;
+
         $test = ArrayUtils::search(
 
             (array) $this -> options -> acceptedFileExtensions,
 
-            Tools::getFileExtension( $this -> options -> value )
+            $extension -> getExtension() -> get()
         );
 
         return ( $test != -1 );

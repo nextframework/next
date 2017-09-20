@@ -67,7 +67,7 @@ class AlphaID implements Prototypable {
             throw new \InvalidArgumentException( 'The Decoding sequence must be a string' );
         }
 
-        return new String( $this -> encode( $integer, $index ) );
+        return new String( [ 'value' => $this -> encode( $integer, $index ) ] );
     }
 
     /**

@@ -10,8 +10,6 @@
  */
 namespace Next\View;
 
-use Next\View\Helper\Helper;    # View Helper Interface
-
 /**
  * View Interface
  *
@@ -91,73 +89,17 @@ interface View {
      */
     public function resetDefaults();
 
-    // Composite Views-related Methods
-
-    /**
-     * Add a new Composite View to be rendered
-     *
-     * @param \Next\View\View $view
-     *  Composite View to be added
-     *
-     * @param integer $priority
-     *
-     *  Priority of the Composite View
-     *
-     *  Priorities higher than this class priority,
-     *  will be prepended to Response.
-     *
-     *  Priorities lower than this class priority,
-     *  will be appended to Response
-     */
-    public function addView( View $view, $priority = 0 );
-
-    /**
-     * Set View Priority
-     *
-     * This value is only considered for Partial Views.
-     * For the Main View, the constant value is used instead
-     *
-     * Partial Views Priorities must be greater than zero
-     * and must not conflict with the value defined in the mentioned
-     * constant
-     *
-     * @param integer $priority
-     *  Partial View Priority
-     */
-    public function setPriority( $priority );
-
-    /**
-     * Get View Priority
-     */
-    public function getPriority();
-
-    /**
-     * Get Composite Views Queue Object
-     */
-    public function getCompositeQueue();
-
     // View Helper-related Methods
 
     /**
      * Register a new Template View Helper
      *
-     * @param \Next\View\Helper\Helper $helper
+     * @param \Next\View\Helper\Helper|string $helper
      *  Template View Helper
      */
-    public function registerHelper( Helper $helper );
+    public function registerHelper( $helper );
 
     // Views File-related Methods
-
-    /**
-     * Set a new default File Extension
-     *
-     * If the file extension is not specified in render() call, it will be added
-     * automatically
-     *
-     * @param string $extension
-     *  Template ViewS File Extensions
-     */
-    public function setExtension( $extension ) ;
 
     /**
      * Get default File Extension
@@ -167,38 +109,9 @@ interface View {
     // Views Path-related Methods
 
     /**
-     * Set a basepath to be prepended in Template Files Location
-     *
-     * @param string $path
-     *  Template Views Bsepath
-     */
-    public function setBasepath( $path );
-
-    /**
      * Get current Basepath
      */
     public function getBasepath();
-
-    /**
-     * Subpath for Template Views Files
-     *
-     * Subpaths are the portion of Template Views File Paths which is common in all
-     * render() calls in each Controller.
-     *
-     * Setting this, makes unnecessary repeat this "prefix" in every Template View Filename
-     *
-     * The subpath will be inserted between BasePath and current path values
-     * (from $paths), during iteration
-     *
-     * If empty, the subpath will be removed, avoiding a malformed filepath
-     *
-     * Note: Even using :subpath in FileSpec, sometimes, you have to use a manual SubPath too,
-     *       specially when your Template Files are in a different directory levels than your Controllers
-     *
-     * @param string $path
-     *  Template Views Optional Subpath
-     */
-    public function setSubpath( $path );
 
     /**
      * Get current Subpath
@@ -219,36 +132,11 @@ interface View {
     public function getPaths();
 
     /**
-     * Defines whether or not FileSpec will be used
-     * for auto-detection
-     *
-     * @param boolean $flag
-     *  Value to define
-     */
-    public function setUseFileSpec( $flag );
-
-    /**
-     * Set a FileSpec to be used
-     *
-     * @param string $spec
-     *  FileSpec for automatically find the proper Template View
-     */
-    public function setFileSpec( $spec );
-
-    /**
      * Get FileSpec definition
      */
     public function getFileSpec() ;
 
     // Template Variables-related Methods
-
-    /**
-     * Redefine Template Variables behavior
-     *
-     * @param boolean $behavior
-     *  Flag to set: TRUE, they'll be returned. FALSE they'll echoed
-     */
-    public function setVariablesBehavior( $behavior );
 
     /**
      * Get Variable Behavior
@@ -286,14 +174,6 @@ interface View {
     // Page renderer
 
     /**
-     * Set Default Template
-     *
-     * @param string $file
-     *  Default Template View File
-     */
-    public function setDefaultTemplate( $file );
-
-    /**
      * Get Default Template
      */
     public function getDefaultTemplate();
@@ -319,4 +199,9 @@ interface View {
      * Disable Rendering Process
      */
     public function disableRender();
+
+    /**
+     * (Re-)Enables Rendering process
+     */
+    public function enableRender();
 }

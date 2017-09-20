@@ -11,6 +11,11 @@
 namespace Next\Components\Types;
 
 /**
+ * InvalidArgumentException Class
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
+/**
  * Defines the Number Data-type Type and prototypes some o PHP Integer
  * functions (some in different argument order) and some external/custom
  * resources as well
@@ -19,20 +24,32 @@ namespace Next\Components\Types;
  */
 class Number extends AbstractTypes {
 
-    // Abstract Methods Implementation
+    // Verifiable Interface Method Implementation
 
     /**
-     * Check whether or not given value is acceptable by datatype class
+     * Verifies Object Integrity.
+     * Checks whether or not given value is acceptable by data-type class
      *
-     * @param mixed $value
-     *  Value to set
-     *
-     * @return boolean
-     *  TRUE if given value is a number, by checking its type is
-     *  an integer or a floating point number, and FALSE otherwise
+     * @throws Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if Parameter Option 'value' is not a number -OR- is NULL
      */
-    protected function accept( $value ) {
-        return ( is_int( $value ) || is_float( $value ) );
+    public function verify() {
+
+        if( is_null( $this -> options -> value ) ||
+                ! is_numeric( $this -> options -> value ) &&
+                    ! is_int( $this -> options -> value ) &&
+                        ! is_float( $this -> options -> value ) ) {
+
+            throw new InvalidArgumentException(
+
+                sprintf(
+
+                    'Argument <strong>%s</strong> is not a valid Number',
+
+                    ( $this -> options -> value !== NULL ? $this -> options -> value : 'NULL' )
+                )
+            );
+        }
     }
 
     // Prototypable Method Implementation
@@ -44,51 +61,57 @@ class Number extends AbstractTypes {
      */
     public function prototype() {
 
-        // Prototypes that doesn't require an initial base value to work with
+        $this -> implement( $this, 'max',  'max' )
+              -> implement( $this, 'min',  'min' );
 
-        $this -> implement( 'max',  'max'     )
-              -> implement( 'min',  'min'     )
-              -> implement( 'pow',  'pow'     )
-              -> implement( 'rand', 'mt_rand' );
+        $this -> implement( $this, 'rand',    'mt_rand',         $this -> _value )
+              -> implement( $this, 'pow',     'pow',             $this -> _value )
+              -> implement( $this, 'ceil',    'ceil',            $this -> _value )
+              -> implement( $this, 'floor',   'floor',           $this -> _value )
+              -> implement( $this, 'modulus', 'fmod',            $this -> _value )
+              -> implement( $this, 'round',   'round',           $this -> _value )
+              -> implement( $this, 'format',  'number_format',   $this -> _value );
 
-        // Prototypes that requires a value to work with
+        // Custom Functions
 
-        if( $this -> _value !== NULL ) {
+        $this -> implement(
 
-            // Native Functions
+            $this, 'compare', function( $a, $b ) {
 
-            $this -> implement( 'rand',       'mt_rand'       )
-                  -> implement( 'ceil',       'ceil'          )
-                  -> implement( 'modulus',    'fmod'          )
-                  -> implement( 'floor',      'floor'         )
-                  -> implement( 'format',     'number_format' )
-                  -> implement( 'round',      'round'         );
+                if( $a === $b ) return 0;
 
-            $value = $this -> _value;
+                return ( $a < $b ? -1 : 1 );
+            },
 
-            // Custom Functions
+            $this -> _value
+        );
 
-            $this -> implement(
+        /**
+         * Formats given file size to be more human readable, by
+         * converting bytes and adding the proper acronym
+         *
+         * ````
+         * $number = new Number( [ 'value' => 572249866.24 ] );
+         *
+         * var_dump( $number -> filesize() -> get() ); // 545.74 MB
+         * ````
+         *
+         * @see https://stackoverflow.com/a/2510459/5613506
+         */
+        $this -> implement( $this, 'filesize', function( $bytes ) {
 
-                'compare',
+            $units = [ 'B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB' ];
 
-                function( $n ) use( $value ) {
+            $bytes = max( $bytes, 0 );
+            $pow   = floor( ( $bytes ? log( $bytes ) : 0 ) / log( 1024 ) );
+            $pow   = min( $pow, count( $units ) - 1 );
 
-                    if( $value === $n ) return 0;
+            $bytes /= ( 1 << ( 10 * $pow ) );
 
-                    return ( $value < $n ? -1 : 1 );
-                }
+            return new String(
+                [ 'value' => round( $bytes, 2 ) . ' ' . $units[ $pow ] ]
             );
 
-            $this -> implement(
-
-                'format',
-
-                function( $prec = 0, $dec = '.', $ts = ',' ) use( $value ) {
-
-                    return new String( number_format( $value, $prec, $dec, $ts ) );
-                }
-            );
-        }
+        }, $this -> _value );
     }
 }

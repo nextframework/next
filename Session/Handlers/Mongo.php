@@ -23,11 +23,11 @@ use Next\Components\Object;    # Object Class
 class Mongo extends Object implements Handler {
 
     /**
-     * Session Handler Mongo DB Default Options
+     * Parameter Options Definition
      *
-     * @var array $defaultOptions
+     * @var array $parameters
      */
-    protected $defaultOptions = [
+    protected $parameters = [
         'database'  => 'Mongo',
         'savePath'  => 'mongodb://localhost:27017'
     ];

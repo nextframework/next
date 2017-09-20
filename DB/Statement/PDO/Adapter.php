@@ -10,9 +10,9 @@
  */
 namespace Next\DB\Statement\PDO;
 
+use Next\DB\Statement\Statement;             # DB Statement Interface
 use Next\DB\Statement\StatementException;    # Statement Exception Class
-
-use Next\DB\Statement\AbstractStatement;     # Statement Abstract Class
+use Next\Components\Object;                  # Object Class
 
 /**
  * PDO Statement Adapter Class
@@ -22,7 +22,16 @@ use Next\DB\Statement\AbstractStatement;     # Statement Abstract Class
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class Adapter extends AbstractStatement {
+class Adapter extends Object implements Statement {
+
+    /**
+     * Parameter Options Definition
+     *
+     * @var array $parameters
+     */
+    protected $parameters = [
+        'driver' => [ 'type' => 'Next\DB\Driver\Driver', 'required' => TRUE ],
+    ];
 
     /**
      * PDOStatement Object

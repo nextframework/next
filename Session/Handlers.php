@@ -27,6 +27,15 @@ use Next\Components\Collections\Set;            # Set Iterator Class
 class Handlers extends Object {
 
     /**
+     * Parameter Options Definition
+     *
+     * @var array $parameters
+     */
+    protected $parameters = [
+        'manager' => [ 'type' => 'Next\Session\Manager', 'required' => TRUE ]
+    ];
+
+    /**
      * Handlers Set
      *
      * @var \Next\Components\Collections\Set $handlers
@@ -41,28 +50,22 @@ class Handlers extends Object {
     private $handler;
 
     /**
-     * Session Object
+     * Session Manager Object
      *
-     * @var Session $session
+     * @var \Next\Session\Manager $manager
      */
-    private $session;
+    private $manager;
 
     /**
-     * Session Handlers Constructor
-     *
-     * @param \Next\Session\Manager $session
-     *  Session Object
-     *
-     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
-     *  Optional Configuration Options for the Session Handler
+     * Additional Initialization.
+     * Creates a new Collection set for all Session Handlers to be
+     * registered and a shortcut for \Next\Session\Manager
      */
-    public function __construct( Manager $session, $options = NULL ) {
-
-        parent::__construct( $options );
+    protected function init() {
 
         $this -> handlers = new Set;
 
-        $this -> session =& $session;
+        $this -> manager  = $this -> options -> manager;
     }
 
     /**
@@ -86,7 +89,6 @@ class Handlers extends Object {
         // Should we activate this handler right now?
 
         if( $activate !== FALSE ) {
-
             $this -> changeHandler( $handler );
         }
 
@@ -116,7 +118,6 @@ class Handlers extends Object {
             // Nothing Found?
 
             if( ! $test instanceof Handler ) {
-
                 throw HandlersException::unknownHandler( (string) $handler );
             }
 
@@ -127,14 +128,13 @@ class Handlers extends Object {
 
         // Committing Session
 
-        $this -> session -> commit();
+        $this -> manager -> commit();
 
         // Setting Session Options with Handler Options
 
         if( isset( $handler -> getOptions -> savePath ) ) {
 
-            $this -> session -> setSessionSavePath(
-
+            $this -> manager -> setSessionSavePath(
                 $handler -> getOptions -> savePath
             );
         }
@@ -143,8 +143,7 @@ class Handlers extends Object {
                         $handler -> getOptions -> lifetime : 0 );
 
         if( $lifetime > 0 ) {
-
-            $this -> session -> setSessionLifetime( $lifetime );
+            $this -> manager -> setSessionLifetime( $lifetime );
         }
 
         // Changing current Session Handler
@@ -153,7 +152,7 @@ class Handlers extends Object {
 
         // Restarting Session
 
-        $this -> session -> init( $this -> session -> getSessionName(), $this -> session -> getSessionID() );
+        $this -> manager -> init( $this -> manager -> getSessionName(), $this -> manager -> getSessionID() );
     }
 
     // Accessors

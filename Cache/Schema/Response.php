@@ -38,11 +38,11 @@ class Response extends Object implements Schema {
     const DEFAULT_CTYPE = 'text/plain';
 
     /**
-     * Default Options
+     * Parameter Options Definition
      *
-     * @var array $defaultOptions
+     * @var array $parameters
      */
-    protected $defaultOptions = [
+    protected $parameters = [
 
         'application' => [ 'type' => 'Next\Application\Application', 'required' => TRUE ],
 
@@ -200,7 +200,7 @@ class Response extends Object implements Schema {
                     );
                 }
 
-                $response -> cleanupMarkup( FALSE )
+                $response -> applyMarkupAdjustments( FALSE )
                           -> addHeader(
                                 new ContentLength(
 

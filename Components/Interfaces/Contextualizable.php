@@ -21,7 +21,7 @@ use Next\Components\Invoker;
 interface Contextualizable {
 
     /**
-     * Register a new Invoker Object to be used as context extension
+     * Registers a new Invoker Object to be used as context extension
      *
      * @param \Next\Components\Invoker $invoker
      *  Invoker Object

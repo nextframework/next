@@ -1,24 +1,24 @@
 <?php
 
 /**
- * Error Handler Controller Class | Debug\Exception\Handlers\ErrorController.php
+ * Error Handler Controller Class | Exception\Handlers\Controllers\ErrorController.php
  *
  * @author       Bruno Augusto
  *
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace Next\Debug\Exception\Handlers\Controllers;
+namespace Next\Exception\Handlers\Controllers;
 
 use Next\View\ViewException;               # View Exception
 use Next\Controller\AbstractController;    # Abstract Controller Class
 
-use Next\Debug\Handlers;                   # Next Debug Handlers Class
+use Next\Exception\Handlers;                   # Next Debug Handlers Class
 
 /**
  * A \Next\Controller\Controller Class to be used by our custom Error Handler
  *
- * @package    Next\Debug
+ * @package    Next\Exception
  *
  * @uses       Next\View\Exception, Next\Controller\AbstractController
  */

@@ -18,7 +18,7 @@ namespace Next\Components\Interfaces;
 interface Verifiable {
 
     /**
-     * Verify Object Integrity
+     * Verifies Object Integrity
      */
     public function verify();
 }

@@ -11,24 +11,42 @@
 namespace Next\Components\Types;
 
 /**
+ * InvalidArgumentException Class
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
+/**
  * Defines the Float Data-type Type
  *
  * @package    Next\Components\Types
  */
-final class Float extends Number {
+class Float extends Number {
 
-    // Abstract Methods Implementation
+    // Verifiable Interface Method Implementation
 
     /**
-     * Check whether or not given value is acceptable by datatype class
+     * Verifies Object Integrity.
+     * Checks whether or not given value is acceptable by data-type class
      *
-     * @param mixed $value
-     *  Value to set
-     *
-     * @return boolean
-     *  TRUE if given value is of the type integer and FALSE otherwise
+     * @throws Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if Parameter Option 'value' is not a float -OR- is NULL
      */
-    protected function accept( $value ) {
-        return ( is_float( $value ) && ! is_int( $value ) );
+    public function verify() {
+
+        parent::verify();
+
+        if( ! is_float( $this -> options -> value ) ||
+                is_int( $this -> options -> value ) ) {
+
+            throw new InvalidArgumentException(
+
+                sprintf(
+
+                    'Argument <strong>%s</strong> is not a valid Float',
+
+                    ( $this -> options -> value !== NULL ? $this -> options -> value : 'NULL' )
+                )
+            );
+        }
     }
 }

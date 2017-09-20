@@ -31,18 +31,14 @@ use Next\DB\Table\RowSet;                       # RowSet Class
 class Manager extends Object {
 
     /**
-     * Connection Driver
+     * Parameter Options Definition
      *
-     * @var \Next\DB\Driver\Driver $driver
+     * @var array $parameters
      */
-    private $driver;
-
-    /**
-     * Table Object
-     *
-     * @var \Next\DB\Table\Table $table
-     */
-    private $table;
+    protected $parameters = [
+        'driver' => [ 'type' => 'Next\DB\Driver\Driver', 'required' => TRUE ],
+        'table'  => [ 'type' => 'Next\DB\Table\Table',   'required' => FALSE, 'default' => NULL ]
+    ];
 
     /**
      * Query Builder
@@ -59,7 +55,7 @@ class Manager extends Object {
     private $repositories;
 
     /**
-     * Data Source
+     * Data-source
      *
      * An associative array where the keys are Table Columns and
      * their associated values
@@ -69,34 +65,16 @@ class Manager extends Object {
     private $source = NULL;
 
     /**
-     * Table Manager Constructor
-     *
-     * @param \Next\DB\Driver\Driver $driver
-     *  Connection Driver
-     *
-     * @param \Next\DB\Table\Table|optional $table
-     *  An optional Table Object. Required for most of CRUD operations,
-     *  optional for Entity Managers (assuming they inject their own)
-     *
-     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
-     *  Optional Configuration Options for the Table Manager
+     * Additional Initialization.
+     * Prepares initial data-source, initializes Repositories Collection
+     * and the Query Builder extending Manager's Context to it
      */
-    public function __construct( Driver $driver, Table $table = NULL, $options = NULL ) {
-
-        parent::__construct( $options );
-
-        // Setting Up resources
-
-        $this -> driver =& $driver;
-
-        $this -> table  =& $table;
-
-        $this -> builder = new Builder( $driver -> getRenderer() );
+    protected function init() {
 
         $this -> repositories = new Repositories;
 
         /**
-         * @internal Data Source
+         * @internal Data-source
          *
          * By default Table Manager will work with original Table Fields.
          *
@@ -104,7 +82,13 @@ class Manager extends Object {
          * work with RowSet Fields computed from the difference between
          * original fields and modified fields
          */
-        if( ! is_null( $table ) ) $this -> source = array_filter( $table -> getFields() );
+        if( ! is_null( $this -> options -> table ) ) {
+            $this -> source = array_filter( $this -> options -> table -> getFields() );
+        }
+
+        $this -> builder = new Builder(
+            [ 'manager' => $this, 'renderer' => $this -> options -> driver -> getRenderer() ]
+        );
 
         // Extend Object Context to QueryBuilder Class
 
@@ -112,7 +96,7 @@ class Manager extends Object {
     }
 
     /**
-     * Cleanup available Repositories when Table Manager is cloned
+     * Clean-up available Repositories when Table Manager is cloned
      *
      * @return void
      */
@@ -122,10 +106,10 @@ class Manager extends Object {
     }
 
     /**
-     * Set Data Source
+     * Set Data-source
      *
      * @param array $source
-     *  Data Source
+     *  Data-source
      *
      * @return \Next\DB\Table\Manager
      *  Table Manager Object (Fluent Interface)
@@ -174,7 +158,7 @@ class Manager extends Object {
 
         $data = $this -> execute() -> fetch( $fetchStyle, array_slice( func_get_args(), 1 ) );
 
-        $rowset = new RowSet( $this, ( $data !== FALSE ? [ $data ] : [] ) );
+        $rowset = new RowSet( [ 'manager' => $this, 'source' => ( $data !== FALSE ? [ $data ] : [] ) ] );
 
         $this -> flush();
 
@@ -197,7 +181,7 @@ class Manager extends Object {
 
         $data = $this -> execute() -> fetchAll( func_get_args() );
 
-        $rowset = new RowSet( $this, ( $data !== FALSE ? $data : [] ) );
+        $rowset = new RowSet( [ 'manager' => $this, 'source' => ( $data !== FALSE ? $data : [] ) ] );
 
         $this -> flush();
 
@@ -244,13 +228,13 @@ class Manager extends Object {
             throw TableException::nothingToInsert();
         }
 
-        $this -> builder -> insert( $this -> table -> getTableName(), $this -> source );
+        $this -> builder -> insert( $this -> options -> table -> getTableName(), $this -> source );
 
         // Executing and returning the Last Insert ID...
 
         $this -> execute();
 
-        return $this -> driver -> getConnection() -> lastInsertId( $name );
+        return $this -> options -> driver -> getConnection() -> lastInsertId( $name );
     }
 
     /**
@@ -270,7 +254,7 @@ class Manager extends Object {
             throw TableException::nothingToUpdate();
         }
 
-        $this -> builder -> update( $this -> table -> getTableName(), $this -> source );
+        $this -> builder -> update( $this -> options -> table -> getTableName(), $this -> source );
 
         // Registering Placeholders Replacements
 
@@ -287,7 +271,7 @@ class Manager extends Object {
      */
     public function delete() {
 
-        $this -> builder -> delete( $this -> table -> getTableName() );
+        $this -> builder -> delete( $this -> options -> table -> getTableName() );
 
         return $this;
     }
@@ -299,7 +283,10 @@ class Manager extends Object {
      *  Table Manager Object (Fluent-Interface)
      */
     public function reset() {
-        return new Manager( $this -> driver, $this -> table );
+
+        return new Manager(
+            [ 'driver' => $this -> options -> driver, 'table' => $this -> options -> table ]
+        );
     }
 
     /**
@@ -328,7 +315,7 @@ class Manager extends Object {
      */
     public function setTable( Table $table ) {
 
-        $this -> table = $table;
+        $this -> options -> table = $table;
 
         $this -> source = array_filter( $table -> getFields() );
 
@@ -356,7 +343,7 @@ class Manager extends Object {
     public function addRepository( $repository, $alias = NULL ) {
 
         $this -> repositories -> addRepository(
-            $repository, $alias, new Manager( $this -> driver )
+            $repository, $alias, $this
         );
 
         return $this;
@@ -407,14 +394,14 @@ class Manager extends Object {
      *  Table Object
      */
     public function getTable() {
-        return $this -> table;
+        return $this -> options -> table;
     }
 
     /**
-     * Get Data Source
+     * Get Data-source
      *
      * @return array
-     *  Data Source
+     *  Data-source
      */
     public function getSource() {
         return $this -> source;
@@ -427,7 +414,7 @@ class Manager extends Object {
      *  Connection Driver
      */
     public function getDriver() {
-        return $this -> driver;
+        return $this -> options -> driver;
     }
 
     /**
@@ -466,7 +453,7 @@ class Manager extends Object {
 
         try {
 
-            $stmt = $this -> driver -> prepare( $query );
+            $stmt = $this -> options -> driver -> prepare( $query );
 
         } catch( DriverException $e ) {
 

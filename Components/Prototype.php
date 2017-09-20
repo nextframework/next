@@ -10,8 +10,15 @@
  */
 namespace Next\Components;
 
+use Next\Components\Types\Type;                 # Data-type Interface
 use Next\Components\Interfaces\Prototypical;    # Prototypical Interface
 use Next\Components\Interfaces\Prototypable;    # Prototypable Interface
+
+/**
+ * InvalidArgumentException Class
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
 use Next\Components\Utils\ArrayUtils;           # ArrayUtils Class
 
 /**
@@ -32,6 +39,9 @@ abstract class Prototype implements Prototypical {
     /**
      * Implement a new callable resource, prototyping it to Object
      *
+     * @param \Next\Components\Object|string
+     *  The name of the Object receiving the prototyped resource
+     *
      * @param string $name
      *  Callable resource name. Should be unique
      *
@@ -44,9 +54,11 @@ abstract class Prototype implements Prototypical {
      * @return \Next\Components\Prototype
      *  Prototype Instance (Fluent Interface)
      */
-    public function implement( $name, $callable, $args = [] ) {
+    public function implement( $prototype, $name, $callable, $args = [] ) {
 
-        self::$prototypes[ (string) $name ] = [ $callable, (array) $args ];
+        $prototype = ( is_object( $prototype ) ? get_class( $prototype ) : (string) $prototype );
+
+        self::$prototypes[ $prototype ][ (string) $name ] = [ $callable, (array) $args ];
 
         return $this;
     }
@@ -54,8 +66,8 @@ abstract class Prototype implements Prototypical {
     /**
      * Invoke a prototyped resource from a caller context
      *
-     * @param \Next\Components\Object $caller
-     *  Caller Object
+     * @param \Next\Components\Object|string $caller
+     *  Caller Object name.
      *
      * @param string $method
      *  Callable resource name
@@ -63,56 +75,67 @@ abstract class Prototype implements Prototypical {
      * @param array $args
      *  Calling Arguments
      *
-     * @return \Next\Components\Object
-     *  Caller Object updated
+     * @return mixed
+     *  If Caller Object is an instance of \Next\Components\Types\Type
+     *  -AND- the Prototype Call results in something the Caller Object
+     *  accepts — i.e Caller Object is an instance of
+     *  \Next\Components\Types\String Type and the result is also a
+     *  string — a new copy of the Caller Object is returned but with
+     *  the resulting value.
+     *
+     *  If an \Next\Exception\Exceptions\InvalidArgumentException
+     *  is caught — meaning the data-type class didn't accept the
+     *  result of the Prototyped resource — the resulting value is
+     *  returned "as is"
+     *
+     *  If the the result is not an instance of \Next\Components\Types\Type
+     *  it'll be returned "as is" as well
      *
      * @throws \Next\Components\Debug\Exception
      *  Called resource is not known as a prototype nor as a extended method
      */
-    public function call( Object $caller, $method, array $args = [] ) {
+    public static function call( $caller, $method, array $args = [] ) {
 
-        if( isset( self::$prototypes[ $method ] ) ) {
+        $prototype = ( is_object( $caller ) ? get_class( $caller ) : (string) $caller );
+
+        if( isset( self::$prototypes[ $prototype ][ $method ] ) ) {
 
             // Merging always optional arguments with called arguments
 
             if( count( $args ) > 0 ) {
 
-                ArrayUtils::insert( self::$prototypes[ $method ][ 1 ], $args );
+                ArrayUtils::insert( self::$prototypes[ $prototype ][ $method ][ 1 ], $args );
 
             } else {
 
                 // Nothing to Merge? OK!
 
-                $args = self::$prototypes[ $method ][ 1 ];
+                $args = self::$prototypes[ $prototype ][ $method ][ 1 ];
             }
 
-            if( self::$prototypes[ $method ][ 0 ] instanceof Prototypable ) {
+            if( self::$prototypes[ $prototype ][ $method ][ 0 ] instanceof Prototypable ) {
 
-                $result = self::$prototypes[ $method ][ 0 ] -> prototype( $args );
+                $result = self::$prototypes[ $prototype ][ $method ][ 0 ] -> prototype( $args );
 
             } else {
 
                 $result = call_user_func_array(
-
-                    self::$prototypes[ $method ][ 0 ], $args
+                    self::$prototypes[ $prototype ][ $method ][ 0 ], $args
                 );
             }
 
-            /**
-             * @internal
-             *
-             * If operation results in an Object or in a scalar,
-             * let's return it as is
-             *
-             * This ensures operations of one type can return a different type
-             */
-            if( $result instanceof Object || ! is_scalar( $result ) ) {
-                return $result;
+            if( $caller instanceof Type ) {
+
+                try {
+
+                    return new $caller( [ 'value' => $result ] );
+
+                } catch( InvalidArgumentException $e ) {
+                    return $result;
+                }
             }
 
-            // Otherwise let's update caller Object
-
-            return new $caller( $result );
+            return $result;
         }
 
         throw \Next\Components\Debug\Exception::wrongUse(

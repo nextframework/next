@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Errors and Exception Handlers Application Class | Debug\Exception\Handlers\HandlersApplication.php
+ * Errors and Exception Handlers Application Class | Exception\Handlers\HandlersApplication.php
  *
  * @author       Bruno Augusto
  *
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace Next\Debug\Exception\Handlers;
+namespace Next\Exception\Handlers;
 
 use Next\Application\AbstractApplication;    # Abstract Application Class
 use Next\View\Standard as View;              # View Engine
@@ -16,7 +16,7 @@ use Next\View\Standard as View;              # View Engine
 /**
  * A \Next\Application\Application for our custom Error and Exception Handlers
  *
- * @package    Next\Debug
+ * @package    Next\Exception
  *
  * @uses       Next\Application\AbstractApplication, Next\View\Standard
  */
@@ -27,10 +27,11 @@ class HandlersApplication extends AbstractApplication {
      */
     public function setupView() {
 
-        $this -> view = new View( $this );
-
-        $this -> view -> setBasepath(
-            sprintf( '%s/Views', dirname( __FILE__ ) )
+        return new View(
+            [
+                'application' => $this,
+                'basepath'    => sprintf( '%s/Views', __DIR__ )
+            ]
         );
     }
 

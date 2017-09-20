@@ -65,7 +65,7 @@ class Manager {
      * Session Constructor
      */
     private function __construct() {
-        $this -> handlers = new Handlers( $this );
+        $this -> handlers = new Handlers( [ 'manager' => $this ] );
     }
 
     /**
@@ -165,7 +165,9 @@ class Manager {
 
         // Initializing the Default Session Environment
 
-        $this -> environment = new Environment( session_name(), TRUE );
+        $this -> environment = new Environment(
+            [ 'name' => session_name(), 'initializaing' => TRUE ]
+        );
     }
 
     /**

@@ -24,11 +24,11 @@ use Next\Components\Object;     # Object Class
 class Currency extends Object implements Validator {
 
     /**
-     * Currency Validator Default Options
+     * Parameter Options Definition
      *
      * @var array $defaulOptions
      */
-    protected $defaultOptions = [
+    protected $parameters = [
 
         /**
          * @internal

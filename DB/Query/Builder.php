@@ -10,12 +10,12 @@
  */
 namespace Next\DB\Query;
 
-use Next\Components\Object;             # Object Class
-use Next\Components\Invoker;            # Invoker Class
+use Next\Components\Object;              # Object Class
+use Next\Components\Invoker;             # Invoker Class
 
-use Next\DB\Query\Renderer\Renderer;    # Query Renderer
+use Next\Components\Utils\ArrayUtils;    # Array Utils Class
 
-use Next\DB\Table\Manager;                # Table Manager Object
+use Next\DB\Table\Manager;               # Table Manager Object
 
 /**
  * Defines the Query Builder Object responsible to assemble a
@@ -26,22 +26,14 @@ use Next\DB\Table\Manager;                # Table Manager Object
 class Builder extends Object {
 
     /**
-     * Query Renderer
+     * Parameter Options Definition
      *
-     * @var \Next\DB\Query\Renderer\Renderer
+     * @var array $parameters
      */
-    private $renderer;
-
-    /**
-     * Table Manager Object
-     * Injected through Extended Context from \Next\DB\Table\Manager::__construct()
-     *
-     * @var \Next\DB\Table\Manager
-     *
-     * @see \Next\DB\Table\Manager::__construct()
-     * @see \Next\Components\Context::extend()
-     */
-    protected $_manager;
+    protected $parameters = [
+        'manager' => [ 'type' => 'Next\DB\Table\Manager', 'required' => TRUE ],
+        'renderer' => [ 'type' => 'Next\DB\Query\Renderer\Renderer', 'required' => TRUE ]
+    ];
 
     /**
      * Built Query
@@ -120,22 +112,6 @@ class Builder extends Object {
      */
     private $limit = [];
 
-    /**
-     * Table Select Constructor
-     *
-     * @param \Next\DB\Query\Renderer $renderer
-     *  Query Renderer to be used
-     *
-     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
-     *  Optional Configuration Options for the Query Builder
-     */
-    public function __construct( Renderer $renderer, $options = NULL ) {
-
-        parent::__construct( $options );
-
-        $this -> renderer = $renderer;
-    }
-
     // CRUD-related methods
 
     /**
@@ -152,7 +128,11 @@ class Builder extends Object {
      */
     public function insert( $table, array $fields ) {
 
-        $this -> query = $this -> renderer -> insert( $table, array_keys( $fields ) );
+        $this -> query = $this -> options
+                               -> renderer
+                               -> insert(
+                                    $table, array_keys( $fields )
+                                );
 
         $this -> addReplacements( $fields );
 
@@ -173,7 +153,11 @@ class Builder extends Object {
      */
     public function update( $table, array $fields ) {
 
-        $this -> query = $this -> renderer -> update( $table, array_keys( $fields ) );
+        $this -> query = $this -> options
+                               -> renderer
+                               -> update(
+                                    $table, array_keys( $fields )
+                                );
 
         $this -> addReplacements( $fields );
 
@@ -191,7 +175,9 @@ class Builder extends Object {
      */
     public function delete( $table ) {
 
-        $this -> query = $this -> renderer -> delete( $table );
+        $this -> query = $this -> options
+                               -> renderer
+                               -> delete( $table );
 
         return $this;
     }
@@ -257,7 +243,9 @@ class Builder extends Object {
             array_map(
 
                 function( $column ) {
-                    return ( $column instanceof Expression ? $column : trim( $column ) );
+
+                    return ( $column instanceof Expression ?
+                        $column : trim( $column ) );
                 },
 
                 $columns
@@ -281,7 +269,9 @@ class Builder extends Object {
          * as index (or property)
          */
         foreach( $columns as $alias => $column ) {
-            $this -> columns[] = $this -> renderer -> columns( $column, $alias );
+            $this -> columns[] = $this -> options
+                                       -> renderer
+                                       -> columns( $column, $alias );
         }
 
         return $this;
@@ -298,7 +288,8 @@ class Builder extends Object {
      */
     public function from( $tables = [] ) {
 
-        $tablename = $this -> _manager -> getTable() -> getTableName();
+        $tablename = $this -> options
+                           -> manager -> getTable() -> getTableName();
 
         /**
          * @internal
@@ -350,7 +341,9 @@ class Builder extends Object {
                 }
             }
 
-            $this -> tables[] = $this -> renderer -> from( $alias, $table );
+            $this -> tables[] = $this -> options
+                                      -> renderer
+                                      -> from( $alias, $table );
         }
 
         /**
@@ -358,7 +351,7 @@ class Builder extends Object {
          * Assembling Query
          * From this point all SQL is a Clause
          */
-        $this -> query = $this -> renderer -> select(
+        $this -> query = $this -> options -> renderer -> select(
             $this -> columns, $this -> tables, $this -> distinct
         );
 
@@ -470,7 +463,10 @@ class Builder extends Object {
                 // Replacing `$key` occurrences found in `$condition`
 
                 $this -> where[ $type ][] = str_replace(
-                    sprintf( ':%s', $key ), sprintf( ':%s_%s', $key, $uniqid ), $condition
+
+                    sprintf( ':%s', $key ),
+
+                    sprintf( ':%s_%s', $key, $uniqid ), $condition
                 );
 
                 // Adding a modified version of Replacements List for Query Renderer
@@ -521,9 +517,12 @@ class Builder extends Object {
      */
     public function join( $table, $on, $type = Query::INNER_JOIN ) {
 
-        $table = ( is_array( $table ) ? array_slice( $table, 0, 1 ) : $table );
+        $table = ( is_array( $table ) ?
+                    array_slice( $table, 0, 1 ) : $table );
 
-        $this -> joins[] = $this -> renderer -> join( $table, $on, $type );
+        $this -> joins[] = $this -> options
+                                 -> renderer
+                                 -> join( $table, $on, $type );
 
         return $this;
     }
@@ -568,7 +567,9 @@ class Builder extends Object {
      */
     public function group( $fields ) {
 
-        $this -> group = array_filter( array_map( 'trim', (array) $fields ) );
+        $this -> group = array_filter(
+            array_map( 'trim', (array) $fields )
+        );
 
         return $this;
     }
@@ -596,9 +597,10 @@ class Builder extends Object {
 
             $this -> order[] = $field;
 
-        } else {
-            $this -> order[] = ( is_array( $field ) ? $field : [ $field => $type ] );
+            return $this;
         }
+
+        $this -> order[] = ( is_array( $field ) ? $field : [ $field => $type ] );
 
         return $this;
     }
@@ -645,23 +647,38 @@ class Builder extends Object {
         }
 
         if( count( $this -> where ) > 0 ) {
-            $this -> query .= $this -> renderer -> where( $this -> where );
+
+            $this -> query .= $this -> options
+                                    -> renderer
+                                    -> where( $this -> where );
         }
 
         if( count( $this -> group ) > 0 ) {
-            $this -> query .= $this -> renderer -> group( $this -> group );
+
+            $this -> query .= $this -> options
+                                    -> renderer
+                                    -> group( $this -> group );
         }
 
         if( count( $this -> having ) > 0 ) {
-            $this -> query .= $this -> renderer -> having( $this -> having );
+
+            $this -> query .= $this -> options
+                                    -> renderer
+                                    -> having( $this -> having );
         }
 
         if( count( $this -> order ) > 0 ) {
-            $this -> query .= $this -> renderer -> order( $this -> order );
+
+            $this -> query .= $this -> options
+                                    -> renderer
+                                    -> order( $this -> order );
         }
 
         if( count( $this -> limit ) > 0 ) {
-            $this -> query .= $this -> renderer -> limit( $this -> limit );
+
+            $this -> query .= $this -> options
+                                    -> renderer
+                                    -> limit( $this -> limit );
         }
 
         return $this -> query;
@@ -702,7 +719,7 @@ class Builder extends Object {
      */
     public function addReplacements( $replacements ) {
 
-        $this -> replacements = \Next\Components\Utils\ArrayUtils::union(
+        $this -> replacements = ArrayUtils::union(
             $this -> replacements, (array) $replacements
         );
 
@@ -722,21 +739,21 @@ class Builder extends Object {
      */
     public function reset() {
 
-        $this -> query = NULL;
+        $this -> query        = NULL;
         $this -> replacements = [];
 
-        $this -> columns = [];
-        $this -> tables = [];
+        $this -> columns      = [];
+        $this -> tables       = [];
 
-        $this -> distinct = FALSE;
+        $this -> distinct     = FALSE;
 
-        $this -> where = [];
-        $this -> joins = [];
-        $this -> having = [];
+        $this -> where        = [];
+        $this -> joins        = [];
+        $this -> having       = [];
 
-        $this -> group = NULL;
-        $this -> order = [];
-        $this -> limit = [];
+        $this -> group        = NULL;
+        $this -> order        = [];
+        $this -> limit        = [];
 
         return $this;
     }
@@ -748,6 +765,6 @@ class Builder extends Object {
      *  Entity Manager
      */
     public function getManager() {
-        return $this -> _manager;
+        return $this -> options -> manager;
     }
 }

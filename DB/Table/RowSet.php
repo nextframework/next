@@ -10,7 +10,8 @@
  */
 namespace Next\DB\Table;
 
-use Next\Components\Utils\ArrayUtils;
+use Next\Components\Object;              # Object Class
+use Next\Components\Utils\ArrayUtils;    # ArrayUtils Class
 
 /**
  * Table RowSet Class
@@ -20,7 +21,32 @@ use Next\Components\Utils\ArrayUtils;
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
+class RowSet extends Object implements DataGateway, \Iterator, \ArrayAccess {
+
+    /**
+     * Parameter Options Definition
+     *
+     * @var array $parameters
+     */
+    protected $parameters = [
+        'manager' => [ 'type' => 'Next\DB\Table\Manager', 'required' => TRUE ],
+        'source'  => [ 'required' => FALSE, 'default' => [] ]
+    ];
+
+    /**
+     * Data-source built with \Next\DB\Table\Table Objects for each
+     * record present on original source passed as Parameter Option
+     *
+     * @var array $source
+     */
+    protected $source = [];
+
+    /**
+     * Total of \Next\DB\Table\Table Objects in data-source built
+     *
+     * @var integer $total
+     */
+    protected $total;
 
     /**
      * Iterator Offset
@@ -28,6 +54,21 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
      * @var integer
      */
     private $offset = 0;
+
+    /**
+     * Additional Initialization.
+     * Sets up provided data-source
+     *
+     * @see \Next\DB\Table\RouSwt::setSource()
+     */
+    protected function init() {
+
+        // Setting Up the Source Data
+
+        $this -> setSource( $this -> options -> source );
+
+        $this -> total = count( $this );
+    }
 
     // DataGateway Interface Methods
 
@@ -45,17 +86,17 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
 
             // Adding updated model as Table Manager Source
 
-            $this -> manager -> setTable( $records );
+            $this -> options -> manager -> setTable( $records );
 
             // Adding WHERE Clause based on PRIMARY KEY
 
             $primary = $records -> getPrimaryKey();
 
-            $this -> manager -> where(
+            $this -> options -> manager -> where(
                 sprintf( '%1$s = :%1$s', $primary ), [ $primary => $records -> {$primary} ]
             );
 
-            $count += $this -> manager -> update() -> rowCount();
+            $count += $this -> options -> manager -> update() -> rowCount();
         }
 
         return $count;
@@ -77,48 +118,48 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
 
             $primary = $records -> getPrimaryKey();
 
-            $this -> manager -> where(
+            $this -> options -> manager -> where(
                 sprintf( '%1$s = :%1$s', $primary ), [ $primary => $records -> {$primary} ]
             );
 
-            $count += $this -> manager -> delete() -> rowCount();
+            $count += $this -> options -> manager -> delete() -> rowCount();
         }
 
         return $count;
     }
 
-    // Method Overwriting
+    // DataGateway Interface Methods Implementation
 
     /**
-     * Set Data Source from different sources
+     * Get Data-source
      *
-     * @param mixed|array|object $source
-     *  Source Data
-     *
-     * @return void
+     * @return array
+     *  Data-source
      */
-    protected function setSource( $source ) {
+    public function getSource() {
+        return ( $this -> total == 1 ? $this -> source[ 0 ] : $this -> source );
+    }
 
-        foreach( $source as $data ) {
+    /**
+     * Get a copy of Data-source as array
+     *
+     * @return array
+     *  Data-source as array
+     */
+    public function getArrayCopy() {
+        return ArrayUtils::map( $this -> source );
+    }
 
-            $table = $this -> manager -> getTable() -> getClass() -> newInstance();
+    // Countable Interface Method Implementation
 
-            /**
-             * @internal
-             *
-             * Adding PRIMARY KEY value
-             *
-             * The value used will be the first value among all fetched data
-             * because, usually, the PRIMARY KEY is listed first
-             */
-            $table -> setPrimaryKey(
-                current( array_slice( (array) $data, 0, 1, TRUE ) )
-            );
-
-            foreach( (array) $data as $column => $value ) $table -> {$column} = $value;
-
-            $this -> source[] = $table;
-        }
+    /**
+     * Count elements on Data-source
+     *
+     * @return integer
+     *  Number of elements in RowSet
+     */
+    public function count() {
+        return ( $this -> total === NULL ? count( $this -> source ) : $this -> total );
     }
 
     // Iterator Interface Methods Implementation
@@ -170,7 +211,7 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
     // ArrayAccess Interface Methods Implementation
 
     /**
-     * Checks whether or not an offset exists within the RowSet Data Source
+     * Checks whether or not an offset exists within the RowSet Data-source
      *
      * @param mixed|string|integer $offset
      *  Offset to search
@@ -179,19 +220,12 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
      *  TRUE if given offset exists and FALSE otherwise
      *
      * @throws \Next\DB\Table\DataGatewayException
-     *  Thrown if trying to remove data from an empty \Next\DB\Table\Table
-     *
-     * @throws \Next\DB\Table\DataGatewayException
      *  Thrown if trying to test data of a \Next\DB\Table\Table
      *  from a RowSet with multiple records
      */
     public function offsetExists( $offset ) {
 
-        $length = count( $this -> source );
-
-        if( $length ==  0 ) throw DataGatewayException::emptyDataSource();
-
-        if( $length > 1 ) {
+        if( $this -> total > 1 ) {
             throw DataGatewayException::accessViolation();
         }
 
@@ -199,7 +233,7 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
     }
 
     /**
-     * Returns the value stored at given offset in the RowSet Data Source
+     * Returns the value stored at given offset in the RowSet Data-source
      *
      * @param mixed|string|integer $offset
      *  Offset to retrieve data from
@@ -208,19 +242,12 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
      *  Data stored at given offset if it exists and FALSE otherwise
      *
      * @throws \Next\DB\Table\DataGatewayException
-     *  Thrown if trying to access data from an empty \Next\DB\Table\Table
-     *
-     * @throws \Next\DB\Table\DataGatewayException
      *  Thrown if trying to access data of a \Next\DB\Table\Table column
      *  from a RowSet with multiple records
      */
     public function offsetGet( $offset ) {
 
-        $length = count( $this -> source );
-
-        if( $length ==  0 ) throw DataGatewayException::emptyDataSource();
-
-        if( $length > 1 ) {
+        if( $this -> total > 1 ) {
             throw DataGatewayException::accessViolation();
         }
 
@@ -232,7 +259,7 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
     }
 
     /**
-     * Assign a value to the specified offset in the RowSet Data Source
+     * Assign a value to the specified offset in the RowSet Data-source
      *
      * @param mixed|string|integer $offset
      *  Offset where new data will be stored
@@ -246,7 +273,7 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
      */
     public function offsetSet( $offset, $data ) {
 
-        if( count( $this -> source ) > 1 ) {
+        if( $this -> total > 1 ) {
             throw DataGatewayException::accessViolation();
         }
 
@@ -254,13 +281,10 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
     }
 
     /**
-     * Removes an Object from RowSet Data Source at given offset
+     * Removes an Object from RowSet Data-source at given offset
      *
      * @param mixed|string|integer $offset
      *  Offset to unset
-     *
-     * @throws \Next\DB\Table\DataGatewayException
-     *  Thrown if trying to remove data from an empty \Next\DB\Table\Table
      *
      * @throws \Next\DB\Table\DataGatewayException
      *  Thrown if trying to remove data of a \Next\DB\Table\Table
@@ -268,11 +292,7 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
      */
     public function offsetUnset( $offset ) {
 
-        $length = count( $this -> source );
-
-        if( $length ==  0 ) throw DataGatewayException::emptyDataSource();
-
-        if( $length > 1 ) {
+        if( $this -> total > 1 ) {
             throw DataGatewayException::accessViolation();
         }
 
@@ -283,6 +303,7 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
 
     /**
      * @internal
+     *
      * Overloading
      *
      * Allows direct manipulation of records when the RowSet has only one entry
@@ -347,5 +368,39 @@ class RowSet extends AbstractDataGateway implements \Iterator, \ArrayAccess {
      */
     public function __unset( $column ) {
         $this -> offsetUnset( $column );
+    }
+
+    // Auxiliary Methods
+
+    /**
+     * Set Data-source from different sources
+     *
+     * @param mixed|array|object $source
+     *  Source Data
+     *
+     * @return void
+     */
+    private function setSource( $source ) {
+
+        foreach( $source as $data ) {
+
+            $table = $this -> options -> manager -> getTable() -> getClass() -> newInstance();
+
+            /**
+             * @internal
+             *
+             * Adding PRIMARY KEY value
+             *
+             * The value used will be the first value among all fetched data
+             * because, usually, the PRIMARY KEY is listed first
+             */
+            $table -> setPrimaryKey(
+                current( array_slice( (array) $data, 0, 1, TRUE ) )
+            );
+
+            foreach( (array) $data as $column => $value ) $table -> {$column} = $value;
+
+            $this -> source[] = $table;
+        }
     }
 }

@@ -19,18 +19,4 @@ use Next\Components\Interfaces\Prototypable;    # Prototypable Resource Class
  *
  * @package    Next\Components\Types
  */
-interface Type extends Prototypable {
-
-    /**
-     * Set value
-     *
-     * @param mixed $value
-     *  Value to set
-     */
-    public function set( $value );
-
-    /**
-     * Get value
-     */
-    public function get();
-}
+interface Type extends Prototypable {}

@@ -10,7 +10,14 @@
  */
 namespace Next\Components;
 
-use Next\Components\Interfaces\Verifiable;
+use Next\Components\Interfaces\Verifiable;    # Verifiable Interface
+
+/**
+ * Custom Exception Classes
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+use Next\Exception\Exceptions\LogicException;
+use Next\Exception\Exceptions\UnexpectedValueException;
 
 /**
  * Defines a data-structure for Class Options as part of the Parameterizable Concept
@@ -157,7 +164,7 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
 
                     if( ! $value instanceof $this -> parameters -> {$name} -> type ) {
 
-                        throw Exception\InvalidArgumentException::type(
+                        throw InvalidArgumentException::type(
                             $name, $this -> parameters -> {$name} -> type
                         );
                     }
@@ -185,7 +192,7 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
     /**
      * Verify Parameter Options Integrity
      *
-     * @throws Next\Components\Exception\LogicException
+     * @throws Next\Exception\Exceptions\LogicException
      *  Thrown if a Parameter Option marked as 'required' wasn't
      *  overwrote with the real value
      */
@@ -194,7 +201,7 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
         foreach( $this-> parameters as $name => $parameter ) {
 
             if( isset( $parameter -> required ) && $parameter -> required !== FALSE ) {
-                throw Exception\LogicException::missing( $name );
+                throw LogicException::missing( $name );
             }
         }
     }
@@ -256,7 +263,7 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
 
             if( $na > 0 && $ni > 0 ) {
 
-                throw ComponentsException::mapping(
+                throw InvalidArgumentException::mapping(
                     'Mixed associative and indexed content is not allowed'
                 );
             }
@@ -414,23 +421,32 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
 
             if( isset( $parameter -> type ) ) {
 
-                $default = $parameter -> default;
-
-                /**
-                 * @internal
-                 *
-                 * If default value is NULL then... it's NULL
-                 */
-                if( $default === NULL ) {
+                if( ! isset( $parameter -> default ) || ( $default = $parameter -> default ) === NULL ) {
                     $this -> parameters -> {$name} = NULL; continue;
                 }
 
                 try {
 
-                    $this -> parameters -> {$name} = new $parameter -> type( $default );
+                    $reflector = new \ReflectionClass( $parameter -> type );
+
+                    if( $reflector -> isInstantiable() ) {
+                        $this -> parameters -> {$name} = new $parameter -> type( $default );
+                    } else {
+                        $this -> parameters -> {$name} = $default;
+                    }
+
+                } catch( \ReflectionException $e ) {
+
+                    $this -> parameters -> {$name} = $default;
 
                 } catch( \Exception $e ) {
-                    throw Exception\UnexpectedValueException::rethrow( $e );
+                    throw UnexpectedValueException::rethrow( $e );
+                }
+
+            } else {
+
+                if( isset( $parameter -> default ) ) {
+                    $this -> parameters -> {$name} = $parameter -> default;
                 }
             }
         }

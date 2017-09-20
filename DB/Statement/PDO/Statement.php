@@ -35,7 +35,7 @@ class Statement extends \PDOStatement {
      * @param \Next\DB\Statement\Statement $adapter
      *  Statement Adapter
      */
-    private function __construct( StatementInterface $adapter ) {
+    protected function __construct( StatementInterface $adapter ) {
 
         $adapter -> setStatement( $this );
 

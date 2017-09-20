@@ -12,6 +12,7 @@ namespace Next\File\Upload\Methods;
 
 use Next\File\Upload\UploadException;    # Upload Exception Class
 
+use Next\Components\Types\Number;        # Number Data-type Class
 use Next\Components\Utils\ArrayUtils;    # Array Utils Class
 use Next\File\Tools;                     # File Tools Class
 
@@ -119,11 +120,13 @@ class Post extends AbstractMethod {
 
                 $errOffset = ( array_key_exists( $error, $this -> errorMessages ) ? $error : 'UNKNOWN' );
 
+                $size = new Number( [ 'value' => $size ] );
+
                 $this -> failed = [
 
-                    'name' => $name, 'size' => Tools::readableFilesize( $size ), 'type' => $type,
+                    'name' => $name, 'size' => $size -> filesize() -> get(),
 
-                    'reason' => $this -> errorMessages[ $errOffset ],
+                    'type' => $type, 'reason' => $this -> errorMessages[ $errOffset ],
                 ];
             }
         }
@@ -157,7 +160,7 @@ class Post extends AbstractMethod {
 
         $this -> fix( $file, $size, $type, $temp );
 
-        $readableFilesize = Tools::readableFilesize( $size );
+        $size = new Number( [ 'value' => $size ] );
 
         // Validating Uploaded File
 
@@ -167,9 +170,9 @@ class Post extends AbstractMethod {
 
             $this -> failed[] = [
 
-                'name' => $file, 'size' => $readableFilesize, 'type' => $type,
+                'name' => $file, 'size' => $size -> filesize() -> get(),
 
-                'reason' => $validation -> getErrorMessage()
+                'type' => $type, 'reason' => $validation -> getErrorMessage()
             ];
 
             return;
@@ -189,9 +192,9 @@ class Post extends AbstractMethod {
 
                 $this -> failed[] = [
 
-                    'name' => $file, 'size' => $readableFilesize, 'type' => $type,
+                    'name' => $file, 'size' => $size -> filesize() -> get(),
 
-                    'reason' => $postProcess -> getErrorMessage()
+                    'type' => $type, 'reason' => $postProcess -> getErrorMessage()
                 ];
 
                 return;
@@ -200,7 +203,9 @@ class Post extends AbstractMethod {
 
                 $this -> succeed[] = [
 
-                    'name' => $file, 'type' => $type, 'size' => $readableFilesize
+                    'name' => $file, 'type' => $type,
+
+                    'size' => $size -> filesize() -> get()
                 ];
             }
 
@@ -208,9 +213,9 @@ class Post extends AbstractMethod {
 
             $this -> failed[] = [
 
-                'name' => $file, 'size' => $readableFilesize, 'type' => $type,
+                'name' => $file, 'size' => $size -> filesize() -> get(),
 
-                'reason' => $this -> errorMessages['uploadFailure']
+                'type' => $type, 'reason' => $this -> errorMessages['uploadFailure']
             ];
         }
     }

@@ -21,36 +21,13 @@ namespace Next\DB\Table;
 class DataGatewayException extends \Next\Components\Debug\Exception {
 
     /**
-     * General violations on data access (or manipulation)
-     *
-     * @var integer
-     */
-    const NOTHING_TO_RETURN    = 0x000003C9;
-
-    /**
      * Nothing to Update
      *
      * @var integer
      */
-    const ACCESS_VIOLATION     = 0x000003CA;
+    const ACCESS_VIOLATION     = 0x000003C9;
 
     // Exception Messages
-
-    /**
-     * Exception for empty Data-sources being wrongly manipulated through Overloading
-     *
-     * @return \Next\DB\Table\DataGatewayException
-     *  Exception for empty Data-sources being wrongly manipulated through Overloading
-     */
-    public static function emptyDataSource() {
-
-        return new self(
-
-            'Data-source is empty and therefore cannot be directly manipulated',
-
-            self::NOTHING_TO_RETURN
-        );
-    }
 
     /**
      * Trying to access a Row object directly when the RowSet has multiple records

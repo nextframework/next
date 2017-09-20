@@ -10,14 +10,24 @@
  */
 namespace Next\Components\Types;
 
-use Next\Components\Object;    # Object Class
+use Next\Components\Interfaces\Verifiable;      # Verifiable Interface
+use Next\Components\Object;                     # Object Class
 
 /**
  * Defines the base structure for a Data-type
  *
  * @package    Next\Components\Types
  */
-abstract class AbstractTypes extends Object implements Type {
+abstract class AbstractTypes extends Object implements Verifiable, Type {
+
+    /**
+     * Parameter Options Definition
+     *
+     * @var array $parameters
+     */
+    protected $parameters = [
+        'value' => [ 'required' => FALSE ]
+    ];
 
     /**
      * Type Value
@@ -27,65 +37,22 @@ abstract class AbstractTypes extends Object implements Type {
     protected $_value;
 
     /**
-     * Datatype Constructor
-     *
-     * @param mixed|\Next\Components\Types\Type|optional $value
-     *  Value to build the Type object, be it raw or another Type Object
-     *
-     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
-     *  Optional Configuration Options for each Type Object
-     *
-     * @throws InvalidArgumentException
-     *  Given argument is not acceptable by concrete datatype class
-     *
-     * @see \Next\Components\Types\AbstractTypes::set()
+     * Additional Initialization.
+     * Sets the data-type value and prototypes resource to it
      */
-    public function __construct( $value = NULL, $options = NULL ) {
+    public function init() {
 
-        parent::__construct( $options );
+        $value = ( $this -> options -> value instanceof Type ?
+                    $this -> options -> value -> get() : $this -> options -> value );
 
-        $this -> set(
-            ( $value instanceof Type ? $value -> get() : $value )
-        );
+        $this -> _value = $value;
 
         // Prototyping
 
         $this -> prototype();
     }
 
-    // Accessors
-
-    /**
-     * Set value
-     *
-     * @param mixed $value
-     *  Value to set
-     *
-     * @return \Next\Components\Interfaces\Type
-     *  Type Object (Fluent-Interface)
-     *
-     * @throws InvalidArgumentException
-     *  Given argument is not acceptable by concrete datatype class
-     */
-    public function set( $value ) {
-
-        if( $this -> accept( $value ) === FALSE ) {
-
-            throw new \Next\Debug\Exception\Exception(
-
-                sprintf(
-
-                    'Argument <strong>%s</strong> is not a valid <em>%s</em>',
-
-                    ( $value !== NULL ? $value : 'NULL' ), $this -> getClass() -> getName()
-                )
-            );
-        }
-
-        $this -> _value = $value;
-
-        return $this;
-    }
+    // Accessory Method
 
     /**
      * Get value
@@ -97,25 +64,15 @@ abstract class AbstractTypes extends Object implements Type {
         return $this -> _value;
     }
 
-    // Abstract Methods Definition
-
-    /**
-     * Check whether or not given value is acceptable by datatype class
-     *
-     * @param mixed $value
-     *  Value to set
-     */
-    abstract protected function accept( $value );
-
     // Overloading
 
     /**
      * Return the \Next\Components\Types\Type value, regardless
      * the desired property name
      *
-     * This allows the Object value to be read without invoking the accessor
-     * method -AND- through any character length, which comes in handy with
-     * strict line length standards
+     * This allows the Object value to be read without invoking the
+     * accessory method which comes in handy with strict line length
+     * standards
      *
      * @param mixed|string $property
      *  Property to be retrieved. Not used!

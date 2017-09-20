@@ -18,6 +18,7 @@ use Next\HTTP\Headers\Fields\Field;                 # Header Fields Interface
 use Next\HTTP\Stream\Adapter\Adapter;               # HTTP Stream Adapter Interface
 
 use Next\Components\Object;                         # Object Class
+use Next\FileSystem\Path;                           # FileSystem Path Data-type Class
 use Next\Components\Parameter;                      # Parameter Object
 use Next\Components\Invoker;                        # Invoker Class
 use Next\HTTP\Stream\Adapter\Socket;                # HTTP Stream Socket Adapter Class
@@ -259,9 +260,10 @@ class Request extends Object {
         $this -> options = new Parameter(
 
             [
-                'uri'    => $_SERVER['REQUEST_URI'],
-                'host'   => $_SERVER['HTTP_HOST'],
-                'method' => $_SERVER['REQUEST_METHOD']
+                'uri'      => $_SERVER['REQUEST_URI'],
+                'host'     => $_SERVER['HTTP_HOST'],
+                'method'   => $_SERVER['REQUEST_METHOD'],
+                'basepath' => ''
             ],
 
             NULL, $this -> options
@@ -361,10 +363,28 @@ class Request extends Object {
 
             /**
              * @internal
-             * By default, the basepath is the basename of directory name
-             * index.php is located
+             *
+             * By default, if a basepath has not been provided as a
+             * Parameter Option yet, its value is whatever lies before
+             * the first occurrence of the DIRECTORY_SEPARATOR constant
+             * in SCRIPT_FILENAME Server Variable after being stripped
+             * of DOCUMENT_ROOT Server Variable. E.g:
+             *
+             * ````
+             * Document Root: D:\root
+             * Project Root Folder: /project
+             * Script Filename: D:\root/project/index.php
+             * Basepath: project
+             * ````
              */
-            $this -> basepath = basename( dirname( $_SERVER['SCRIPT_FILENAME'] ) );
+            if( empty( $this -> options -> basepath ) ) {
+
+                $path = trim( str_replace( $_SERVER['DOCUMENT_ROOT'], '', $_SERVER['SCRIPT_FILENAME'] ), DIRECTORY_SEPARATOR );
+
+                if( ( $slash = strpos( $path, DIRECTORY_SEPARATOR ) ) !== FALSE ) {
+                    $this -> basepath = substr( $path, 0, $slash );
+                }
+            }
 
             // Adding default Request Headers
 
@@ -395,7 +415,9 @@ class Request extends Object {
      */
     public function setBasepath( $basepath ) {
 
-        $this -> basepath = Tools::cleanAndInvertPath( $basepath );
+        $basepath = new Path( [ 'value' => $basepath ] );
+
+        $this -> basepath = $basepath -> clean() -> get();
 
         return $this;
     }
@@ -915,7 +937,7 @@ class Request extends Object {
      * Wrapper Method for Data Retrieve
      *
      * @param array $source
-     *  Data Source, superglobal or class property
+     *  Data-source, super-global or class property
      *
      * @param string|optional $key
      *  Desired Param
@@ -923,7 +945,7 @@ class Request extends Object {
      * @return mixed
      *
      *   <p>
-     *       If <strong>$key</strong> is equal to NULL, all Data Source
+     *       If <strong>$key</strong> is equal to NULL, all Data-source
      *       will be returned
      *   </p>
      *

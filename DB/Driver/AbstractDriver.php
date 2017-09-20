@@ -25,11 +25,11 @@ use Next\Components\Parameter;                     # Parameter Class
 abstract class AbstractDriver extends Object implements Driver {
 
     /**
-     * Connection Adapter Default Options
+     * Parameter Options Definition
      *
-     * @var array $defaultOptions
+     * @var array $parameters
      */
-    protected $defaultOptions = [
+    protected $parameters = [
 
         'host'     => 'localhost',
         'username' => 'root',

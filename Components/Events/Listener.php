@@ -10,7 +10,8 @@
  */
 namespace Next\Components\Events;
 
-use Next\Components\Object;    # Object Class
+use Next\Components\Interfaces\Verifiable;    # Verifiable Interface
+use Next\Components\Object;                   # Object Class
 
 /**
  * Events Listeners acts similarly to Observer component of the
@@ -19,7 +20,7 @@ use Next\Components\Object;    # Object Class
  *
  * @package    Next\Components\Events
  */
-class Listener extends Object {
+class Listener extends Object implements Verifiable {
 
     /**
      * Listener callback
@@ -32,26 +33,13 @@ class Listener extends Object {
      * Listener Constructor
      *
      * @param callable $callback
-     *  A callable resource for when an Event has been handled,
-     *  much like \Next\Components\Interfaces\Observer::update()
-     *
-     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
-     *  Optional Configuration Options for each Event Listener
-     *
-     * @throws \Next\Components\Events\EventsException
-     *  Thrown if provided callback is not callable
-     *
-     * @see \Next\Components\Interfaces\Observer::update()
+     *  A callable resource for when an Event has been handled
      */
-    public function __construct( $callback, $options = NULL ) {
-
-        parent::__construct( $options );
-
-        if( ! is_callable( $callback ) ) {
-            throw EventsException::invalidCallback();
-        }
+    public function __construct( $callback ) {
 
         $this -> callback = $callback;
+
+        parent::__construct();
     }
 
     /**
@@ -88,6 +76,22 @@ class Listener extends Object {
             return $reflector -> invokeArgs(
                 array_merge( [ $event ], array_shift( $args ) )
             );
+        }
+    }
+
+    // Verifiable Interface Method Implementation
+
+    /**
+     * Verifies Object Integrity
+     *
+     * @throws Next\Components\Events\EventsException
+     *  Thrown if the callback provided through Parameter Option
+     *  is not a callable resource
+     */
+    public function verify() {
+
+        if( ! is_callable( $this -> callback ) ) {
+            throw EventsException::invalidCallback();
         }
     }
 }

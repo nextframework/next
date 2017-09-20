@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Components Debug Error & Exception Handlers Class | Components\Debug\Handlers.php
+ * Components Debug Error & Exception Handlers Class | Exception\ErrorHandler.php
  *
  * @author       Bruno Augusto
  *
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace Next\Debug\Exception;
+namespace Next\Exception;
 
 use Next\Controller\Controller;                  # Controller Interface
 use Next\Application\ApplicationException;       # Application Exception
@@ -17,15 +17,15 @@ use Next\HTTP\Headers\Fields\FieldsException;    # Header Field Exception
 use Next\Controller\Router\NullRouter;           # Null Router Class
 use Next\HTTP\Request;                           # HTTP Request
 use Next\HTTP\Response;                          # HTTP Response
-use Next\Debug\Exception\Handlers\Controllers\ErrorHandlerController;
+use Next\Exception\Handlers\Controllers\ErrorHandlerController;    # Error Handler Application Controller
 
 /**
  * Registers Error and Exception handlers to deal with runtime errors
  * or uncaught Exceptions producing a nicer view
  *
- * @package    Next\Debug
+ * @package    Next\Exception
  *
- * @uses       Next\Debug\Exception\Handler
+ * @uses       Next\Exception\Handler
  */
 class ErrorHandler implements Handler {
 

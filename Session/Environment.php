@@ -24,16 +24,26 @@ use Next\Components\Object;                           # Object Class
 class Environment extends Object {
 
     /**
-     * Environment
+     * Parameter Options Definition
      *
-     * An Environment is a sub-array under $_SESSION to store anything is needed
+     * @var array $parameters
+     */
+    protected $parameters = [
+        'name'         => [ 'required' => TRUE ],
+        'initializing' => [ 'required' => FALSE, 'default' => FALSE ]
+    ];
+
+    /**
+     * Environment Name.
+     * An Environment is a dimension under $_SESSION to store anything
+     * is needed
      *
-     * @var string|NULL $environment
+     * @var string $environment
      */
     private $environment;
 
     /**
-     * Flag for whether ot not an Environment is locked.
+     * Flag for whether not not an Environment is locked.
      *
      * Locked Environments are read-only
      *
@@ -42,25 +52,12 @@ class Environment extends Object {
     private $locked = FALSE;
 
     /**
-     * Environment Constructor
-     *
-     * @param string $environment
-     *  Environment name to be registered
-     *
-     * @param boolean|optional $initializing
-     *  Defines whether or not the Session Environment is under initialization,
-     *  which will create the required structured under $_SESSION
-     *
-     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
-     *  Optional Configuration Options for the Session Environment
+     * Additional Initialization.
+     * Registers a new Session Environment, creating a new dimension
+     * under $_SESSION, optionally, emptying it
      */
-    public function __construct( $environment, $initializing = FALSE, $options = NULL ) {
-
-        parent::__construct( $options );
-
-        // Registering Session Environment
-
-        $this -> registerEnvironment( $environment, $initializing );
+    protected function init() {
+        $this -> registerEnvironment();
     }
 
     /**
@@ -321,35 +318,23 @@ class Environment extends Object {
     // Auxiliary Methods
 
     /**
-     * Register Environment
-     *
-     * Initializes the Session if not started yet and create proper dimension
-     * in $_SESSION super global array
-     *
-     * @param string $environment
-     *  Environment name to be registered
-     *
-     * @param boolean|optional $initializing
-     * Defines whether or not the Session Environment is under initializing,
-     *  which will create the required structured under $_SESSION
-     *
-     * @throws \Next\Session\Environment\EnvironmentException
-     *  Environment name starts with a number
+     * Registers a new Environment.
+     * Registers a new Session Environment, creating a new dimension
+     * under $_SESSION, optionally, emptying it
      */
-    private function registerEnvironment( $environment, $initializing = FALSE ) {
+    private function registerEnvironment() {
 
-        if( preg_match( '#(^[0-9])#i', $environment ) ) {
-
+        if( preg_match( '#(^[0-9])#i', $this -> options -> environment ) ) {
             throw EnvironmentException::invalidEnvironment();
         }
 
         // Registering Environment
 
-        $this -> environment =& $environment;
+        $this -> environment = $this -> options -> environment;
 
         // Initialize Session Environment if not initialized yet
 
-        if( $initializing == TRUE ) {
+        if( $this -> options -> initializing !== FALSE ) {
 
             try{
 

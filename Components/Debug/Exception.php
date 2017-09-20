@@ -326,26 +326,6 @@ class Exception extends \Exception {
             );
         }
 
-        // Exception Code Range
-
-        if( $code > 0x00000032 ) {
-
-            list( $min, $max ) = $this -> range + [ 0x00000000, 0x00000032 ];
-
-            if( $code < $min || $code > $max ) {
-
-                die(
-
-                    vsprintf(
-
-                        '[0x%08X]: Exception Code <strong>0x%08X</strong> is Out of <strong>%s</strong> Range',
-
-                        [ self::OUT_OF_RANGE, $code, $classname ]
-                    )
-                );
-            }
-        }
-
         // Response Code
 
         $codes = '(

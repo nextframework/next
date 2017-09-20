@@ -25,11 +25,11 @@ use Next\Components\Object;                         # Object Class
 class Standard extends Object implements Mapper {
 
     /**
-     * Default Options
+     * Parameter Options Definition
      *
-     * @var array $defaultOptions
+     * @var array $parameters
      */
-    protected $defaultOptions = [
+    protected $parameters = [
 
         'filename'          => 'map.php',
         'save'              => FALSE,

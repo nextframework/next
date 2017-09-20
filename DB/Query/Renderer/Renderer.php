@@ -147,4 +147,14 @@ interface Renderer extends Query {
      *  The JOIN Type. Defaults to INNER JOIN
      */
     public function join( $table, $on, $type = Query::INNER_JOIN );
+
+    // Query Building-related methods
+
+    /**
+     * Quote an expression with a DB Driver-specific Quote Identifier
+     *
+     * @param string $expression
+     *  Expression to quote
+     */
+    public function quote( $expression );
 }

@@ -22,18 +22,20 @@ use Next\Components\Collections\Lists;    # Collection Lists Class
 class Handler extends Object {
 
     /**
+     * Parameter Options Definition
+     *
+     * @var array $parameters
+     */
+    protected $parameters = [
+        'event' => [ 'type' => 'Next\Components\Events\Event', 'required' => TRUE ]
+    ];
+
+    /**
      * Event Listeners
      *
      * @var array $listeners
      */
     protected $listeners = [];
-
-    /**
-     * The Event Object
-     *
-     * @var \Next\Components\Events\Event $event
-     */
-    protected $event;
 
     /**
      * Event Listener handled results
@@ -43,23 +45,7 @@ class Handler extends Object {
     protected $results = [];
 
     /**
-     * Events Handler Constructor
-     *
-     * @param \Next\Components\Events\Event|optional $event
-     *  An optional Event Object
-     *
-     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
-     *  Optional Configuration Options for the Event Handler
-     */
-    public function __construct( Event $event = NULL, $options = NULL ) {
-
-        parent::__construct( $options );
-
-        $this -> event = ( ! is_null( $event ) ? $event : new Event );
-    }
-
-    /**
-     * Attach a new Event Listener Object
+     * Adds a new Event Listener Object
      *
      * @param string $name
      *  Event Listener identifier key
@@ -103,11 +89,8 @@ class Handler extends Object {
     /**
      * Event Listener handling
      *
-     * Additionally to the trigger name an unlimited number of arguments
-     * may be passed to the Listener.
-     *
-     * This possible list is not explicitly documented in order
-     * to not create an unused variable just for the documentation
+     * Additionally to the Event Listener trigger name an unlimited
+     * number of arguments may be passed to the Listener.
      *
      * @param string $name
      *  Event Listener trigger name
@@ -131,24 +114,20 @@ class Handler extends Object {
 
         foreach( $this -> listeners[ $name ] as $listener ) {
 
-            if( $this -> event -> isPropagationStopped() ) break;
+            if( $this -> options -> event -> isPropagationStopped() ) break;
 
             try {
 
                 $result = $listener -> update(
-                    $this -> event, array_slice( func_get_args(), 1 )
+                    $this -> options -> event, array_slice( func_get_args(), 1 )
                 );
 
-                if( ! array_key_exists( $name, $this -> results ) ) {
-                    $this -> results[ $name ] = new Lists;
-                }
-
-                $this -> results[ $name ] -> add( $result );
+                $this -> results[ $name ][] = $result;
 
             } catch( \ReflectionException $e ) {
 
                 throw EventsException::listenerExecutionError(
-                    $name, $this -> event -> getName(), $e
+                    $name, $this -> options -> event -> getName(), $e
                 );
             }
         }
@@ -161,18 +140,15 @@ class Handler extends Object {
     /**
      * Get Event Handler Object
      *
-     * Allow an automatically assigned Event (empty constructor) to
-     * have its propagation directives manipulated
-     *
      * @return \Next\Components\Events\Event
      *  The Event Object
      */
     public function getEvent() {
-        return $this -> event;
+        return $this -> options -> event;
     }
 
     /**
-     * Get results of Event Listeners handled
+     * Get results of handled Event Listeners
      *
      * @param string $name
      *  An optional Event Listener trigger name to filter to a specific Collection
@@ -190,6 +166,6 @@ class Handler extends Object {
             return $this -> results[ $name ];
         }
 
-        return $this -> result;
+        return $this -> results;
     }
 }

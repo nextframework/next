@@ -1503,11 +1503,11 @@ class PHPManual extends Object implements Decorator, Linkify {
     ];
 
     /**
-     * Parameter Options Default Options Definition
+     * Parameter Options Definition
      *
-     * @var array $defaultOptions
+     * @var array $parameters
      */
-    protected $defaultOptions = [
+    protected $parameters = [
 
         // Decoratable resource
 

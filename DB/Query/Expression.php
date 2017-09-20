@@ -23,11 +23,13 @@ use Next\Components\Object;     # Object Class
 class Expression extends Object {
 
     /**
-     * Query Expression Default Options
+     * Parameter Options Definition
      *
-     * @var array $defaultOptions
+     * @var array $parameters
      */
-    protected $defaultOptions = [
+    protected $parameters = [
+
+        'expression' => [ 'required' => TRUE ],
 
         /**
          * @internal
@@ -53,35 +55,12 @@ class Expression extends Object {
     ];
 
     /**
-     * SQL raw Expression
-     *
-     * @var string $expression
-     */
-    private $expression;
-
-    /**
-     * SQL Expression COntructor
-     *
-     * @param string $expression
-     *  SQL Expression
-     *
-     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
-     *  Optional Configuration Options for the Query Expression
-     */
-    public function __construct( $expression, $options = NULL ) {
-
-        parent::__construct( $options );
-
-        $this -> expression =& $expression;
-    }
-
-    /**
      * Get SQL Expression
      *
      * @return string
      *  SQL Expression
      */
     public function getExpression() {
-        return sprintf( '( %s )', $this -> expression );
+        return sprintf( '( %s )', $this -> options -> expression );
     }
 }

@@ -20,34 +20,20 @@ use Next\Components\Object;    # Object Class
 class Event extends Object {
 
     /**
-     * Flag to condition whether no further event listeners should be triggered
+     * Parameter Options Definition
+     *
+     * @var array $parameters
+     */
+    protected $parameters = [
+        'name' => [ 'default' => 'Next' ]
+    ];
+
+    /**
+     * Flag to condition whether no further Event Listeners should be triggered
      *
      * @var bool $propagationStopped
      */
     protected $propagationStopped = FALSE;
-
-    /**
-     * Event Name
-     *
-     * @var string $name
-     */
-    protected $name;
-
-    /**
-     * Event Constructor
-     *
-     * @param string|optional $name
-     *  An optional Event Name
-     *
-     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
-     *  Optional Configuration Options for each Event
-     */
-    public function __construct( $name = NULL, $options = NULL ) {
-
-        parent::__construct( $options );
-
-        $this -> name = ( ! is_null( $name ) ? $name : 'Next' );
-    }
 
     // Event bubbling-related methods
 
@@ -64,17 +50,17 @@ class Event extends Object {
     }
 
     /**
-     * Starts (or restarts) the propagation of the Event to further Event Listeners.
+     * Starts (or restarts) the propagation of the Event to
+     * further Event Listeners.
      *
-     * If multiple Event listeners are connected to the same event, and one of
-     * Event Listeners stopped the propagation, this allow sequential Listeners
-     * to be fired again
+     * If multiple Event Listeners are connected to the same Event,
+     * and one of Event Listeners stopped the propagation, this allow
+     * sequential Listeners to be fired again
      *
-     * This is useful if an Event Handler responsible for a critical error is fired
-     * and stopped the propagation, and a complementary, but not crucial, task also
-     * failed and needs to inform the endpoint too
-     *
-     * @return void
+     * This is useful if an Event Handler responsible for a
+     * critical error is fired and stopped the propagation, and a
+     * complementary, but not crucial, task also fails and needs to
+     * inform the endpoint too
      */
     public function startPropagation() {
         $this -> propagationStopped = FALSE;
@@ -84,10 +70,8 @@ class Event extends Object {
      * Stops the propagation of the Event to further Event Listeners.
      *
      * If multiple Event listeners are connected to the same event,
-     * further Event Listeners will not be triggered once any trigger calls
-     * this method
-     *
-     * @return void
+     * further Event Listeners will not be triggered once any trigger
+     * calls this method
      */
     public function stopPropagation() {
         $this -> propagationStopped = TRUE;
@@ -96,12 +80,12 @@ class Event extends Object {
     // Accessors
 
     /**
-     * Returns the Event name
+     * Get the Event name
      *
      * @return string
-     *  Event name
+     *  The Event name
      */
     public function getName() {
-        return $this -> name;
+        return $this -> options -> name;
     }
 }

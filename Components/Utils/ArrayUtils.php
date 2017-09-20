@@ -22,7 +22,7 @@ class ArrayUtils {
      * Equalize array lengths
      *
      * The shorter array will receive as many NULL elements as needed to have the same length
-     * of th larger array.
+     * of the larger array.
      *
      * Both arguments are optional, so this method can be used to create dummy arrays based upon
      * other array length
@@ -57,8 +57,6 @@ class ArrayUtils {
     /**
      * Searches value inside a multidimensional array, returning its index
      *
-     * Original function by "giulio provasi" (link below)
-     *
      * @param mixed|array $haystack
      *  The haystack to search
      *
@@ -73,6 +71,7 @@ class ArrayUtils {
      *  be returned. Otherwise, -1 will
      *
      * @see http://www.php.net/manual/en/function.array-search.php#97645
+     *  Original source authored by "giulio provasi"
      */
     public static function search( $haystack, $needle, $index = NULL ) {
 
@@ -154,8 +153,6 @@ class ArrayUtils {
      * arrays which are present in second, keeping the same structure
      * of arrays you enter.
      *
-     * Original function by "bpat1434" (link below)
-     *
      * @param array $a
      *  Initial array
      *
@@ -166,6 +163,7 @@ class ArrayUtils {
      *  A new array with elements in <strong>$b</strong> united to elements in <strong>$a</strong>
      *
      * @see http://www.phpbuilder.com/board/showpost.php?p=10886411&postcount=6
+     *  Original source authored by "bpat1434"
      */
     public static function union( array $a, array $b ) {
 
@@ -306,6 +304,7 @@ class ArrayUtils {
      *  Transpose multidimensional array
      *
      * @see http://stackoverflow.com/a/3423692/753531
+     *  Original source authored by "Codler"
      */
     public static function transpose( array $array ) {
 

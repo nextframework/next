@@ -16,21 +16,21 @@ namespace Next\Components;
  *
  * @package    Next\Components
  */
-class Invoker {
+class Invoker extends Object {
 
     /**
      * Caller Object
      *
      * @var \Next\Components\Object $caller
      */
-    private $caller;
+    protected $caller;
 
     /**
      * Callee Object
      *
      * @var \Next\Components\Object $callee
      */
-    private $callee;
+    protected $callee;
 
     /**
      * Invoker Constructor
@@ -41,7 +41,7 @@ class Invoker {
      * @param \Next\Components\Object $callee
      *  Callee Object
      */
-    function __construct ( Object $caller, Object $callee ) {
+    public function __construct( Object $caller, Object $callee ) {
 
         $this -> caller =& $caller;
         $this -> callee =& $callee;

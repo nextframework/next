@@ -49,7 +49,7 @@ class GUID implements Prototypable {
             );
         }
 
-        return new String( $this -> GUID() );
+        return new String( [ 'value' => $this -> GUID() ] );
     }
 
     /**

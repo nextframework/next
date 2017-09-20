@@ -10,9 +10,10 @@
  */
 namespace Next\Components\Types;
 
-use Next\Components\Types\String\AlphaID;    # AlphaID Prototype
-use Next\Components\Types\String\GUID;       # GUID Prototype Class
-use Next\Components\Types\String\Truncate;   # Truncate String Prototype Class
+/**
+ * InvalidArgumentException Class
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
 
 /**
  * Defines the String Data-type Type and prototypes some o PHP String
@@ -21,7 +22,7 @@ use Next\Components\Types\String\Truncate;   # Truncate String Prototype Class
  *
  * @package    Next\Components\Types
  */
-final class String extends AbstractTypes {
+class String extends AbstractTypes {
 
     /**
      * Truncate Prototyped resource controlling constants
@@ -33,19 +34,38 @@ final class String extends AbstractTypes {
     const TRUNCATE_CENTER = 3;
     const TRUNCATE_DEFAULT_REPLACEMENT = '...';
 
-    // Abstract Methods Implementation
+    /**
+     * String Padding resource controlling constants
+     *
+     * @var string
+     */
+    const PAD_LEFT  = 0;
+    const PAD_RIGHT = 1;
+    const PAD_BOTH  = 2;
+
+    // Verifiable Interface Method Implementation
 
     /**
-     * Check whether or not given value is acceptable by datatype class
+     * Verifies Object Integrity.
+     * Checks whether or not given value is acceptable by data-type class
      *
-     * @param mixed $value
-     *  Value to set
-     *
-     * @return boolean
-     *  TRUE if given value is of the type string and FALSE otherwise
+     * @throws Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if Parameter Option 'value' is not a string -OR- is NULL
      */
-    protected function accept( $value ) {
-        return ( ! is_null( $value ) && is_string( $value ) );
+    public function verify() {
+
+        if( is_null( $this -> options -> value ) || ! is_string( $this -> options -> value ) ) {
+
+            throw new InvalidArgumentException(
+
+                sprintf(
+
+                    'Argument <strong>%s</strong> is not a valid String',
+
+                    ( $this -> options -> value !== NULL ? $this -> options -> value : 'NULL' )
+                )
+            );
+        }
     }
 
     // Prototypable Method Implementation
@@ -57,46 +77,85 @@ final class String extends AbstractTypes {
      */
     public function prototype() {
 
-        // Prototypes that doesn't require an initial base value to work with
+        // Native Functions
 
-        $this -> implement( 'GUID', new GUID );
+        $this -> implement( $this, 'compare',        'strcmp',         [ 0 => $this -> _value ] )
+              -> implement( $this, 'caseCompare',    'strcasecmp',     [ 0 => $this -> _value ] )
+              -> implement( $this, 'lowerFirst',     'lcfirst',        [ 1 => $this -> _value ] )
+              -> implement( $this, 'find',           'strstr',         $this -> _value )
+              -> implement( $this, 'repeat',         'str_repeat',     $this -> _value )
+              -> implement( $this, 'reverseFind',    'strrpos',        $this -> _value )
+              -> implement( $this, 'reverse',        'strrev',         $this -> _value )
+              -> implement( $this, 'shuffle',        'str_shuffle',    $this -> _value )
+              -> implement( $this, 'striptags',      'strip_tags',     $this -> _value )
+              -> implement( $this, 'substring',      'substr',         $this -> _value )
+              -> implement( $this, 'toLower',        'strtolower',     $this -> _value )
+              -> implement( $this, 'toUpper',        'strtoupper',     $this -> _value )
+              -> implement( $this, 'trim',           'trim',           $this -> _value )
+              -> implement( $this, 'trimLeft',       'ltrim',          $this -> _value )
+              -> implement( $this, 'trimRight',      'rtrim',          $this -> _value )
+              -> implement( $this, 'upperFirst',     'ucfirst',        $this -> _value )
+              -> implement( $this, 'upperWords',     'ucwords',        $this -> _value );
 
-        // Prototypes that requires a value to work with
+            /**
+             * @internal
+             *
+             * Because some of PHP functions have a not so obvious argument
+             * order using our Argument Swapping to put `$this -> _value`
+             * directly in the position the original function expect the
+             * input string to be works for instanced calls, but not work
+             * for static calls because the duplication removal done in
+             * \Next\Components\Prototype::call()
+             *
+             * So for these cases to work regardless how the Prototype is
+             * invoked we need to keep the value in the first position —
+             * thus invalidating the argument swapping — -AND- make a
+             * "Closured" implementation
+             *
+             * @see \Next\Components\Prototype::call()
+             */
 
-        if( $this -> _value !== NULL ) {
+            // explode()
 
-            // Native Functions
+        $this -> implement( $this, 'explode', function( $string, $delimiter, $limit = PHP_INT_MAX ) {
 
-            $this -> implement( 'compare',        'strcmp'          )
-                  -> implement( 'caseCompare',    'strcasecmp'      )
-                  -> implement( 'explode',        'explode',        [ 1 => $this -> _value ] )
-                  -> implement( 'find',           'strstr'          )
-                  -> implement( 'lowerFirst',     'lcfirst'         )
-                  -> implement( 'pad',            'str_pad'         )
-                  -> implement( 'repeat',         'str_repeat'      )
-                  -> implement( 'replace',        'str_replace',    [ 2 => $this -> _value ] )
-                  -> implement( 'reverseFind',    'strrpos'         )
-                  -> implement( 'shuffle',        'str_shuffle'     )
-                  -> implement( 'striptags',      'strip_tags'      )
-                  -> implement( 'substring',      'substr'          )
-                  -> implement( 'toLower',        'strtolower'      )
-                  -> implement( 'toUpper',        'strtoupper'      )
-                  -> implement( 'trim',           'trim'            )
-                  -> implement( 'upperFirst',     'ucfirst'         )
-                  -> implement( 'upperWords',     'ucwords'         );
+            return explode( $delimiter, $string, $limit );
 
-            // Custom Prototypes
+        }, [ 0 => $this -> _value ] );
 
-            $this -> implement( 'alphaID',  new AlphaID,  $this -> _value )
-                  -> implement( 'truncate', new Truncate, $this -> _value );
+            // str_replace()
 
-            $this -> implement( 'getFileExtension', function() {
+        $this -> implement( $this, 'replace', function( $string, $search, $replacement, &$count = NULL ) {
 
-                return new String( pathinfo( func_get_arg( 0 ), PATHINFO_EXTENSION ) );
+            return str_replace( $search, $replacement, $string, $count );
 
-                return ( ! empty( $extension ) ? $extension : FALSE );
+        }, [ 0 => $this -> _value ] );
 
-            }, $this -> value);
-        }
+        // Custom Prototypes
+
+        $this -> implement( $this, 'pad',      new String\Pad,       $this -> _value )
+              -> implement( $this, 'truncate', new String\Truncate,  $this -> _value )
+              -> implement( $this, 'GUID',     new String\GUID )
+              -> implement( $this, 'AlphaID',  new String\AlphaID,   $this -> _value );
+
+        /**
+         * Quotes a string with given Quote Identifier
+         *
+         * @param string $string
+         *  The string to be quoted. Not directly passed!
+         *
+         * @param string|optional $identifier
+         *  The Quote Identifier that'll wrap the input string
+         *
+         * @return Next\Components\Types\String
+         *  A String Data-type Object with the quoted string
+         */
+        $this -> implement( $this, 'quote', function( $string, $identifier = '"' ) {
+
+            return new String(
+                [ 'value' => sprintf( '%s%s%s', $identifier, $string, $identifier ) ]
+            );
+
+        }, $this -> _value );
     }
 }

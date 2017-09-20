@@ -1,17 +1,17 @@
 <?php
 
 /**
- * Paginator Adapter Interface | Paginate\Adapter\Adapter.php
+ * Paginator Adapter Interface | Pagination\Adapter\Adapter.php
  *
  * @author       Bruno Augusto
  *
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace Next\Paginate\Adapter;
+namespace Next\Pagination\Adapter;
 
 /**
- * Paginate Adapter Interface
+ * Pagination Adapter Interface
  *
  * @author        Bruno Augusto
  *

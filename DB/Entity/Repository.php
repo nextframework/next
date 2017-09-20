@@ -20,17 +20,10 @@ use Next\DB\Table\Manager;      # Entities Manager Class
 /**
  * Entity Repository Base Class
  *
- * @author       Bruno Augusto
+ * @package      Next\DB
  *
- * @copyright    Copyright (c) 2016 Next Studios
- *
- * @package      Next
- * @subpackage   DB\Entity
- *
- * @uses         \Next\DB\Query\Query,
- *               \Next\Components\Object,
- *               \Next\Components\Invoker,
- *               \Next\DB\Table\Manager
+ * @uses         \Next\DB\Query\Query, \Next\Components\Object,
+ *               \Next\Components\Invoker, \Next\DB\Table\Manager
  *               \Next\DB\Entity\EntityException
  */
 class Repository extends Object {
@@ -64,7 +57,7 @@ class Repository extends Object {
      * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for each Entity Repository
      */
-    public function __construct( Manager $manager = NULL, $options = NULL ) {
+    public function __construct( Manager $manager = NULL ) {
 
         if( ! is_null( $manager ) ) {
 
@@ -77,7 +70,7 @@ class Repository extends Object {
              * in order to trigger Object::init() from child classes which may change
              * the Table Object used by Manager
              */
-            parent::__construct( $options );
+            parent::__construct();
 
             // And this integrity checking ensures a Table Object was set
 

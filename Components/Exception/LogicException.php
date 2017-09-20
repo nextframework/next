@@ -2,7 +2,7 @@
 
 namespace Next\Components\Exception;
 
-use Next\Debug\Exception\Exception;    # Exception Class
+use Next\Exception;    # Exception Class
 
 class LogicException extends Exception {
 

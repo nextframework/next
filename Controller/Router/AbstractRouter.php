@@ -10,8 +10,7 @@
  */
 namespace Next\Controller\Router;
 
-use Next\Application\Application;    # Application Interface
-use Next\Components\Object;          # Object Class
+use Next\Components\Object;    # Object Class
 
 /**
  * Defines the base structure for a Controller Router
@@ -21,11 +20,13 @@ use Next\Components\Object;          # Object Class
 abstract class AbstractRouter extends Object implements Router {
 
     /**
-     * Application Object
+     * Parameter Options Definition
      *
-     * @var \Next\Application\Application $application
+     * @var array $parameters
      */
-    protected $application;
+    protected $parameters = [
+        'application' => [ 'type' => 'Next\Application\Application', 'required' => TRUE ]
+    ];
 
     /**
      * Flag to condition whether or not the Router will do its job
@@ -56,24 +57,7 @@ abstract class AbstractRouter extends Object implements Router {
     protected $method;
 
     /**
-     * Constructor Overwriting
-     * Sets up a type-hinted Application Object for all Routing Strategies
-     *
-     * @param \Next\Application\Application $application
-     *  Application Object
-     *
-     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
-     *  Optional Configuration Options for Router Adapter
-     */
-    public function __construct( Application $application, $options = NULL ) {
-
-        parent::__construct( $options );
-
-        $this -> application = $application;
-    }
-
-    /**
-     * Additional Initialization
+     * Additional Initialization.
      * Calls the Router Connector, which could be to a Database, a File Stream, a XML...
      */
     protected function init() {
@@ -131,8 +115,6 @@ abstract class AbstractRouter extends Object implements Router {
     // Abstract Methods Definition
 
     /**
-     * Establishes a Connection
-     *
      * Establishes a Connection with a Database, with a File (through a Stream)...
      */
     abstract protected function connect();

@@ -10,6 +10,8 @@
  */
 namespace Next\Components\Interfaces;
 
+use Next\Components\Object;    # Object Class
+
 /**
  * Prototypical Objects are assumed to allow all of their instances
  * have callable features available
@@ -21,6 +23,9 @@ interface Prototypical  {
     /**
      * Implement a new callable resource, prototyping it to Object
      *
+     * @param \Next\Components\Object|string
+     *  The name of the Object receiving the prototyped resource
+     *
      * @param string $name
      *  Callable resource name. Should be unique
      *
@@ -30,7 +35,7 @@ interface Prototypical  {
      * @param array $args
      *  Default arguments available to callable resource
      */
-    public function implement( $name, $callable, $args = [] );
+    public function implement( $prototype, $name, $callable, $args = [] );
 
     /**
      * Get Prototyped Resources

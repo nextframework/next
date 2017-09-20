@@ -10,6 +10,8 @@
  */
 namespace Next\DB\Query\Renderer;
 
+use Next\Components\Object;      # Object Class
+use Next\FileSystem\Path;        # FileSystem Path Data-type Class
 use Next\DB\Query\Expression;    # Query Expression Class
 
 /**
@@ -20,7 +22,16 @@ use Next\DB\Query\Expression;    # Query Expression Class
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class MySQL extends AbstractRenderer {
+class MySQL extends Object implements Renderer {
+
+    /**
+     * Parameter Options Definition
+     *
+     * @var array $parameters
+     */
+    protected $parameters = [
+        'quoteIdentifier' => [ 'required' => TRUE ],
+    ];
 
     // CRUD-related methods
 
@@ -396,6 +407,36 @@ class MySQL extends AbstractRenderer {
         return rtrim( sprintf( ' %s %s, %s ', self::LIMIT, $data[ 0 ], $data[ 1 ] ) );
     }
 
+    // Query Building-related methods
+
+    /**
+     * Quote an expression with a DB Driver-specific Quote Identifier
+     *
+     * @param string $expression
+     *  Expression to quote
+     *
+     * @return string
+     *  Input expression, quoted
+     */
+    public function quote( $expression ) {
+
+        // Do we have a full database definition (e.g. db.table)?
+
+        if( strpos( $expression, '.' ) !== FALSE ) {
+
+            $expression = implode(
+
+                sprintf( '%1$s.%1$s', $this -> options -> quoteIdentifier ),
+
+                explode( '.', $expression )
+            );
+        }
+
+        $expression = new Path( [ 'value' => $expression ] );
+
+        return $expression -> quote( $this -> options -> quoteIdentifier ) -> get();
+    }
+
     // Auxiliary Methods
 
     /**
@@ -443,7 +484,9 @@ class MySQL extends AbstractRenderer {
              */
             $columns[ $type ] = preg_replace(
 
-                sprintf( '#(:%1$s(.*?))%1$s#', $this -> quoteIdentifier ), ':$2', $columns[ $type ]
+                sprintf( '#(:%1$s(.*?))%1$s#',
+
+                $this -> options -> quoteIdentifier ), ':$2', $columns[ $type ]
             );
         }
     }

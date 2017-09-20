@@ -56,4 +56,15 @@ class Route implements Helper {
     public function getHelperName() {
         return 'route';
     }
+
+    // OverLoading
+
+    /**
+     * Get the Helper name to be registered by View Engine
+     *
+     * @return string
+     */
+    public function __toString() {
+        return $this -> getHelperName();
+    }
 }

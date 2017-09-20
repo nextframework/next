@@ -10,7 +10,8 @@
  */
 namespace Next\Components;
 
-use Next\Components\Object;    # Object Class
+use Next\Components\Interfaces\Verifiable;    # Verifiable Interface
+use Next\Components\Object;                   # Object Class
 
 /**
  * The Mimicker Object literally tries to make a regular object mimic
@@ -18,50 +19,46 @@ use Next\Components\Object;    # Object Class
  *
  * @package    Next\Components
  */
-class Mimicker extends Object {
+class Mimicker extends Object implements Verifiable {
 
     /**
-     * Mimicker object
+     * Parameter Options Definition
      *
-     * @var object $mimicker
+     * @var array $parameters
      */
-    protected $mimicker;
+    protected $parameters = [
+
+        // The object to be mimicked as an instance of \next\Components\Object
+
+        'resource' => [ 'required' => TRUE ],
+    ];
+
+    // Verifiable Interface Method Implementation
 
     /**
-     * Constructor Overwriting
-     * Instantiates the real class mimicking an instance of \Next\Components\Object
-     *
-     * @param object $mimicker
-     *  Object trying to mimic an instance of \Next\ComponentsObject
-     *
-     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
-     *  Optional Configuration Options for Object Mimicker Class
+     * Verifies Object Integrity
      *
      * @throws \Next\Components\ContextException
-     *  Thrown if resource being mimicked is not an object
+     *  Thrown if provided resource to be mimicked is not an object
      */
-    public function __construct( $mimicker, $options = NULL ) {
-
-        parent::__construct( $options );
+    public function verify() {
 
         // Only objects can (or need to) be mimicked
 
-        if( ! is_object( $mimicker ) ) {
+        if( ! is_object( $this -> options -> resource ) ) {
             throw ContextException::notMimicable();
         }
-
-        $this -> mimicker = new $mimicker;
     }
 
     // Accessors
 
     /**
-     * Get mimicker Object
+     * Get mimicked Object
      *
      * @return object
      *  Mimicked Object
      */
-    public function getMimicker() {
-        return $this -> mimicker;
+    public function getMimicked() {
+        return $this -> options -> resource;
     }
 }

@@ -10,8 +10,9 @@
  */
 namespace Next\DB\Driver\PDO\Adapter;
 
-use Next\DB\Driver\DriverException;    # Driver Exception Class
-use Next\DB\Driver\PDO\AbstractPDO;    # PDO Abstract Class
+use Next\DB\Driver\DriverException;              # Driver Exception Class
+use Next\DB\Driver\PDO\AbstractPDO;              # PDO Abstract Class
+use Next\DB\Query\Renderer\MySQL as Renderer;    # MySQL Query Renderer Class
 
 /**
  * SQLite Connection Adapter Class
@@ -77,16 +78,18 @@ class SQLite extends AbstractPDO {
     /**
      * Set an SQL Statement Renderer
      *
-     * For now there is no needs to use a SQLite-specific SQL Statement Renderer Class,
-     * so let's reuse MySQL Renderer, but we have to set the Quote Identifier Symbol, though.
+     * For now there is no needs to use a SQLite-specific
+     * SQL Statement Renderer Class, so let's reuse MySQL Renderer,
+     * only with a different Quote Identifier Symbol.
      *
-     * IMPORTANT: The Symbol CANNOT be a single quote ( ' ), otherwise SQLite will return
-     *            the column's name instead of column's value
+     * IMPORTANT: The Symbol CANNOT be a single quote ( ' ),
+     *             Otherwise SQLite will return the column's name
+     *             instead of column's value
      *
      * @return \Next\DB\Query\Renderer\Renderer
-     *  MySQL Renderer (yes! MySQL Renderer, read comment above)
+     *  MySQL Renderer Object
      */
     public function getRenderer() {
-        return new \Next\DB\Query\Renderer\MySQL( '"' );
+        return new Renderer( [ 'quoteIdentifier' => '"' ] );
     }
 }

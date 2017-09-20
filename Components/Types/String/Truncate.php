@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Truncate String Class | Components\Types\String\GUID.php
+ * Truncate String Class | Components\Types\String\Truncate.php
  *
  * @author       Bruno Augusto
  *
@@ -42,7 +42,7 @@ class Truncate implements Prototypable {
             case String::TRUNCATE_BEFORE:
 
                 return new String(
-                    substr( $string, 0, strrpos( substr( $string, 0, $length ), ' ' ) ) . $replacement
+                    [ 'value' => substr( $string, 0, strrpos( substr( $string, 0, $length ), ' ' ) ) . $replacement ]
                 );
 
             break;
@@ -50,7 +50,7 @@ class Truncate implements Prototypable {
             case String::TRUNCATE_AFTER:
 
                 return new String(
-                    substr( $string, 0, ( strpos( substr( $string, $length ),' ' ) + $length ) ) . $replacement
+                    [ 'value' => substr( $string, 0, ( strpos( substr( $string, $length ),' ' ) + $length ) ) . $replacement ]
                 );
 
             break;
@@ -85,7 +85,7 @@ class Truncate implements Prototypable {
                 }
 
                 return new String(
-                    reset( $segments ) . $replacement . trim( $end )
+                    [ 'value' => reset( $segments ) . $replacement . trim( $end ) ]
                 );
 
             break;

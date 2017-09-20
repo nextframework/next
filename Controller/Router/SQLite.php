@@ -23,15 +23,6 @@ use Next\DB\Driver\PDO\Adapter\SQLite as Adapater;    # SQLite DB Adapter
 class SQLite extends Standard {
 
     /**
-     * Default Options
-     *
-     * @var array $defaultOptions
-     */
-    protected $defaultOptions = [
-        'dbPath' => 'data/routes.sqlite'
-    ];
-
-    /**
      * SQLite Connection Resource
      *
      * @var mixed $dbh
@@ -53,10 +44,7 @@ class SQLite extends Standard {
     }
 
     /**
-     * Finds a Route that matches to an Application AND current Request
-     *
-     * @param \Next\Application\Application $application
-     *  Application to iterate Controllers
+     * Finds a matching Route for the Application -AND- current Request URI
      *
      * @return array|object|boolean
      *
@@ -66,11 +54,11 @@ class SQLite extends Standard {
      *
      *  If none could, FALSE will be returned
      */
-    public function find( Application $application ) {
+    public function find() {
 
         // Shortening Declarations
 
-        $request = $application -> getRequest();
+        $request = $this -> options -> application -> getRequest();
 
         $URI = $request -> getURL( FALSE );
 
@@ -92,7 +80,7 @@ class SQLite extends Standard {
 
             [
 
-                $application -> getClass() -> getName(),
+                $this -> options -> application -> getClass() -> getName(),
 
                 $request -> getRequestMethod(),
 
@@ -199,6 +187,14 @@ class SQLite extends Standard {
        );
 
         $this -> dbh = $adapter -> getConnection();
+    }
+
+    /**
+     * Set Class Options.
+     * Defines a default filepath for PHP-array with Generated Routes
+     */
+    public function setOptions() {
+        return [ 'dbPath' => 'data/routes.sqlite' ];
     }
 
     // Auxiliary Methods

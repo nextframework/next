@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Components Debug Error & Exception Handlers Class | Components\Debug\Handlers.php
+ * Components Debug Error & Exception Handlers Class | Exception\ExceptionHandler.php
  *
  * @author       Bruno Augusto
  *
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace Next\Debug\Exception;
+namespace Next\Exception;
 
 use Next\Controller\Controller;                  # Controller Interface
 use Next\Application\ApplicationException;       # Application Exception
@@ -22,9 +22,9 @@ use Next\HTTP\Response;                          # HTTP Response
  * Registers Error and Exception handlers to deal with runtime errors
  * or uncaught Exceptions producing a nicer view
  *
- * @package    Next\Debug
+ * @package    Next\Exception
  *
- * @uses       Next\Debug\Exception\Handler
+ * @uses       Next\Exception\Handler
  */
 class ExceptionHandler implements Handler {
 
@@ -51,7 +51,7 @@ class ExceptionHandler implements Handler {
     /**
      * Development Mode Exception Handler
      *
-     * @param \ErrorException|\Exception|\Error|\Throwable|\Next\Debug\Exception $e
+     * @param \ErrorException|\Exception|\Error|\Throwable|\Next\Exception $e
      *  Exception thrown
      *
      * @param integer|optional $code
@@ -79,7 +79,7 @@ class ExceptionHandler implements Handler {
 
         self::handle(
 
-            'Next\Debug\Exception\Handlers\Controllers\ExceptionHandlerController',
+            'Next\Exception\Handlers\Controllers\ExceptionHandlerController',
 
             'development', [ 'e' => $e ], $code
         );
@@ -88,7 +88,7 @@ class ExceptionHandler implements Handler {
     /**
      * Production Mode Exception Handler
      *
-     * @param \ErrorException|\Exception|\Error|\Throwable|\Next\Debug\Exception $e
+     * @param \ErrorException|\Exception|\Error|\Throwable|\Next\Exception\Exception $e
      *  Exception thrown
      *
      * @param integer|optional $code
@@ -107,7 +107,7 @@ class ExceptionHandler implements Handler {
 
         self::handle(
 
-            'Next\Debug\Exception\Handlers\Controllers\ExceptionHandlerController',
+            'Next\Exception\Handlers\Controllers\ExceptionHandlerController',
 
             'production', [ 'e' => $e ], $code
         );
@@ -127,7 +127,7 @@ class ExceptionHandler implements Handler {
 
         self::handle(
 
-            'Next\Debug\Handlers\Controllers\ErrorController', 'status',
+            'Next\Exception\Handlers\Controllers\ErrorController', 'status',
 
             [ 'code' => $code ], $code
         );

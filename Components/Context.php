@@ -31,7 +31,7 @@ class Context implements Contextualizable {
     private $callables = [];
 
     /**
-     * Register a new Invoker Object to be used as context extension
+     * Registers a new Invoker Object to be used as context extension
      *
      * @param \Next\Components\Invoker $invoker
      *  Invoker Object
@@ -54,7 +54,7 @@ class Context implements Contextualizable {
 
         if( $callee instanceof Mimicker ) {
 
-            $reflector = new \ReflectionObject( $callee -> getMimicker() );
+            $reflector = new \ReflectionObject( $callee -> getMimicked() );
 
         } else {
 
@@ -102,7 +102,7 @@ class Context implements Contextualizable {
         // Building Context Structure
 
         $this -> callables[ $caller -> getClass() -> getName() ][] = [
-            ( $callee instanceof Mimicker ? $callee -> getMimicker() : $callee ), $methods, $properties
+            ( $callee instanceof Mimicker ? $callee -> getMimicked() : $callee ), $methods, $properties
         ];
 
         return $this;

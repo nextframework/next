@@ -38,7 +38,7 @@ class Registry {
     private function __clone() {}
 
     /**
-     * Enforcing Singleton. Disallow Direct Constructor
+     * Enforcing Singleton. Disallow direct instantiation
      */
     private function __construct() {}
 

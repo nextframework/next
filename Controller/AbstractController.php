@@ -60,18 +60,15 @@ abstract class AbstractController extends Object implements Controller {
     protected $session;
 
     /**
-     * Controller Constructor
+     * Controller Constructor.
      * Configures Controller Object with the Application Object provided, if any
      *
      * Application Objects are provided usually, but not restricted to, during Dispatching Process
      *
      * @param \Next\Application\Application|optional $application
      *  Application Object
-     *
-     * @param mixed|optional $options
-     *  Additional options
      */
-    final public function __construct( Application $application = NULL, $options = NULL ) {
+    final public function __construct( Application $application = NULL ) {
 
         if( ! is_null( $application ) ) {
 
@@ -98,7 +95,7 @@ abstract class AbstractController extends Object implements Controller {
 
             // Constructing parent Object, which executes additional initialization routines
 
-            parent::__construct( $options );
+            parent::__construct();
         }
     }
 

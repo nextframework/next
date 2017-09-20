@@ -59,7 +59,7 @@ class AlphaID implements Prototypable {
         if( empty( $string ) ) {
 
             throw new \InvalidArgumentException(
-                'A string must be informed in order to be converted to an numeric value'
+                'A string must be informed in order to be converted to a numeric value'
             );
         }
 
@@ -67,7 +67,7 @@ class AlphaID implements Prototypable {
             throw new \InvalidArgumentException( 'The Decoding sequence must be a string' );
         }
 
-        return new Integer( $this -> decode( $string, $index ) );
+        return new Integer( [ 'value' => $this -> decode( $string, $index ) ] );
     }
 
     /**

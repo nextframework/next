@@ -26,11 +26,11 @@ use Next\Components\Object;          # Object Class
 abstract class AbstractInterval extends Object implements Equation, Interval {
 
     /**
-     * Interval Default Options
+     * Parameter Options Definition
      *
-     * @var array $DefaultOptions
+     * @var array $parameters
      */
-    protected $defaultOptions = [
+    protected $parameters = [
 
         /**
          * @internal

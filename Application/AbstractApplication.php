@@ -85,10 +85,19 @@ abstract class AbstractApplication extends Object implements Application {
     protected $session;
 
     /**
-     * Additional Initialization.
-     * Sets up a type-hinted Application Object for all Caching Schema
+     * Application Constructor.
+     *
+     * Configures:
+     *
+     * - Request and Response Objects
+     * - Application Router
+     * - Database Connection
+     * - Session
+     * - View Engine
+     * - Application Controllers
+     * - Caching Schemas
      */
-    protected function init() {
+    public function __construct() {
 
         // Setting Up Application's Resources...
 
@@ -135,7 +144,7 @@ abstract class AbstractApplication extends Object implements Application {
 
             // View Engine
 
-        $this -> setupView();
+        $this -> view = $this -> setupView();
 
             // Controllers Classes
 
@@ -149,9 +158,11 @@ abstract class AbstractApplication extends Object implements Application {
 
         $this -> initCache();
 
-        // Checking Application's Integrity
+        // Checking Application's Integrity. @todo replace with Verifiable::verify()
 
         $this -> checkIntegrity();
+
+        parent::__construct();
     }
 
     /**

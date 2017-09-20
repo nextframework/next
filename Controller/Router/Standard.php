@@ -10,10 +10,9 @@
  */
 namespace Next\Controller\Router;
 
-use Next\Components\Object;              # Object Class
-use Next\Components\Utils\ArrayUtils;    # Array Utils Class
-use Next\Application\Application;        # Application Interface
-use Next\HTTP\Request;                   # Request Class
+use Next\Components\Object;          # Object Class
+use Next\Application\Application;    # Application Interface
+use Next\HTTP\Request;               # Request Class
 
 /**
  * Standard Controller Router based on PHP Arrays
@@ -21,15 +20,6 @@ use Next\HTTP\Request;                   # Request Class
  * @package    Next\Controller\Router
  */
 class Standard extends AbstractRouter {
-
-    /**
-     * Default Options
-     *
-     * @var array $defaultOptions
-     */
-    protected $defaultOptions = [
-        'filePath' => 'data/routes.php'
-    ];
 
     // RegExp and String Delimiter Constants
 
@@ -41,10 +31,7 @@ class Standard extends AbstractRouter {
     const SEPARATOR_TOKEN    = '|';
 
     /**
-     * Finds a Route that matches to an Application AND current Request
-     *
-     * @param \Next\Application\Application $application
-     *  Application to iterate Controllers
+     * Finds a matching Route for the Application -AND- current Request URI
      *
      * @return array|object|boolean
      *
@@ -54,11 +41,11 @@ class Standard extends AbstractRouter {
      *
      *  If none could, FALSE will be returned
      */
-    public function find( Application $application ) {
+    public function find() {
 
         // Shortening Declarations
 
-        $request = $application -> getRequest();
+        $request = $this -> options -> application -> getRequest();
 
         $URI = $request -> getURL( FALSE );
 
@@ -82,16 +69,18 @@ class Standard extends AbstractRouter {
 
                 $data,
 
-                function( $route ) use( $application, $request, $URI ) {
+                function( $route ) use( /*$application, */$request, $URI ) {
 
                     /**
+                     * @internal
+                     *
                      * To be a matching route it must:
                      *
                      * - Belong to the same Application Controller (class name)
                      * - Correspond to the same Request Method of the current Request
                      * - Have its route RegExp match the Request URI of current Request
                      */
-                    return ( $route['application']   == $application -> getClass() -> getName() &&
+                    return ( $route['application']   == $this -> options -> application -> getClass() -> getName() &&
                            ( $route['requestMethod'] ==          $request -> getRequestMethod() &&
                              preg_match( sprintf( '@^%s$@i', $route['URI'] ), $URI ) != 0 ) );
                 }
@@ -105,6 +94,7 @@ class Standard extends AbstractRouter {
 
             /**
              * @internal
+             *
              * $data is being rewritten to point to the first in the filtered dataset
              * because this contains the most specific route, counter-balancing
              * the lack of gluttony of preg_match() that doesn't match as much as possible
@@ -133,6 +123,7 @@ class Standard extends AbstractRouter {
 
             /**
              * @internal
+             *
              * Validating Required Params
              * Only Parameters with a List|of|Acceptable|Values or with a defined REGEX
              * will be validated
@@ -381,6 +372,14 @@ class Standard extends AbstractRouter {
         }
 
         return $pairs;
+    }
+
+    /**
+     * Set Class Options.
+     * Defines a default filepath for PHP-array with Generated Routes
+     */
+    public function setOptions() {
+        return [ 'filePath' => 'data/routes.php' ];
     }
 
     // Auxiliary Methods

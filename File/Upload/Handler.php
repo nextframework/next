@@ -29,11 +29,11 @@ use Next\HTTP\Response;                            # Response Class
 class Handler extends Object {
 
     /**
-     * Default Options
+     * Parameter Options Definition
      *
-     * @var array $defaultOptions
+     * @var array $parameters
      */
-    protected $defaultOptions = [
+    protected $parameters = [
 
         'uploadDir'                 => 'uploads',
         'name'                      => 'files',

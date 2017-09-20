@@ -27,11 +27,11 @@ use Next\Components\Parameter;                     # Parameter Class
 abstract class AbstractField extends Object implements Parameterizable, Field {
 
     /**
-     * Headers Fields Default/Known Options
+     * Parameter Options Definition
      *
-     * @var array $defaultOptions
+     * @var array $parameters
      */
-    protected $defaultOptions = [
+    protected $parameters = [
 
         /**
          * Defines whether or not Headers accept multiple values at same time

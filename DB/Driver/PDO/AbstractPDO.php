@@ -67,7 +67,7 @@ abstract class AbstractPDO extends AbstractDriver {
                 [
                   'Next\DB\Statement\PDO\Statement',
 
-                  [ new \Next\DB\Statement\PDO\Adapter( $this ) ]
+                  [ new \Next\DB\Statement\PDO\Adapter( [ 'driver' => $this ] ) ]
                 ]
             );
 

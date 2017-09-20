@@ -11,11 +11,16 @@
 namespace Next\Components\Types;
 
 /**
+ * InvalidArgumentException Class
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
+/**
  * Defines the Unsigned Data-type Type
  *
  * @package    Next\Components\Types
  */
-final class Unsigned extends Number {
+class Unsigned extends Number {
 
     // Abstract Methods Implementation
 
@@ -36,5 +41,36 @@ final class Unsigned extends Number {
      */
     protected function accept( $value ) {
         return parent::accept( $value ) && ( $value >= 0 );
+    }
+
+    // Verifiable Interface Method Implementation
+
+    /**
+     * Verifies Object Integrity.
+     * Checks whether or not given value is acceptable by data-type class
+     *
+     * Note that there is no signed–unsigned type distinction.
+     * Here, Unsigned just represents a valid non-negative
+     * \Next\Components\Types\Number
+     *
+     * @throws Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if Parameter Option 'value' is not a unsigned number -OR- is NULL
+     */
+    public function verify() {
+
+        parent::verify();
+
+        if( $this -> options -> value < 0 ) {
+
+            throw new InvalidArgumentException(
+
+                sprintf(
+
+                    'Argument <strong>%s</strong> is not a valid Unsigned Number',
+
+                    ( $this -> options -> value !== NULL ? $this -> options -> value : 'NULL' )
+                )
+            );
+        }
     }
 }

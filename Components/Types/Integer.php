@@ -10,7 +10,10 @@
  */
 namespace Next\Components\Types;
 
-use Next\Components\Types\Integer\AlphaID;
+/**
+ * InvalidArgumentException Class
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
 
 /**
  * Defines the Integer Data-type Type and prototypes some o PHP Integer
@@ -19,21 +22,34 @@ use Next\Components\Types\Integer\AlphaID;
  *
  * @package    Next\Components\Types
  */
-final class Integer extends Number {
+class Integer extends Number {
 
-    // Abstract Methods Implementation
+    // Verifiable Interface Method Implementation
 
     /**
-     * Check whether or not given value is acceptable by datatype class
+     * Verifies Object Integrity.
+     * Checks whether or not given value is acceptable by data-type class
      *
-     * @param mixed $value
-     *  Value to set
-     *
-     * @return boolean
-     *  TRUE if given value is of the type integer and FALSE otherwise
+     * @throws Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if Parameter Option 'value' is not a integer -OR- is NULL
      */
-    protected function accept( $value ) {
-        return ( is_int( $value ) && ! is_float( $value ) );
+    public function verify() {
+
+        parent::verify();
+
+        if( ! is_int( $this -> options -> value ) ||
+                is_float( $this -> options -> value ) ) {
+
+            throw new InvalidArgumentException(
+
+                sprintf(
+
+                    'Argument <strong>%s</strong> is not a valid Integer',
+
+                    ( $this -> options -> value !== NULL ? $this -> options -> value : 'NULL' )
+                )
+            );
+        }
     }
 
     // Prototypable Method Implementation
@@ -49,26 +65,19 @@ final class Integer extends Number {
 
         parent::prototype();
 
-        // Prototypes that requires a value to work with
+        $this -> implement(
 
-        if( $this -> _value !== NULL ) {
+            $this, 'convert',
 
-            // Custom Functions
+            function( $number, $from, $to ) {
+                return new String( [ 'value' => base_convert( $number, $from, $to ) ] );
+            },
 
-            $value = $this -> _value;
+            $this -> _value
+        );
 
-            $this -> implement(
+        // Custom Prototypes
 
-                'convert',
-
-                function( $from, $to ) use( $value ) {
-                    return new String( base_convert( $value, $from, $to ) );
-                }
-            );
-
-            // Custom Prototypes
-
-            $this -> implement( 'alphaID', new AlphaID, $this -> value );
-        }
+        $this -> implement( $this, 'AlphaID', new Integer\AlphaID, $this -> _value );
     }
 }

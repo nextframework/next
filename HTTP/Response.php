@@ -563,6 +563,15 @@ class Response extends Object {
     const CLEANUP = '/(^[\\r\\n]*|[\\r\\n]{2,})[\\s\\t]*[\\r\\n]+/';
 
     /**
+     * Parameter Options Definition
+     *
+     * @var array $parameters
+     */
+    protected $parameters = [
+        'meta' => [ 'requried' => FALSE, 'default' => [] ]
+    ];
+
+    /**
      * HTTP Message for Codes
      *
      * @var array $messages
@@ -696,9 +705,9 @@ class Response extends Object {
      * Should we cleanup excess of whitespace and try to
      * fix indentation for markup languages?
      *
-     * @var boolean $shouldCleanupMarkup
+     * @var boolean $shouldApplyMarkupAdjustments
      */
-    private $shouldCleanupMarkup = TRUE;
+    private $shouldApplyMarkupAdjustments = TRUE;
 
     /**
      * Should we avoid Response Headers to be sent?
@@ -708,20 +717,12 @@ class Response extends Object {
     private $disableSendingHeaders = FALSE;
 
     /**
-     * Response Constructor
-     *
-     * @param string|optional $data
-     *  Response Data
-     *
-     * @param array|optional $metaData
-     *  Response Meta Data
-     *
-     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
-     *  Optional Configuration Options for the Response Object
+     * Additional Initialization.
+     * Prepares HTTP Response Headers Collection extending
+     * Response's Context to it and sends all HTTP response Headers
+     * already sent so far
      */
-    public function __construct( $data = NULL, array $metaData = [], $options = NULL ) {
-
-        parent::__construct( $options );
+    protected function init() {
 
         // Headers Management Object
 
@@ -731,68 +732,31 @@ class Response extends Object {
 
         $this -> extend( new Invoker( $this, $this -> headers ) );
 
-        /**
-         * @internal
-         * When dealing with Routed (internal) Requests, no data will
-         * be available because the Front Controller did not send the
-         * Response yet.
-         *
-         * In External Requests, the Response is not sent anyways,
-         * so we condition the buffer length to not hide any output
-         * manually added, like a debugging purposes var_dump()
-         */
-        if( empty( $data ) || ob_get_length() ) {
+        if( defined( 'TURBO_MODE' ) && TURBO_MODE === FALSE ) {
 
-            if( defined( 'TURBO_MODE' ) && ! TURBO_MODE === TRUE ) {
+            if( function_exists( 'apache_response_headers' ) ) {
 
-                if( function_exists( 'apache_response_headers' ) ) {
+                try {
 
-                    try {
+                    $this -> headers
+                          -> addHeader( apache_response_headers() );
 
-                        $this -> headers
-                              -> addHeader( apache_response_headers() );
+                } catch( FieldsException $e ) {
 
-                    } catch( FieldsException $e ) {
-
-                        /**
-                         * @internal
-                         * We're silencing the FieldsException in order to not
-                         * break the Response Flow
-                         *
-                         * However, if this Exception is caught, no Response
-                         * Headers will be available
-                         */
-                    }
-
-                } else {
-
-                    $headers = headers_list();
-
-                    foreach( $headers as $data ) {
-
-                        list( $header, $value ) = explode( ':', $data, 2 );
-
-                        try {
-
-                           $this -> headers -> addHeader( $header, $value );
-
-                        } catch( FieldsException $e ) {
-
-                           // Same explanation as above
-                        }
-                    }
+                    /**
+                     * @internal
+                     * We're silencing the FieldsException in order to not
+                     * break the Response Flow
+                     *
+                     * However, if this Exception is caught, no Response
+                     * Headers will be available
+                     */
                 }
             }
+        }
 
-        } else {
-
-            $this -> appendBody( $data );
-
-            if( count( $metaData ) != 0 &&
-                    ( defined( 'TURBO_MODE' ) && ! TURBO_MODE === TRUE ) ) {
-
-                $this -> addResponseData( $metaData );
-            }
+        if( count( $this -> options -> meta ) > 0 ) {
+            $this -> addResponseData();
         }
     }
 
@@ -849,7 +813,7 @@ class Response extends Object {
      */
     public function send() {
 
-        if( $this -> shouldCleanupMarkup ) {
+        if( ! empty( $this -> body ) && $this -> shouldApplyMarkupAdjustments ) {
 
             // Cleaning Up HTML's extra NewLines
 
@@ -1058,17 +1022,7 @@ class Response extends Object {
     }
 
     /**
-     * Get current state of Markup Cleanup flag
-     *
-     * @return boolean
-     *  Markup Cleanup flag value
-     */
-    public function shouldCleanupMarkup() {
-        return $this -> shouldCleanupMarkup;
-    }
-
-    /**
-     * Change state of Markup Cleaning flag
+     * Change state of Markup Adjustments flag
      *
      * @param boolean $flag
      *  New state for the flag
@@ -1076,9 +1030,9 @@ class Response extends Object {
      * @return \Next\HTTP\Response
      *  Response Instance (Fluent Interface)
      */
-    public function cleanupMarkup( $flag ) {
+    public function applyMarkupAdjustments( $flag ) {
 
-        $this -> shouldCleanupMarkup = (bool) $flag;
+        $this -> shouldApplyMarkupAdjustments = (bool) $flag;
 
         return $this;
     }
@@ -1224,7 +1178,7 @@ class Response extends Object {
      *  TRUE if Response Body is not empty and FALSE otherwise
      */
     public function hasBody() {
-        return (bool) ! empty( $this -> body );
+        return ( ! empty( $this -> body ) );
     }
 
     /**
@@ -1246,8 +1200,9 @@ class Response extends Object {
      *  TRUE if HTTP Response Code is in Client Error Range and FALSE otherwise
      */
     public function isClientError() {
-        return ( $this -> statusCode <  self::INTERNAL_SERVER_ERROR &&
-                 $this -> statusCode >= self::BAD_REQUEST );
+
+        return ( $this -> statusCode >= self::BAD_REQUEST &&
+                    $this -> statusCode < self::INTERNAL_SERVER_ERROR );
     }
 
     /**
@@ -1258,7 +1213,7 @@ class Response extends Object {
      *  and FALSE otherwise
      */
     public function isForbidden() {
-        return ( self::FORBIDDEN == $this -> statusCode );
+        return ( $this -> statusCode == self::FORBIDDEN );
     }
 
     /**
@@ -1269,18 +1224,20 @@ class Response extends Object {
      *  and FALSE otherwise
      */
     public function isInformational() {
-        return ( $this -> statusCode >= self::HTTP_CONTINUE && $this -> statusCode < self::OK );
+
+        return ( $this -> statusCode >= self::HTTP_CONTINUE &&
+                    $this -> statusCode < self::OK );
     }
 
     /**
-     * Does the status code indicate the resource is not found?
+     * Does the status code indicate the resource was not found?
      *
      * @return bool
      *  TRUE if HTTP Response Code is equal to Not Found Response Code
      *  and FALSE otherwise
      */
     public function isNotFound() {
-        return ( self::NOT_FOUND === $this -> statusCode );
+        return ( $this -> statusCode == self::NOT_FOUND );
     }
 
     /**
@@ -1291,7 +1248,7 @@ class Response extends Object {
      *  and FALSE otherwise
      */
     public function isOk() {
-        return ( self::OK === $this -> statusCode );
+        return ( $this -> statusCode == self::OK );
     }
 
     /**
@@ -1302,8 +1259,8 @@ class Response extends Object {
      */
     public function isServerError() {
 
-        return ( self::INTERNAL_SERVER_ERROR <= $this -> statusCode &&
-            600 > $this -> statusCode );
+        return ( $this -> statusCode >= self::INTERNAL_SERVER_ERROR &&
+                    $this -> statusCode < 600 );
     }
 
     /**
@@ -1314,8 +1271,8 @@ class Response extends Object {
      */
     public function isRedirect() {
 
-        return ( self::MULTIPLE_CHOICES <= $this -> statusCode &&
-            self::BAD_REQUEST > $this -> statusCode );
+        return ( $this -> statusCode >= self::MULTIPLE_CHOICES &&
+                    $this -> statusCode < self::BAD_REQUEST );
     }
 
     /**
@@ -1326,8 +1283,8 @@ class Response extends Object {
      */
     public function isSuccess() {
 
-        return ( self::OK <= $this -> statusCode &&
-            self::MULTIPLE_CHOICES > $this -> statusCode );
+        return ( $this -> statusCode >= self::OK &&
+                    $this -> statusCode < self::MULTIPLE_CHOICES );
     }
 
     /**
@@ -1425,13 +1382,17 @@ class Response extends Object {
      * Fill Response Information
      *
      * @param array $meta
-     *  Response Metadata
+     *  Response MetaData
      */
-    private function addResponseData( array $meta ) {
+    private function addResponseData() {
+
+        if( ! array_key_exists( 'wrapper_data', $this -> options -> meta ) ) {
+            return;
+        }
 
         // Shortening Wrapper Data Metadata
 
-        $wrapperData = ( isset( $meta['wrapper_data'] ) ? $meta['wrapper_data'] : NULL );
+        $data = $this -> options -> meta['wrapper_data'];
 
         // Default, for PHP error prevention
 
@@ -1439,15 +1400,16 @@ class Response extends Object {
 
         /**
          * @internal
+         *
          * Response Headers are the same array of Wrapper Data, but
          * if we have the HTTP Status Code in the first index, the
          * Headers themselves start from the second index
          *
          * If HTTP Response Code is missing, they start from first index
          */
-        $headers = $wrapperData;
+        $headers = $data;
 
-        if( ! is_null( $wrapperData ) && count( $wrapperData ) != 0 ) {
+        if( ! is_null( $data ) && count( $data ) != 0 ) {
 
             // HTTP Status Code
 
@@ -1456,7 +1418,7 @@ class Response extends Object {
              * Simple way to get HTTP Status Code:
              * From the end, three digits before any text
              */
-            preg_match( '/ (\d{3}) .*?$/', $wrapperData[ 0 ], $code );
+            preg_match( '/ (\d{3}) .*?$/', $data[ 0 ], $code );
 
             if( count( $code ) != 0 ) {
 

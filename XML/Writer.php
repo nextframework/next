@@ -30,11 +30,11 @@ use Next\HTTP\Headers\Fields\Entity\ContentType;    # Content-Type Entity Header
 class Writer extends Object {
 
     /**
-     * XML Writer Default Options
+     * Parameter Options Definition
      *
-     * @var array $defaultOptions
+     * @var array $parameters
      */
-    protected $defaultOptions = [
+    protected $parameters = [
 
         'addPrologue' => TRUE,
         'version'     => '1.0',
@@ -49,13 +49,15 @@ class Writer extends Object {
     ];
 
     /**
-     * Additional initialization
+     * Additional initialization.
+     * Extends XML\Writer Context to native XmlWriter Class and
+     * starts the XML document
      */
     public function init() {
 
-        // Extending this class' Context to native XMLWriter Class
-
-        $this -> extend( new Invoker( $this, new Mimicker( new \XMLWriter ) ) );
+        $this -> extend(
+            new Invoker( $this, new Mimicker( [ 'resource' => new \XmlWriter ] ) )
+        );
 
         // Starting XML Document
 

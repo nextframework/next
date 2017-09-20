@@ -11,30 +11,42 @@
 namespace Next\Components\Types;
 
 /**
+ * InvalidArgumentException Class
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
+/**
  * Defines the Boolean Data-type Type and prototypes some o PHP Boolean
  * functions (some in different argument order) and some external/custom
  * resources as well
  *
  * @package    Next\Components\Types
  */
-final class Boolean extends AbstractTypes {
+class Boolean extends AbstractTypes {
 
-    // Abstract Methods Implementation
+    // Verifiable Interface Method Implementation
 
     /**
-     * Check whether or not given value is acceptable by datatype class
+     * Verifies Object Integrity.
+     * Checks whether or not given value is acceptable by data-type class
      *
-     * @param mixed $value
-     *  Value to set
-     *
-     * @return boolean
-     *  TRUE if given value is of the type boolean or given value
-     *  is any other accepted boolean variants.
-     *
-     *  Return FALSE otherwise
+     * @throws Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if Parameter Option 'value' is not a boolean -OR- is NULL
      */
-    protected function accept( $value ) {
-        return is_bool( $value );
+    public function verify() {
+
+        if( is_null( $this -> options -> value ) || ! is_bool( $this -> options -> value ) ) {
+
+            throw new InvalidArgumentException(
+
+                sprintf(
+
+                    'Argument <strong>%s</strong> is not a valid Boolean',
+
+                    ( $this -> options -> value !== NULL ? $this -> options -> value : 'NULL' )
+                )
+            );
+        }
     }
 
     // Prototypable Method Implementation
@@ -48,20 +60,15 @@ final class Boolean extends AbstractTypes {
 
         // Prototypes that requires a value to work with
 
-        if( $this -> _value !== NULL ) {
+        $this -> implement(
 
-            // Custom Functions
+            $this, 'compare',
 
-            $value = $this -> _value;
+            function( $a, $b ) {
+                return ( (bool) $a === (bool) $b );
+            },
 
-            $this -> implement(
-
-                'compare',
-
-                function( $b ) use( $value ) {
-                    return ( (bool) $value === (bool) $b );
-                }
-            );
-        }
+            $this -> _value
+        );
     }
 }
