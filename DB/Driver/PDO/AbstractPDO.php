@@ -10,8 +10,14 @@
  */
 namespace Next\DB\Driver\PDO;
 
-use Next\DB\Driver\DriverException;    # Driver Exception Class
-use Next\DB\Driver\AbstractDriver;     # Connection Driver Abstract Class
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\RuntimeException;
+
+use Next\Components\Interfaces\Configurable;    # Configurable Interface
+
+use Next\DB\Driver\AbstractDriver;              # Connection Driver Abstract Class
 
 /**
  * PDO Driver Abstract Adapter Class
@@ -29,13 +35,12 @@ abstract class AbstractPDO extends AbstractDriver {
      * Connect
      *
      * @return PDO
+     *  PDO Connection Link
      *
-     * @throws \Next\DB\Driver\DriverException
-     *  A PDOException was caught
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown with \PDOException's message if one is caught
      */
     public function connect() {
-
-        // Connecting...
 
         try {
 
@@ -71,16 +76,16 @@ abstract class AbstractPDO extends AbstractDriver {
                 ]
             );
 
-            // Adapter Extra Initialization
+            /**
+             * Running post-initialization Configuration, if needed
+             */
+            if( $this instanceof Configurable ) $this -> configure();
 
-            $this -> configure();
+            return $this -> connection;
 
         } catch( \PDOException $e ) {
-
-            throw DriverException::PDOException( $e );
+            throw new RuntimeException( $e -> getMessage() );
         }
-
-        return $this -> connection;
     }
 
     /**
@@ -117,8 +122,8 @@ abstract class AbstractPDO extends AbstractDriver {
      * @return \Next\DB\Statement\Statement
      *  Statement Object
      *
-     * @throws \Next\DB\Driver\DriverException
-     *  A PDOException was caught
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown with \PDOException's message if one is caught
      */
     public function query( $statement ) {
 
@@ -127,8 +132,7 @@ abstract class AbstractPDO extends AbstractDriver {
             return $this -> getConnection() -> query( (string) $statement );
 
         } catch( \PDOException $e ) {
-
-            throw DriverException::PDOException( $e );
+            throw new RuntimeException( $e -> getMessage() );
         }
     }
 
@@ -141,8 +145,8 @@ abstract class AbstractPDO extends AbstractDriver {
      * @return \Next\DB\Statement\Statement
      *  Statement Object
      *
-     * @throws \Next\DB\Driver\DriverException
-     *  A PDOException was caught
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown with \PDOException's message if one is caught
      */
     public function prepare( $statement ) {
 
@@ -151,8 +155,7 @@ abstract class AbstractPDO extends AbstractDriver {
             return $this -> getConnection() -> prepare( (string) $statement );
 
         } catch( \PDOException $e ) {
-
-            throw DriverException::PDOException( $e );
+            throw new RuntimeException( $e -> getMessage() );
         }
     }
 
@@ -170,8 +173,8 @@ abstract class AbstractPDO extends AbstractDriver {
      * @return integer|string
      *  ID of last inserted record
      *
-     * @throws \Next\DB\Driver\DriverException
-     *  A PDOException was caught
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown with \PDOException's message if one is caught
      */
     public function lastInsertId( $name = NULL ) {
 
@@ -180,8 +183,7 @@ abstract class AbstractPDO extends AbstractDriver {
             return $this -> getConnection() -> lastInsertId( $name );
 
         } catch( \PDOException $e ) {
-
-            throw DriverException::PDOException( $e );
+            throw new RuntimeException( $e -> getMessage() );
         }
     }
 
@@ -209,17 +211,13 @@ abstract class AbstractPDO extends AbstractDriver {
     /**
      * Check for Connection Driver Requirements
      *
-     * @throws \Next\DB\Driver\DriverException
+     * @throws \Next\Exception\Exceptions\RuntimeException
      *  PDO Extension was not loaded
      */
     protected function checkRequirements() {
 
         if( ! extension_loaded( 'pdo' ) ) {
-
-            throw DriverException::unfullfilledRequirements(
-
-                'PDO Extension was not loaded'
-            );
+            throw new RuntimeException( 'PDO Extension not loaded' );
         }
     }
 }

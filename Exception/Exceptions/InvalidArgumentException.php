@@ -1,21 +1,26 @@
 <?php
 
+/**
+ * Invalid Argument Exception Class | Exception/Exceptions\InvalidArgumentException.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
+ */
 namespace Next\Exception\Exceptions;
 
-use Next\Exception\Exception;    # Exception Class
+require_once __DIR__ . '/LogicException.php';
 
-class InvalidArgumentException extends Exception {
-
-    public static function type( $option, $type ) {
-
-        return new self(
-
-            sprintf(
-
-                'Parameter Option <strong>%1$s</strong> must be an instance of <em>%2$s</em>',
-
-                $option, $type
-            )
-        );
-    }
-}
+/**
+ * The InvalidArgumentException defines an Exception Type for when
+ * an argument is not of the expected type
+ *
+ * As for Next Framework, at least for now, we also consider missing
+ * values, like Parameter Options, as InvalidArgumentException as well
+ *
+ * @package    Next\Exception
+ *
+ * @uses       Next\Exception\Exceptions\LogicException
+ */
+class InvalidArgumentException extends LogicException {}

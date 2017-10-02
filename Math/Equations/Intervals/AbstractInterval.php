@@ -10,8 +10,12 @@
  */
 namespace Next\Math\Equations\Intervals;
 
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
 use Next\Math\Equations\Equation;    # Equations Interface
-use Next\Math\MathException;         # Math Exception Class
 use Next\Components\Object;          # Object Class
 
 /**
@@ -21,7 +25,7 @@ use Next\Components\Object;          # Object Class
  *
  * @uses       \Next\Math\Equations\Equation,
  *             \Next\Math\Equations\Intervals\Interval,
- *             \Next\Math\MathException, \Next\Components\Object,
+ *             \Next\Components\Object,
  */
 abstract class AbstractInterval extends Object implements Equation, Interval {
 
@@ -235,28 +239,38 @@ abstract class AbstractInterval extends Object implements Equation, Interval {
     /**
      * Checks Parameter Options Integrity
      *
-     * @throws \Next\Math\MathException
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Thrown if required Option 'positive' with the total number of
      *  positive results is missing or is not a valid integer
      *
-     * @throws \Next\Math\MathException
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Thrown if required Option 'negative' with the total number of
      *  negative results is missing or is not a valid integer
      */
     private function checkIntegrity() {
 
         if( ! isset( $this -> options -> positive ) ) {
-            throw new MathException( 'Interval Equation requires an integer representing the total number of positive results' );
+
+            throw new InvalidArgumentException(
+                'Interval Equation requires an integer representing
+                the total number of positive results'
+            );
         }
 
         if( ! isset( $this -> options -> negative ) ) {
-            throw new MathException( 'Interval Equation requires an integer representing the total number of negative results' );
+
+            throw new InvalidArgumentException(
+                'Interval Equation requires an integer representing
+                the total number of negative results'
+            );
         }
 
         if( $this -> options -> confidence < 0 || $this -> options -> confidence >= 1 ) {
 
-            throw new MathException(
-                'Interval Equation requires a positive float lower than 1.0 (i.e. 100%) representing the level of statistical confidence'
+            throw new InvalidArgumentException(
+                'Interval Equation requires a positive float lower
+                than 1.0 (i.e. 100%) representing the level
+                of statistical confidence'
             );
         }
     }

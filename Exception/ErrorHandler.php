@@ -11,9 +11,6 @@
 namespace Next\Exception;
 
 use Next\Controller\Controller;                  # Controller Interface
-use Next\Application\ApplicationException;       # Application Exception
-use Next\HTTP\Response\ResponseException;        # Response Exception
-use Next\HTTP\Headers\Fields\FieldsException;    # Header Field Exception
 use Next\Controller\Router\NullRouter;           # Null Router Class
 use Next\HTTP\Request;                           # HTTP Request
 use Next\HTTP\Response;                          # HTTP Response
@@ -91,23 +88,9 @@ class ErrorHandler implements Handler {
 
                     call_user_func( [ new ErrorHandlerController( $application ), 'error' ] );
 
-                    // Adding Response Code
+                    $response -> addHeader( 500 ) -> send();
 
-                    try {
-
-                        $response -> addHeader( 500 );
-
-                    } catch( FieldsException $e ) {}
-
-                    /**
-                     * Sending the Response
-                     *
-                     * @todo Test further if it's needed to handle sent
-                     * headers like in previous version of Debug Module
-                     */
-                    $response -> send();
-
-                } catch( ApplicationException $e ) {
+                } catch( Exception $e ) {
 
                     // If fail here, you're in serious troubles XD
 

@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Application Abstract Class | Application/AbstractApplication.php
+ * Caching Schema Chain Class | Cache\Schema\Chain.php
  *
  * @author       Bruno Augusto
  *
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace Next\Application;
+namespace Next\Cache\Schemas;
 
 /**
  * Exception Class(es)
@@ -19,39 +19,39 @@ use Next\Components\Object;                            # Object Class
 use Next\Components\Collections\AbstractCollection;    # Abstract Collection Class
 
 /**
- * Defines a \Next\Components\Collections\AbstractCollection for Applications
+ * Defines a \Next\Components\Collections\AbstractCollection for Caching Schemas.
  *
- * @package    Next\Application
+ * @package    Next\Cache
  */
 class Chain extends AbstractCollection {
 
     /**
      * Checks if given `Next\Components\Object` is acceptable in a
-     * Applications' Chain
+     * Caching Schemas' Chain
      *
-     * To be valid, the Object must implement `\Next\Application\Application` Interface
+     * To be valid, the Object must implement `\Next\Cache\Schemas\Schema` Interface
      *
      * @param \Next\Components\Object $object
      *  An Object object
      *
      * @return boolean
-     *  TRUE if given Object is acceptable in Applications' Collection
+     *  TRUE if given Object is acceptable in Caching Schemas' Collection
      *  and FALSE otherwise
      *
      * @throws \Next\Exception\Exceptions\InvalidArgumentException
-     *  Given Object is not acceptable in a Applications' Chain
+     *  Given Object is not acceptable in a Caching Schemas' Chain
      */
-    protected function accept( Object $object ) {
+    public function accept( Object $object ) {
 
-        if( ! $object instanceof Application ) {
+        if( ! $object instanceof Schema ) {
 
             return new InvalidArgumentException(
 
                 sprintf(
 
-                    '<strong>%s</strong> is not a valid Application
+                    '<strong>%s</strong> is not a valid Caching Schema
 
-                    Applications must implement <em>Next\Application\Application</em> Interface',
+                    Caching Schemas must implement <em>Next\Cache\Schemas\Schema</em> Interface',
 
                     $object
                 )

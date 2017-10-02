@@ -10,6 +10,11 @@
  */
 namespace Next\DB\Table;
 
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
 use Next\Components\Object;    # Object Class
 
 /**
@@ -41,13 +46,24 @@ abstract class AbstractTable extends Object implements Table {
      *
      * Checks for the presence of model PRIMARY KEY and thus aborting if missing
      *
-     * @throws \Next\DB\Table\TableException
-     *  Thrown if the PRIMARY KEY column NAME is missing from Entity
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if the PRIMARY KEY column NAME has not been defined
+     *  on Entity Class
      */
     public function init() {
 
         if( is_null( $this -> _primary ) ) {
-            throw TableException::missingPrimaryKey( $this );
+
+            throw new InvalidArgumentException(
+
+                sprintf(
+
+                    'PRIMARY KEY has not been defined on
+                    Entity Class <strong>%s</strong> (<em>%s</em>)',
+
+                    (string) $table, $table -> getClass() -> getName()
+                )
+            );
         }
 
         // Creating the PRIMARY KEY Column in runtime
@@ -222,8 +238,6 @@ abstract class AbstractTable extends Object implements Table {
      *
      * @param mixed|string|integer $offset
      *  Column offset to be emptied
-     *
-     * @return void
      */
     public function offsetUnset( $offset ) {
         $this -> {$offset} = NULL;

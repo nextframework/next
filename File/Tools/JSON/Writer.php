@@ -10,7 +10,7 @@
  */
 namespace Next\File\Tools\JSON;
 
-use Next\Components\Debug\Exception;            # Exception Class
+use Next\Exception\Exception;                   # Exception Class
 
 use Next\Components\Object;                     # Object Class
 
@@ -59,7 +59,7 @@ class writer extends Object {
      * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for the JSON Writer
      *
-     * @throws \Next\Components\Debug\Exception
+     * @throws \Next\Exception\Exception
      *  Thrown if given data is a valid PHP resource
      */
     public function __construct( $file, $data, $options = NULL ) {
@@ -78,8 +78,6 @@ class writer extends Object {
      *
      * @param integer|optional $options
      *  Additional options to be passed to json_encode()
-     *
-     * @return void
      */
     public function write( $options = 0 ) {
 

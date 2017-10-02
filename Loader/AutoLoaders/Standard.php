@@ -10,10 +10,16 @@
  */
 namespace Next\Loader\AutoLoader;
 
+/**
+ * Exception Class(es)
+ */
+require_once __DIR__ . '/../../Exception/Exceptions/InvalidArgumentException.php';
+
+use Next\Exception\Exceptions\InvalidArgumentException;
+
 require_once __DIR__ . '/AutoLoader.php';    # AutoLoader Interface
 
 use Next\Loader\AutoLoaders\AutoLoader;      # AutoLoader Interface
-use Next\Loader\LoaderException;             # AutoLoader Exceptions Class
 
 /**
  * PHP-Array Class Map File AutoLoader
@@ -38,35 +44,27 @@ class Standard implements AutoLoader {
      * @param string $file
      *  PHP-Array Map File to work with
      *
-     * @throws \Next\LoaderException
-     *  PHP-Array Filename was not set
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if PHP-Array Filename was not set
      *
-     * @throws \Next\LoaderException
-     *  PHP-Array File is not readable
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if PHP-Array File is not readable
      */
     public function __construct( $file ) {
 
-        // PHP-Array File must exist
+        // PHP-Array File must exist and be readable
 
         if( ! is_file( $file ) ) {
 
-            throw LoaderException::unfullfilledRequirements(
-
-                'PHP-Array File <strong>%s</strong> doesn\'t exists',
-
-                [ $file ]
+            throw new InvalidArgumentException(
+                sprintf( 'PHP-Array File <strong>%s</strong> doesn\'t exists', $file )
             );
         }
 
-        // ... and must be readable
-
         if( ! is_readable( $file ) ) {
 
-            throw LoaderException::unfullfilledRequirements(
-
-                'PHP-Array File <strong>%s</strong> is not readable',
-
-                [ $file ]
+            throw new InvalidArgumentException(
+                sprintf( 'PHP-Array File <strong>%s</strong> is not readable', $file )
             );
         }
 

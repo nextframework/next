@@ -10,23 +10,24 @@
  */
 namespace Next\Controller;
 
-use Next\Controller\Router\RouterException;            # Router Exception Class
-use Next\Controller\Dispatcher\DispatcherException;    # Dispatcher Exception Class
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\BadMethodCallException;
+use Next\Controller\Router\RouterException;
 
-use Next\Components\Object;                            # Object Class
-use Next\Controller\Dispatcher\Standard;               # Standard Dispatcher Class
-
-use Next\Components\Debug\Handlers;                    # Errors & Exceptions Handlers
-
-use Next\HTTP\Request;                                 # Request Class
-use Next\HTTP\Response;                                # Response Class
+use Next\Components\Object;                 # Object Class
+use Next\Controller\Dispatcher\Standard;    # Standard Dispatcher Class
+use Next\Exception\ExceptionHandler;        # Exceptions Handlers Class
+use Next\HTTP\Request;                      # Request Class
+use Next\HTTP\Response;                     # Response Class
 
 /**
  * The Front Controller Class, one of the most busy classes in the
  * Routing/Dispatching process:
  *
  * - Iterates through all \Next\Application\Application added to \Next\Application\Chain;
- * - Executes all \Next\Cache\Schema\Schema added to their \Next\Cache\Schema\Chain;
+ * - Executes all \Next\Cache\Schemas\Schema added to their \Next\Cache\Schemas\Chain;
  * - Checks with their \Next\Controller\Router\Router if current
  *   Request should be routed or delivered "as is";
  * - Communes with their Routers until one of them becomes able to
@@ -34,7 +35,7 @@ use Next\HTTP\Response;                                # Response Class
  * - Deals with their associated \Next\Controller\Dispatcher\Dispatcher,
  *   checking if its \Next\HTTP\Response should output a Response Body
  *   or return it for later;
- * - And if anything at fail in the process deal with \Next\Components\Debug\Handlers
+ * - And if anything at fail in the process deal with \Next\Exception\ExceptionHandler
  *   to create an Error Response or then send 503 or 404 Headers
  *   to the browser;
  *
@@ -96,7 +97,7 @@ class Front extends Object {
 
                 // Trying to find a matching Route
 
-                $match = $router -> find(/* $application */);
+                $match = $router -> find();
 
                 if( $match !== FALSE ) {
 
@@ -119,13 +120,13 @@ class Front extends Object {
                                 return $dispatched;
                             }
 
-                        } catch( DispatcherException $e ) {
+                        } catch( BadMethodCallException $e ) {
 
                             /**
-                             *  If a DispatcherException should be
-                             *  thrown only when something irreversible
-                             *  happens it means we can safely use an
-                             *  HTTP Code 503 (Service Unavailable)
+                             *  BadMethodCallException are thrown when
+                             *  something irreversible happened when
+                             *  dispatching the Controller, which means
+                             *  we can safely use an HTTP Code 503
                              *
                              * But we'll condition this to the internal
                              * constant DEVELOPMENT MODE. If it is defined
@@ -134,9 +135,9 @@ class Front extends Object {
                              * can, possibly, understand why this is happening
                              */
                             if( ( defined( 'DEVELOPMENT_MODE' ) && DEVELOPMENT_MODE >= 1 ) ) {
-                                Handlers::development( $e, 503 );
+                                ExceptionHandler::development( $e, 503 );
                             } else {
-                                Handlers::response( 503 );
+                                ExceptionHandler::response( 503 );
                             }
                         }
 
@@ -163,7 +164,7 @@ class Front extends Object {
                  * for missing required parameters (if any) or mal-formed
                  * parameters
                  */
-                Handlers::production( $e );
+                ExceptionHandler::production( $e );
             }
         }
 
@@ -177,7 +178,7 @@ class Front extends Object {
         if( ! $this -> options -> dispatcher -> isDispatched() &&
             ! $this -> options -> dispatcher -> shouldReturn() ) {
 
-            Handlers::response( 404 );
+            ExceptionHandler::response( 404 );
         }
     }
 }

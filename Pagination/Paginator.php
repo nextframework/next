@@ -138,11 +138,11 @@ class Paginator extends Object implements Verifiable, \Countable {
      * Verifies Object Integrity
      *
      * @throws Next\Exception\Exceptions\InvalidArgumentException
-     *  Throw if initial value of Parameter Option 'itemsPerPage' is not an
+     *  Thrown if initial value of Parameter Option 'itemsPerPage' is not an
      *  integer or it's less than 1
      *
      * @throws Next\Exception\Exceptions\InvalidArgumentException
-     *  Throw if initial value of Parameter Option 'currentPage' is not an
+     *  Thrown if initial value of Parameter Option 'currentPage' is not an
      *  integer or it's less than 1
      */
     public function verify() {

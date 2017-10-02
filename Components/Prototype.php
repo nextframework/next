@@ -15,6 +15,11 @@ use Next\Components\Interfaces\Prototypical;    # Prototypical Interface
 use Next\Components\Interfaces\Prototypable;    # Prototypable Interface
 
 /**
+ * Bad Method Call Exception Class
+ */
+use Next\Exception\Exceptions\BadMethodCallException;
+
+/**
  * InvalidArgumentException Class
  */
 use Next\Exception\Exceptions\InvalidArgumentException;
@@ -91,8 +96,9 @@ abstract class Prototype implements Prototypical {
      *  If the the result is not an instance of \Next\Components\Types\Type
      *  it'll be returned "as is" as well
      *
-     * @throws \Next\Components\Debug\Exception
-     *  Called resource is not known as a prototype nor as a extended method
+     * @throws \Next\Exception\Exceptions\BadMethodCallException
+     *  Called resource is not known as a Prototyped Resource nor as
+     *  part of an Extended Context
      */
     public static function call( $caller, $method, array $args = [] ) {
 
@@ -138,12 +144,15 @@ abstract class Prototype implements Prototypical {
             return $result;
         }
 
-        throw \Next\Components\Debug\Exception::wrongUse(
+        throw new BadMethodCallException(
 
-            'Method <strong>%s</strong> could not be matched against any
-            methods in extended Context or prototyped functions',
+            sprintf(
 
-            [ $method ]
+                'Method <strong>%s</strong> could not be matched against
+                any methods in extended Context or prototyped functions',
+
+                $method
+            )
         );
     }
 

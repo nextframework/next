@@ -10,7 +10,10 @@
  */
 namespace Next\Session;
 
-use Next\Session\SessionException;    # Session Exception Class
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exception\RuntimeException;
 
 /**
  * Defines the Session Manager Class handling everything, from the
@@ -93,7 +96,9 @@ class Manager {
 
             if( ! empty( $currentID ) ) {
 
-                throw SessionException::alreadyInitiated();
+                throw new RuntimeException(
+                    'Session has been manually started with session_start()'
+                );
             }
 
             self::$instance = new Manager;
@@ -160,7 +165,7 @@ class Manager {
         $test = session_start();
 
         if( ! $test ) {
-            throw SessionException::initializationFailure();
+            throw new RuntimeException( 'Session initialization failure' );
         }
 
         // Initializing the Default Session Environment

@@ -76,8 +76,8 @@ class SQLite extends Object implements Writer {
      *  Number of records processed
      *
      * @throws \Next\Tools\Routes\Generators\Writer\OutputWriterException
-     *  Unable to record route, as a re-throwing of a
-     *  \Next\DB\Statement\StatementException caught
+     *  Unable to record route, as a re-throw of a
+     *  Next\DB\Table\TableException caught
      */
     public function save( array $data ) {
 

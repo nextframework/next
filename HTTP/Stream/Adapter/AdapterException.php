@@ -18,7 +18,7 @@ namespace Next\HTTP\Stream\Adapter;
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class AdapterException extends \Next\Components\Debug\Exception {
+class AdapterException extends \Next\Exception\Exception {
 
     /**
      * Invalid Opening Mode

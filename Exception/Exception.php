@@ -10,6 +10,8 @@
  */
 namespace Next\Exception;
 
+require_once __DIR__ . '/../Components/Interfaces/Verifiable.php';
+
 use Next\Components\Interfaces\Verifiable;    # Verifiable Interface Class
 use Next\Validate\HTTP\Headers\Code;          # HTTP Status Code Validator Class
 
@@ -38,41 +40,6 @@ class Exception extends \Exception implements Verifiable {
      * @var integer
      */
     const PHP_ERROR                    = 0x00000001;
-
-    /**
-     * Too few arguments for Exception Message Placeholders
-     *
-     * @var integer
-     */
-    const TOO_FEW_ARGUMENTS            = 0x00000002;
-
-    /**
-     * Supplied HTTP Response Code is not valid
-     *
-     * @var integer
-     */
-    const INVALID_RESPONSE_CODE        = 0x00000003;
-
-    /**
-     * Unfulfilled Requirements
-     *
-     * @var integer
-     */
-    const UNFULFILLED_REQUIREMENTS     = 0x00000004;
-
-    /**
-     * Fatal Error on resource usage
-     *
-     * @var integer
-     */
-    const WRONG_USE                    = 0x00000005;
-
-    /**
-     * Logical Error on resource usage
-     *
-     * @var integer
-     */
-    const LOGIC_ERROR                  = 0x00000006;
 
     /**
      * Placeholders Replacements
@@ -141,7 +108,7 @@ class Exception extends \Exception implements Verifiable {
          * ahead, e.g:
          *
          * ````
-         * throw new Exception( 'Some message', Exception::WRONG_USE, NULL, 'myCallbackFunction' );
+         * throw new Exception( 'Some message', Exception::UNKNOWN, NULL, 'myCallbackFunction' );
          * ````
          *
          * Then `$this -> responseCode` WILL NOT have the default
@@ -157,64 +124,6 @@ class Exception extends \Exception implements Verifiable {
         // Constructing the Exception
 
         parent::__construct( $message, $this -> code );
-    }
-
-    // Common Exceptions Messages
-
-    /**
-     * Unfulfilled Requirements
-     *
-     * Something is going wrong because your server did not achieved
-     * the minimum requirements defined by desired Module
-     *
-     * @param string $message
-     *  Message to be thrown
-     *
-     * @param array|optional $args
-     *  Variable list of argument to build final message
-     *
-     * @return \Next\Debug
-     *  Exception for Unfulfilled requirements
-     */
-    public static function unfullfilledRequirements( $message, array $args = [] ) {
-        return new static( $message, self::UNFULFILLED_REQUIREMENTS, $args );
-    }
-
-    /**
-     * Logic Violations
-     *
-     * Something is going wrong because of a Logic Violation.
-     * Logic Violation's Exceptions are thrown basically when your actions makes no sense :P
-     *
-     * @param string $message
-     *  Message to be thrown
-     *
-     * @param array|optional $args
-     *  Variable list of argument to build final message
-     *
-     * @return \Next\Debug
-     *  Exception for Unfulfilled requirements
-     */
-    public static function logic( $message, array $args = [] ) {
-        return new static( $message, self::LOGIC_ERROR, $args );
-    }
-
-    /**
-     * Wrong Use of Resources
-     *
-     * Something is going wrong after using a Framework Feature
-     *
-     * @param string $message
-     *  Message to be thrown
-     *
-     * @param array|optional $args
-     *  Variable list of argument to build final message
-     *
-     * @return \Next\Debug
-     *  Exception for Unfulfilled requirements
-     */
-    public static function wrongUse( $message, array $args = [] ) {
-        return new static( $message, self::WRONG_USE, $args );
     }
 
     // Accessory Methods
@@ -284,16 +193,7 @@ class Exception extends \Exception implements Verifiable {
         $validator = new Code( [ 'value' => $this -> responseCode ] );
 
         if( ! $validator -> validate() ) {
-
-            die(
-
-                sprintf(
-
-                    '[0x%08X]: Invalid or unknown HTTP Response Code supplied',
-
-                    self::INVALID_RESPONSE_CODE
-                )
-            );
+            die( 'Invalid or unknown HTTP Response Code supplied' );
         }
     }
 

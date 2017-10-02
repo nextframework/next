@@ -18,7 +18,7 @@ namespace Next\Tools\Routes\Generators;
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class GeneratorsException extends \Next\Components\Debug\Exception {
+class GeneratorsException extends \Next\Exception\Exception {
 
     /**
      * No Routes Found

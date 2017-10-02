@@ -158,7 +158,7 @@ class Standard extends Object implements Verifiable, Style {
      * Verifies Object Integrity
      *
      * @throws Next\Exception\Exceptions\InvalidArgumentException
-     *  Throw if initial value of Parameter Option 'before' is not an
+     *  Thrown if initial value of Parameter Option 'before' is not an
      *  integer or it's less than 1
      */
     public function verify() {

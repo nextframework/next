@@ -10,14 +10,20 @@
  */
 namespace Next\Components;
 
-use Next\Components\Interfaces\Contextualizable;    # Contextualizable Interface
-use Next\Components\Invoker;                        # Invoker Class
-use Next\Components\Utils\ArrayUtils;               # Array Utils Class
+/**
+ * Exception Class(es)
+ */
+use Next\Components\Interfaces\Contextualizable;
+use Next\Exception\Exceptions\BadMethodCallException;
+use Next\Exception\Exceptions\NullException;
+
+use Next\Components\Invoker;             # Invoker Class
+use Next\Components\Utils\ArrayUtils;    # Array Utils Class
 
 /**
  * Bridges two \Next\Components\Object instances wrapped by a
  * \Next\Components\Invoker Object and handles methods calling
- * and properties setting/getting within the Extended Context
+ * within the Extended Context
  *
  * @package    Next\Components
  */
@@ -40,26 +46,17 @@ class Context implements Contextualizable {
      *  One or more methods accessible through extended Context.
      *  Defaults to NULL, which means almost all PUBLIC methods will be accessible
      *
-     * @param string|array|optional $properties
-     *  One or more properties accessible through extended Context
-     *  Defaults to NULL, which means all PROTECTED properties will be accessible
-     *
      * @return \Next\Components\Context
      *  Context Instance (Fluent Interface)
      */
-    function extend( Invoker $invoker, $methods = NULL, $properties = NULL ) {
+    function extend( Invoker $invoker, $methods = NULL ) {
 
         $caller = $invoker -> getCaller();
         $callee = $invoker -> getCallee();
 
-        if( $callee instanceof Mimicker ) {
-
-            $reflector = new \ReflectionObject( $callee -> getMimicked() );
-
-        } else {
-
-            $reflector = $callee -> getClass();
-        }
+        $reflector = ( $callee instanceof Mimicker ?
+                         new \ReflectionObject( $callee -> getMimicked() ) :
+                            $callee -> getClass() );
 
         // Methods
 
@@ -75,34 +72,10 @@ class Context implements Contextualizable {
 
         $methods = array_map( [ $this, 'simplify' ], $methods );
 
-        // Properties
-
-        if( is_null( $properties ) ) {
-            $properties = $reflector -> getProperties( \ReflectionProperty::IS_PROTECTED );
-        }
-
-        $properties = array_filter( $properties, [ $this, 'filter' ] );
-
-        $properties = array_map( [ $this, 'simplify' ], $properties );
-
-        // Injecting Caller Object into Callee
-
-        try {
-
-            $property = $reflector -> getproperty( sprintf( '_%s', strtolower( $caller ) ) );
-
-            $property -> setAccessible( TRUE );
-
-            $property -> setValue( $invoker -> getCallee(), $caller );
-
-        } catch( \ReflectionException $e ) {
-            // Silenced because we'll only inject if the property exist
-        }
-
         // Building Context Structure
 
         $this -> callables[ $caller -> getClass() -> getName() ][] = [
-            ( $callee instanceof Mimicker ? $callee -> getMimicked() : $callee ), $methods, $properties
+            ( $callee instanceof Mimicker ? $callee -> getMimicked() : $callee ), $methods
         ];
 
         return $this;
@@ -125,8 +98,15 @@ class Context implements Contextualizable {
      *
      *  If invoking process fail, false will returned.
      *
-     * @throws \Next\Components\Debug\Exception
-     *  Called resource is not known as an extended method
+     * @throws \Next\Exception\Exceptions\BadmethodcallException
+     *  Thrown if a \ReflectionException is caught in
+     *  `\Next\Components\Context::call()` when trying to call the
+     *  method under Extended Context
+     *
+     * @throws \Next\Exception\Exceptions\NullException
+     *  Thrown as a way for `\Next\Components\Object` to know the
+     *  method hasn't been found as part of the Extended Context and
+     *  should try to search as Prototyped Resource
      */
     public function call( Object $caller, $method, array $args = [] ) {
 
@@ -155,145 +135,38 @@ class Context implements Contextualizable {
 
                 } catch( \ReflectionException $e ) {
 
-                    return FALSE;
+                    throw new BadMethodCallException(
+
+                        sprintf(
+
+                            'Unable to call method <strong>%s</strong>
+                            under Extended Context',
+
+                            $method
+                        )
+                    );
                 }
             }
         }
 
         /**
-         * Unknown Method
-         *
          * @internal
          *
-         * In fact, because of the Prototype feature, triggered in \Next\Components\Object::__call()
-         * when a generic Exception is thrown, this Exception will never be caught or seen
+         * Theoretically, here we should throw an Exception in case
+         * the method couldn't be found as part of the Extended Context.
+         *
+         * But because we also have Prototyped Resources feature, this
+         * Exception will be never seen, acting just as a hint for
+         * `Next\Components\Object::__call()` to trigger the calling
+         * of Prototyped Resources
+         *
+         * If the method can't be found there as well THEn it's a real
+         * method not found scenario
+         *
+         * @see Next\Components\Object::__call()
+         * @see Next\Components\Prototype::call()
          */
-        throw ContextException::methodNotFound( $method );
-    }
-
-    /**
-     * Get value of a protected property from caller context
-     *
-     * @param \Next\Components\Object $caller
-     *  Caller Object
-     *
-     * @param string $property
-     *  Property trying to be accessed
-     *
-     * @return mixed
-     *  The value of the property
-     */
-    public function get( Object $caller, $property ) {
-
-        $caller = $caller -> getClass() -> getName();
-
-        if( array_key_exists( $caller, $this -> callables ) ) {
-
-            $offset = ArrayUtils::search(
-
-                $this -> callables[ $caller ], $property
-            );
-
-            if( $offset != -1 ) {
-
-                try {
-
-                    $reflector = new \ReflectionProperty(
-
-                        $this -> callables[ $caller ][ $offset ][ 0 ], $property
-                    );
-
-                    $reflector -> setAccessible( TRUE );
-
-                    return $reflector -> getValue( $this -> callables[ $caller ][ $offset ][ 0 ] );
-
-                } catch( \ReflectionException $e ) {
-
-                    // Unable to access chosen property
-
-                    throw ContextException::propertyFailure( $property, $caller );
-                }
-
-            } else {
-
-                // Unknown Property
-
-                throw ContextException::propertyNotFound( $property, $caller, FALSE );
-            }
-
-        } else {
-
-            /**
-             * Unknown Caller
-             *
-             * @internal
-             * This Exception exist for debugging purposes only
-             */
-            throw \Next\Components\Debug\Exception::wrongUse(
-
-                'Object <strong>%s</strong> could not be recognized as a valid extended context',
-
-                [ $caller ]
-            );
-        }
-    }
-
-    /**
-     * Set value to a protected property from caller context
-     *
-     * @param \Next\Components\Object $caller
-     *  Caller Object
-     *
-     * @param string $property
-     *  Property trying to be changed
-     *
-     * @param mixed $value
-     *  New value for the property
-     */
-    public function set( Object $caller, $property, $value ) {
-
-        $caller = $caller -> getClass() -> getName();
-
-        if( array_key_exists( $caller, $this -> callables ) ) {
-
-            $offset = ArrayUtils::search(
-
-                $this -> callables[ $caller ], $property
-            );
-
-            if( $offset != -1 ) {
-
-                try {
-
-                    $reflector = new \ReflectionProperty(
-
-                        $this -> callables[ $caller ][ $offset ][ 0 ], $property
-                    );
-
-                    $reflector -> setAccessible( TRUE );
-
-                    $reflector -> setValue( $this -> callables[ $caller ][ $offset ][ 0 ], $value );
-
-                } catch( \ReflectionException $e ) {
-
-                    // Unable to modify chosen property
-
-                    throw ContextException::propertyFailure( $property, $caller, FALSE );
-                }
-
-            } else {
-
-                // Unknown Property
-
-                throw ContextException::propertyNotFound( $property, $caller );
-            }
-
-        } else {
-
-            // Unknown Caller
-
-            throw ContextException::callerNotFound( $caller );
-        }
+        throw new NullException( NULL );
     }
 
     /**
@@ -316,19 +189,18 @@ class Context implements Contextualizable {
      * - \Next\Components\Prototype
      * - Any magic method (__get(), __set()...)
      *
-     * @param string|ReflectionMethod|ReflectionProperty $element
+     * @param string|ReflectionMethod $element
      *  The current element in the "behind the scenes" loop of array_filter()
      *
      * @return boolean
-     *  TRUE if current element is not a ReflectionMethod or ReflectionProperty object -OR-
-     *  if current element IS a ReflectionMethod or ReflectionProperty object -AND-
-     *  is not a method of one of the classes mentioned above
-     *
-     *  FALSE otherwise
+     *  TRUE if current element is NOT an instance of
+     *  \ReflectionMethod -OR- if given \ReflectionObject::$class
+     *  property of current element is not a method of one of the
+     *  classes mentioned above and FALSE otherwise
      */
     private function filter( $element ) {
 
-        if( ! $element instanceof \ReflectionMethod && ! $element instanceof \ReflectionProperty  ) {
+        if( ! $element instanceof \ReflectionMethod ) {
             return TRUE;
         }
 
@@ -345,23 +217,20 @@ class Context implements Contextualizable {
     }
 
     /**
-     * Get method name from ReflectionMethod and ReflectionProperty objects
+     * Get method name from ReflectionMethod objects
      *
-     * @param string|reflectionMethod|ReflectionProperty $element
+     * @param string|reflectionMethod $element
      *  The current element in the "behind the scenes" loop of array_map()
      *
      * @return string
-     *  If current element is an instance of ReflectionMethod or ReflectionProperty then the
+     *  If current element is an instance of ReflectionMethod then the
      *  value of their public property 'name' will be returned
      *
-     *  If the current element is not an object of neither of these classes, it will be returned "as is"
+     *  Otherwise it will be returned "as is"
      */
     private function simplify( $element ) {
 
-        if( ! $element instanceof \ReflectionMethod && ! $element instanceof \ReflectionProperty  ) {
-            return $element;
-        }
-
-        return $element -> name;
+        return ( ! $element instanceof \ReflectionMethod  ) ?
+                    $element : $element -> name;
     }
 }

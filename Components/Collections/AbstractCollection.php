@@ -168,7 +168,7 @@ abstract class AbstractCollection extends Object
 
         $i = $this -> find( $reference );
 
-        if( $i !== FALSE && $i != -1 && array_key_exists( $i, $this -> collection ) ) {
+        if( $i != -1 ) {
             unset( $this -> collection[ $i ], $this -> references[ $i ] );
         }
 
@@ -303,9 +303,9 @@ abstract class AbstractCollection extends Object
      *  A reference to search for.
      *  It can be a string, an integer or an \Next\Components\Object object
      *
-     * @return boolean|integer
-     *  Returns -1 if Collection is empty or if the reference couldn't be
-     *  found within it and FALSE if the searching process fails
+     * @return integer
+     *  Returns the offset of what is being searched if located within
+     *  the Collection and -1 if Collection is empty or if can't be found
      *
      * @see \Next\Components\Utils\ArrayUtils::search()
      */
@@ -328,10 +328,16 @@ abstract class AbstractCollection extends Object
 
         /**
          * @internal
+         *
          * If an integer (not a numeric string) greater than or equal
-         * to zero is informed, let's use it "as is"
+         * to zero is informed -AND- it exists within the Collection
+         * let's return it "as is"
          */
-        if( is_int( $reference ) && $reference >= 0 ) return $reference;
+        if( ( is_int( $reference ) && $reference >= 0 ) &&
+                array_key_exists( $reference, $this -> collection ) ) {
+
+            return $reference;
+        }
 
         // Otherwise, let's search by name
 
@@ -458,8 +464,6 @@ abstract class AbstractCollection extends Object
      *
      * @param string $serialized
      *  String representation of an Object
-     *
-     * @return void
      */
     public function unserialize( $serialized ) {
 

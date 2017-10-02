@@ -220,7 +220,6 @@ abstract class AbstractHeaders extends Object {
 
                     $this -> addHeader( $n, $v );
                 }
-
             }
 
         } else {
@@ -247,36 +246,19 @@ abstract class AbstractHeaders extends Object {
 
             if( array_key_exists( $header, $this -> known ) ) {
 
-                // Building full Classname...
-
+                /**
+                 * @internal
+                 *
+                 * Building full Classname, instantiating and adding Header to Headers' Collection
+                 */
                 $class = sprintf( '%s\%s', self::FIELDS_NS, $this -> known[ $header ] );
 
-                // ... checking if it exists...
+                if( ! class_exists( $class ) ) return $this;
 
-                if( class_exists( $class ) ) {
+                $object = new $class( [ 'value' => $value ] );
 
-                    try {
-
-                        // ...and trying to add it
-
-                        $object = new $class( [ 'value' => $value ] );
-
-                        if( $this -> accept( $object ) ) {
-                            $this -> headers -> add( $object );
-                        }
-
-                    } catch( FieldsException $e ) {
-
-                        /**
-                         * @internal
-                         * We'll re-throw the same Exception caught if a true error occur
-                         * so our Exception Handler can do the rest
-                         */
-                        if( $e -> getCode() !== FieldsException::ALL_INVALID ) {
-
-                            throw FieldsException::invalidHeaderValue( $e -> getMessage(), $e -> getCode() );
-                        }
-                    }
+                if( $this -> accept( $object ) ) {
+                    $this -> headers -> add( $object );
                 }
 
             } else {
@@ -309,28 +291,6 @@ abstract class AbstractHeaders extends Object {
      */
     public function hasHeader( $header ) {
         return ( $this -> headers -> item( $header ) instanceof Field );
-    }
-
-    /**
-     * Return Header Field Object from given name, if it exists
-     *
-     * @param string $header
-     *  Header Field to be searched
-     *
-     * @return \Next\HTTP\Headers\Fields\Field|boolean
-     *  If Header exists, it will be returned, otherwise, FALSE will
-     */
-    public function findHeader( $header ) {
-
-        $h = $this -> headers -> find( $header );
-
-        if( $h != -1 && $h != FALSE &&
-            array_key_exists( $h, $this -> headers -> getCollection() ) ) {
-
-            return $this -> headers[ $h ];
-        }
-
-        return FALSE;
     }
 
     /**

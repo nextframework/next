@@ -10,13 +10,21 @@
  */
 namespace Next\Controller\Router;
 
-use Next\Application\Application;                     # Application Interface
-use Next\HTTP\Request;                                # Request Class
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\BadMethodCallException;
 
+use Next\Components\Interfaces\Verifiable;            # Verifiable Interface
+use Next\Application\Application;                     # Application Interface
+
+use Next\HTTP\Request;                                # Request Class
 use Next\DB\Driver\PDO\Adapter\SQLite as Adapater;    # SQLite DB Adapter
 
 /**
  * Controller Router based on SQLite Databases
+ * It uses most of the logics of `\Next\Controller\Router\Standard`
+ * as it derives only the way of finding the Routes, having the same parser
  *
  * @package    Next\Controller\Router
  */
@@ -30,18 +38,21 @@ class SQLite extends Standard {
     protected $dbh;
 
     /**
-     * Additional Initialization
+     * Additional Initialization.
+     * Creates an SQLIte Database Connection and extends the
+     * functionality of SQLite pseudo-language
      *
-     * Extends functionality of Standard Router SQLite Handler
+     * @see SQLite::connect()
+     * @see SQLite::createFunction()
      */
     protected function init() {
 
-        parent::init();
-
-        // Extending SQLITE Custom Resources
+        $this -> connect();
 
         $this -> createFunction();
     }
+
+    // Router Interface Method Implementation
 
     /**
      * Finds a matching Route for the Application -AND- current Request URI
@@ -111,14 +122,24 @@ class SQLite extends Standard {
 
             if( count( $requiredParams ) > 0 ) {
 
-                $this -> lookup( $requiredParams, $URI, $request -> getQuery() );
+                /**
+                 * @internal
+                 *
+                 * Merging manually defined GET query (i.e. `?param=value` )
+                 * so they can be considered as validatable arguments too
+                 */
+                foreach( $request -> getQuery() as $key => $value ) {
+                    $requiredParams[] = [ 'name' => $key ];
+                }
+
+                $this -> lookup( $requiredParams, $URI );
             }
 
             /**
              * @internal
-             * Validating Required Params
-             * Only Parameters with a List|of|Acceptable|Values or with a defined REGEX
-             * will be validated
+             *
+             * Validating Required Params against a List|of|Acceptable|Values
+             * or with a defined REGEX, if defined
              */
             $this -> validate(
 
@@ -148,46 +169,39 @@ class SQLite extends Standard {
 
             $data -> params = array_merge( $params, $request -> getQuery() );
 
-            // Discarding Unnecessary Information
-
-            unset( $data -> requiredParams, $data -> optionalParams );
-
             return $data;
         }
 
         return FALSE;
     }
 
-    // Auxiliary methods
+    // Verifiable Interface Method Implementation
 
     /**
-     * Establishes a Connection with the SQLITE Database File
+     * Verifies Object Integrity
      *
      * @throws \Next\Controller\Router\RouterException
-     *  SQLITE Database File doesn't exist in defined directory
+     *  Filepath to the SQLite Database File was not informed or it's empty
      */
-    protected function connect() {
+    public function verify() {
 
         // Checking if Database File Exists
 
         if( $this -> options -> dbPath === FALSE || ! file_exists( $this -> options -> dbPath ) ) {
 
-            throw RouterException::connectionFailure(
+            throw new InvalidArgumentException(
 
-                'Routes Database File %s doesn\'t exist in Data Directory',
+                sprintf(
 
-                RouterException::CONNECTION_FAILED,
+                    'SQLite Database File <strong>%s</strong> doesn\'t exist',
 
-                [ $this -> options -> dbPath ]
+                    $this -> options -> dbPath
+                )
             );
         }
-
-        $adapter = new Adapter(
-           [ 'dbPath' => $this -> options -> dbPath ]
-       );
-
-        $this -> dbh = $adapter -> getConnection();
     }
+
+    // Parameterizable Method Overwriting
 
     /**
      * Set Class Options.
@@ -198,6 +212,18 @@ class SQLite extends Standard {
     }
 
     // Auxiliary Methods
+
+    /**
+     * Establishes a Connection with the SQLITE Database File
+     */
+    private function connect() {
+
+        $adapter = new Adapter(
+           [ 'dbPath' => $this -> options -> dbPath ]
+        );
+
+        $this -> dbh = $adapter -> getConnection();
+    }
 
     /**
      * Extends SQLITE functionality adding a UDF (User Defined Function)
@@ -211,9 +237,10 @@ class SQLite extends Standard {
 
         if( ! method_exists( $this -> dbh, 'sqliteCreateFunction' ) ) {
 
-            throw RouterException::unfullfilledRequirements(
+            throw new BadMethodCallException(
 
-                'PDO::sqliteCreateFunction() doesn\'t exist in current Database Handler so you are not able to use Standard Router'
+                'PDO::sqliteCreateFunction() doesn\'t exist in current
+                Database Handler so the REGEXP Operator can\'t be created'
             );
         }
 

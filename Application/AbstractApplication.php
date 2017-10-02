@@ -10,22 +10,19 @@
  */
 namespace Next\Application;
 
-use Next\Components\Debug\Exception;             # Exception Class
-use Next\Controller\Router\RouterException;      # Router Exception Class
-use Next\Controller\ControllerException;         # Controller Chain Exception Class
-use Next\Cache\CacheException;                   # Cache Exception Class
+/**
+ * Exception Classes
+ */
+use Next\Exception\Exception;
+use Next\Exception\Exceptions\FatalException;
 
 use Next\Controller\Router\Router;               # Router Interface
-
 use Next\Components\Object;                      # Object Class
-
+use Next\Cache\Schemas\Chain as CachingChain;    # Caching Schemas Chain Class
+use Next\Controller\Chain as ControllerChain;    # Controllers Chain Class
+use Next\View\View;                              # View Engine Interface
 use Next\HTTP\Request;                           # Request Class
 use Next\HTTP\Response;                          # Response Class
-
-use Next\Controller\Chain as ControllerChain;    # Controllers Chain Class
-use Next\View\View;                              # View Interface
-use Next\Cache\Schema\Chain as CachingChain;     # Controllers Chain Class
-
 use Next\Session\Manager as Session;             # Session Manager
 
 /**
@@ -73,7 +70,7 @@ abstract class AbstractApplication extends Object implements Application {
     /**
      * Caching Services Chain
      *
-     * @var \Next\Cache\Schema\Chain $cache
+     * @var \Next\Cache\Schemas\Chain $cache
      */
     protected $cache;
 
@@ -85,7 +82,7 @@ abstract class AbstractApplication extends Object implements Application {
     protected $session;
 
     /**
-     * Application Constructor.
+     * Application Constructor
      *
      * Configures:
      *
@@ -99,58 +96,64 @@ abstract class AbstractApplication extends Object implements Application {
      */
     public function __construct() {
 
-        // Setting Up Application's Resources...
-
-            // Request and Response Objects
+        // Request and Response Objects
 
         $this -> request  = new Request;
         $this -> response = new Response;
 
-            // Router
+        // Router
 
-        $this -> setupRouter();
+        $this -> router = $this -> setupRouter();
 
-            // Database Adapters
+        // Database Connections
 
         $this -> setupDatabase();
 
-            /**
-             * Session
-             *
-             * @internal
-             *
-             * Session Manager is initialized before View Engine because
-             * View Engines *should* provide a way of Templates to
-             * access Session Environment Data, but if a Session is not
-             * yet available that wouldn't be possible
-             *
-             * If an Exception is caught here we'll rethrow it as a
-             * \Next\Application\ApplicationException. Because this is
-             * the lowest possible Exception in the Request/Response Flow,
-             * while on Production Mode, - i.e DEVELOMENT_MODE constant
-             * is not defined or set to zero - only a simple message
-             * would appear
-             */
+        /**
+         * Session
+         *
+         * @internal
+         *
+         * Session Manager is initialized before the View Engine
+         * because View Engines *should* provide a way for
+         * Templates to access Session Environment Data, but if a
+         * Session is not yet available that wouldn't be possible
+         *
+         * If an Exception is caught here we'll re-throw it as a
+         * \Next\Exception\Exceptions\FatalException, the lowest
+         * possible kind of Exception handled directly by the
+         * Controllers' Dispatcher
+         */
         try {
 
             $this -> session = $this -> initSession();
 
         } catch( Exception $e ) {
 
-            throw new ApplicationException(
+            throw new FatalException(
                 $e -> getMessage(), NULL, NULL, $e -> getResponseCode()
             );
         }
 
-            // View Engine
+        // View Engine
 
         $this -> view = $this -> setupView();
 
-            // Controllers Classes
+        /**
+         * Controllers' Chain and classes
+         *
+         * @internal
+         *
+         * They're only needed when the DEVELOPMENT_MODE constant is
+         * defined and set to '2', case in which the Routes Generator
+         * would take place
+         */
+        if( defined( 'DEVELOPMENT_MODE' ) && DEVELOPMENT_MODE == 2 ) {
 
-        $this -> controllers = new ControllerChain;
+            $this -> controllers = new ControllerChain;
 
-        $this -> setupControllers();
+            $this -> setupControllers();
+        }
 
             // Caching
 
@@ -166,7 +169,9 @@ abstract class AbstractApplication extends Object implements Application {
     }
 
     /**
-     * Router Setup.
+     * Router Setup
+     *
+     * @internal
      *
      * It's **not** abstract because not all Applications require
      * a Routing System
@@ -174,19 +179,23 @@ abstract class AbstractApplication extends Object implements Application {
     protected function setupRouter() {}
 
     /**
-     * Database(s) Setup.
+     * Database(s) Setup
+     *
+     * @internal
      *
      * It's **not** abstract because not all Applications require
-     * a Database.
+     * a Database
      *
-     * Our built-in HandlersApplication is an example of that.
+     * Our built-in HandlersApplication is an example of that
      *
-     * @see Next\Components\Debug\Handlers\HandlersApplication
+     * @see Next\Exception\Handlers\HandlersApplication
      */
     protected function setupDatabase() {}
 
     /**
-     * View Engine Setup.
+     * View Engine Setup
+     *
+     * @internal
      *
      * It's **not** abstract because not all the Applications require
      * a View Engine
@@ -194,7 +203,9 @@ abstract class AbstractApplication extends Object implements Application {
     protected function setupView() {}
 
     /**
-     * Caching Initialization.
+     * Caching Initialization
+     *
+     * @internal
      *
      * It's **not** abstract because not all the Applications require
      * a Caching System
@@ -202,7 +213,9 @@ abstract class AbstractApplication extends Object implements Application {
     protected function initCache() {}
 
     /**
-     * Session Initialization.
+     * Session Initialization
+     *
+     * @internal
      *
      * It's **not** abstract because not all the Applications require
      * a Session interaction
@@ -212,19 +225,19 @@ abstract class AbstractApplication extends Object implements Application {
     // Application Interface Methods Implementation
 
     /**
-     * Get Application Directory.
+     * Get Application Directory
      *
      * Application directory comes from Application Class NameSpace
      *
      * @return string
-     *  Application Class Namespace
+     *  Application Class' Fully Qualified Namespace
      */
     public function getApplicationDirectory() {
         return $this -> getClass() -> getNamespaceName();
     }
 
     /**
-     * Set Request Object.
+     * Set Request Object
      *
      * @param \Next\HTTP\Request $request
      *  Request Object
@@ -308,7 +321,7 @@ abstract class AbstractApplication extends Object implements Application {
     /**
      * Get Caching Schema Chain
      *
-     * @return \Next\Cache\Schema\Chain
+     * @return \Next\Cache\Schemas\Chain
      *  Caching Schema Collection Chain Object
      */
     public function getCache() {
@@ -341,30 +354,40 @@ abstract class AbstractApplication extends Object implements Application {
     /**
      * Checks Application Integrity
      *
-     * @throws \Next\Application\ApplicationException
-     *  Application has an invalid Router assigned
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if an HTTP Router has been assigned but it's not valid
+     *  because it doesn't implement `\Next\Controller\Router\Router`
      *
-     * @throws \Next\Application\ApplicationException
-     *  Assigned Application has an invalid View Engine assigned
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if a View Engine has been assigned but it's not valid
+     *  because it doesn't implement `\Next\View\View` Interface
+     *
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if a Session Manager has been assigned but it's not
+     *  valid because, currently, only Objects instance of
+     *  `\Next\Session\Manager` are accepted
      */
     private function checkIntegrity() {
 
-        // Checking if assigned Router is valid
-
         if( ! is_null( $this -> router ) && ! $this -> router instanceof Router ) {
-            throw ApplicationException::invalidRouter();
-        }
 
-        // Checking if assigned View Engine is Valid
+            throw new InvalidArgumentException(
+                'Routers must implement <em>Next\Controller\Router\Router</em> Interface'
+            );
+        }
 
         if( ! is_null( $this -> view ) && ! $this -> view instanceof View ) {
-            throw ApplicationException::invalidViewEngine();
+
+            throw new InvalidArgumentException(
+                'View Engines must implement View <em>Next\View\View</em> Interface'
+            );
         }
 
-        // Checking if assigned Session Manager is Valid
-
         if( ! is_null( $this -> session ) && ! $this -> session instanceof Session ) {
-            throw ApplicationException::invalidSessionManager();
+
+            throw new InvalidArgumentException(
+                'Session Manager must be an instance of <em>Next\Session\Manager</em>'
+            );
         }
     }
 }

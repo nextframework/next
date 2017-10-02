@@ -10,6 +10,11 @@
  */
 namespace Next\Components;
 
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
 use Next\Components\Interfaces\Verifiable;    # Verifiable Interface
 use Next\Components\Object;                   # Object Class
 
@@ -28,7 +33,7 @@ class Mimicker extends Object implements Verifiable {
      */
     protected $parameters = [
 
-        // The object to be mimicked as an instance of \next\Components\Object
+        // The object to be mimicked as an instance of \Next\Components\Object
 
         'resource' => [ 'required' => TRUE ],
     ];
@@ -38,15 +43,16 @@ class Mimicker extends Object implements Verifiable {
     /**
      * Verifies Object Integrity
      *
-     * @throws \Next\Components\ContextException
-     *  Thrown if provided resource to be mimicked is not an object
+     * @return \Next\Exception\Exceptions\InvalidArgumentException
+     *  Resource not mimic-able
      */
     public function verify() {
 
-        // Only objects can (or need to) be mimicked
-
         if( ! is_object( $this -> options -> resource ) ) {
-            throw ContextException::notMimicable();
+
+            return new InvalidArgumentException(
+                'Only objects can (or need to) be mimic-able'
+            );
         }
     }
 

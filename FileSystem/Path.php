@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * FileSystem "Path" Types Class | FileSystem\Path.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
+ */
 namespace Next\FileSystem;
 
 /**
@@ -9,7 +17,43 @@ use Next\Exception\Exceptions\InvalidArgumentException;
 
 use Next\Components\Types\String;
 
+/**
+ * Defines the Path Data-type Type and prototypes some external/custom
+ * resources related to FileSystem operations
+ *
+ * @package    Next\FileSystem
+ */
 class Path extends String {
+
+    // Verifiable Interface Method Overwriting
+
+    /**
+     * Verifies Object Integrity.
+     * Checks whether or not given value is acceptable by data-type class
+     *
+     * @throws Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if Parameter Option 'value' is not a valid string,
+     *  is NULL or is not a resolvable filepath
+     *
+     * @see Next\Components\Types\String::verify()
+     */
+    public function verify() {
+
+        parent::verify();
+
+        if( stream_resolve_include_path( $this -> options -> value ) === FALSE ) {
+
+            throw new InvalidArgumentException(
+
+                sprintf(
+
+                    'Argument <strong>%s</strong> is not a valid filepath',
+
+                    ( $this -> options -> value !== NULL ? $this -> options -> value : 'NULL' )
+                )
+            );
+        }
+    }
 
     // Prototypable Method Implementation
 

@@ -18,7 +18,7 @@ namespace Next\HTTP\Stream\Reader;
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class ReaderException extends \Next\Components\Debug\Exception {
+class ReaderException extends \Next\Exception\Exception {
 
     /**
      * Unable to Read Data

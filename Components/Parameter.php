@@ -17,7 +17,8 @@ use Next\Components\Interfaces\Verifiable;    # Verifiable Interface
  */
 use Next\Exception\Exceptions\InvalidArgumentException;
 use Next\Exception\Exceptions\LogicException;
-use Next\Exception\Exceptions\UnexpectedValueException;
+use Next\Exception\Exceptions\RuntimeException;
+use Next\Exception\Exceptions\AccessViolationException;
 
 /**
  * Defines a data-structure for Class Options as part of the Parameterizable Concept
@@ -113,6 +114,8 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
 
         foreach( $parameter as $name => $value ) {
 
+            $name = trim( $name );
+
             if( isset( $this -> parameters -> {$name} ) ) {
 
                 /**
@@ -164,8 +167,15 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
 
                     if( ! $value instanceof $this -> parameters -> {$name} -> type ) {
 
-                        throw InvalidArgumentException::type(
-                            $name, $this -> parameters -> {$name} -> type
+                        throw new InvalidArgumentException(
+
+                            sprintf(
+
+                                'Parameter Option <strong>%1$s</strong>
+                                must be an instance of <em>%2$s</em>',
+
+                                $name, $this -> parameters -> {$name} -> type
+                            )
                         );
                     }
                 }
@@ -201,7 +211,16 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
         foreach( $this-> parameters as $name => $parameter ) {
 
             if( isset( $parameter -> required ) && $parameter -> required !== FALSE ) {
-                throw LogicException::missing( $name );
+
+                throw new LogicException(
+
+                    sprintf(
+
+                        'Missing required Parameter Option <strong>%s</strong>',
+
+                        $name
+                    )
+                );
             }
         }
     }
@@ -308,18 +327,22 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
      * @param string $identifier
      *  Parameter Identifier
      *
-     * @throws \Next\Components\Debug\Exception
-     *  thrown if trying to remove a Identifier that doesn't exist
+     * @throws \Next\Exception\Exceptions\AccessViolationException
+     *  Thrown if trying to remove a Identifier that doesn't exist
      */
-    public function offsetUnset($identifier) {
+    public function offsetUnset( $identifier ) {
 
         if( ! isset( $this -> parameters -> {$identifier} ) ) {
 
-            throw Exception::logic(
+            throw new AccessViolationException(
 
-                'Identifier <strong>%s</strong> doesn\'t exist and therefore cannot be removed',
+                sprintf(
 
-                [ $identifier ]
+                    'Parameter Option <strong>%s</strong> doesn\'t exist
+                    and therefore cannot be removed',
+
+                    $identifier
+                )
             );
         }
 
@@ -359,6 +382,8 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
      *
      * @return boolean
      *  TRUE if Parameter Identifier exists and FALSE otherwise
+     *
+     * @see Parameter Parameter::offsetExists()
      */
     public function __isset( $identifier ) {
         return $this -> offsetExists( $identifier );
@@ -370,8 +395,10 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
      * @param string $identifier
      *  Parameter Identifier
      *
-     * @throws \Next\Components\Debug\Exception
-     *  thrown if trying to remove a Identifier that doesn't exist
+     * @throws \Next\Exception\Exceptions\AccessViolationException
+     *  Thrown if trying to remove a Identifier that doesn't exist
+     *
+     * @see Parameter::offsetUnset()
      */
     public function __unset( $identifier ) {
         $this -> offsetUnset( $identifier );
@@ -385,6 +412,8 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
      *
      * @param mixed $value
      *  Parameter value
+     *
+     * @see Parameter::offsetSet()
      */
     public function __set( $identifier, $value ) {
         $this -> offsetSet( $identifier, $value );
@@ -398,6 +427,8 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
      *
      * @return mixed
      *  Parameter value
+     *
+     * @see Parameter::offsetGet()
      */
     public function __get( $identifier ) {
         return $this -> offsetGet( $identifier );
@@ -411,7 +442,7 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
      * an Exception - overwriting them with a Default Value, if provided
      * otherwise with NULL
      *
-     * @throws Next\Components\Exception\UnexpectedValueException
+     * @throws Next\Components\Exception\RuntimeException
      *  Throws if an \Exception is caught when instantiating the object
      *  defined in 'type' entry
      */
@@ -440,7 +471,20 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
                     $this -> parameters -> {$name} = $default;
 
                 } catch( \Exception $e ) {
-                    throw UnexpectedValueException::rethrow( $e );
+
+                    throw new RuntimeException(
+
+                        sprintf(
+
+                            'Unable to instantiate object <strong>%s</strong>
+                            defined as default value of <strong>%s</strong>
+                            Parameter Option
+
+                            The following error has been returned: %s',
+
+                            $parameter -> type, $name, $e -> getMessage()
+                        )
+                    );
                 }
 
             } else {

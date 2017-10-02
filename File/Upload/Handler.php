@@ -10,8 +10,6 @@
  */
 namespace Next\File\Upload;
 
-use Next\HTTP\Response\ResponseException;          # Response Exception Class
-
 use Next\Application\Application;                  # Application Interface
 
 use Next\Components\Object;                        # Object Class

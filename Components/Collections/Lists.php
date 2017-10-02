@@ -10,11 +10,13 @@
  */
 namespace Next\Components\Collections;
 
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\OutOfRangeException;
+
 use Next\Components\Object;              # Object Class
-
 use Next\Components\Utils\ArrayUtils;    # ArrayUtils Class
-
-use Next\Components\Debug\Exception;     # Exception Class
 
 /**
  * Defines a structure derived from \Next\Components\Collections\AbstractCollection
@@ -30,8 +32,9 @@ class Lists extends AbstractCollection implements \ArrayAccess {
      * @param mixed|integer|string $reference
      *  Object reference to find
      *
-     * @return \Next\Components\Object|boolean
-     *  Object of given offset or FALSE if given offset doesn't exists
+     * @return \Next\Components\Object|integer
+     *  Object at given offset or -1 if unable to find it within
+     *  the Collection
      *
      * @see \Next\Components\Collections\AbstractCollection::find()
      */
@@ -39,11 +42,7 @@ class Lists extends AbstractCollection implements \ArrayAccess {
 
         $index = $this -> find( $reference );
 
-        if( $index !== FALSE && $index != -1 && array_key_exists( $index, $this -> collection ) ) {
-            return $this -> collection[ $index ];
-        }
-
-        return FALSE;
+        return ( $index != -1 ) ? $this -> collection[ $index ] : -1;
     }
 
     /**
@@ -59,17 +58,19 @@ class Lists extends AbstractCollection implements \ArrayAccess {
      * @return array
      *  A slice of Object Collection with the elements
      *
-     * @throws \OutOfRangeException
+     * @throws Next\Exception\Exceptions\OutOfRangeException
      *  Thrown if give offset is greater than the number of Objects
      *  in the Collection
      *
      * @todo Check the possibility of `$end` returns a negative value
-     * @todo Replace the OutOfRangeException with internal Next Debug Component
      */
     public function getNeighbors( $offset = 0, $limit = 1 ) {
 
         if( $offset >= $this -> count() ) {
-            throw new \OutOfRangeException( 'Requested offset exceeds the size of Collection' );
+
+            throw new OutOfRangeException(
+                'Requested offset exceeds the size of Collection'
+            );
         }
 
         $start = ( $offset - $limit ) >= 0 ? ( $offset - $limit ) : 0;
@@ -119,13 +120,8 @@ class Lists extends AbstractCollection implements \ArrayAccess {
      * @param mixed|string|integer $offset
      *  Offset where new data will be stored
      *
-     * @param mixed|\Next\Components\Object $object
+     * @param \Next\Components\Object $object
      *  Object to add
-     *
-     * @return void
-     *
-     * @throws \Next\Components\Debug\Exception
-     *  Throw if given is not an instance of \Next\Components\Object
      *
      * @see \Next\Components\Collection\AbstractCollection::add()
      */
@@ -139,8 +135,6 @@ class Lists extends AbstractCollection implements \ArrayAccess {
      *
      * @param mixed|string|integer $offset
      *  Offset to unset
-     *
-     * @return void
      *
      * @see \Next\Components\Collections\AbsractCollection::remove()
      */

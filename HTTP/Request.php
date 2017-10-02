@@ -10,7 +10,11 @@
  */
 namespace Next\HTTP;
 
-use Next\HTTP\Request\RequestException;             # Request Exception Classes
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\BadMethodCallException;
+
 use Next\HTTP\Stream\Adapter\AdapterException;      # Adapter Exception Class
 use Next\HTTP\Headers\Fields\FieldsException;       # Headers Fields Exception Class
 
@@ -664,9 +668,12 @@ class Request extends Object {
      */
     public function isAjax() {
 
-        $header = $this -> headers -> findHeader( 'X-Requested-With' );
+        $header = $this -> headers -> item( 'X-Requested-With' );
 
-        return ( $header instanceof Field && $header -> getValue() == 'XMLHttpRequest' );
+        if( $header === -1 ) return FALSE;
+
+        return ( $header instanceof Field &&
+                    strcasecmp( $header -> getValue(), 'XMLHttpRequest' ) == 0 );
     }
 
     /**
@@ -677,10 +684,12 @@ class Request extends Object {
      */
     public function isFlash() {
 
-        $header = $this -> headers -> findHeader( 'User-Agent' );
+        $header = $this -> headers -> item( 'User-Agent' );
+
+        if( $header === -1 ) return FALSE;
 
         return ( $header instanceof Field &&
-                 strpos( $header -> getValue(), 'flash' ) !== FALSE );
+                    strpos( $header -> getValue(), 'flash' ) !== FALSE );
     }
 
     /**
@@ -772,11 +781,9 @@ class Request extends Object {
 
             if( is_null( $value ) ) {
 
-                throw RequestException::wrongUse(
+                throw new BadMethodCallException(
 
-                    'Wrong use of Request::setPostData(). POST Data must have a field name and a value.
-
-                    <br />
+                    'Wrong use of Request::setPostData(). POST Data must have a field name and a value
 
                     If you don\'t have a field name, consider use Request::setRawPostData() instead'
                 );
@@ -1264,7 +1271,7 @@ class Request extends Object {
              * ... we have to add the proper Content-type Header Field,
              * if missing, in order to be sure a PHP Error will not be raised
              */
-            if( $this -> headers -> find( 'Content-Type' ) === FALSE ) {
+            if( $this -> headers -> find( 'Content-Type' ) === -1 ) {
 
                 try {
 

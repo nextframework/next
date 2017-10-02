@@ -18,7 +18,7 @@ namespace Next\Tools\ClassMapper;
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class ClassMapperException extends \Next\Components\Debug\Exception {
+class ClassMapperException extends \Next\Exception\Exception {
 
     /**
      * Unknown Mapping Strategy

@@ -234,8 +234,6 @@ class Post extends AbstractMethod {
      *
      * @param string $temp
      *  Path of temporary file
-     *
-     * @return void
      */
     protected function fix( &$file, &$size, &$type, &$temp ) {
 

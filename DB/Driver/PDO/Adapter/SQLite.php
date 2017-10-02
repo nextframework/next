@@ -10,7 +10,12 @@
  */
 namespace Next\DB\Driver\PDO\Adapter;
 
-use Next\DB\Driver\DriverException;              # Driver Exception Class
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\RuntimeException;
+use Next\Exception\Exceptions\InvalidArgumentException;
+
 use Next\DB\Driver\PDO\AbstractPDO;              # PDO Abstract Class
 use Next\DB\Query\Renderer\MySQL as Renderer;    # MySQL Query Renderer Class
 
@@ -24,6 +29,15 @@ use Next\DB\Query\Renderer\MySQL as Renderer;    # MySQL Query Renderer Class
  */
 class SQLite extends AbstractPDO {
 
+    /**
+     * Parameter Options Definition
+     *
+     * @var array $parameters
+     */
+    protected $parameters = [
+        'dbPath' => [ 'required' => TRUE ]
+    ];
+
     // Abstract Methods Implementation
 
     /**
@@ -31,22 +45,8 @@ class SQLite extends AbstractPDO {
      *
      * @return string
      *  SQLite Adapter DSN used by PDO Connection
-     *
-     * @throws \Next\DB\Driver\DriverException
-     *  Required <strong>Path</strong> or <strong>File</strong>
-     *  parameters was not set in Connection Parameters
      */
     protected function getDSN() {
-
-        if( ! isset( $this -> options -> dbPath ) ||
-              empty( $this -> options -> dbPath ) ) {
-
-            throw DriverException::missingConnectionAdapterParameter(
-
-                'Missing DSN Path for SQLite Adapter'
-            );
-        }
-
         return sprintf( 'sqlite:%s', $this -> options -> dbPath );
     }
 
@@ -58,22 +58,14 @@ class SQLite extends AbstractPDO {
      */
     protected function checkRequirements() {
 
-        // Checking for PDO Extension
-
         parent::checkRequirements();
 
-        // Checking for PDO SQLite Extension
-
         if( ! in_array( 'sqlite', \PDO::getAvailableDrivers() ) ) {
-
-            throw DriverException::unfullfilledRequirements(
-
-                'PDO SQLite Driver was not loaded'
-            );
+            throw new RuntimeException( 'PDO SQLite Extension not loaded' );
         }
     }
 
-    // Interface Method Implementation
+    // Driver Interface Method Implementation
 
     /**
      * Set an SQL Statement Renderer

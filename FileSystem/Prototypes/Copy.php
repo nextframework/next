@@ -13,9 +13,9 @@ namespace  Next\Filesystem\Prototypes;
 use Next\Components\Interfaces\Prototypable;    # Prototypable Interface
 
 /**
- * Generates a GUID in compliance with RFC 4122 Section 4.4
+ * Copies all files from given directory to another one
  *
- * @package    Next\Components\Types
+ * @package    Next\FileSystem
  */
 class Copy implements Prototypable {
 
@@ -44,16 +44,6 @@ class Copy implements Prototypable {
      *
      * @param string $destination
      *  Destination path
-     *
-     * @param string $path
-     *  Directory to work with
-     *
-     * @param array|optional $files
-     *  A list of files to be deleted. If empty, all files found will
-     *
-     * @param boolean|optional $destroy
-     *  Flag conditioning is given directory should be destroyed if empty,
-     *  after the process
      */
     private function copy( $source, $destination ) {
 

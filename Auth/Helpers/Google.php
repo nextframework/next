@@ -10,7 +10,12 @@
  */
 namespace Next\Auth\Helpers;
 
-use Next\Components\Debug\Exception;     # Exception Class
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\RuntimeException;
+use Next\Exception\Exceptions\InvalidArgumentException;
+use Next\Exception\Exceptions\BadMethodCallException;
 
 use Next\Components\Object;              # Object Class
 use Next\Components\Utils\ArrayUtils;    # Array Utils Class
@@ -23,11 +28,29 @@ use Next\Validate\Validators\URL;        # URL Validator Class
  *
  * @package    Next\Auth
  *
- * @uses       \Next\Auth\Helpers\Helper, \Next\Components\Debug\Exception,
- *             \Next\Components\Object, \Next\Components\Utils\ArrayUtils,
- *             \Next\DB\Table\Table, \Next\Validate\Validators\URL
+ * @uses       Next\Exception\Exceptions\RuntimeException,
+ *             Next\Exception\Exceptions\InvalidArgumentException,
+ *             Next\Exception\Exceptions\BadMethodCallException,
+ *             Next\Auth\Helpers\Helper,
+ *             Next\Components\Object,
+ *             Next\Components\Utils\ArrayUtils,
+ *             Next\DB\Table\Table,
+ *             Next\Validate\Validators\URL
  */
 class Google extends Object implements Helper {
+
+    /**
+     * Parameter Options Definition
+     *
+     * @var array $parameters
+     */
+    protected $parameters = [
+
+        'credentialsFile' => [ 'required' => TRUE ],
+        'clientID'        => [ 'required' => TRUE ],
+        'clientSecret'    => [ 'required' => TRUE ],
+        'redirectURL'     => [ 'required' => TRUE ]
+    ];
 
     /**
      * Google Client
@@ -91,15 +114,19 @@ class Google extends Object implements Helper {
      * @return string
      *  The Access Token
      *
-     * @throws \Next\Components\Debug\Exception
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Thrown if Access Token hasn't been obtained yet -AND- Request Code is missing
      */
     public function getAccessToken() {
 
         if( ! isset( $this -> options -> token ) ) {
 
-            if( ! isset( $this -> options -> requestCode ) || empty( $this -> options -> requestCode ) ) {
-                throw new Exception( 'A Request Code is required in order to retrieve an Access Token' );
+            if( ! isset( $this -> options -> requestCode ) ||
+                    empty( $this -> options -> requestCode ) ) {
+
+                throw new InvalidArgumentException(
+                    'A Request Code is required in order to retrieve an Access Token'
+                );
             }
 
             return ArrayUtils::map(
@@ -119,16 +146,24 @@ class Google extends Object implements Helper {
      * @return \Next\DB\Table\Table
      *  Provided Data Model modified with User's e-mail Address
      *
-     * @throws \Next\Components\Debug\Exception
+     * @throws \Next\Exception\Exception\InvalidArgumentException
      *  Thrown if an Data Model hasn't been provided -OR- if it's not a valid one
      *  In order to be valid the Data model must be an instance of \Next\DB\Table\Table
+     *
+     * @throws \Next\Exception\Exceptions\BadMethodCallException
+     *  Thrown if no Access Token could be fetched because both
+     *  Authentication Token -AND- Request Code have been provided
+     *
+     * @see Google::negotiate()
      */
     public function getData() {
 
         if( is_null( $this -> options -> model ) ||
             ( ! $this -> options -> model instanceof Table ) ) {
 
-            throw new Exception( 'Data Models must must be instance of \Next\DB\Table\Table' );
+            throw new InvalidArgumentException(
+                'Data Models must must be instance of \Next\DB\Table\Table'
+            );
         }
 
         $this -> negotiate();
@@ -174,7 +209,7 @@ class Google extends Object implements Helper {
      * Negotiates exchanged Token, configuring the Google Client and
      * initializing the Google OAuth Service to be consumed
      *
-     * @throws \Next\Components\Debug\Exception
+     * @throws \Next\Exception\Exceptions\BadMethodCallException
      * Thrown if Access Token is not defined, which means this method
      * is being invoked prior to an Authentication (i.e. Google Consent Screen)
      */
@@ -183,7 +218,10 @@ class Google extends Object implements Helper {
         $token = $this -> getAccessToken();
 
         if( is_null( $token ) ) {
-            throw new Exception( 'An Access Token is required in order to access Google OAuth Service' );
+
+            throw new BadMethodCallException(
+                'An Access Token is required in order to access Google OAuth Service'
+            );
         }
 
         $this -> client -> setAccessToken( $token );
@@ -203,61 +241,16 @@ class Google extends Object implements Helper {
     /**
      * Checks Parameter Options Integrity
      *
-     * @throws \Next\Components\Debug\Exception
-     *  Thrown if 'clientID' Parameter Option is missing
-     *
-     * @throws \Next\Components\Debug\Exception
-     *  Thrown if 'clientSecret' Parameter Option is missing
-     *
-     * @throws \Next\Components\Debug\Exception
-     *  Thrown if 'credentialsFile' Parameter Option is missing
-     *
-     * @throws \Next\Components\Debug\Exception
+     * @throws \Next\Exception\Exceptions\RuntimeException
      *  Thrown if 'credentialsFile' points to a non-resolvable path
      *
-     * @throws \Next\Components\Debug\Exception
+     * @throws \Next\Exception\Exceptions\RuntimeException
      *  Throws if 'redirectURL' is an invalid URL (mostly likely not absolute)
      */
     private function checkIntegrity() {
 
-        if( ! isset( $this -> options -> credentialsFile ) ) {
-
-            throw new Exception(
-                'Missing required Parameter Option <strong>credentialsFile</strong>',
-                Exception::UNFULFILLED_REQUIREMENTS
-            );
-        }
-
-        if( ! isset( $this -> options -> clientID ) ) {
-
-            throw new Exception(
-                'Missing required Parameter Option <strong>clientID</strong>',
-                Exception::UNFULFILLED_REQUIREMENTS
-            );
-        }
-
-        if( ! isset( $this -> options -> clientSecret ) ) {
-
-            throw new Exception(
-                'Missing required Parameter Option <strong>clientSecret</strong>',
-                Exception::UNFULFILLED_REQUIREMENTS
-            );
-        }
-
-        if( ! isset( $this -> options -> redirectURL ) ) {
-
-            throw new Exception(
-                'Missing required Parameter Option <strong>redirectURL</strong>',
-                Exception::UNFULFILLED_REQUIREMENTS
-            );
-        }
-
         if( ! stream_resolve_include_path( $this -> options -> credentialsFile ) ) {
-
-            throw new Exception(
-                'Credentials File not found',
-                Exception::UNFULFILLED_REQUIREMENTS
-            );
+            throw new RuntimeException( 'Credentials File not found' );
         }
 
         $validator = new URL(
@@ -265,10 +258,7 @@ class Google extends Object implements Helper {
         );
 
         if( ! $validator -> validate() ) {
-
-            throw new Exception(
-                'Invalid Redirection URL', Exception::UNFULFILLED_REQUIREMENTS
-            );
+            throw new RuntimeException( 'Invalid Redirection URL' );
         }
     }
 }

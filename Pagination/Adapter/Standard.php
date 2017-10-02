@@ -69,7 +69,7 @@ class Standard extends Object implements Verifiable, Adapter {
      * Verifies Object Integrity
      *
      * @throws Next\Exception\Exceptions\InvalidArgumentException
-     *  Throw if required Parameter Option 'source' is not an array
+     *  Thrown if required Parameter Option 'source' is not an array
      */
     public function verify() {
 

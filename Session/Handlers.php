@@ -10,9 +10,13 @@
  */
 namespace Next\Session;
 
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
 use Next\Components\Object;                     # Object Class
 
-use Next\Session\Handlers\HandlersException;    # Session Handlers Exception Class
 use Next\Session\Handlers\Handler;              # Session Handlers Interface
 use Next\Components\Collections\Set;            # Set Iterator Class
 
@@ -117,8 +121,18 @@ class Handlers extends Object {
 
             // Nothing Found?
 
-            if( ! $test instanceof Handler ) {
-                throw HandlersException::unknownHandler( (string) $handler );
+            if( $test === -1 || $test instanceof Handler ) {
+
+                throw new InvalidArgumentException(
+
+                    sprintf(
+
+                        'Handler <strong>%s</strong> not found within
+                        Session Handlers Collection',
+
+                        $handler
+                    )
+                );
             }
 
             // Yeah! We're ninjas!

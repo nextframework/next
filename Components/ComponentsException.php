@@ -11,127 +11,63 @@
 namespace Next\Components;
 
 /**
+ * Exception Classes
+ */
+use Next\Exception\Exception;
+use Next\Exception\Exceptions\FatalException;
+
+/**
  * Defines wrapper static methods for all Exceptions thrown
  * within the Components Module
  *
  * @package    Next\Components
  */
-class ComponentsException extends \Next\Components\Debug\Exception {
+class ComponentsException extends Exception {
 
     /**
-     * Array to Parameter Object Mapping
+     * Constructor of Object class has been overwritten and thus the
+     * extended context and/or function prototyping feature were nullified
      *
-     * @var integer
-     */
-    const MAPPING = 0x000001CB;
-
-    /**
-     * Constructor Overwritten
+     * @param \Next\Components\Object $object
+     *  The Object context
      *
-     * @var integer
-     */
-    const CONSTRUCTOR_OVERWRITTEN = 0x000001CC;
-
-    /**
-     * Exception for when something unexpected occurs while mapping
-     * an array into a \Next\Components\Parameter Object recursively
-     *
-     * @param string $message
-     *  Message with the error occurred
-     *
-     * @return \Next\Components\ComponentsException
-     *  Exception for array to object mapping errors
-     */
-    public static function mapping( $message ) {
-        throw new self( $message, self::MAPPING );
-    }
-
-    /**
-     * Constructor of Object class has been overwritten and thus the extended
-     * context and/or function prototyping feature were nullified
-     *
-     * @param string $method
+     * @param string|optional $method
      *  Method being invoked
-
-     * @param \Next\Components\Object $object
-     *  The Object context
      *
-     * @return \Next\Components\ComponentsException
+     * @return \Next\Exception\Exceptions\FatalException
      *  Exception for constructor overwritten
      */
-    public static function extendedContextFailure( $method, Object $object ) {
+    public static function extendedContextFailure( Object $object, $method = NULL ) {
 
-        return new self(
+        if( $method !== NULL ) {
 
-            'Method %s not known by <strong>%s</strong>
-            and was not trapped by <em>Object::__call()</em>
+            return new FatalException(
 
-            Could you possibly overwrote <em>Object::__construct()</em>
-            without invoke it under parent context?',
+                sprintf(
 
-            self::CONSTRUCTOR_OVERWRITTEN,
+                    'Method <strong>%s</strong> not known by
+                    <strong>%s</strong> and was not trapped by
+                    <em>Object::__call()</em>
 
-            [ ( ! empty( $method ) ? sprintf( '<strong>%s</strong>' ) : '' ), $object ]
-        );
-    }
+                    Could you possibly overwrote <em>Object::__construct()</em>
+                    without invoke it under parent context?',
 
-    /**
-     * Constructor of Object class has been overwritten and thus the extended
-     * context and/or function prototyping feature were nullified
-     *
-     * It's basically the same as ComponentsExecption::extendedContextFailure(),
-     * specifically when trying to make use of __set()
-     *
-     * @param string $property
-     *  Property being overloaded
-     *
-     * @param \Next\Components\Object $object
-     *  The Object context
-     *
-     * @return \Next\Components\ComponentsException
-     *  Exception for constructor overwritten
-     */
-    public static function overloadedPropertyUpdateFailure( $property, Object $object ) {
+                    $method, $object
+                )
+            );
+        }
 
-        return new self(
+        return new FatalException(
 
-            'Property <strong>%s</strong> is not known by <strong>%s</strong>
-            and was not trapped by <em>Object::__set()</em>
+            sprintf(
 
-            Could you possibly overwrote <em>Object::__construct()</em>
-            without invoke it under parent context?',
+                'Unable to Extend Context of <strong>%s</strong>
 
-            self::CONSTRUCTOR_OVERWRITTEN, [ $property, $object ]
-        );
-    }
+                Could you possibly overwrote <em>Object::__construct()</em>
+                without invoke it under parent context?',
 
-    /**
-     * Constructor of Object class has been overwritten and thus the extended
-     * context and/or function prototyping feature were nullified
-     *
-     * It's basically the same as ComponentsExecption::extendedContextFailure(),
-     * specifically when trying to make use of __get()
-     *
-     * @param string $property
-     *  Property being overloaded
-     *
-     * @param \Next\Components\Object $object
-     *  The Object context
-     *
-     * @return \Next\Components\ComponentsException
-     *  Exception for constructor overwritten
-     */
-    public static function overloadedPropertyReadingFailure( $property, Object $object ) {
-
-        return new self(
-
-            'Property <strong>%s</strong> is not known by <strong>%s</strong>
-            and was not trapped by <em>Object::__get()</em>
-
-            Could you possibly overwrote <em>Object::__construct()</em>
-            without invoke it under parent context?',
-
-            self::CONSTRUCTOR_OVERWRITTEN, [ $property, $object ]
+                $object
+            )
         );
     }
 }

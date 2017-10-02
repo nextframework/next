@@ -10,41 +10,52 @@
  */
 namespace Next\Controller;
 
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
 use Next\Components\Object;                            # Object Class
 use Next\Components\Collections\AbstractCollection;    # Abstract Collection Class
 
 /**
- * Defines a \Next\Components\Collections\AbstractCollection for Controllers.
- * To be a valid within this Collection, the Object must implement the
- * \Next\Controller\Controller Interface
+ * Defines a \Next\Components\Collections\AbstractCollection for Controllers
  *
  * @package    Next\Controller
  */
 class Chain extends AbstractCollection {
 
     /**
-     * Check Object acceptance
+     * Checks if given `Next\Components\Object` is acceptable in a
+     * Controllers' Chain
      *
-     * Check if given Controller is acceptable in Controllers Chain
-     * To be valid, the Controller must implement \Next\Controller\Controller Interface
+     * To be valid, the Object must implement `\Next\Controller\Controller` Interface
      *
      * @param \Next\Components\Object $object
      *  An Object object
      *
-     *  The checking for \Next\Controller\Controller Interface will be inside
-     *  the method.
-     *
      * @return boolean
-     *  TRUE if given Object is acceptable by Controllers Collection and FALSE otherwise
+     *  TRUE if given Object is acceptable in Controllers' Collection
+     *  and FALSE otherwise
      *
-     * @throws \Next\Controller\ControllerException
-     *  Given Controller is not acceptable in the Controller Chain
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Given Object is not acceptable in a Controllers' Chain
      */
     public function accept( Object $object ) {
 
         if( ! $object instanceof Controller ) {
 
-            throw ControllerException::invalidController( $object );
+            return new InvalidArgumentException(
+
+                sprintf(
+
+                    '<strong>%s</strong> is not a valid Controller
+
+                    Controllers must implement <em>Next\Controller\Controller</em> Interface',
+
+                    $object
+                )
+            );
         }
 
         return TRUE;

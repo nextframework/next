@@ -10,6 +10,13 @@
  */
 namespace Next\DB\Entity;
 
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+use Next\Exception\Exceptions\BadMethodCallException;
+use Next\Exception\Exceptions\DomainException;
+
 use Next\Components\Object;    # Object Class
 use Next\DB\Table\Manager;     # Entities Manager Class
 
@@ -52,6 +59,13 @@ class Repositories extends Object {
      *
      * @return \Next\DB\Entity\Repositories
      *  Repositories Object (Fluent-Interface)
+     *
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if FQCN of Repository is not an instance of `Next\DB\Entity\Repository`
+     *
+     * @throws \Next\Exception\Exceptions\BadMethodCallException
+     *  Thrown if the resulting Repository from given FQCN couldn't
+     *  be handled raising a \ReflectionException
      */
     public function addRepository( $repository, $alias = NULL, Manager $manager ) {
 
@@ -60,7 +74,18 @@ class Repositories extends Object {
             $reflector = new \ReflectionClass( $repository );
 
             if( ! $reflector -> isSubclassOf( 'Next\DB\Entity\Repository' ) ) {
-                throw EntityException::invalidRepository( $repository );
+
+                throw new InvalidArgumentException(
+
+                    sprintf(
+
+                        '<strong>%s</strong> is not a valid Repository
+
+                        Repositories must be an instance of <em>Next\\DB\Entity\Repository</em>',
+
+                        $repository
+                    )
+                );
             }
 
             $alias = ( ! is_null( $alias ) ? trim( $alias ) : $reflector -> getShortName() );
@@ -83,7 +108,7 @@ class Repositories extends Object {
              * Repository Classes that can't be found would return a not-so-useful
              * Response, making it difficult to debug
              */
-            throw EntityException::repositoryNotExists( $repository );
+            throw new BadMethodCallException( $e -> getMessage() );
         }
 
         return $this;
@@ -93,12 +118,12 @@ class Repositories extends Object {
      * Get an Entity Repository
      *
      * @param string $repository
-     *  Entity Repository to retrieve, be it the full classpath or its alias directly
+     *  Entity Repository to retrieve, be it the FQCN or its alias directly
      *
      * @return \Next\DB\Entity\Repository
      *  The Entity Repository Object
      *
-     * @throws \Next\DB\Entity\EntityException
+     * @throws \Next\Exception\Exceptions\DomainException
      *  Thrown if Repository Object doesn't exist
      */
     public function getRepository( $repository ) {
@@ -108,7 +133,16 @@ class Repositories extends Object {
         }
 
         if( ! array_key_exists( $repository, $this -> repositories ) ) {
-            throw EntityException::repositoryNotExists( $repository );
+
+            throw new DomainException(
+
+                sprintf(
+
+                    'Repository <strong>%s</strong> doesn\'t exist',
+
+                    $repository
+                )
+            );
         }
 
         return $this -> repositories[ $repository ];

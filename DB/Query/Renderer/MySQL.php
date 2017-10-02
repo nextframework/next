@@ -445,8 +445,6 @@ class MySQL extends Object implements Renderer {
      *
      * @param array &$columns
      *  Statements in which to search the columns to quote
-     *
-     * @return void
      */
     private function quoteColumns( array &$columns ) {
 

@@ -10,9 +10,7 @@
  */
 namespace Next\DB\Driver;
 
-use Next\Components\Interfaces\Parameterizable;    # Parameterizable Interface
-use Next\Components\Object;                        # Object Class
-use Next\Components\Parameter;                     # Parameter Class
+use Next\Components\Object;    # Object Class
 
 /**
  * Connection Driver Class
@@ -77,25 +75,6 @@ abstract class AbstractDriver extends Object implements Driver {
         return $this -> connection;
     }
 
-    // Parameterizable Interface Methods Implementation
-
-    /**
-     * Set DB Adapter Options
-     *
-     * Not required for now, but overwritable!
-     */
-    public function setOptions() {}
-
-    /**
-     * Get DB Driver Options
-     *
-     * @return \Next\Components\Parameter
-     *  Parameter Object with merged options
-     */
-    public function getOptions() {
-        return $this -> options;
-    }
-
     // Auxiliary Methods
 
     /**
@@ -106,13 +85,6 @@ abstract class AbstractDriver extends Object implements Driver {
     private function checkIntegrity() {}
 
     // Abstract Methods Definition
-
-    /**
-     * Connection Adapter Configuration
-     *
-     * It's abstract because every driver must provide extensibility for its adapters
-     */
-    abstract protected function configure();
 
     /**
      * Check for Driver-specific Requirements

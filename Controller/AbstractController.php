@@ -89,7 +89,7 @@ abstract class AbstractController extends Object implements Controller {
                 $this -> session = $session;
             }
 
-            // HTTP GET Params (a.k.a. Dynamic Params) as Template Variables
+            // HTTP GET Parameters (a.k.a. Dynamic Parameters) as Template Variables
 
             $this -> view -> assign( $this -> request -> getQuery() );
 
@@ -135,169 +135,74 @@ abstract class AbstractController extends Object implements Controller {
     // OverLoading
 
     /**
-     * Check for GET Params existence
-     *
-     * @note The PRESENCE of key is tested, not its value
+     * Check the EXISTENCE of an HTTP GET Parameter
      *
      * @param string $param
-     *  Desired Param from Dynamic Params
+     *  Desired HTTP GET Parameter
      *
      * @return boolean
-     *  TRUE if exists, FALSE otherwise OR if a
-     *  \Next\HTTP\Request\RequestException is caught
-     *
-     * @throws \Next\Controller\ControllerException
-     *  Testing existence of internal properties
+     *  TRUE if exists and FALSE otherwise
      */
     public function __isset( $param ) {
-
-        $param = trim( $param );
-
-        if( substr( $param, 0, 1 ) == '_' ) {
-
-            throw ControllerException::unnecessaryTest();
-        }
-
-        try {
-
-            return ( $this -> request -> getQuery( $param ) !== FALSE );
-
-        } catch( RequestException $e ) {
-
-            return FALSE;
-        }
+        return ( array_key_exists( trim( $param ), $this -> request -> getQuery() ) );
     }
 
     /**
-     * Retrieve a GET Param
-     *
-     * Grant access to a Request Dynamic Params using Property Notation instead Array Notation
+     * Retrieve an HTTP GET Parameter
      *
      * @param string $param
-     *  Desired Param from Dynamic Params
+     *  Desired HTTP GET Parameter
      *
-     * @return mixed Dynamic Param Value
-     *
-     * @throws \Next\Controller\ControllerException
-     *  Trying to access internal properties prefixed with an underscore
-     *  without use their correct accessors
-     *
-     * @throws \Next\Controller\ControllerException
-     *  Trying to access non-existent param
+     * @return mixed|string
+     *  Value of desired HTTP GET Parameter
      */
     public function __get( $param ) {
-
-        $param = trim( $param );
-
-        try {
-
-            return $this -> request -> getQuery( $param );
-
-        } catch( RequestException $e ) {
-
-            throw ControllerException::paramNotFound($e);
-        }
+        return $this -> request -> getQuery( trim( $param ) );
     }
 
     /**
-     * Set a Template Variable
-     *
-     * <p>
-     *     Allows to set a Template Variable directly from Controller
-     *     context, instead of using \Next\View\View::assign() or
-     *     \Next\View\View::__set() (if implemented)
-     * </p>
-     *
-     * <p>This method is slightly different of others.</p>
-     *
-     * <p>
-     *     While __get() and __isset() work over the HTTP GET Params
-     *     (a.k.a Dynamic Params) this one works over Template Variables
-     * </p>
+     * Sets a Template Variable from Controller Context instead of
+     * using \Next\View\View::assign() or through overloading,
+     * if implemented
      *
      * @param string $param
      *  Template Variable Name
      *
      * @param string $value
      *  Template Variable Value
-     *
-     * @throws \Next\Controller\ControllerException
-     *  A \Next\View\ViewException was caught due a Template Variable
-     *  forbiddenness, because it conflicts with a reserved (or internal)
-     *  Template Variable name
      */
     public function __set( $param, $value ) {
-
-        try {
-
-            $this -> view -> $param = $value;
-
-        } catch( ViewException $e ) {
-
-            throw ControllerException::assignmentFailure( $e );
-        }
+        $this -> view -> $param = $value;
     }
 
     /**
-     * Unset a Template Variable
-     *
-     * Allows to unset a Template Variable from Controller context,
-     * instead of using:
-     *
-     * `$this -> view -> remove( 'variable' );`
-     *
-     * Or maybe then:
-     *
-     * `unset( $this -> view -> variable );`
-     *
-     * This method is slightly different of others. While `__get()` and `__isset()`
-     * work over the HTTP GET Params (a.k.a Dynamic Params) this one works over
-     * Template Variables
+     * Unsets a Template Variable from Controller Context instead of
+     * of through overloading — i.e. `unset( $this -> view -> variable )`
      *
      * @param string $param
      *  Desired Template Variable
-     *
-     * @throws \Next\Controller\ControllerException
-     *  Trying to unset an forbidden Template Variable,
-     *  always prefixed with an unserscore.
-     *
-     * @throws \Next\Controller\ControllerException
-     *  Trying to unset a nonexistent Template Variable
      */
     public function __unset( $param ) {
-
-        try {
-
-            unset( $this -> view -> $param );
-
-        } catch( ViewException $e ) {
-
-            throw ControllerException::removalFailure( $e );
-        }
+        unset( $this -> view -> $param );
     }
 
     /**
-     * Render Template View automatically
-     *
-     * <p>
-     *     Render Template View automatically based upon
-     *     Template View FileSpec, once a Template View Filename
-     *     cannot be manually informed
-     * </p>
+     * Renders the Template View automatically based upon
+     * Template View FileSpec, since a Template View Filename
+     * can't be manually informed here
      */
     public function __destruct() {
 
         /**
          * @internal
-         * This checking is needed because when the DEVELOPMENT_MODE constant
-         * is set as '2', case in which activates the Routes Generator, this
-         * property is not a View Object yet, because Controller Constructor
-         * did not receive an Application to work with
          *
-         * This checking has no effects when this constant is set as 1 or 0 (zero).
+         * This checking is needed because when the DEVELOPMENT_MODE
+         * constant is set as '2', case in which activates the
+         * Routes Generator, this property is not a View Object yet,
+         * because Controller Constructor did not receive a
+         * `\Next\Application\Application` to work with
          */
-        if( $this -> view instanceof View ) {
-
+        if( ! defined( 'DEVELOPMENT_MODE' ) || DEVELOPMENT_MODE >= 2 ) {
             $this -> view -> render();
         }
     }

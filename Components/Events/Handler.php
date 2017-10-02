@@ -10,6 +10,11 @@
  */
 namespace Next\Components\Events;
 
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\BadFunctionCallException;
+
 use Next\Components\Object;               # Object Class
 use Next\Components\Collections\Lists;    # Collection Lists Class
 
@@ -71,17 +76,12 @@ class Handler extends Object {
      *
      * @return \Next\Components\Events\Handler
      *   Events Handler Object (Fluent Interface)
-     *
-     * @throws \Next\Components\Events\EvenstException
-     *  Thrown if given Listener, as referenced by its trigger name, doesn't exist
      */
     public function removeListener( $name ) {
 
-        if( ! array_key_exists( $name, $this -> listeners ) ) {
-            throw EventsException::unknownListener( $name );
+        if( array_key_exists( $name, $this -> listeners ) ) {
+            unset( $this -> listeners[ $name ] );
         }
-
-        unset( $this -> listeners[ $name ] );
 
         return $this;
     }
@@ -95,11 +95,8 @@ class Handler extends Object {
      * @param string $name
      *  Event Listener trigger name
      *
-     * @return \Next\Components\Events\Handler
-     *   Events Handler Object (Fluent Interface)
-     *
      * @throws \Next\Components\Events\EventsException
-     *  Throw if given Event Listener, as referenced by
+     *  Thrown if given Event Listener, as referenced by
      *  the trigger name, doesn't exist
      *
      * @throws \Next\Components\Events\EventsException
@@ -108,9 +105,7 @@ class Handler extends Object {
      */
     public function handle( $name ) {
 
-        if( ! array_key_exists( $name, $this -> listeners ) ) {
-            throw EventsException::unknownListener( $name );
-        }
+        if( ! array_key_exists( $name, $this -> listeners ) ) return;
 
         foreach( $this -> listeners[ $name ] as $listener ) {
 
@@ -126,13 +121,20 @@ class Handler extends Object {
 
             } catch( \ReflectionException $e ) {
 
-                throw EventsException::listenerExecutionError(
-                    $name, $this -> options -> event -> getName(), $e
+                throw new BadFunctionCallException(
+
+                    sprintf(
+
+                        'Event Listener <strong>%s</strong> of Event
+                        <strong>%s</strong> could not be executed
+
+                        The following error has been returned: %s',
+
+                        $name, $event, $e -> getMessage()
+                    )
                 );
             }
         }
-
-        return $this;
     }
 
     // Accessors

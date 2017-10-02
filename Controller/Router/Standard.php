@@ -10,16 +10,23 @@
  */
 namespace Next\Controller\Router;
 
-use Next\Components\Object;          # Object Class
-use Next\Application\Application;    # Application Interface
-use Next\HTTP\Request;               # Request Class
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
+use Next\Components\Interfaces\Verifiable;    # Verifiable Interface
+use Next\Application\Application;             # Application Interface
+
+use Next\Components\Object;                   # Object Class
+use Next\HTTP\Request;                        # Request Class
 
 /**
  * Standard Controller Router based on PHP Arrays
  *
  * @package    Next\Controller\Router
  */
-class Standard extends AbstractRouter {
+class Standard extends AbstractRouter implements Verifiable {
 
     // RegExp and String Delimiter Constants
 
@@ -30,11 +37,12 @@ class Standard extends AbstractRouter {
      */
     const SEPARATOR_TOKEN    = '|';
 
+    // Router Interface Method Implementation
+
     /**
      * Finds a matching Route for the Application -AND- current Request URI
      *
      * @return array|object|boolean
-     *
      *  If a Route could be match against current Request URI an
      *  array or an object will be returned (depending on Connection
      *  Driver configuration).
@@ -69,16 +77,18 @@ class Standard extends AbstractRouter {
 
                 $data,
 
-                function( $route ) use( /*$application, */$request, $URI ) {
+                function( $route ) use( $request, $URI ) {
 
                     /**
                      * @internal
                      *
                      * To be a matching route it must:
                      *
-                     * - Belong to the same Application Controller (class name)
-                     * - Correspond to the same Request Method of the current Request
-                     * - Have its route RegExp match the Request URI of current Request
+                     * - Belong to the same Application Controller (classname)
+                     * - Correspond to the same Request Method of
+                     *   the current Request
+                     * - Have its route RegExp matching the Request URI
+                     *   of current Request
                      */
                     return ( $route['application']   == $this -> options -> application -> getClass() -> getName() &&
                            ( $route['requestMethod'] ==          $request -> getRequestMethod() &&
@@ -90,43 +100,49 @@ class Standard extends AbstractRouter {
 
             if( count( $data ) == 0 ) return FALSE;
 
-            // Match found, let's prepare everything for a successful Dispatch
-
             /**
              * @internal
              *
-             * $data is being rewritten to point to the first in the filtered dataset
-             * because this contains the most specific route, counter-balancing
-             * the lack of gluttony of preg_match() that doesn't match as much as possible
+             * $data is being rewritten to point to the first in the
+             * filtered dataset because this contains the most specific
+             * Route, counter-balancing the lack of gluttony
+             * of preg_match() that doesn't match as much as possible
              */
             $data = Object::map( array_shift( $data ) );
 
             /**
              * @internal
-             * Setting Up Found Controller and its action to be used in View,
-             * as part of findFilebySpec() method
+             *
+             * Setting Up Controller and its Action found to be used
+             * later, maybe by View Engines as part of FileSpec detection
              */
             $this -> controller = $data -> controller;
-
             $this -> method     = $data -> method;
 
             // Analyzing Params
 
             $requiredParams = unserialize( $data -> requiredParams );
 
-            // Lookup for Required Params in URL
-
             if( count( $requiredParams ) > 0 ) {
 
-                $this -> lookup( $requiredParams, $URI, $request -> getQuery() );
+                /**
+                 * @internal
+                 *
+                 * Merging manually defined GET query (i.e. `?param=value` )
+                 * so they can be considered as validatable arguments too
+                 */
+                foreach( $request -> getQuery() as $key => $value ) {
+                    $requiredParams[] = [ 'name' => $key ];
+                }
+
+                $this -> lookup( $requiredParams, $URI );
             }
 
             /**
              * @internal
              *
-             * Validating Required Params
-             * Only Parameters with a List|of|Acceptable|Values or with a defined REGEX
-             * will be validated
+             * Validating Required Params against a List|of|Acceptable|Values
+             * or with a defined REGEX, if defined
              */
             $this -> validate(
 
@@ -136,14 +152,15 @@ class Standard extends AbstractRouter {
 
                     function( $current ) {
 
-                        return ( ! empty( $current['acceptable'] ) || ! empty( $current['regex'] ) );
+                        return ( ! empty( $current['acceptable'] ) ||
+                                    ! empty( $current['regex'] ) );
                     }
                 ),
 
                 $URI
             );
 
-            // Process Dynamic Params, in order to register them as Request Params
+            // Processing Dynamic Params, in order to register them as Request Params
 
             $params = $this -> process(
 
@@ -156,40 +173,47 @@ class Standard extends AbstractRouter {
 
             $data -> params = array_merge( $params, $request -> getQuery() );
 
-            // Discarding Unnecessary Information
-
-            unset( $data -> requiredParams, $data -> optionalParams );
-
             return $data;
         }
 
         return FALSE;
     }
 
-    // Auxiliary methods
+    // Verifiable Interface Method Implementation
 
     /**
-     * Creates a \Next\HTTP\Stream\Reader object to read data from input
-     * PHP array generated by one of the \Next\Tools\Routes\Generators\Generator
+     * Verifies Object Integrity
      *
      * @throws \Next\Controller\Router\RouterException
      *  Filepath to the PHP array was not informed or it's empty
      */
-    protected function connect() {
+    public function verify() {
 
         // Checking if PHP File Exists
 
-        if( $this -> options -> filePath === FALSE || ! file_exists( $this -> options -> filePath ) ) {
+        if( $this -> options -> filePath === FALSE ||
+              ! file_exists( $this -> options -> filePath ) ) {
 
-            throw RouterException::connectionFailure(
+            throw new InvalidArgumentException(
 
-                'PHP Database File <strong>%s</strong> doesn\'t exist',
+                sprintf(
 
-                RouterException::CONNECTION_FAILED,
+                    'PHP Database File <strong>%s</strong> doesn\'t exist',
 
-                [ $this -> options -> filePath ]
+                    $this -> options -> filePath
+                )
             );
         }
+    }
+
+    // Parameterizable Method Overwriting
+
+    /**
+     * Set Class Options.
+     * Defines a default filepath for PHP-array with Generated Routes
+     */
+    public function setOptions() {
+        return [ 'filePath' => 'data/routes.php' ];
     }
 
     // Abstract Methods Implementation
@@ -203,25 +227,10 @@ class Standard extends AbstractRouter {
      * @param string $URI
      *  Request URI to be checked against
      *
-     * @param array|optional $queryData
-     *  Manually set GET parameters to be considered as validatable arguments too
-     *
      * @throws \Next\Controller\Router\RouterException
      *  Any of the Required Parameters is missing or has no value
      */
-    protected function lookup( array $params, $URI, array $queryData = [] ) {
-
-        /**
-         * Merging manually defined GET query so they can
-         * be considered as validatable arguments too
-         */
-        if( count( $queryData ) != 0 ) {
-
-            foreach( $queryData as $key => $value ) {
-
-                $params[] = [ 'name' => $key ];
-            }
-        }
+    protected function lookup( array $params, $URI ) {
 
         array_walk(
 
@@ -231,13 +240,26 @@ class Standard extends AbstractRouter {
 
                 preg_match( sprintf( '/\/%s(?:\/|\?).+\/?/', $current['name'] ), $URI, $matches );
 
-                // Required argument is not present in URL and neither in GET superglobal?
-
+                /**
+                 * @internal
+                 *
+                 * Required argument is not present in URL and neither
+                 * in GET superglobal, so let's also deny access
+                 * sending a 400 Response Header (Bad Request)
+                 */
                 if( count( $matches ) == 0 && ! isset( $_GET[ $current['name'] ] ) ) {
 
-                    // Fine! Let's also send a 400 Response Header (Bad Request)
+                    throw new InvalidArgumentException(
 
-                    throw RouterException::missingParameter( $current['name'] );
+                        sprintf(
+
+                            'Missing or malformed Required Parameter <strong>%s</strong>',
+
+                            $current['name']
+                        ),
+
+                        NULL, 400
+                    );
                 }
             }
         );
@@ -258,17 +280,15 @@ class Standard extends AbstractRouter {
      */
     protected function validate( array $params, $URI ) {
 
-        // Do we have something to work with?
+        // Nothing to validate
 
         if( count( $params ) == 0 ) return;
-
-        $token = self::SEPARATOR_TOKEN;
 
         array_walk(
 
             $params,
 
-            function( $current ) use( $URI, $token ) {
+            function( $current ) use( $URI ) {
 
                 // Finding argument value
 
@@ -280,34 +300,66 @@ class Standard extends AbstractRouter {
 
                 if( count( $value ) == 0 ) return TRUE;
 
-                // Validating parameter value with a predefined REGEXP
+                // Validating parameter value against a predefined REGEXP
 
                 if( ! empty( $current['regex'] ) ) {
 
                     /**
-                     * If argument value does not match defined REGEX it is
-                     * automatically blocked regardless if a list given value is
-                     * valid against it (even if this may sound ridiculous)
+                     * @internal
+                     *
+                     * If argument value does not match predefined REGEX
+                     * it is automatically blocked regardless if a
+                     * list|of|valid|values has been provided and the
+                     * argument is valid — even if this may sound ridiculous
                      */
                     if( preg_match( sprintf( '/%s/', $current['regex'] ), $value[ 1 ] ) == 0 ) {
-                        throw RouterException::invalidParameter( $current );
+
+                        throw new InvalidArgumentException(
+
+                            sprintf(
+
+                                'Invalid Required Parameter <strong>%s</strong>',
+
+                                $current['name']
+                            ),
+
+                            NULL, 400
+                        );
                     }
 
                 } else {
 
-                    $valid = explode( $token, $current['acceptable'] );
+                    $valid = explode( self::SEPARATOR_TOKEN, $current['acceptable'] );
 
-                    // If Parameter is not in the list...
-
+                    /**
+                     * @internal
+                     *
+                     * There's not a RegExp to validate, then
+                     * let's check against a list|of|valid|values
+                     */
                     if( ! in_array( $value[ 1 ], $valid ) ) {
 
-                        // ... and there is no Default Value defined for it
-
+                        /**
+                         * @internal
+                         *
+                         * A Route Argument might be defined as required
+                         * but it doesn't need to be defined by the
+                         * User so let's check if a default Value has
+                         * been provided as fallback
+                         */
                         if( ! empty( $current['default'] ) ) {
 
-                            // Teh, he, he ^^
+                            throw new InvalidArgumentException(
 
-                            throw RouterException::invalidParameter( $current );
+                                sprintf(
+
+                                    'Invalid Required Parameter <strong>%s</strong>',
+
+                                    $current['name']
+                                ),
+
+                                NULL, 400
+                            );
                         }
                     }
                 }
@@ -316,7 +368,7 @@ class Standard extends AbstractRouter {
     }
 
     /**
-     * Process Dynamic Params, in order to register them as Request Params
+     * Process Dynamic Params, in order to register them as HTTP GET Params
      *
      * @param array $params
      *  Array of Params to parse
@@ -329,7 +381,7 @@ class Standard extends AbstractRouter {
      */
     protected function process( array $params, $URI ) {
 
-        // Do we have something to work with?
+        // Nothing to process
 
         if( count( $params ) == 0 ) return [];
 
@@ -341,12 +393,20 @@ class Standard extends AbstractRouter {
 
             // Listing Parameters Values
 
-            preg_match( sprintf( '/\/%s\/([^\/]+)\/?/', $temp ), $URI, $value );
+            preg_match(
+                sprintf( '/\/%s\/([^\/]+)\/?/', $temp ), $URI, $value
+            );
 
             // Finding Parameter Value(s)
 
-                // Match! Which means current Parameter (in iteration) is present in Requested URI
-
+            /**
+             * @internal
+             *
+             * If we got a match means current Parameter in iteration
+             * is present in Requested URI and we can get its value
+             *
+             * @see Standard::findParameterValue()
+             */
             if( count( $value ) > 0 ) {
 
                 $pairs[ $temp ] = $this -> findParameterValue( $param, $value[ 1 ] );
@@ -355,17 +415,15 @@ class Standard extends AbstractRouter {
 
                 /**
                  * @internal
-                 * No match!
                  *
-                 * Which means current Parameter (in iteration) is not present in Requested URI
+                 * If we don't have a match, the Route Argument *may*
+                 * not present on Request URI, but the Request URI
+                 * itself could be malformed. — i.e. /param1/value1/param2
                  *
-                 * - OR -
-                 *
-                 * Parameter is mal-formed. E.g (of two params): /param1/value1/param2
-                 *
-                 * As optional Parameter, otherwise the flow would be stopped
-                 * by \Next\Controller\Router\Standard::lookup(), we'll use the
-                 * Default value, if defined in Route, or NULL, if not
+                 * Being an optional Parameter — otherwise the flow
+                 * would've been interrupted by Standard::lookup(),
+                 * we'll use the Default Value, if defined in Route,
+                 * or `NULL`, if not
                  */
                 $pairs[ $temp ] = ( ! empty( $param['default'] ) ? $param['default'] : NULL );
             }
@@ -374,18 +432,10 @@ class Standard extends AbstractRouter {
         return $pairs;
     }
 
-    /**
-     * Set Class Options.
-     * Defines a default filepath for PHP-array with Generated Routes
-     */
-    public function setOptions() {
-        return [ 'filePath' => 'data/routes.php' ];
-    }
-
     // Auxiliary Methods
 
     /**
-     * Find Parameter Value
+     * Finds Parameter Value
      *
      * @param array $param
      *  Parameter Data
@@ -394,53 +444,49 @@ class Standard extends AbstractRouter {
      *  Parameter Value
      *
      * @return string
-     *
-     *   - Input Parameter Value, if parameter is present and is valid
-     *
-     *   - The Default Parameter Value if parameter is missing or is invalid AND
-     *     a Default Value is defined in Router
-     *
-     *   - NULL, in any other cases
+     *  - Input Parameter Value, if parameter is present and is valid
+     *  - Default Parameter Value, if parameter is missing or is
+     *    invalid -AND- a Default Value is defined in Router
+     *  - `NULL`, in any other cases
      */
     private function findParameterValue( $param, $value ) {
 
-        // Validating parameter value with a predefined REGEXP
+        /**
+         * @internal
+         *
+         * If we have a RegExp to work with and it matches the
+         * argument value, it's accepted "as is"
+         */
+        if( ! empty( $param['regex'] ) &&
+                preg_match( sprintf( '/%s/', $param['regex'] ), $value ) != 0 ) {
 
-        if( ! empty( $param['regex'] ) ) {
-
-            // If argument value matches defined REGEX is automatically accepted "as is"
-
-            if( preg_match( sprintf( '/%s/', $param['regex'] ), $value ) != 0 ) {
-                return $value;
-            }
-
-        } else {
-
-            // Comparing value against a List, if any
-
-            if( ! empty( $param['acceptable'] ) ) {
-
-                $list = explode( self::SEPARATOR_TOKEN, $param['acceptable'] );
-
-                // If given value is in the list, let's accept it
-
-                if( in_array( $value, $list ) ) {
-
-                    return $value;
-
-                } else {
-
-                    // Otherwise let's try to find a default value for it
-
-                    return ( ! empty( $param['default'] ) ? $param['default'] : NULL );
-                }
-
-            } else {
-
-                // We don't have a List, so let's return input value "as is"
-
-                return $value;
-            }
+            return $value;
         }
+
+        /**
+         * @internal
+         *
+         * Otherwise let's compare against a list|of|valid|values if defined
+         */
+        if( ! empty( $param['acceptable'] ) ) {
+
+            $list = explode( self::SEPARATOR_TOKEN, $param['acceptable'] );
+
+            /**
+             * @internal
+             *
+             * If the argument value is on the list, we accept it, otherwise
+             * we use its Default Value.
+             * If no Default Value was defined, we set it as `NULL`
+             */
+
+            if( in_array( $value, $list ) ) return $value;
+
+            return ( ! empty( $param['default'] ) ? $param['default'] : NULL );
+        }
+
+        // Not RegExp and not list, let's accept it "as is"
+
+        return $value;
     }
 }

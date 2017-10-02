@@ -10,6 +10,11 @@
  */
 namespace Next\Components;
 
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\NullException;
+
 use Next\Components\Interfaces\Contextualizable;    # Contextualizable Interface
 use Next\Components\Interfaces\Informational;       # Informational Interface
 use Next\Components\Interfaces\Parameterizable;     # Parameterizable Interface
@@ -125,6 +130,16 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      *
      * @return stdClass
      *  Given argument mapped into an stdClass Object
+     *
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown when an entry of the associative array being mapped
+     *  has an empty key. E.g:
+     *
+     * ````
+     * $array = [ '' => 'foo' ];
+     * ````
+     *
+     * This is accepted by PHP (for whatever reason), but we don't accept
      */
     public static function map( $param ) {
 
@@ -134,7 +149,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
 
             if( strlen( $k ) == 0 ) {
 
-                throw ComponentsException::mapping(
+                throw new RuntimeException(
                     'Although accepted as valid by PHP, all dimensions must have a key'
                 );
             }
@@ -144,14 +159,6 @@ class Object extends Prototype implements Contextualizable, Informational, Param
                 $keys = array_keys( $v );
 
                 $na = count( array_filter( $keys, 'is_string') );
-                $ni = count( array_filter( $keys, 'is_int') );
-
-                if( $na > 0 && $ni > 0 ) {
-
-                    throw ComponentsException::mapping(
-                        'Mixed associative and indexed content is not allowed'
-                    );
-                }
 
                 // Mapping associative arrays recursively
 
@@ -225,7 +232,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
     final public function extend( Invoker $invoker, $methods = NULL, $properties = NULL ) {
 
         if( is_null( $this -> context ) ) {
-            throw ComponentsException::extendedContextFailure( '', $this );
+            throw ComponentsException::extendedContextFailure( $this );
         }
 
         $this -> context -> extend( $invoker, $methods, $properties );
@@ -308,19 +315,20 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      * @param array|optional $args
      *  Variable list of arguments to the method
      *
-     * @return mixed|boolean
-     *  Return what extended method returns or FALSE if a ReflectionException
-     *  is caught in \Next\Components\Context::call()
+     * @return mixed|void
+     *  Returns what the method under Extended Context returns or
+     *  what the prototyped resource returns
+     *  Any failure on either of these calls and nothing is returned
      *
-     * @throws \Next\Components\ComponentsException
-     *  Object Constructor was overwritten without invoking it through
-     *  parent context instead of using the \Next\Components\Object::init()
+     * @throws \Next\Exception\Exceptions\BadmethodcallException
+     *  Thrown if a \ReflectionException is caught in when trying
+     *  to call the method under Extended Context
+     *
+     * @throws \Next\Exception\Exceptions\BadmethodcallException
+     *  Thrown if the method couldn't be found as part of an
+     *  Extended Context and neither as a Prototyped Resource
      */
     public function __call( $method, array $args = [] ) {
-
-        if( is_null( $this -> context ) ) {
-            throw ComponentsException::extendedContextFailure( $method, $this );
-        }
 
         // Trying to call as an extended method
 
@@ -328,81 +336,11 @@ class Object extends Prototype implements Contextualizable, Informational, Param
 
             return $this -> context -> call( $this, $method, $args );
 
-        } catch( ContextException $e ) {
+        } catch( NullException $e ) {
 
-            if( $e -> getCode() == ContextException::METHOD_NOT_FOUND ) {
+            // Trying to call as a prototyped method
 
-                // Trying to call as a prototyped method
-
-                return $this -> call( $this, $method, $args );
-            }
-        }
-    }
-
-    /**
-     * Allow change of properties from extended Objects in this Object context
-     *
-     * IMPORTANT!
-     *
-     * In order to be considered a property of an extended context,
-     * properties must be prefixed with an underscore, even if they don't
-     * have one in their original classes
-     *
-     * @param string $property
-     *  Property trying to be changed
-     *
-     * @param mixed $value
-     *  New value for the property
-     *
-     * @throws \Next\Components\ComponentsException
-     *  Object Constructor was overwritten without invoking it through
-     *  parent context instead of using the \Next\Components\Object::init()
-     */
-    public function __set( $property, $value ) {
-
-        if( is_null( $this -> context ) ) {
-
-            throw ComponentsException::overloadedPropertyUpdateFailure(
-                $property, $this
-            );
-        }
-
-        // Only properties prefixed with an underscore will be considered for extended context
-
-        if( substr( $property, 0, 1 ) == '_' ) {
-            $this -> context -> set( $this, str_replace( '_', '', $property ), $value );
-        }
-    }
-
-    /**
-     * Allow retrieval of properties from extended Objects in this Object context
-     *
-     * IMPORTANT!
-     *
-     * In order to be considered a property of an extended context,
-     * properties must be prefixed with an underscore, even if they
-     * don't have one in their original classes
-     *
-     * @param string $property
-     *  Property trying to be retrieved
-     *
-     * @throws \Next\Components\ComponentsException
-     *  Object Constructor was overwritten without invoking it through
-     *  parent context instead of using the \Next\Components\Object::init()
-     */
-    public function __get( $property ) {
-
-        if( is_null( $this -> context ) ) {
-
-            throw ComponentsException::overloadedPropertyReadingFailure(
-                $property, $this
-            );
-        }
-
-        // Only properties prefixed with an underscore will be considered for extended context
-
-        if( substr( $property, 0, 1 ) == '_' ) {
-            return $this -> context -> get( $this, str_replace( '_', '', $property ) );
+            return $this -> call( $this, $method, $args );
         }
     }
 

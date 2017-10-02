@@ -18,7 +18,7 @@ namespace Next\HTTP\Stream\Writer;
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class WriterException extends \Next\Components\Debug\Exception {
+class WriterException extends \Next\Exception\Exception {
 
     /**
      * Unable to Write Data

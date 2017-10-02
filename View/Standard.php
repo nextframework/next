@@ -352,7 +352,7 @@ class Standard extends Object implements View {
      * @return \Next\View\View
      *  View Object (Fluent Interface)
      *
-     * @throws \Next\View\ViewException
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Chosen Template Variable is defined as reserved
      */
     public function assign( $tplVar, $value = NULL ) {
@@ -432,7 +432,7 @@ class Standard extends Object implements View {
      * @return \Next\HTTP\Response
      *  Response Object
      *
-     * @throws \Next\View\ViewException
+     * @throws \Next\Exception\Exceptions\RuntimeException
      *  Thrown if unable to find Template View File
      */
     public function render( $name = NULL, $search = TRUE ) {
@@ -542,11 +542,12 @@ class Standard extends Object implements View {
      * @param string $tplVar
      *  Template Variable to be deleted
      *
-     * @throws \Next\View\ViewException
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Trying to unset a undefined Template Variable
      *
-     * @throws \Next\View\ViewException
-     *  Trying to unset internal properties
+     * @throws \Next\Exception\Exceptions\AccessViolationException
+     *  Trying to unset a Template Variable whose name has been marked
+     *  as forbidden or forbidden due an association with a View Engine Helper
      */
     public function __unset( $tplVar ) {
 
@@ -570,8 +571,9 @@ class Standard extends Object implements View {
      * @param mixed|optional $value
      *  Template Variable Value
      *
-     * @throws \Next\View\ViewException
-     *  Trying to set value for internal properties (prefixed with "_")
+     * @throws \Next\Exception\Exceptions\AccessViolationException
+     *  Trying to set a Template Variable with a name that has been marked
+     *  as forbidden or forbidden due an association with a View Engine Helper
      */
     public function __set( $tplVar, $value = NULL ) {
 
@@ -598,18 +600,10 @@ class Standard extends Object implements View {
      *  Template Variable will be returned.
      *  Otherwise, variable will be echoed and thus, nothing will be returned
      *
-     * @throws \Next\View\ViewException
-     *  Trying to access internal properties (prefixed with "_" without
-     *  use their correct accessors
-     *
-     * @throws \Next\View\ViewException
-     *  Trying to get a undefined Template Variable
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Trying to retrieve/output data from an undefined Template Variable
      */
     public function __get( $tplVar ) {
-
-        if( in_array( $tplVar, $this -> _forbiddenTplVars ) ) {
-            throw ViewException::forbiddenVariable( $tplVar );
-        }
 
         if( ! array_key_exists( $tplVar, $this -> _tplVars ) ) {
              throw ViewException::missingVariable( $tplVar );
@@ -642,7 +636,7 @@ class Standard extends Object implements View {
      *  Return what the helper returns or FALSE if a ReflectionException
      *  is caught in \Next\Components\Context::call()
      *
-     * @throws \Next\View\ViewException
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Thrown if View Helper cannot be recognized among registered ones
      */
     public function __call( $helper, array $args = [] ) {
@@ -669,11 +663,15 @@ class Standard extends Object implements View {
      * @return string
      *  Template View Filepath
      *
-     * @throws \Next\View\ViewException
-     *  There are no directories assigned to iterate and search the file
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown if template Filepath wasn't provide and the auto-searching
+     *  feature through Template View FileSpec is turned off
      *
-     * @throws \Next\View\ViewException
-     *  No file could be found
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown if there are no paths assigned to iterate and search for the file
+     *
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown if a Template File could be found
      */
     private function findFile( $file = NULL ) {
 
@@ -694,7 +692,6 @@ class Standard extends Object implements View {
         // No paths to iterate?
 
         if( count( $this -> _paths ) == 0 && is_null( $this -> options -> basepath ) )  {
-
             throw ViewException::noPaths( $file );
         }
 
@@ -757,18 +754,14 @@ class Standard extends Object implements View {
         if( $this -> options -> useFileSpec ) {
 
             if( ! empty( $this -> options -> subpath ) ) {
-
                 throw ViewException::wrongUseOfSubpath( $file );
-
-            } else {
-
-                throw ViewException::unableToFindUnderFileSpec( $file );
             }
 
-        } else {
+            throw ViewException::unableToFindUnderFileSpec( $file );
 
-            throw ViewException::missingFile( $file );
         }
+
+        throw ViewException::missingFile( $file );
     }
 
     /**

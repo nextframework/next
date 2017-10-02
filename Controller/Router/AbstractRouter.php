@@ -56,14 +56,6 @@ abstract class AbstractRouter extends Object implements Router {
      */
     protected $method;
 
-    /**
-     * Additional Initialization.
-     * Calls the Router Connector, which could be to a Database, a File Stream, a XML...
-     */
-    protected function init() {
-        $this -> connect();
-    }
-
     // Routing Flow-related Methods
 
     /**
@@ -115,11 +107,6 @@ abstract class AbstractRouter extends Object implements Router {
     // Abstract Methods Definition
 
     /**
-     * Establishes a Connection with a Database, with a File (through a Stream)...
-     */
-    abstract protected function connect();
-
-    /**
      * Lookup for Required Params in URL
      *
      * @param array $params
@@ -127,16 +114,12 @@ abstract class AbstractRouter extends Object implements Router {
      *
      * @param string $uri
      *  Request URI to be checked against
-     *
-     * @param array|optional $queryData
-     *  Manually set GET parameters to be considered as validatable arguments too
      */
-    abstract protected function lookup( array $params, $uri, array $queryData = [] );
+    abstract protected function lookup( array $params, $uri );
 
     /**
-     * Check if Required Parameters are present
-     *
-     * Also check if they are valid in a list of valid values, if defined
+     * Checks if Required Parameters are present and if they are
+     * valid in a list of valid values, if defined
      *
      * @param array $params
      *  Route Params

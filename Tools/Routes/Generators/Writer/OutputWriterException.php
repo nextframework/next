@@ -18,7 +18,7 @@ namespace Next\Tools\Routes\Generators\Writer;
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class OutputWriterException extends \Next\Components\Debug\Exception {
+class OutputWriterException extends \Next\Exception\Exception {
 
     /**
      * Missing required option

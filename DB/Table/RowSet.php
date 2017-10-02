@@ -10,6 +10,11 @@
  */
 namespace Next\DB\Table;
 
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\AccessViolationException;
+
 use Next\Components\Object;              # Object Class
 use Next\Components\Utils\ArrayUtils;    # ArrayUtils Class
 
@@ -219,14 +224,19 @@ class RowSet extends Object implements DataGateway, \Iterator, \ArrayAccess {
      * @return boolean
      *  TRUE if given offset exists and FALSE otherwise
      *
-     * @throws \Next\DB\Table\DataGatewayException
+     * @throws \Next\Exception\Exception\AccessViolationException
      *  Thrown if trying to test data of a \Next\DB\Table\Table
      *  from a RowSet with multiple records
      */
     public function offsetExists( $offset ) {
 
         if( $this -> total > 1 ) {
-            throw DataGatewayException::accessViolation();
+
+            throw new AccessViolationException(
+
+                'Data-source has more than one record and therefore
+                cannot be directly manipulated'
+            );
         }
 
         return isset( $this -> source[ 0 ] -> {$offset} );
@@ -241,14 +251,19 @@ class RowSet extends Object implements DataGateway, \Iterator, \ArrayAccess {
      * @return mixed|boolean
      *  Data stored at given offset if it exists and FALSE otherwise
      *
-     * @throws \Next\DB\Table\DataGatewayException
+     * @throws \Next\Exception\Exception\AccessViolationException
      *  Thrown if trying to access data of a \Next\DB\Table\Table column
      *  from a RowSet with multiple records
      */
     public function offsetGet( $offset ) {
 
         if( $this -> total > 1 ) {
-            throw DataGatewayException::accessViolation();
+
+            throw new AccessViolationException(
+
+                'Data-source has more than one record and therefore
+                cannot be directly manipulated'
+            );
         }
 
         if( isset( $this -> source[ 0 ][ $offset ] ) ) {
@@ -267,14 +282,19 @@ class RowSet extends Object implements DataGateway, \Iterator, \ArrayAccess {
      * @param mixed $data
      *  Data to add
      *
-     * @throws \Next\DB\Table\DataGatewayException
+     * @throws \Next\Exception\Exception\AccessViolationException
      *  Thrown if trying to modify data of a \Next\DB\Table\Table
      *  from a RowSet with multiple records
      */
     public function offsetSet( $offset, $data ) {
 
         if( $this -> total > 1 ) {
-            throw DataGatewayException::accessViolation();
+
+            throw new AccessViolationException(
+
+                'Data-source has more than one record and therefore
+                cannot be directly manipulated'
+            );
         }
 
         $this -> source[ 0 ] -> {$offset} = $data;
@@ -286,14 +306,19 @@ class RowSet extends Object implements DataGateway, \Iterator, \ArrayAccess {
      * @param mixed|string|integer $offset
      *  Offset to unset
      *
-     * @throws \Next\DB\Table\DataGatewayException
+     * @throws \Next\Exception\Exception\AccessViolationException
      *  Thrown if trying to remove data of a \Next\DB\Table\Table
      *  from a RowSet with multiple records
      */
     public function offsetUnset( $offset ) {
 
         if( $this -> total > 1 ) {
-            throw DataGatewayException::accessViolation();
+
+            throw new AccessViolationException(
+
+                'Data-source has more than one record and therefore
+                cannot be directly manipulated'
+            );
         }
 
         if( isset( $this -> source[ 0 ] -> {$offset} ) ) {
@@ -377,8 +402,6 @@ class RowSet extends Object implements DataGateway, \Iterator, \ArrayAccess {
      *
      * @param mixed|array|object $source
      *  Source Data
-     *
-     * @return void
      */
     private function setSource( $source ) {
 

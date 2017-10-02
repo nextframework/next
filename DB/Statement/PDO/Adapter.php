@@ -10,9 +10,14 @@
  */
 namespace Next\DB\Statement\PDO;
 
-use Next\DB\Statement\Statement;             # DB Statement Interface
-use Next\DB\Statement\StatementException;    # Statement Exception Class
-use Next\Components\Object;                  # Object Class
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\RuntimeException;
+use Next\Exception\Exceptions\BadMethodCallException;
+
+use Next\DB\Statement\Statement;    # DB Statement Interface
+use Next\Components\Object;         # Object Class
 
 /**
  * PDO Statement Adapter Class
@@ -199,12 +204,15 @@ class Adapter extends Object implements Statement {
      * @param array|optional $args
      *  Variable list of arguments to the method, if exist
      *
-     * @return mixed
-     *  Returns what called PDOStatement method return and
-     *  FALSE if a ReflectionException is caught
+     * @return mixed|void
+     *  Returns what called PDOStatement's method returns and
+     *  FALSE otherwise
      *
-     * @throws \Next\DB\Statement\StatementException
-     *  A PDOException was caught
+     * @throws \Next\Exception\Exceptions\BadMethodCallException
+     *  Thrown with \PDOException's message if one is caught
+     *
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown with \PDOException's message if one is caught
      */
     private function invoke( $method, $args = [] ) {
 
@@ -212,6 +220,7 @@ class Adapter extends Object implements Statement {
 
             /**
              * @internal
+             *
              * The trick here is to reflect over Statement parent class,
              * even if PDOStatement has no parent class
              *
@@ -219,17 +228,27 @@ class Adapter extends Object implements Statement {
              */
             $reflector = new \ReflectionMethod( get_parent_class( $this -> stmt ), $method );
 
-            return $reflector -> invokeArgs( $this -> stmt, array_filter( (array) $args ) );
-
-        } catch( \PDOException $e ) {
-
-            // If a PDOException is caught, let' re-throw it as StatementException
-
-            throw new StatementException( $e -> getMessage() );
+            return $reflector -> invokeArgs(
+                $this -> stmt, array_filter( (array) $args )
+            );
 
         } catch( \ReflectionException $e ) {
 
-            return FALSE;
+            throw new BadFunctionException(
+
+                sprintf(
+
+                    '<em>PDO::%s</em> could not be invoked
+
+                    The following error has been returned: %s',
+
+                    $method, $e -> getMessage()
+                )
+            );
+
+        } catch( \PDOException $e ) {
+
+            throw new RuntimeException( $e -> getMessage() );
         }
     }
 }

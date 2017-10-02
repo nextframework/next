@@ -10,7 +10,12 @@
  */
 namespace Next\Session;
 
-use Next\Session\Environment\EnvironmentException;    # Session Environment Exception Class
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\AccessViolationException;
+use Next\Exception\Exceptions\InvalidArgumentException;
+
 use Next\Components\Object;                           # Object Class
 
 /**
@@ -192,9 +197,6 @@ class Environment extends Object {
      *
      * @return \Next\Session\Environment
      *  Environment Object (Fluent Interface)
-     *
-     * @throws \Next\Session\Environment\EnvironmentException
-     *  Environment is Locked
      */
     public function append( $name, $value = NULL ) {
 
@@ -233,17 +235,25 @@ class Environment extends Object {
      *  Desired value from current Environment if it hasn't
      *  been explicitly destroyed, otherwise nothing is returned
      *
-     * @throws \Next\Session\Environment\EnvironmentException
-     *  Requested index doesn't exists
+     * @throws \Next\Exception\Exceptions\AccessViolationException
+     *  Thrown if requested offset doesn't exists under
+     *  initialized Session Environment
      */
     public function __get( $name ) {
 
         if( ! $this -> isDestroyed() ) {
 
-            $name = (string) $name;
-
             if( ! array_key_exists( $name, (array) $_SESSION[ $this -> environment ] ) ) {
-                throw EnvironmentException::undefinedIndex( $name, $this -> environment );
+
+                throw new AccessViolationException(
+
+                    sprintf(
+
+                        'Undefined index <strong>%s</strong> in Environment <strong>%s</strong>',
+
+                        $name, $this -> environment
+                    )
+                );
             }
 
             return $_SESSION[ $this -> environment ][ $name ];
@@ -258,14 +268,11 @@ class Environment extends Object {
      *
      * @param mixed $value
      *  Value of the new index
-     *
-     * @throws \Next\Session\Environment\EnvironmentException
-     *  Environment is Locked
      */
     public function __set( $name, $value ) {
 
         if( ! $this -> isLocked() ) {
-            $_SESSION[ $this -> environment ][ (string) $name ] = $value;
+            $_SESSION[ $this -> environment ][ $name ] = $value;
         }
     }
 
@@ -284,7 +291,7 @@ class Environment extends Object {
     public function __isset( $name ) {
 
         if( ! $this -> isDestroyed() ) {
-            return array_key_exists( (string) $name, (array) $_SESSION[ $this -> environment ] );
+            return array_key_exists( $name, (array) $_SESSION[ $this -> environment ] );
         }
 
         return FALSE;
@@ -297,21 +304,14 @@ class Environment extends Object {
      *
      * @param string $name
      *  Index to be removed
-     *
-     * @throws \Next\Session\Environment\EnvironmentException
-     *  Requested index doesn't exists
      */
     public function __unset( $name ) {
 
         if( ! $this -> isLocked() ) {
 
-            $name = (string) $name;
-
-            if( ! array_key_exists( $name, (array) $_SESSION[ $this -> environment ] ) ) {
-                throw EnvironmentException::undefinedIndex( $name, $this -> environment );
+            if( array_key_exists( $name, (array) $_SESSION[ $this -> environment ] ) ) {
+                unset( $_SESSION[ $this -> environment ][ $name ] );
             }
-
-            unset( $_SESSION[ $this -> environment ][ $name ] );
         }
     }
 
@@ -325,7 +325,10 @@ class Environment extends Object {
     private function registerEnvironment() {
 
         if( preg_match( '#(^[0-9])#i', $this -> options -> environment ) ) {
-            throw EnvironmentException::invalidEnvironment();
+
+            throw new InvalidArgumentException(
+                'Session environment must not start with a number'
+            );
         }
 
         // Registering Environment
@@ -334,16 +337,8 @@ class Environment extends Object {
 
         // Initialize Session Environment if not initialized yet
 
-        if( $this -> options -> initializing !== FALSE ) {
-
-            try{
-
-                if( $this -> isDestroyed() ) $this -> unsetAll();
-
-            } catch( EnvironmentException $e ) {
-
-                $this -> unsetAll();
-            }
+        if( $this -> options -> initializing !== FALSE || $this -> isDestroyed() ) {
+            $this -> unsetAll();
         }
     }
 }

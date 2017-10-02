@@ -10,13 +10,8 @@
  */
 namespace Next\Exception;
 
-use Next\Controller\Controller;                  # Controller Interface
-use Next\Application\ApplicationException;       # Application Exception
-use Next\HTTP\Response\ResponseException;        # Response Exception
-use Next\HTTP\Headers\Fields\FieldsException;    # Header Field Exception
-use Next\Controller\Router\NullRouter;           # Null Router Class
-use Next\HTTP\Request;                           # HTTP Request
-use Next\HTTP\Response;                          # HTTP Response
+use Next\HTTP\Request;     # HTTP Request
+use Next\HTTP\Response;    # HTTP Response
 
 /**
  * Registers Error and Exception handlers to deal with runtime errors
@@ -169,40 +164,15 @@ class ExceptionHandler implements Handler {
 
             call_user_func( [ new $controller( $application ), $action ] );
 
-            // Adding Response Code
-
-            if( ! is_null( $code ) ) {
-
-                try {
-
-                    $response -> addHeader( $code );
-
-                } catch( FieldsException $e ) {}
-            }
-
             // Sending the Response
 
-            try {
-
-                $response -> send();
-
-            } catch( ResponseException $e ) {
-
-                /**
-                 * @internal
-                 *
-                 * If we can't send the Response, there is a
-                 * Internal Server Error, but it'll only be sent if
-                 * we're still able to send headers, which is not the
-                 * case of very specific scenarios, when the current
-                 * buffer length cannot determined and thus, cleansed.
-                 *
-                 * Otherwise, this would cause an infinite loop
-                 */
-                if( Response::canSendHeaders() ) self::response( 500 );
+            if( ! is_null( $code ) ) {
+                $response -> addHeader( $code );
             }
 
-        } catch( ApplicationException $e ) {
+            $response -> send();
+
+        } catch( Exception $e ) {
 
             // If fail here, you're in serious troubles XD
 

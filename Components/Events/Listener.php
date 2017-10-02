@@ -10,6 +10,11 @@
  */
 namespace Next\Components\Events;
 
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
 use Next\Components\Interfaces\Verifiable;    # Verifiable Interface
 use Next\Components\Object;                   # Object Class
 
@@ -91,7 +96,10 @@ class Listener extends Object implements Verifiable {
     public function verify() {
 
         if( ! is_callable( $this -> callback ) ) {
-            throw EventsException::invalidCallback();
+
+            throw new InvalidArgumentException(
+                'The callback provided for Event Listener is not callable'
+            );
         }
     }
 }

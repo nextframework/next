@@ -10,7 +10,7 @@
  */
 namespace Next\File\Tools\JSON;
 
-use Next\Components\Debug\Exception;            # Exception Class
+use Next\Exception\Exception;                   # Exception Class
 
 use Next\Components\Object;                     # Object Class
 

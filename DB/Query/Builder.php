@@ -10,6 +10,12 @@
  */
 namespace Next\DB\Query;
 
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\BadMethodCallException;
+use Next\Exception\Exceptions\InvalidArgumentException;
+
 use Next\Components\Object;              # Object Class
 use Next\Components\Invoker;             # Invoker Class
 
@@ -413,25 +419,35 @@ class Builder extends Object {
      *  implicit maintainability as for multiple WHERE conditions,
      *  Builder::where() should be called again
      *
-     * @throws QueryException
-     *  Thrown if trying to create a multiple possibilities condition with an
-     *  invalid or unexpected data-structure.
+     * @throws \Next\Exception\Exceptions\BadMethodCallException
+     *  Thrown if trying to create a multiple possibilities condition
+     *  by defining all of them, repeatedly, as an array,
+     *  enforcing maintainability
+     *
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if when creating a multiple possibilities condition,
+     *  the first entry on the array of replacements doesn't have a
+     *  key or its key doesn't match any CLAUSE define on `$condition`
      */
     public function where( $condition, $replacements = [], $type = Query::SQL_AND ) {
 
         if( is_array( $condition ) ) {
-            throw QueryException::multipleConditions( 'where' );
+
+            throw new BadMethodCallException(
+                'Multiple conditions are not allowed (Builder::where'
+            );
         }
 
         /**
          * @internal
          *
-         * Most of the times `$replacements` will be an array in the format
-         * `[ 'field' => 'value' ]` being `field ` a matching column used
-         * on `$condition` so the checking is made over the number of replacements
+         * Most of the times `$replacements` will be an array in the
+         * format `[ 'field' => 'value' ]` being `field ` a matching
+         * column used on `$condition` so the checking is made over
+         * the number of replacements
          *
-         * Anything greater than 1 (one) theoretically characterizes a multiple
-         * possibilities condition
+         * Anything greater than 1 (one) theoretically characterizes a
+         * multiple possibilities condition
          */
         if( count( $replacements, COUNT_RECURSIVE ) > 1 ) {
 
@@ -442,15 +458,21 @@ class Builder extends Object {
 
             if( is_null( $key ) ) {
 
-                throw QueryException::wrongUse(
-                    'Multiple possibilities conditions expect all of them to be under an associative array'
+                throw new InvalidArgumentException(
+
+                    'Multiple possibilities conditions expects all of
+                    them to be under an associative array with a
+                    valid key'
                 );
             }
 
             if( strpos( $condition, $key ) === FALSE ) {
 
-                throw QueryException::wrongUse(
-                    'Invalid or unexpected data-structure for multiple possibilities condition'
+                throw new InvalidArgumentException(
+
+                    'Multiple possibilities conditions expects the
+                    condition to be defined as leading key on
+                    replacements\' list'
                 );
             }
 

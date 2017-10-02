@@ -10,11 +10,13 @@
  */
 namespace Next\HTTP\Headers\Fields;
 
-use Next\Components\Interfaces\Parameterizable;    # Parameterizable Interface
-use Next\Validate\Validator;                       # Validator Interface
-use Next\Validate\HTTP\Headers\Headers;            # Headers Validator Interface
-use Next\Components\Object;                        # Object Class
-use Next\Components\Parameter;                     # Parameter Class
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
+use Next\Validate\Validator;    # Validator Interface
+use Next\Components\Object;     # Object Class
 
 /**
  * Header Class
@@ -24,7 +26,7 @@ use Next\Components\Parameter;                     # Parameter Class
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-abstract class AbstractField extends Object implements Parameterizable, Field {
+abstract class AbstractField extends Object implements Field {
 
     /**
      * Parameter Options Definition
@@ -70,6 +72,8 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
         // Checking Integrity
 
         $this -> checkIntegrity();
+
+        $this -> setValue( $this -> options -> value );
     }
 
     // Header Field Interface Methods Implementation
@@ -86,7 +90,7 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
      * @param string $value
      *  Header Value
      *
-     * @throws \Next\HTTP\Headers\Fields\FieldsException
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  All possible values assigned to the Header are invalid
      */
     public function setValue( $value ) {
@@ -144,9 +148,9 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
 
             if( count( $value ) != 0 ) {
 
-                $validator = $this -> getValidator( trim( $v ) );
-
                 foreach( $value as $v ) {
+
+                    $validator = $this -> getValidator( trim( $v ) );
 
                     if( $validator -> validate() !== FALSE ) {
 
@@ -174,12 +178,23 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
         // Do we have at least one valid value?
 
         if( count( $valid ) == 0 ) {
-            throw FieldsException::invalidHeaderValue( $this -> options -> name );
+
+            throw new InvalidArgumentException(
+
+                sprintf(
+
+                     'All values assigned to <strong>%s</strong> Header are invalid',
+
+                     $this -> options -> name
+                )
+            );
         }
 
         // Building Header
 
-        $this -> value = implode( sprintf( '%s ', $this -> options -> multiplesSeparator ), $valid );
+        $this -> value = implode(
+            sprintf( '%s ', $this -> options -> multiplesSeparator ), $valid
+        );
     }
 
     /**
@@ -199,13 +214,13 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
     }
 
     /**
-     * Get Header Value
+     * Get Header Value after treated and validated
      *
      * @return string
      *  Header Field Value
      */
     public function getValue() {
-        return $this -> options -> value;
+        return $this -> value;
     }
 
     // Auxiliary Methods
@@ -213,13 +228,13 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
     /**
      * Check Options Integrity
      *
-     * @throws \Next\HTTP\Headers\Fields\FieldsException
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Header Field has no well-formed name
      *
-     * @throws \Next\HTTP\Headers\Fields\FieldsException
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Object defined as validator is not instance of \Next\Validate\Validator
      *
-     * @throws \Next\HTTP\Headers\Fields\FieldsException
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Provided validator is not a Header Field Validator, characterized
      *  as instance of \Next\Validate\HTTP\Headers\Headers
      */
@@ -229,14 +244,14 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
 
         if( ! isset( $this -> options -> name ) || empty( $this -> options -> name ) ) {
 
-            throw FieldsException::unfullfilledRequirements(
+            throw new InvalidArgumentException(
                 sprintf( 'Header <strong>%s</strong> doesn\'t have a defined name', (string) $this )
             );
         }
 
         if( ! isset( $this -> options -> value ) || empty( $this -> options -> value ) ) {
 
-            throw FieldsException::unfullfilledRequirements(
+            throw new InvalidArgumentException(
 
                 sprintf(
 
@@ -261,15 +276,8 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
 
         if( ! $validator instanceof Validator ) {
 
-            throw FieldsException::unfullfilledRequirements(
-                'Header Fields Validators must implement Validator Interface'
-            );
-        }
-
-        if( ! $validator instanceof Headers ) {
-
-            throw FieldsException::unfullfilledRequirements(
-                'HTTP Headers Validators must implement HTTP Headers Validator Interface'
+            throw new InvalidArgumentException(
+                'Header Fields Validators must implement <em>Next\Validate\Validator</em> Interface'
             );
         }
     }
@@ -310,7 +318,7 @@ abstract class AbstractField extends Object implements Parameterizable, Field {
         return $data;
     }
 
-    // Abstract Methods Definition
+    // Abstract Method Definition
 
     /**
      * Get Header Field Validator

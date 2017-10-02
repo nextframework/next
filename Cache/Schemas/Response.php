@@ -8,7 +8,7 @@
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace Next\Cache\Schema;
+namespace Next\Cache\Schemas;
 
 use Next\Components\Object;                           # Object Class
 use Next\HTTP\Headers\Fields\Entity\ContentType;      # Content-Type Header Class
@@ -26,7 +26,7 @@ use Next\HTTP\Headers\Fields\Raw;                     # Raw Header Field Class
  * It's also responsible to send 304 and 404 Headers when given
  * resource is, respectively, already cached or not found
  *
- * @package    Next\Cache\Schema
+ * @package    Next\Cache
  */
 class Response extends Object implements Schema {
 

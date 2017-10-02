@@ -10,10 +10,16 @@
  */
 namespace Next\Loader\AutoLoader;
 
+/**
+ * Exception Class(es)
+ */
+require_once __DIR__ . '/../../Exception/Exceptions/InvalidArgumentException.php';
+
+use Next\Exception\Exceptions\InvalidArgumentException;
+
 require_once __DIR__ . '/AutoLoader.php';    # AutoLoader Interface
 
 use Next\Loader\AutoLoaders\AutoLoader;      # AutoLoader Interface
-use Next\Loader\LoaderException;             # AutoLoader Exceptions Class
 
 /**
  * XML Class Map File AutoLoader
@@ -38,11 +44,11 @@ class XML implements AutoLoader {
      * @param string $file
      *  XML Map File to work with
      *
-     * @throws \Next\LoaderException
-     *  XML Filename was not set
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if XML Filepath informed is not a file
      *
-     * @throws \Next\LoaderException
-     *  XML File is not readable
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if XML File is not readable
      */
     public function __construct( $file ) {
 
@@ -50,11 +56,8 @@ class XML implements AutoLoader {
 
         if( ! is_file( $file ) ) {
 
-            throw LoaderException::unfullfilledRequirements(
-
-                'XML File File <strong>%s</strong> doesn\'t exists',
-
-                [ $file ]
+            throw new InvalidArgumentException(
+                spritnf( 'XML File File <strong>%s</strong> doesn\'t exists', $file )
             );
         }
 
@@ -62,11 +65,8 @@ class XML implements AutoLoader {
 
         if( ! is_readable( $file ) ) {
 
-            throw LoaderException::unfullfilledRequirements(
-
-                'XML File <strong>%s</strong> is not readable',
-
-                [ $file ]
+            throw new InvalidArgumentException(
+                sprintf( 'XML File <strong>%s</strong> is not readable', $file )
             );
         }
 

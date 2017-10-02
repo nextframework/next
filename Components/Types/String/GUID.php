@@ -10,11 +10,13 @@
  */
 namespace  Next\Components\Types\String;
 
-use Next\Components\Debug\Exception;          # Exception Class
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\RuntimeException;
 
 use Next\Components\Interfaces\Prototypable;    # Prototypable Interface
-
-use Next\Components\Types\String;             # String Object Class
+use Next\Components\Types\String;               # String Object Class
 
 /**
  * Generates a GUID in compliance with RFC 4122 Section 4.4
@@ -32,7 +34,7 @@ class GUID implements Prototypable {
      * @return \Next\Components\Types\String
      *  A String Object with the generated GUID
      *
-     * @throws \Next\Components\Debug\Exception
+     * @throws \Next\Exception\Exceptions\RuntimeException
      *  Thrown if OpenSSL Extension is not enabled
      *
      * @see \Next\Components\Types\String\GUID::GUID()
@@ -41,11 +43,8 @@ class GUID implements Prototypable {
 
         if( ! extension_loaded( 'openssl' ) ) {
 
-            throw new Exception(
-
-                'OpenSSL Extension is required in order to generate a GUID v4',
-
-                Exception::UNFULFILLED_REQUIREMENTS, NULL, 500
+            throw new RuntimeException(
+                'OpenSSL Extension is required in order to generate a GUID v4'
             );
         }
 

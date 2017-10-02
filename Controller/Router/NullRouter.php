@@ -23,6 +23,8 @@ use Next\Application\Application;    # Application Interface
  */
 class NullRouter extends AbstractRouter {
 
+    // Router Interface Method Implementation
+
     /**
      * Finds a matching Route for the Application -AND- current Request URI
      *
@@ -34,13 +36,6 @@ class NullRouter extends AbstractRouter {
     }
 
     // Abstract Methods Implementation
-
-    /**
-     * Establishes a Connection
-     *
-     * Establishes a Connection with a Database, with a File (through a Stream)...
-     */
-    protected function connect() {}
 
     /**
      * Lookup for Required Params in URL

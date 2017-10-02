@@ -10,6 +10,11 @@
  */
 namespace Next\Validate;
 
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
 use Next\Components\Interfaces\Informational;          # Informational Interface
 
 use Next\Components\Object;                            # Object Class
@@ -74,7 +79,19 @@ class Chain extends AbstractCollection {
     public function accept( Object $object ) {
 
         if( ! $object instanceof Validator || ! $object instanceof Informational ) {
-            throw ValidateException::invalidChainValidator( $object );
+
+            return new InvalidArgumentException(
+
+                sprintf(
+
+                    '<strong>%s</strong> is not a valid Validator Chain
+
+                    Validators must implement both <em>Next\Validate\Validator</em>
+                    and <em>Next\Components\Interfaces\Informational</em> Interfaces',
+
+                    $object
+                )
+            );
         }
 
         return TRUE;

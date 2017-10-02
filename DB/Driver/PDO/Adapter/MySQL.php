@@ -10,7 +10,14 @@
  */
 namespace Next\DB\Driver\PDO\Adapter;
 
-use Next\DB\Driver\DriverException;              # Driver Exception Class
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\RuntimeException;
+use Next\Exception\Exceptions\InvalidArgumentException;
+
+use Next\Components\Interfaces\Configurable;     # Configurable Interface
+
 use Next\DB\Driver\PDO\AbstractPDO;              # PDO Abstract Class
 use Next\DB\Query\Renderer\MySQL as Renderer;    # MySQL Query Renderer Class
 
@@ -24,10 +31,19 @@ use Next\DB\Query\Renderer\MySQL as Renderer;    # MySQL Query Renderer Class
  */
 class MySQL extends AbstractPDO {
 
-    // Abstract Methods Implementation
+    /**
+     * Parameter Options Definition
+     *
+     * @var array $parameters
+     */
+    protected $parameters = [
+        'database' => [ 'required' => TRUE ]
+    ];
+
+    // Configurable Interface method Implementation
 
     /**
-     * MySQL Driver extra initialization
+     * Post-initialization Configuration
      */
     protected function configure() {
 
@@ -41,56 +57,33 @@ class MySQL extends AbstractPDO {
      *
      * @return string
      *  MySQL Adapter DSN used by PDO Connection
-     *
-     * @throws \Next\DB\Driver\DriverException
-     *  Required <strong>Host</strong> or <strong>Database</strong>
-     *  parameters was not set in Connection Parameters
      */
     protected function getDSN() {
 
-        if( ! isset( $this -> options -> host ) || empty( $this -> options -> host ) ) {
+        return sprintf(
 
-            throw DriverException::missingConnectionAdapterParameter(
+            'mysql:host=%s;dbname=%s',
 
-                'Missing DSN Host for MySQL Adapter'
-            );
-        }
-
-        if( ! isset( $this -> options -> database ) || empty( $this -> options -> database ) ) {
-
-            throw DriverException::missingConnectionAdapterParameter(
-
-                'Missing DSN Database for MySQL Adapter'
-            );
-        }
-
-        return sprintf( 'mysql:host=%s;dbname=%s', $this -> options -> host, $this -> options -> database );
+            $this -> options -> host, $this -> options -> database
+        );
     }
 
     /**
      * Check for MySQL Adapter Requirements
      *
-     * @throws \Next\DB\Driver\DriverException
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  PDO_MYSQL Extension was not loaded
      */
     protected function checkRequirements() {
 
-        // Checking for PDO Extension
-
         parent::checkRequirements();
 
-        // Checking for PDO MySQL Extension
-
         if( ! in_array( 'mysql', \PDO::getAvailableDrivers() ) ) {
-
-            throw DriverException::unfullfilledRequirements(
-
-                'PDO MySQL Driver was not loaded'
-            );
+            throw new RuntimeException( 'PDO MySQL extension not loaded' );
         }
     }
 
-    // Interface Method Implementation
+    // Driver Interface Method Implementation
 
     /**
      * Set an SQL Statement Renderer

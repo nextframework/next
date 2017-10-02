@@ -10,7 +10,12 @@
  */
 namespace Next\HTTP;
 
-use Next\HTTP\Response\ResponseException;          # Response Exception
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\Exception;
+use Next\Exception\Exceptions\RuntimeException;
+
 use Next\HTTP\Headers\Fields\FieldsException;      # Headers Fields Exception Class
 
 use Next\HTTP\Headers\Fields\Field;                # Header Field Interface
@@ -741,7 +746,7 @@ class Response extends Object {
                     $this -> headers
                           -> addHeader( apache_response_headers() );
 
-                } catch( FieldsException $e ) {
+                } catch( Exception $e ) {
 
                     /**
                      * @internal
@@ -891,8 +896,10 @@ class Response extends Object {
      *  When FALSE (default), the current full URL minus the current
      *  Request URI will be prepended to given URL
      *
-     * @throws \Next\HTTP\Response\ResponseException
-     *  Any header was already sent
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown if any Header has already been sent
+     *
+     * @see Response::canSendHeaders()
      */
     public function redirect( $to, $raw = FALSE ) {
 
@@ -1038,30 +1045,25 @@ class Response extends Object {
     }
 
     /**
-     * Check if we can send any header
+     * Checks if we can send any header
      *
-     * @return boolean
-     *
-     *   <p>TRUE if any Header was already sent and FALSE otherwise.</p>
-     *
-     *   <p>
-     *      If argument is set to TRUE, however, an Exception will be
-     *      thrown instead
-     *   </p>
-     *
-     * @throws \Next\HTTP\Response\ResponseException
-     *  Any header was already sent
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown if any Header has already been sent
      */
     public static function canSendHeaders() {
 
         if( headers_sent( $file, $line ) ) {
 
-            throw ResponseException::logic(
+            throw new RuntimeException(
 
-                'Cannot modify headers Information.
-                Header was already sent in file <strong>%s</strong> at line <strong>%s</strong>',
+                sprintf(
 
-                [ $file, $line ]
+                    'Cannot modify headers Information.
+
+                    Header was already sent in file <strong>%s</strong> at line <strong>%s</strong>',
+
+                    $file, $line
+                )
             );
 
             return FALSE;
@@ -1319,8 +1321,10 @@ class Response extends Object {
     /**
      * Send Response Headers
      *
-     * @throws \Next\HTTP\Response\ResponseException
-     *  Any header was already sent
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown if any Header has already been sent
+     *
+     * @see Response::canSendHeaders()
      */
     private function sendHeaders() {
 

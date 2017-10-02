@@ -10,7 +10,6 @@
  */
 namespace Next\HTTP;
 
-use Next\HTTP\Headers\Fields\FieldsException;   # Header Fields Exception Class
 use Next\Components\Object;                     # Object Class
 use Next\Components\Collections\Lists;          # Lists Class
 use Next\HTTP\Headers\Fields\Request\Cookie;    # HTTP Cookie Header Class
@@ -58,7 +57,7 @@ class Cookies extends Object {
      */
     public function addCookie( $cookie, $value = NULL ) {
 
-        // Well-formed Cookie. Will be added "as is"
+        // Well-formed Request Cookie Header Field. Will be added "as is"
 
         if( $cookie instanceof Cookie ) {
 
@@ -91,31 +90,12 @@ class Cookies extends Object {
              * Let's build the full Cookie representation before add it
              */
             if( ! is_null( $value ) && strpos( $value, '=' ) === FALSE ) {
-
                 $cookie = sprintf( '%s=%s', $cookie, $value );
             }
 
-            try {
-
-                $this -> cookies -> add(
-                    new Cookie( [ 'value' => $cookie ] )
-                );
-
-            } catch( FieldsException $e ) {
-
-                /**
-                 * @internal
-                 * We'll rethrow the same Exception caught if a true error occur
-                 * so our Exception Handler can do the rest
-                 */
-                if( $e -> getCode() !== FieldsException::ALL_INVALID ) {
-
-                    throw FieldsException::invalidHeaderValue(
-
-                        $e -> getMessage(), $e -> getCode()
-                    );
-                }
-            }
+            $this -> cookies -> add(
+                new Cookie( [ 'value' => $cookie ] )
+            );
         }
 
         return $this;

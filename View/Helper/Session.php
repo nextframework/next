@@ -15,9 +15,6 @@ use Next\Components\Invoker;                          # Invoker Class
 
 use Next\Session\Manager as SessionManager;           # Session Manager Class
 use Next\Session\Environment;                         # Session Environment Class
-use Next\Session\Environment\EnvironmentException;    # Session Environment Exception Class
-
-use Next\View\ViewException;                          # View Exception Class
 
 /**
  * Defines the Session View Helper through which Session Data can be
@@ -68,27 +65,11 @@ class Session extends Object implements Helper {
      *  The value in SESSION associated to given entry, if present.
      *  Otherwise, the value defined in <strong>$default</strong>, if defined,
      *  will be returned instead
-     *
-     * @throws \Next\View\ViewException
-     *  Thrown if a \Next\Session\Environment\EnvironmentException is caught and
-     *  the Exception Code is not the one associated to an undefined index, case
-     *  in which what is defined in <strong>$default</strong>, if defined, will
-     *  be returned instead
      */
     public function get( $name, $default = NULL ) {
 
-        try {
-
-            return $this -> environment -> $name;
-
-        } catch( EnvironmentException $e ) {
-
-            if( $e -> getCode() == EnvironmentException::UNDEFINED_INDEX ) {
-                return $default;
-            }
-
-            throw new ViewException( $e -> getMessage(), NULL, NULL, $e -> getResponseCode(), $e -> getCallback() );
-        }
+        return ( isset( $this -> environment -> $name ) ?
+            $this -> environment -> $name : $default );
     }
 
     // Helper Interface Method Implementation

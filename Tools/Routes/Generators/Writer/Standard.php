@@ -54,8 +54,8 @@ class Standard extends Object implements Writer {
      *  Number of records processed
      *
      * @throws \Next\Tools\Routes\Generators\Writer\WriterException
-     *  Unable to record route, as a rethrowing of a
-     *  \Next\DB\Statement\StatementException caught
+     *  Unable to record route, as a re-throw of a
+     *  \Next\HTTP\Stream\Adapter\AdapterException caught
      */
     public function save( array $data ) {
 

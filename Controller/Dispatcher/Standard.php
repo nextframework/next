@@ -10,16 +10,19 @@
  */
 namespace Next\Controller\Dispatcher;
 
-use Next\Components\Debug\Exception;        # Exception Class
-use Next\Controller\ControllerException;    # Controller Exception Class
-use Next\View\ViewException;                # View Exception Class
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exception;
+use Next\Exception\Exceptions\BadMethodCallException;
+use Next\Controller\ControllerException;
+use Next\View\ViewException;
 
-use Next\Application\Application;           # Application Interface
+use Next\Application\Application;       # Application Interface
 
-use Next\Components\Debug\Handlers;         # Exceptions Handlers Class
-use Next\Components\Parameter;              # Parameter Class
-
-use Next\HTTP\Response;                     # HTTP Response Class
+use Next\Exception\ExceptionHandler;    # Exceptions Handlers Class
+use Next\Components\Parameter;          # Parameter Class
+use Next\HTTP\Response;                 # HTTP Response Class
 
 /**
  * Standard Controller Dispatcher based on Reflection of
@@ -53,7 +56,7 @@ class Standard extends AbstractDispatcher {
      * @return \Next\HTTP\Response
      *  Response Object
      *
-     * @throws \Next\Controller\Dispatcher\DispatcherException
+     * @throws \Next\Exception\Exceptions\BadMethodCallException
      *  ReflectionException was caught
      */
     public function dispatch( Application $application, Parameter $data ) {
@@ -80,7 +83,17 @@ class Standard extends AbstractDispatcher {
 
         } catch( \ReflectionException $e ) {
 
-            throw DispatcherException::reflection( $e );
+            throw new BadMethodCallException(
+
+                sprintf(
+
+                    'Unable to dispatch <em>%s::%s()</em>
+
+                    The following error has been returned: %s',
+
+                    $data -> controller, $data -> method, $e -> getMessage()
+                )
+            );
 
         } catch( ControllerException $e ) {
 
@@ -120,7 +133,7 @@ class Standard extends AbstractDispatcher {
 
             } catch( ViewException $e ) {
 
-                Handlers::production( $e );
+                ExceptionHandler::production( $e );
             }
 
         } catch( ViewException $e ) {
@@ -143,7 +156,7 @@ class Standard extends AbstractDispatcher {
                 ob_end_clean();
             }
 
-            Handlers::development( $e );
+            ExceptionHandler::development( $e );
         }
     }
 
@@ -155,10 +168,8 @@ class Standard extends AbstractDispatcher {
      * @param \Next\Application\Application $application
      *  Application Object being dispatched
      *
-     * @param \Next\Components\Debug\Exception $e
+     * @param \Next\Exception\Exception $e
      *  Exception thrown
-     *
-     * @return void
      */
     private function handleExceptionCallback( Application $application, Exception $e ) {
 
@@ -205,7 +216,7 @@ class Standard extends AbstractDispatcher {
 
                     if( ! is_callable( $callback[ 0 ] ) ) {
 
-                        Handlers::development(
+                        ExceptionHandler::development(
                             new Exception( 'Exception callbacks must be callable' )
                         );
                     }
@@ -252,7 +263,7 @@ class Standard extends AbstractDispatcher {
                 ob_end_clean();
             }
 
-            Handlers::development( $e );
+            ExceptionHandler::development( $e );
         }
     }
 }

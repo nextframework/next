@@ -10,7 +10,6 @@
  */
 namespace Next\Loader;
 
-use Next\Loader\LoaderException;                                  # Loader Exception Class
 use Next\Loader\AutoLoaders\AutoLoader as AutoLoaderInterface;    # AutoLoadader Interface
 
 /**
@@ -28,17 +27,7 @@ class AutoLoader {
      *
      * @var SplObjectStorage $autoloaders
      */
-    private $autoloaders;
-
-    /**
-     * AutoLoader Constructor
-     */
-    public function __construct() {
-
-        // Setting Up AutoLoaders Object Storage
-
-        $this -> autoloaders = new \SplObjectStorage;
-    }
+    private $autoloaders = [];
 
     /**
      * Register a new AutoLoader Object
@@ -48,22 +37,17 @@ class AutoLoader {
      *
      * @return \Next\AutoLoader
      *  AutoLoader Instance (Fluent Interface)
-     *
-     * @throws \Next\LoaderException
-     *  Trying to register an already registered AutoLoader Object
      */
     public function registerAutoLoader( AutoLoaderInterface $autoloader ) {
 
-        if( $this -> autoloaders -> contains( $autoloader ) ) {
+        $classname = get_class( $autoloader );
 
-            require_once 'LoaderException.php';
+        if( ! array_key_exists( $classname, $this -> autoloaders ) ) {
 
-            throw LoaderException::duplicated();
+            $this -> autoloaders[ get_class( $autoloader) ] = $autoloader;
+
+            spl_autoload_register( $autoloader -> call() );
         }
-
-        $this -> autoloaders -> attach( $autoloader );
-
-        spl_autoload_register( $autoloader -> call() );
 
         return $this;
     }
@@ -76,22 +60,17 @@ class AutoLoader {
      *
      * @return \Next\AutoLoader
      *  AutoLoader Instance (Fluent Interface)
-     *
-     * @throws \Next\LoaderException
-     *  Trying to unregister a non registered AutoLoader Object
      */
     public function unregisterAutoLoader( AutoLoaderInterface $autoloader ) {
 
-        if( ! $this -> autoloaders -> contains( $autoloader ) ) {
+        $classname = get_class( $autoloader );
 
-            require_once 'LoaderException.php';
+        if( array_key_exists( $classname, $this -> autoloaders ) ) {
 
-            throw LoaderException::unknown();
+            spl_autoload_unregister( $autoloader -> call() );
+
+            unset( $this -> autoloaders[ $classname ] );
         }
-
-        $this -> autoloaders -> detach( $autoloader );
-
-        spl_autoload_unregister( $autoloader -> call() );
 
         return $this;
     }

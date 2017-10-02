@@ -10,15 +10,19 @@
  */
 namespace Next\DB\Table;
 
-use Next\DB\Driver\DriverException;             # Driver Exception Class
-use Next\DB\Statement\StatementException;       # Statement Exception Class
-use Next\Components\Object;                     # Object Class
-use Next\Components\Invoker;                    # Invoker Class
-use Next\DB\Driver\Driver;                      # Connection Driver Interface
-use Next\DB\Query\Query;                        # Query Interface
-use Next\DB\Query\Builder;                      # Query Builder Class
-use Next\DB\Entity\Repositories;                # Repositories Collection Class
-use Next\DB\Table\RowSet;                       # RowSet Class
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\LengthException;
+
+use Next\DB\Query\Query;            # Query Interface
+use Next\DB\Driver\Driver;          # Connection Driver Interface
+
+use Next\Components\Object;         # Object Class
+use Next\Components\Invoker;        # Invoker Class
+use Next\DB\Query\Builder;          # Query Builder Class
+use Next\DB\Entity\Repositories;    # Repositories' Collection Class
+use Next\DB\Table\RowSet;           # RowSet Class
 
 /**
  * Table Manager Class
@@ -97,11 +101,8 @@ class Manager extends Object {
 
     /**
      * Clean-up available Repositories when Table Manager is cloned
-     *
-     * @return void
      */
     public function __clone() {
-
         $this -> repositories = new Repositories;
     }
 
@@ -217,15 +218,13 @@ class Manager extends Object {
      * @return integer|string
      *  The ID of last record inserted
      *
-     * @throws \Next\DB\Table\TableException
+     * @throws \Next\Exception\Exceptions\LengthException
      *  Trying to insert something without define any field
      */
     public function insert( $name = NULL ) {
 
-        // Checking Integrity
-
         if( count( $this -> source ) == 0 ) {
-            throw TableException::nothingToInsert();
+            throw new LengthException( 'Nothing to insert' );
         }
 
         $this -> builder -> insert( $this -> options -> table -> getTableName(), $this -> source );
@@ -243,15 +242,13 @@ class Manager extends Object {
      * @return \Next\DB\Table\Manager
      *  Manager instance, in order to allow method chaining to build the final query
      *
-     * @throws \Next\DB\Table\TableException
+     * @throws \Next\Exception\Exceptions\LengthException
      *  Trying to execute an UPDATE Statement without define any field
      */
     public function update() {
 
-        // Checking Integrity
-
         if( count( $this -> source ) == 0 ) {
-            throw TableException::nothingToUpdate();
+            throw new LengthException( 'Nothing to update' );
         }
 
         $this -> builder -> update( $this -> options -> table -> getTableName(), $this -> source );
@@ -343,7 +340,7 @@ class Manager extends Object {
     public function addRepository( $repository, $alias = NULL ) {
 
         $this -> repositories -> addRepository(
-            $repository, $alias, $this
+            $repository, $alias, new Manager( [ 'driver' => $this -> options -> driver ] )
         );
 
         return $this;
@@ -435,41 +432,25 @@ class Manager extends Object {
      * @return \Next\DB\Statement\Statement
      *  Statement Object
      *
-     * @throws \Next\DB\Table\TableException
+     * @throws \Next\Exception\Exceptions\LengthException
      *  SQL Statement is empty
      *
      * @throws \Next\DB\Table\TableException
-     *  A DriverException or a StatementException is caught
+     *  A DriverException is caught
      */
     private function execute() {
 
         $query = $this -> assemble();
 
         if( empty( $query ) ) {
-            throw TableException::logic( 'Query is empty' );
+            throw new LengthException( 'Query is empty' );
         }
 
-        // Preparing...
+        // Preparing & Executing
 
-        try {
+        $stmt = $this -> options -> driver -> prepare( $query );
 
-            $stmt = $this -> options -> driver -> prepare( $query );
-
-        } catch( DriverException $e ) {
-
-            throw TableException::prepare( $e );
-        }
-
-        // ... and Executing
-
-        try {
-
-            $stmt -> execute( $this -> getReplacements() );
-
-        } catch( StatementException $e ) {
-
-            throw TableException::execute( $e );
-        }
+        $stmt -> execute( $this -> getReplacements() );
 
         return $stmt;
     }

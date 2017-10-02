@@ -10,8 +10,6 @@
  */
 namespace Next\Tools\Routes\Generators;
 
-use Next\Components\Interfaces\Parameterizable;    # Parameterizable Interface
-
 /**
  * Routes Generator Interface
  *
@@ -20,7 +18,7 @@ use Next\Components\Interfaces\Parameterizable;    # Parameterizable Interface
  * @copyright     Copyright (c) 2016 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-interface Generator extends Parameterizable {
+interface Generator {
 
     /**
      * Find Routes from Controllers Methods DocBlocks

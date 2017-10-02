@@ -20,7 +20,7 @@ use Next\Components\Object;    # Object Class
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class UploadException extends \Next\Components\Debug\Exception {
+class UploadException extends \Next\Exception\Exception {
 
     /**
      * Invalid Chain Post-Processor
