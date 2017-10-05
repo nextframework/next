@@ -15,19 +15,21 @@ namespace Next\Math\Equations\Intervals;
  */
 use Next\Exception\Exceptions\InvalidArgumentException;
 
-use Next\Math\Equations\Equation;    # Equations Interface
-use Next\Components\Object;          # Object Class
+use Next\Components\Interfaces\Verifiable;    # Verifiable Interface
+use Next\Math\Equations\Equation;             # Equations Interface
+use Next\Components\Object;                   # Object Class
 
 /**
  * Abstracts the common components of Interval Equations
  *
  * @package    Next\Math
  *
- * @uses       \Next\Math\Equations\Equation,
- *             \Next\Math\Equations\Intervals\Interval,
- *             \Next\Components\Object,
+ * @uses       Next\Components\Interfaces\Verifiable,
+ *             Next\Math\Equations\Equation,
+ *             Next\Math\Equations\Intervals\Interval,
+ *             Next\Components\Object,
  */
-abstract class AbstractInterval extends Object implements Equation, Interval {
+abstract class AbstractInterval extends Object implements Verifiable, Equation, Interval {
 
     /**
      * Parameter Options Definition
@@ -37,36 +39,27 @@ abstract class AbstractInterval extends Object implements Equation, Interval {
     protected $parameters = [
 
         /**
+         * Total of positive results
+         */
+        'positive'  => [ 'required' => TRUE ],
+
+        /**
+         * Total of negative results
+         */
+        'negative'  => [ 'required' => TRUE ],
+
+        /**
+         * Confidence Level
+         *
          * @internal
          *
-         * 95% of Confidence that the results will be likely
-         * considered as positive
+         * In statistics, a Confidence Interval is a type of estimation
+         * computed from the observed data.
+         * Defaults to '0.95',meaning 95% chance that the results will
+         * be likely considered as positive
          */
         'confidence' => 0.95
     ];
-
-    /**
-     * Total of positive results
-     *
-     * @var integer $positive
-     */
-    protected $positive;
-
-    /**
-     * Total of negative results
-     *
-     * @var integer $negative
-     */
-    protected $negative;
-
-    /**
-     * Confidence Level.
-     * In statistics, a Confidence Interval is a type of estimation
-     * computed from the observed data.
-     *
-     * @var float $confidence
-     */
-    protected $confidence;
 
     /**
      * Total number of results
@@ -83,7 +76,10 @@ abstract class AbstractInterval extends Object implements Equation, Interval {
     protected $p;
 
     /**
-     * Quantile of the standard normal distribution.
+     * Quantile of the standard normal distribution
+     *
+     * @internal
+     *
      * In statistics and the theory of probability, quantiles are
      * cutpoints dividing the range of a probability distribution into
      * contiguous intervals with equal probabilities, or dividing
@@ -101,25 +97,20 @@ abstract class AbstractInterval extends Object implements Equation, Interval {
 
     /**
      * Additional Initialization.
-     * Checks Interval Parameter Options Integrity and populates
-     * Interval properties, shortening Parameter Options and
-     * pre-computing values used by concrete classes
+     * Pre-computes values used by concrete classes
      */
     public function init() {
 
-        $this -> checkIntegrity();
+        $positive   = intval( $this -> options -> positive );
+        $negative   = intval( $this -> options -> negative );
 
-        $this -> positive   = intval( $this -> options -> positive );
-        $this -> negative   = intval( $this -> options -> negative );
-        $this -> confidence = $this -> options -> confidence;
-
-        $this -> n = ( $this -> positive + $this -> negative );
+        $this -> n = ( $positive + $negative );
 
         $this -> z = $this -> pNorm(
-            ( 1 - ( 1 - $this -> confidence ) / 2 )
+            ( 1 - ( 1 - $this -> options -> confidence ) / 2 )
         );
 
-        $this -> p = ( $this -> n > 0 ? ( 1.0 * $this -> positive ) / $this -> n : 0 );
+        $this -> p = ( $this -> n > 0 ? ( 1.0 * $positive ) / $this -> n : 0 );
     }
 
     // Boundable Interface Method Implementation
@@ -143,7 +134,7 @@ abstract class AbstractInterval extends Object implements Equation, Interval {
      *  Number of Positives
      */
     public function getPositives() {
-        return $this -> positive;
+        return intval( $this -> options -> positive );
     }
 
     /**
@@ -153,7 +144,7 @@ abstract class AbstractInterval extends Object implements Equation, Interval {
      *  Number of Negatives
      */
     public function getNegatives() {
-        return $this -> negative;
+        return intval( $this -> options -> negative );
     }
 
     /**
@@ -163,7 +154,7 @@ abstract class AbstractInterval extends Object implements Equation, Interval {
      *  The Quantile
      */
     public function getConfidence() {
-        return $this -> confidence;
+        return $this -> options -> confidence;
     }
 
     /**
@@ -194,6 +185,28 @@ abstract class AbstractInterval extends Object implements Equation, Interval {
      */
     public function getQuantile() {
         return $this -> z;
+    }
+
+    /**
+     * Verifies Object Integrity
+     *
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if optional Parameter Option 'confidence' has
+     *  been overwritten with a value lower than or equal to
+     *  zero (0% chance of being considered relevant) -OR- a value
+     *  greater or equal to 1 (100% chance)
+     */
+    public function verify() {
+
+        if( $this -> options -> confidence < 0 ||
+                $this -> options -> confidence >= 1 ) {
+
+            throw new InvalidArgumentException(
+                'Interval Equation requires a positive float lower
+                than 1.0 (100%) representing the level of statistical
+                confidence'
+            );
+        }
     }
 
     // Auxiliary Methods
@@ -234,44 +247,5 @@ abstract class AbstractInterval extends Object implements Equation, Interval {
         }
 
         return $qn > 0.5 ? sqrt( $w1 * $w3 ) : -sqrt( $w1 * $w3 );
-    }
-
-    /**
-     * Checks Parameter Options Integrity
-     *
-     * @throws \Next\Exception\Exceptions\InvalidArgumentException
-     *  Thrown if required Option 'positive' with the total number of
-     *  positive results is missing or is not a valid integer
-     *
-     * @throws \Next\Exception\Exceptions\InvalidArgumentException
-     *  Thrown if required Option 'negative' with the total number of
-     *  negative results is missing or is not a valid integer
-     */
-    private function checkIntegrity() {
-
-        if( ! isset( $this -> options -> positive ) ) {
-
-            throw new InvalidArgumentException(
-                'Interval Equation requires an integer representing
-                the total number of positive results'
-            );
-        }
-
-        if( ! isset( $this -> options -> negative ) ) {
-
-            throw new InvalidArgumentException(
-                'Interval Equation requires an integer representing
-                the total number of negative results'
-            );
-        }
-
-        if( $this -> options -> confidence < 0 || $this -> options -> confidence >= 1 ) {
-
-            throw new InvalidArgumentException(
-                'Interval Equation requires a positive float lower
-                than 1.0 (i.e. 100%) representing the level
-                of statistical confidence'
-            );
-        }
     }
 }

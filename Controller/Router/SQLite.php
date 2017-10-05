@@ -18,8 +18,9 @@ use Next\Exception\Exceptions\BadMethodCallException;
 use Next\Components\Interfaces\Verifiable;            # Verifiable Interface
 use Next\Application\Application;                     # Application Interface
 
+use Next\Components\Object;                           # Object Class
 use Next\HTTP\Request;                                # Request Class
-use Next\DB\Driver\PDO\Adapter\SQLite as Adapater;    # SQLite DB Adapter
+use Next\DB\Driver\PDO\Adapter\SQLite as Adapter;     # SQLite DB Adapter
 
 /**
  * Controller Router based on SQLite Databases
@@ -103,76 +104,83 @@ class SQLite extends Standard {
 
         // Match found, let's prepare everything for a successful Dispatch
 
-        if( $data !== FALSE ) {
+        if( $data === FALSE ) return FALSE;
 
-            /**
-             * @internal
-             * Setting Up Found Controller and its action to be used in View,
-             * as part of findFilebySpec() method
-             */
-            $this -> controller =& $data -> controller;
+        /**
+         * @internal
+         *
+         * $data is being rewritten to point to the first in the
+         * filtered dataset because this contains the most specific
+         * Route, counter-balancing the lack of gluttony
+         * of preg_match() that doesn't match as much as possible
+         */
+        $data = Object::map( ( is_array( $data ) ? array_shift( $data ) : $data ) );
 
-            $this -> method     =& $data -> method;
+        /**
+         * @internal
+         *
+         * Setting Up Found Controller and its action to be used in View,
+         * as part of findFilebySpec() method
+         */
+        $this -> controller = $data -> controller;
+        $this -> method     = $data -> method;
 
-            // Analyzing Params
+        // Analyzing Params
 
-            $requiredParams = unserialize( $data -> requiredParams );
+        $requiredParams = unserialize( $data -> requiredParams );
 
-            // Lookup for Required Params in URL
+        // Lookup for Required Params in URL
 
-            if( count( $requiredParams ) > 0 ) {
-
-                /**
-                 * @internal
-                 *
-                 * Merging manually defined GET query (i.e. `?param=value` )
-                 * so they can be considered as validatable arguments too
-                 */
-                foreach( $request -> getQuery() as $key => $value ) {
-                    $requiredParams[] = [ 'name' => $key ];
-                }
-
-                $this -> lookup( $requiredParams, $URI );
-            }
+        if( count( $requiredParams ) > 0 ) {
 
             /**
              * @internal
              *
-             * Validating Required Params against a List|of|Acceptable|Values
-             * or with a defined REGEX, if defined
+             * Merging manually defined GET query (i.e. `?param=value` )
+             * so they can be considered as validatable arguments too
              */
-            $this -> validate(
+            foreach( $request -> getQuery() as $key => $value ) {
+                $requiredParams[] = [ 'name' => $key ];
+            }
 
-                array_filter(
-
-                    $requiredParams,
-
-                    function( $current ) {
-
-                        return ( ! empty( $current['acceptable'] ) || ! empty( $current['regex'] ) );
-                    }
-                ),
-
-                $URI
-            );
-
-            // Process Dynamic Params, in order to register them as Request Params
-
-            $params = $this -> process(
-
-                array_merge( $requiredParams, unserialize( $data -> optionalParams ) ),
-
-                $URI
-            );
-
-            // Merging manually defined GET query
-
-            $data -> params = array_merge( $params, $request -> getQuery() );
-
-            return $data;
+            $this -> lookup( $requiredParams, $URI );
         }
 
-        return FALSE;
+        /**
+         * @internal
+         *
+         * Validating Required Params against a List|of|Acceptable|Values
+         * or with a defined REGEX, if defined
+         */
+        $this -> validate(
+
+            array_filter(
+
+                $requiredParams,
+
+                function( $current ) {
+
+                    return ( ! empty( $current['acceptable'] ) || ! empty( $current['regex'] ) );
+                }
+            ),
+
+            $URI
+        );
+
+        // Process Dynamic Params, in order to register them as Request Params
+
+        $params = $this -> process(
+
+            array_merge( $requiredParams, unserialize( $data -> optionalParams ) ),
+
+            $URI
+        );
+
+        // Merging manually defined GET query
+
+        $data -> params = array_merge( $params, $request -> getQuery() );
+
+        return $data;
     }
 
     // Verifiable Interface Method Implementation
@@ -201,14 +209,14 @@ class SQLite extends Standard {
         }
     }
 
-    // Parameterizable Method Overwriting
+    // Parameterizable Interface Method Overwriting
 
     /**
      * Set Class Options.
-     * Defines a default filepath for PHP-array with Generated Routes
+     * Defines a default dbpath for the SQLite Database with Generated Routes
      */
     public function setOptions() {
-        return [ 'dbPath' => 'data/routes.sqlite' ];
+        return [ 'dbPath' => __DIR__ . '/routes.sqlite' ];
     }
 
     // Auxiliary Methods

@@ -20,7 +20,7 @@ require_once __DIR__ . '/LogicException.php';
  * to a context instead of taking into account the literal meaning of
  * a length
  *
- * For example: Our Manager Table Manager needs data to insert/delete
+ * For example: Our Entity Manager needs data to insert/delete
  * records, but if the provided data-source doesn't have any, it has
  * then an invalid length for the context of populated data-source
  *

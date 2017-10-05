@@ -17,10 +17,11 @@ use Next\Exception\Exceptions\RuntimeException;
 use Next\Exception\Exceptions\InvalidArgumentException;
 use Next\Exception\Exceptions\BadMethodCallException;
 
-use Next\Components\Object;              # Object Class
-use Next\Components\Utils\ArrayUtils;    # Array Utils Class
-use Next\DB\Table\Table;                 # DB Table Interface
-use Next\Validate\Validators\URL;        # URL Validator Class
+use Next\Components\Interfaces\Verifiable;    # Verifiable Interface
+use Next\Components\Object;                   # Object Class
+use Next\Components\Utils\ArrayUtils;         # Array Utils Class
+use Next\DB\Entity\Entity;                    # DB Entity Interface
+use Next\Validate\Validators\URL;             # URL Validator Class
 
 /**
  * Google Auth Helper is a simple helper to ease out a little bit
@@ -34,10 +35,10 @@ use Next\Validate\Validators\URL;        # URL Validator Class
  *             Next\Auth\Helpers\Helper,
  *             Next\Components\Object,
  *             Next\Components\Utils\ArrayUtils,
- *             Next\DB\Table\Table,
+ *             Next\DB\Entity\Entity,
  *             Next\Validate\Validators\URL
  */
-class Google extends Object implements Helper {
+class Google extends Object implements Verifiable, Helper {
 
     /**
      * Parameter Options Definition
@@ -70,15 +71,7 @@ class Google extends Object implements Helper {
      * Additional Initialization.
      * Checks Helper Integrity and configures Google Client Object
      */
-    public function init() {
-
-        /**
-         * @internal
-         *
-         * Integrity Check is performed before creating the
-         * Google Client Object because it depends on Parameter Options
-         */
-        $this -> checkIntegrity();
+    protected function init() {
 
         $client = new \Google_Client;
 
@@ -143,12 +136,12 @@ class Google extends Object implements Helper {
      * Consumes Google OAuth Service adding User's E-mail Address to
      * provided Data Model
      *
-     * @return \Next\DB\Table\Table
+     * @return \Next\DB\Entity\Entity
      *  Provided Data Model modified with User's e-mail Address
      *
      * @throws \Next\Exception\Exception\InvalidArgumentException
      *  Thrown if an Data Model hasn't been provided -OR- if it's not a valid one
-     *  In order to be valid the Data model must be an instance of \Next\DB\Table\Table
+     *  In order to be valid the Data model must be an instance of \Next\DB\Entity\Entity
      *
      * @throws \Next\Exception\Exceptions\BadMethodCallException
      *  Thrown if no Access Token could be fetched because both
@@ -159,10 +152,10 @@ class Google extends Object implements Helper {
     public function getData() {
 
         if( is_null( $this -> options -> model ) ||
-            ( ! $this -> options -> model instanceof Table ) ) {
+            ( ! $this -> options -> model instanceof Entity ) ) {
 
             throw new InvalidArgumentException(
-                'Data Models must must be instance of \Next\DB\Table\Table'
+                'Data Models must must be instance of \Next\DB\Entity\Entity'
             );
         }
 
@@ -247,7 +240,7 @@ class Google extends Object implements Helper {
      * @throws \Next\Exception\Exceptions\RuntimeException
      *  Throws if 'redirectURL' is an invalid URL (mostly likely not absolute)
      */
-    private function checkIntegrity() {
+    public function verify() {
 
         if( ! stream_resolve_include_path( $this -> options -> credentialsFile ) ) {
             throw new RuntimeException( 'Credentials File not found' );

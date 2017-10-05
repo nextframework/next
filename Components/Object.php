@@ -112,9 +112,9 @@ class Object extends Prototype implements Contextualizable, Informational, Param
 
         if( $this instanceof Filterable ) $this -> filter();
 
-        $this -> init();
-
         if( $this instanceof Verifiable ) $this -> verify();
+
+        $this -> init();
     }
 
     /**
@@ -294,8 +294,12 @@ class Object extends Prototype implements Contextualizable, Informational, Param
     }
 
     /**
-     * Set Class Options
-     * It's not really implemented because not all child classes have something to be configured
+     * Set class options
+     *
+     * @internal
+     *
+     * It's not really implemented because not all child classes
+     * have something to be configured
      */
     public function setOptions() {}
 

@@ -13,7 +13,7 @@ namespace Next\Session;
 /**
  * Exception Class(es)
  */
-use Next\Exception\Exception\RuntimeException;
+use Next\Exception\Exceptions\RuntimeException;
 
 /**
  * Defines the Session Manager Class handling everything, from the
@@ -171,7 +171,7 @@ class Manager {
         // Initializing the Default Session Environment
 
         $this -> environment = new Environment(
-            [ 'name' => session_name(), 'initializaing' => TRUE ]
+            [ 'name' => session_name() ]
         );
     }
 

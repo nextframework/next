@@ -60,7 +60,7 @@ abstract class Plugin extends Object {
      */
     protected $parameters = [
         'application'  => [ 'type' => 'Next\Application\Application', 'required' => TRUE ],
-        'manager'      => [ 'type' => 'Next\DB\Table\Manager',        'required' => FALSE ],
+        'manager'      => [ 'type' => 'Next\DB\Entity\Manager',       'required' => FALSE ],
 
         /**
          * Options Parameter Option to condition whether the Plugin is
@@ -124,7 +124,7 @@ abstract class Plugin extends Object {
      * - Creates the Event Handler (and its Event Object)
      * - Extends Plugin Context to *some* of the methods of
      *   \Next\Application\Application (required) and
-     *   \Next\DB\Table\Table (optional) defined as Parameter Options
+     *   \Next\DB\Entity\Entity (optional) defined as Parameter Options
      *  - Creates default Event Listeners
      */
     public function init() {
@@ -145,16 +145,6 @@ abstract class Plugin extends Object {
 
             [ 'getRequest', 'getResponse', 'getView' ]
         );
-
-        if( ! is_null( $this -> options -> manager ) ) {
-
-            $this -> extend(
-
-                new Invoker( $this, $this -> options -> manager ),
-
-                [ 'addRepository', 'getRepository', 'getRepositories' ]
-            );
-        }
 
         $this -> addDefaultEventListeners();
     }

@@ -20,27 +20,30 @@ namespace Next\DB\Driver;
  */
 interface Driver {
 
-    // Basic Stuff
-
     /**
-     * Connect
+     * Establishes a Database Connection
      */
     public function connect();
 
     /**
-     * Disconnect
+     * Disestablishes a Database Connection
      */
     public function disconnect();
 
     /**
-     * Check if it's Connected
+     * Checks if there's a Database Connection Link active
      */
     public function isConnected();
+
+    /**
+     * Get Database Connection Link
+     */
+    public function getConnection();
 
     // Query-related Methods
 
     /**
-     * Execute an SQL statement
+     * Executes an SQL statement
      *
      * @param string $statement
      *  Query Statement
@@ -50,7 +53,7 @@ interface Driver {
     public function query( $statement );
 
     /**
-     * Prepare an SQL Statement
+     * Prepares an SQL Statement
      *
      * @param string $statement
      *  Statement to be prepared
@@ -60,21 +63,16 @@ interface Driver {
     public function prepare( $statement );
 
     /**
-     * Get Last inserted ID
-     *
+     * Get Last inserted ID.
      * Returns the ID of the last inserted row or sequence value
      *
      * @param string|optional $name
-     *
-     *   <p>
-     *       Name of the sequence object from which the ID should be returned.
-     *   </p>
-     *
-     *   <p>Used by PDO_PGSQL, for example (according to manual)</p>
+     *  Name of the sequence object from which the ID should be returned.
+     *  Used by PDO_PGSQL, for example (according to manual)
      */
     public function lastInsertId( $name = NULL );
 
-    // Accessors
+    // Accessory Methods
 
     /**
      * Get an SQL Statement Renderer

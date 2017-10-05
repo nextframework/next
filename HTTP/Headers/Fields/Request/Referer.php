@@ -16,7 +16,7 @@ use Next\HTTP\Headers\Fields\AbstractField;    # Header Field Abstract Class
 /**
  * Request 'Referer' Header Field Validator Class
  */
-use Next\Validate\HTTP\Headers\Request\Range as Validator;
+use Next\Validate\HTTP\Headers\Request\Referer as Validator;
 
 /**
  * Request 'Referer' Header Field Class

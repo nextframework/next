@@ -11,7 +11,7 @@
 namespace Next\Components\Types;
 
 /**
- * InvalidArgumentException Class
+ * Exception Class(es)
  */
 use Next\Exception\Exceptions\InvalidArgumentException;
 
@@ -57,13 +57,7 @@ class String extends AbstractTypes {
         if( is_null( $this -> options -> value ) || ! is_string( $this -> options -> value ) ) {
 
             throw new InvalidArgumentException(
-
-                sprintf(
-
-                    'Argument <strong>%s</strong> is not a valid String',
-
-                    ( $this -> options -> value !== NULL ? $this -> options -> value : 'NULL' )
-                )
+                'Argument is not a valid String'
             );
         }
     }

@@ -13,11 +13,12 @@ namespace Next\HTTP;
 /**
  * Exception Class(es)
  */
+use Next\Exception\Exception;
 use Next\Exception\Exceptions\BadMethodCallException;
 
 use Next\HTTP\Stream\Adapter\AdapterException;      # Adapter Exception Class
-use Next\HTTP\Headers\Fields\FieldsException;       # Headers Fields Exception Class
 
+use Next\Components\Interfaces\Verifiable;          # Verifiable Interface
 use Next\HTTP\Headers\Fields\Field;                 # Header Fields Interface
 use Next\HTTP\Stream\Adapter\Adapter;               # HTTP Stream Adapter Interface
 
@@ -239,40 +240,6 @@ class Request extends Object {
      */
     public function init() {
 
-        /**
-         * HTTP Request Class default Options
-         *
-         * @internal
-         *
-         * Because, obviously, variables can't be used outside class
-         * methods, differently than all other classes adept of the
-         * Parameterizable Concept, HTTP Request Class' Parameter Object
-         * is manually built during the Additional Initialization stage
-         *
-         * It's a small price to pay instead of defining these default
-         * variables every time, everywhere the Request Object is needed
-         *
-         * \Next\Components\Object::setOptions() is being used, but
-         * without a particular reason, after all the Request
-         * shouldn't derive any other
-         *
-         * And, the great trick (^_^). The third "argument'
-         * for \Next\Components\Parameter, holding the options entered
-         * when instantiating the Object comes through Object::$options
-         * itself because one way or another its procedures were done
-         */
-        $this -> options = new Parameter(
-
-            [
-                'uri'      => $_SERVER['REQUEST_URI'],
-                'host'     => $_SERVER['HTTP_HOST'],
-                'method'   => $_SERVER['REQUEST_METHOD'],
-                'basepath' => ''
-            ],
-
-            NULL, $this -> options
-        );
-
         // Cookies Management Object
 
         $this -> cookies = new Cookies;
@@ -295,13 +262,11 @@ class Request extends Object {
 
         //---------------------------
 
-        $this -> checkIntegrity();
-
         // Setting Up Basic Informations
 
             // Do we have an HTTP Stream Adapter?
 
-        if( isset( $this -> options -> adapter ) ) {
+        if( ! is_null( $this -> options -> adapter ) ) {
 
             $this -> adapter = $this -> options -> adapter;
 
@@ -764,7 +729,7 @@ class Request extends Object {
      * @return \Next\HTTP\Request
      *  Request Instance (Fluent Interface)
      *
-     * @throws \Next\HTTP\Request\RequestException
+     * @throws \Next\Exception\Exceptions\BadMethodCallException
      *   <strong>$value</strong> argument is NULL, case in which a
      *  possible RAW Data should be considered instead
      */
@@ -982,12 +947,6 @@ class Request extends Object {
      *
      *  Otherwise, if everything is fine, a \Next\HTTP\Response instance will
      *
-     * @throws \Next\HTTP\Request\RequestException
-     *  No HTTP Stream Adapter provided
-     *
-     * @throws \Next\HTTP\Headers\Fields\FieldsException
-     *  Invalid or malformed Cookie (s) Value (s)
-     *
      * @see \Next\HTTP\Stream\Adapter\AdapterException
      */
     public function send() {
@@ -1043,23 +1002,11 @@ class Request extends Object {
         /**
          * @internal
          *
-         * Cookies
-         *
          * Cookies are defined in a Header Field too, so they come first
          */
-        try {
-
-            $this -> headers -> addHeader(
-                $this -> cookies -> getCookies( TRUE )
-            );
-
-        } catch( FieldsException $e ) {
-
-            throw new RequestException(
-
-                $e -> getMessage()
-            );
-        }
+        $this -> headers -> addHeader(
+            $this -> cookies -> getCookies( TRUE )
+        );
 
         // Headers
 
@@ -1089,7 +1036,7 @@ class Request extends Object {
         }
     }
 
-    // Accessors
+    // Accessory Methods
 
     /**
      * Get Connection Adapter, available only in External Requests
@@ -1101,24 +1048,26 @@ class Request extends Object {
         return $this -> adapter;
     }
 
-    // Auxiliary Methods
+    // Parameterizable Interface Method Overwriting
 
     /**
-     * Checks Parameter Options Integrity
+     * Set class options
      *
-     * @throws \Next\HTTp\Request\RequestException
-     *  Thrown if Parameter Option 'adapter', if defined, isn't
-     *  an instance of \Next\HTTP\Stream\Adapter\Adapter
+     * @return array
+     *  HTTP Request Object Class Default Options
      */
-    private function checkintegrity() {
+    public function setOptions() {
 
-        if( isset( $this -> options-> adapter ) ) {
-
-            if( ! $this -> options -> adapter instanceof Adapter ) {
-                throw new RequestException( 'Invalid Stream Adapter' );
-            }
-        }
+        return [
+            'adapter'  => [ 'type' => 'Next\HTTP\Stream\Adapter\Adapter', 'required' => FALSE ],
+            'uri'      => [ 'required' => FALSE, 'default' => $_SERVER['REQUEST_URI'] ],
+            'host'     => [ 'required' => FALSE, 'default' => $_SERVER['HTTP_HOST'] ],
+            'method'   => [ 'required' => FALSE, 'default' => $_SERVER['REQUEST_METHOD'] ],
+            'basepath' => ''
+        ];
     }
+
+    // Auxiliary Methods
 
     /**
      * Get Request Protocol Version
@@ -1191,12 +1140,14 @@ class Request extends Object {
 
                 $this -> headers -> addHeader( apache_request_headers() );
 
-            } catch( FieldsException $e ) {
+            } catch( Exception $e ) {
 
                 /**
                  * @internal
-                 * We're silencing the FieldsException in order to not break the Request Flow
-                 * However, if this Exception is caught, no Request Headers will be available
+                 * We're silencing any Next\Exception\Exception caught
+                 * in order to not break the Request Flow
+                 * However, if this happens, no Request Headers
+                 * will be available
                  */
             }
 
@@ -1229,7 +1180,7 @@ class Request extends Object {
                         )
                     );
 
-                } catch( FieldsException $e ) {
+                } catch( Exception $e ) {
 
                     // Same explanation as above
                 }
@@ -1279,9 +1230,9 @@ class Request extends Object {
                         new ContentType( [ 'value' => 'application/x-www-form-urlencoded' ] )
                     );
 
-                } catch( FieldsException $e ) {
+                } catch( Exception $e ) {
 
-                    // Silenced because we're 100% sure this FieldsException will never be caught :P
+                    // Silenced because we're 100% sure this will never be caught :P
                 }
             }
         }

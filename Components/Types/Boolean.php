@@ -11,7 +11,7 @@
 namespace Next\Components\Types;
 
 /**
- * InvalidArgumentException Class
+ * Exception Class(es)
  */
 use Next\Exception\Exceptions\InvalidArgumentException;
 
@@ -38,13 +38,7 @@ class Boolean extends AbstractTypes {
         if( is_null( $this -> options -> value ) || ! is_bool( $this -> options -> value ) ) {
 
             throw new InvalidArgumentException(
-
-                sprintf(
-
-                    'Argument <strong>%s</strong> is not a valid Boolean',
-
-                    ( $this -> options -> value !== NULL ? $this -> options -> value : 'NULL' )
-                )
+                'Argument is not a valid Boolean'
             );
         }
     }

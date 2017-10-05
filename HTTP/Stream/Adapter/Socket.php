@@ -378,7 +378,7 @@ class Socket extends AbstractAdapter {
 
         if( ! is_resource( $this -> stream ) ) {
 
-            throw AdapterException::logic(
+            throw new AdapterException(
 
                 'Stream must be opened before perform any operation over it'
             );

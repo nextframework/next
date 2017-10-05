@@ -8,14 +8,16 @@
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace  Next\Filesystem\Prototypes;
+namespace  Next\FileSystem\Prototypes;
 
 use Next\Components\Interfaces\Prototypable;    # Prototypable Interface
 
 /**
- * Generates a GUID in compliance with RFC 4122 Section 4.4
+ * Removes a File/Directory.
+ * If removing a Directory, operates recursively, with file filters
+ * and parent directory destruction if empty
  *
- * @package    Next\Components\Types
+ * @package    Next\FileSystem
  */
 class Delete implements Prototypable {
 
@@ -25,9 +27,8 @@ class Delete implements Prototypable {
      * Prototypes the Directory/File Removal routine by proxying,
      * treating and handling the mixed arguments received
      *
-     * @return \Next\Components\Types\String
-     *  A new String Object with the original string chopped
-     *  and combined with delimiter string
+     * @return boolean
+     *  Returns TRUE if file(s) could be removed and FALSE otherwise
      */
     public function prototype() {
 

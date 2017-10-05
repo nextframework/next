@@ -206,14 +206,14 @@ class Standard extends AbstractRouter implements Verifiable {
         }
     }
 
-    // Parameterizable Method Overwriting
+    // Parameterizable Interface Method Overwriting
 
     /**
      * Set Class Options.
      * Defines a default filepath for PHP-array with Generated Routes
      */
     public function setOptions() {
-        return [ 'filePath' => 'data/routes.php' ];
+        return [ 'filePath' => __DIR__ . '/routes.php' ];
     }
 
     // Abstract Methods Implementation

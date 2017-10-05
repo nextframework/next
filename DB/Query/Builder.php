@@ -21,8 +21,6 @@ use Next\Components\Invoker;             # Invoker Class
 
 use Next\Components\Utils\ArrayUtils;    # Array Utils Class
 
-use Next\DB\Table\Manager;               # Table Manager Object
-
 /**
  * Defines the Query Builder Object responsible to assemble a
  * Database Query through class' methods
@@ -37,8 +35,8 @@ class Builder extends Object {
      * @var array $parameters
      */
     protected $parameters = [
-        'manager' => [ 'type' => 'Next\DB\Table\Manager', 'required' => TRUE ],
-        'renderer' => [ 'type' => 'Next\DB\Query\Renderer\Renderer', 'required' => TRUE ]
+        'renderer' => [ 'type' => 'Next\DB\Query\Renderer\Renderer', 'required' => TRUE ],
+        'table'    => [ 'required' => TRUE ]
     ];
 
     /**
@@ -121,7 +119,7 @@ class Builder extends Object {
     // CRUD-related methods
 
     /**
-     * Build an INSERT Statement
+     * Builds an INSERT Statement
      *
      * @param string $table
      *  Table name
@@ -129,8 +127,8 @@ class Builder extends Object {
      * @param array $fields
      *  Columns to be added in INSERT Statement
      *
-     * @return \Next\DB\Table\Select
-     *  Table Select Object (Fluent Interface)
+     * @return \Next\DB\Query\Builder
+     *  Query Builder Object (Fluent Interface)
      */
     public function insert( $table, array $fields ) {
 
@@ -146,7 +144,7 @@ class Builder extends Object {
     }
 
     /**
-     * Render UPDATE Statement
+     * Builds an UPDATE Statement
      *
      * @param string $table
      *  Table name
@@ -154,8 +152,8 @@ class Builder extends Object {
      * @param array $fields
      *  Columns to be added in UPDATE Statement
      *
-     * @return \Next\DB\Table\Select
-     *  Table Select Object (Fluent Interface)
+     * @return \Next\DB\Query\Builder
+     *  Query Builder Object (Fluent Interface)
      */
     public function update( $table, array $fields ) {
 
@@ -171,13 +169,13 @@ class Builder extends Object {
     }
 
     /**
-     * Build a DELETE Statement
+     * Builds a DELETE Statement
      *
      * @param string $table
      *  Table Name
      *
-     * @return \Next\DB\Table\Select
-     *  Table Select Object (Fluent Interface)
+     * @return \Next\DB\Query\Builder
+     *  Query Builder Object (Fluent Interface)
      */
     public function delete( $table ) {
 
@@ -191,13 +189,13 @@ class Builder extends Object {
     // Select-related Rendering Methods
 
     /**
-     * Specify SELECT Statement Columns
+     * Specifies one or more Columns for a SELECT Statement
      *
      * @param \Next\DB\Query\Expression|string|array|optional $columns
      *  Columns to be included in SELECT Statement
      *
-     * @return \Next\DB\Table\Select
-     *  Table Select Object (Fluent Interface)
+     * @return \Next\DB\Query\Builder
+     *  Query Builder Object (Fluent Interface)
      */
     public function select( $columns = [] ) {
 
@@ -275,6 +273,7 @@ class Builder extends Object {
          * as index (or property)
          */
         foreach( $columns as $alias => $column ) {
+
             $this -> columns[] = $this -> options
                                        -> renderer
                                        -> columns( $column, $alias );
@@ -284,38 +283,40 @@ class Builder extends Object {
     }
 
     /**
-     * Specify the columns to be searched
+     * Specifies one or more Database Tables to be searched
      *
      * @param array|optional $tables
      *  One or more different tables to search
      *
-     * @return \Next\DB\Table\Select
-     *  Table Select Object (Fluent Interface)
+     * @return \Next\DB\Query\Builder
+     *  Query Builder Object (Fluent Interface)
      */
     public function from( $tables = [] ) {
-
-        $tablename = $this -> options
-                           -> manager -> getTable() -> getTableName();
 
         /**
          * @internal
          *
          * If only one table was informed, as string, it's not possible
-         * to defined an alias and because the PRIMARY KEY, if properly defined
-         * in \Next\DB\Table\Table, is automatically added, we need to enforce the
-         * alias used in here
+         * to define an alias and because the PRIMARY KEY — if properly
+         * defined in \Next\DB\Entity\Entity — is automatically added,
+         * we need to enforce the alias used in here
          *
-         * The same rules apply: The alias will be first character of the
-         * \Next\DB\Table\Table
+         * The same rules apply: The alias will be first character of
+         * the \Next\DB\Entity\Entity
          */
         if( ! is_array( $tables ) ) {
 
             if( strpos( $this -> columns[ 0 ], '.' ) !== FALSE ) {
-                $tables = [ strtolower( substr( $tablename, 0, 1 ) ) => $tables ];
+
+                $tables = [
+                    strtolower( substr( $this -> options -> table, 0, 1 ) ) => $tables
+                ];
             }
         }
 
         /**
+         * @internal
+         *
          * Usage:
          *
          * ````[ 'm' => 'members' ]````
@@ -324,26 +325,28 @@ class Builder extends Object {
          *
          * ````SELECT fields FROM `members` m````
          *
-         * If an alias is not defined as element index, it will not exist (obviously)
+         * If an alias is not defined as element index, it will
+         * not exist (obviously)
          */
         foreach( (array) $tables as $alias => $table ) {
 
             /**
              * @internal
-             * If we have multiple tables listed we'll compare the table name
-             * coming from \Next\DB\Table\Table::getTablename(), against the
-             * tables included for the statement
              *
-             * If found without a string alias, we'll enforce it to match the
-             * automatically added PRIMARY KEY
+             * If we have multiple tables listed we'll compare the
+             * Entity Name coming from \Next\DB\Entity\Entity::getEntityName(),
+             * against the tables included for the statement
              *
-             * The same rules apply: The alias will be first character of the
-             * \Next\DB\Table\Table
+             * If found without a string alias, we'll enforce it to
+             * match the automatically added PRIMARY KEY
+             *
+             * The same rules apply: The alias will be first character
+             * of the \Next\DB\Entity\Entity
              */
-            if( $pos = strpos( $table, $tablename ) !== FALSE ) {
+            if( $pos = strpos( $table, $this -> options -> table ) !== FALSE ) {
 
                 if( ! is_string( $alias ) ) {
-                    $alias = strtolower( substr( $tablename, 0, 1 ) );
+                    $alias = strtolower( substr( $this -> options -> table, 0, 1 ) );
                 }
             }
 
@@ -354,8 +357,8 @@ class Builder extends Object {
 
         /**
          * @internal
-         * Assembling Query
-         * From this point all SQL is a Clause
+         *
+         * Assembling Query. From this point all SQL is a Clause
          */
         $this -> query = $this -> options -> renderer -> select(
             $this -> columns, $this -> tables, $this -> distinct
@@ -365,10 +368,10 @@ class Builder extends Object {
     }
 
     /**
-     * Specify a DISTINCT Clause
+     * Builds a DISTINCT Clause
      *
-     * @return \Next\DB\Table\Select
-     *  Table Select Object (Fluent Interface)
+     * @return \Next\DB\Query\Builder
+     *  Query Builder Object (Fluent Interface)
      */
     public function distinct() {
 
@@ -377,10 +380,8 @@ class Builder extends Object {
         return $this;
     }
 
-    // Other Clauses
-
     /**
-     * Add a WHERE Clause
+     * Adds a WHERE Clause
      *
      * @param array|string $condition
      *  WHERE Clause
@@ -388,8 +389,8 @@ class Builder extends Object {
      * @param array|mixed|optional $replacements
      *  Value for Clause Placeholders, if any
      *
-     *  If `$condition` has multiple possible values, `$replacements` must
-     *  be an associative array led by that field name. E.g.:
+     *  If `$condition` has multiple possible values, `$replacements`
+     *  must be an associative array led by that field name. E.g.:
      *
      *  ````
      *  Array
@@ -403,21 +404,19 @@ class Builder extends Object {
      *  )
      *  ````
      *
-     * This helps not having to manually code a loop calling Build::where() for each
-     * one of them with potentially insecure workarounds for the multiplicity
+     * This helps not having to manually code a loop calling
+     * Build::where() for each one of them with potentially
+     * insecure workarounds for the multiplicity
      *
      * @param mixed|string|optional $type
      *  The WHERE Clause condition type, 'AND' or 'OR'.
-     *
      *  Defaults to 'AND'
      *
-     * @return \Next\DB\Table\Select
-     *  Table Select Object (Fluent Interface)
+     * @return \Next\DB\Query\Builder
+     *  Query Builder Object (Fluent Interface)
      *
-     * @throws QueryException
-     *  Thrown if trying to use multiple conditions at once in order to
-     *  implicit maintainability as for multiple WHERE conditions,
-     *  Builder::where() should be called again
+     * @throws \Next\Exception\Exceptions\BadMethodCallException
+     *  Thrown if WHERE Clause is empty
      *
      * @throws \Next\Exception\Exceptions\BadMethodCallException
      *  Thrown if trying to create a multiple possibilities condition
@@ -425,16 +424,24 @@ class Builder extends Object {
      *  enforcing maintainability
      *
      * @throws \Next\Exception\Exceptions\InvalidArgumentException
-     *  Thrown if when creating a multiple possibilities condition,
-     *  the first entry on the array of replacements doesn't have a
-     *  key or its key doesn't match any CLAUSE define on `$condition`
+     *  Thrown when creating a multiple possibilities condition
+     *  without a valid key on the first entry on the replacements
+     *  array -OR- if this key doesn't match any Clause defined
+     *  on `$condition`
      */
     public function where( $condition, $replacements = [], $type = Query::SQL_AND ) {
+
+        if( is_null( $condition ) ) {
+
+            throw new BadMethodCallException(
+                'Empty Clause (Builder::where)'
+            );
+        }
 
         if( is_array( $condition ) ) {
 
             throw new BadMethodCallException(
-                'Multiple conditions are not allowed (Builder::where'
+                'Multiple conditions are not allowed (Builder::where)'
             );
         }
 
@@ -451,8 +458,12 @@ class Builder extends Object {
          */
         if( count( $replacements, COUNT_RECURSIVE ) > 1 ) {
 
-            // Only the first array will be used as multiple replacements values list
-
+            /**
+             * @internal
+             *
+             * Only the first array will be used as multiple
+             * replacements values list
+             */
             $key = (array) array_keys( $replacements );
             $key = array_shift( $key );
 
@@ -491,8 +502,12 @@ class Builder extends Object {
                     sprintf( ':%s_%s', $key, $uniqid ), $condition
                 );
 
-                // Adding a modified version of Replacements List for Query Renderer
-
+                /**
+                 * @internal
+                 *
+                 * Adding a modified version of Replacements List
+                 * for Query Renderer
+                 */
                 $this -> addReplacements(
                     [ sprintf( '%s_%s', $key, $uniqid ) => $value ]
                 );
@@ -511,16 +526,16 @@ class Builder extends Object {
     }
 
     /**
-     * Add a JOIN Clause
+     * Adds a JOIN Clause
      *
      * @param string|array $table
-     *  - A string with the JOIN Table
-     *  - A single-index array with JOIN Table and its alias as key. E.g.:
+     *  A string with the JOIN Table or a single-index array with
+     *  a JOIN Table and its alias as key:
      *
      *  ````[ 'm' => 'members' ]````
      *
-     *  NOTE: In order to implicit maintainability, only the first index will be used.
-     *  For multiple JOINS, call the method again
+     *  NOTE: In order to implicit maintainability, only the first
+     *  index will be used. For multiple JOINS, call the method again
      *
      * @param string $on
      *  The ON Clause
@@ -528,14 +543,15 @@ class Builder extends Object {
      * @param string|optional $type
      *  The JOIN Type
      *
-     *  The Query interface has three values of JOIN Types:
-     *  Query::INNER_JOIN, Query::LEFT_OUTER_JOIN and Query::RIGHT_OUTER_JOIN
+     *  The Query Interface has three values of JOIN Types:
+     *  Query::INNER_JOIN, Query::LEFT_OUTER_JOIN and
+     *  Query::RIGHT_OUTER_JOIN
      *
-     *  However there are no constraints about what it's accepted here because there are numerous
-     *  valid aliases for this value
+     *  However there are no constraints about what it's accepted here
+     *  because there are numerous valid aliases for this value
      *
-     * @return \Next\DB\Table\Select
-     *  Table Select Object (Fluent-Interface)
+     * @return \Next\DB\Query\Builder
+     *  Query Builder Object (Fluent-Interface)
      */
     public function join( $table, $on, $type = Query::INNER_JOIN ) {
 
@@ -550,13 +566,13 @@ class Builder extends Object {
     }
 
     /**
-     * Add a HAVING Clause
+     * Adds a HAVING Clause
      *
      * @param array|string $condition
      *  HAVING Clause
      *
-     * NOTE: In order to implicit maintainability, only the first index will be used.
-     * For multiple HAVING conditions, call the method again
+     * NOTE: In order to implicit maintainability, only the first index
+     * will be used. For multiple HAVING conditions, call the method again
      *
      * @param array|optional $values
      *  Values for Clause Placeholders, if any
@@ -566,8 +582,8 @@ class Builder extends Object {
      *
      *  Defaults to 'AND'
      *
-     * @return \Next\DB\Table\Select
-     *  Table Select Object (Fluent Interface)
+     * @return \Next\DB\Query\Builder
+     *  Query Builder Object (Fluent Interface)
      */
     public function having( $condition, $values = [], $type = Query::SQL_AND ) {
 
@@ -579,13 +595,13 @@ class Builder extends Object {
     }
 
     /**
-     * Add a GROUP BY Clause
+     * Adds a GROUP BY Clause
      *
      * @param string|array $fields
      *  Fields to group results
      *
-     * @return \Next\DB\Table\Select
-     *  Table Select Object (Fluent Interface)
+     * @return \Next\DB\Query\Builder
+     *  Query Builder Object (Fluent Interface)
      */
     public function group( $fields ) {
 
@@ -597,23 +613,24 @@ class Builder extends Object {
     }
 
     /**
-     * Add ORDER BY Clause(s)
+     * Adds ORDER BY Clause(s)
      *
      * @param string|array|Next\DB\Query\Expression $field
-     *  - As a string, the field to order
-     *  - As an associative array, keys are the fields and values
-     *    order types
-     *  - As a Next\DB\Query\Expression, the Object itself to be
-     *    rendered "as is"
+     *  - A string with the field to order, accepting the default
+     *    ordering value (Next\DB\Query\Query::ORDER_ASCENDING)
+     *  - An associative array in which keys are the fields to order
+     *    and the values the ordering directions
+     *  - A Next\DB\Query\Expression, case in which the Clause
+     *    will be rendered "as is"
      *
-     * @param string|optional $type
+     * @param string|optional $orientation
      *  Orientation, if <strong>$field</strong> is not an array: ASC or DESC.
      *  Defaults to ASC
      *
-     * @return \Next\DB\Table\Select
-     *  Table Select Object (Fluent Interface)
+     * @return \Next\DB\Query\Builder
+     *  Query Builder Object (Fluent Interface)
      */
-    public function order( $field, $type = Query::ORDER_ASCENDING ) {
+    public function order( $field, $orientation = Query::ORDER_ASCENDING ) {
 
         if( $field instanceof Expression ) {
 
@@ -622,13 +639,13 @@ class Builder extends Object {
             return $this;
         }
 
-        $this -> order[] = ( is_array( $field ) ? $field : [ $field => $type ] );
+        $this -> order[] = ( is_array( $field ) ? $field : [ $field => $orientation ] );
 
         return $this;
     }
 
     /**
-     * Add a LIMIT Clause, with or without an offset
+     * Adds a LIMIT Clause with an optional offset
      *
      * @param integer|optional $limit
      *  Number of records to be returned.
@@ -638,8 +655,8 @@ class Builder extends Object {
      *  Record offset to start.
      *  Defaults to 0 and it'll be forced to not be negative
      *
-     * @return \Next\DB\Table\Select
-     *  Table Select Object (Fluent Interface)
+     * @return \Next\DB\Query\Builder
+     *  Query Builder Object (Fluent Interface)
      */
     public function limit( $limit = 1, $offset = 0 ) {
 
@@ -657,7 +674,7 @@ class Builder extends Object {
     }
 
     /**
-     * Assemble the Query
+     * Assembles the Query
      *
      * @return string
      *  Built Query
@@ -706,13 +723,15 @@ class Builder extends Object {
         return $this -> query;
     }
 
-    // Accessors
+    // Accessory Methods
 
     /**
-     * Get built query
+     * Get assembled query
      *
      * @return string
-     *  Built query
+     *  Assembled query.
+     *  It'll, obvious, be empty if called before using any of the
+     *  Query Builder's methods
      */
     public function getQuery() {
         return $this -> query;
@@ -749,15 +768,17 @@ class Builder extends Object {
     }
 
     /**
-     * Resets the Query Builder preparing it for another (possible) statement
+     * Resets the Query Builder preparing it for another (possible)
+     * statement
      *
-     * Although all the property types can be predefined while defining them, by having such feature
-     * we can flush them after used, which doesn't occur within this class scope
+     * Although all the property types can be predefined while
+     * defining them, by having such feature we can flush them after
+     * used, which doesn't occur within this class scope
      *
      * @return \Next\Query\Builder
      *  Query Builder Object (Fluent-Interface)
      *
-     * @see \Next\DB\Table\Manager::flush()
+     * @see \Next\DB\Entity\Manager::flush()
      */
     public function reset() {
 
@@ -778,15 +799,5 @@ class Builder extends Object {
         $this -> limit        = [];
 
         return $this;
-    }
-
-    /**
-     * Get Entity Manager
-     *
-     * @return \Next\DB\Table\Manager
-     *  Entity Manager
-     */
-    public function getManager() {
-        return $this -> options -> manager;
     }
 }

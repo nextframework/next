@@ -83,20 +83,6 @@ class Exception extends \Exception implements Verifiable {
 
         // Listing Additional Exception Components
 
-        /*extract(
-
-            // @todo Watch this index!
-            ( isset( $args[ 0 ] ) ? $args[ 0 ] : $args ) + [
-              'code'         => self::UNKNOWN,
-              'replacements' => [],
-              'responseCode' => 500,
-              'callback'     => [],
-              'file'         => $this -> getFile(),
-              'line'         => $this -> getLine(),
-              'severity'     => ''
-            ]
-        );*/
-
         /**
          * @todo Provide default values for skipped parameters
          *
@@ -117,7 +103,7 @@ class Exception extends \Exception implements Verifiable {
         list( $this -> code, $this -> responseCode, $this -> callback, $this -> file, $this -> line, $this -> severity ) =
             $args + [ self::UNKNOWN, 500, [], $this -> getFile(), $this -> getLine(), $this -> getSeverity() ];
 
-        // Verifying Exception Object Integrity
+        // Verifying Object Integrity
 
         $this -> verify();
 

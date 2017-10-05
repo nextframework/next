@@ -11,11 +11,11 @@
 namespace Next\FileSystem;
 
 /**
- * InvalidArgumentException Class
+ * Exception Class(es)
  */
 use Next\Exception\Exceptions\InvalidArgumentException;
 
-use Next\Components\Types\String;
+use Next\Components\Types\String;    # Strings Data-type Class
 
 /**
  * Defines the Path Data-type Type and prototypes some external/custom
@@ -44,13 +44,7 @@ class Path extends String {
         if( stream_resolve_include_path( $this -> options -> value ) === FALSE ) {
 
             throw new InvalidArgumentException(
-
-                sprintf(
-
-                    'Argument <strong>%s</strong> is not a valid filepath',
-
-                    ( $this -> options -> value !== NULL ? $this -> options -> value : 'NULL' )
-                )
+                'Argument is not a valid filepath'
             );
         }
     }
@@ -98,7 +92,9 @@ class Path extends String {
 
         // Custom Prototypes
 
-        $this -> implement( $this, 'delete', new Prototypes\Delete, $this -> _value )
-              -> implement( $this, 'copy',   new Prototypes\Copy,   $this -> _value );
+        $this -> implement( $this, 'delete',      new Prototypes\Delete,      $this -> _value )
+              -> implement( $this, 'copy',        new Prototypes\Copy,        $this -> _value )
+              -> implement( $this, 'tree',        new Prototypes\Tree,        $this -> _value )
+              -> implement( $this, 'classmapper', new Prototypes\ClassMapper, $this -> _value );
     }
 }

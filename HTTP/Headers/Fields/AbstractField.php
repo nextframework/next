@@ -15,8 +15,9 @@ namespace Next\HTTP\Headers\Fields;
  */
 use Next\Exception\Exceptions\InvalidArgumentException;
 
-use Next\Validate\Validator;    # Validator Interface
-use Next\Components\Object;     # Object Class
+use Next\Components\Interfaces\Verifiable;    # Verifiable Interface
+use Next\Validate\Validator;                  # Validator Interface
+use Next\Components\Object;                   # Object Class
 
 /**
  * Header Class
@@ -26,7 +27,7 @@ use Next\Components\Object;     # Object Class
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-abstract class AbstractField extends Object implements Field {
+abstract class AbstractField extends Object implements Verifiable, Field {
 
     /**
      * Parameter Options Definition
@@ -35,23 +36,26 @@ abstract class AbstractField extends Object implements Field {
      */
     protected $parameters = [
 
+        'name'  => [ 'required' => TRUE ],
+        'value' => [ 'required' => TRUE ],
+
         /**
          * Defines whether or not Headers accept multiple values at same time
          * Defaults to FALSE
          */
-        'acceptMultiples'    => FALSE,
+        'acceptMultiples'    => [ 'required' => FALSE, 'default' => FALSE ],
 
         /**
          * Defines the separator in order to split the input string
          * Defaluts to "," (comma)
          */
-        'multiplesSeparator' => ',',
+        'multiplesSeparator' => [ 'required' => FALSE, 'default' => ',' ],
 
         /**
          * Defines whether or not whitespaces should preserved before validation
          * Defaults to FALSE
          */
-        'preserveWhitespace' => FALSE,
+        'preserveWhitespace' => [ 'required' => FALSE, 'default' => FALSE ],
     ];
 
     /**
@@ -68,11 +72,6 @@ abstract class AbstractField extends Object implements Field {
      *  Header Value
      */
     protected function init() {
-
-        // Checking Integrity
-
-        $this -> checkIntegrity();
-
         $this -> setValue( $this -> options -> value );
     }
 
@@ -198,91 +197,6 @@ abstract class AbstractField extends Object implements Field {
     }
 
     /**
-     * Get Header Name
-     *
-     * Header Name comes from Field Options instead of from string representation
-     * of Object Class not only because some Fields have hyphens in its name and
-     * this character is not allowed as PHP Class Name Definition,
-     * but because we're already overwriting this method to return the full string
-     * representation of Header Field
-     *
-     * @return string
-     *  Header Field Name
-     */
-    public function getName() {
-        return $this -> options -> name;
-    }
-
-    /**
-     * Get Header Value after treated and validated
-     *
-     * @return string
-     *  Header Field Value
-     */
-    public function getValue() {
-        return $this -> value;
-    }
-
-    // Auxiliary Methods
-
-    /**
-     * Check Options Integrity
-     *
-     * @throws \Next\Exception\Exceptions\InvalidArgumentException
-     *  Header Field has no well-formed name
-     *
-     * @throws \Next\Exception\Exceptions\InvalidArgumentException
-     *  Object defined as validator is not instance of \Next\Validate\Validator
-     *
-     * @throws \Next\Exception\Exceptions\InvalidArgumentException
-     *  Provided validator is not a Header Field Validator, characterized
-     *  as instance of \Next\Validate\HTTP\Headers\Headers
-     */
-    private function checkIntegrity() {
-
-        // Headers Options
-
-        if( ! isset( $this -> options -> name ) || empty( $this -> options -> name ) ) {
-
-            throw new InvalidArgumentException(
-                sprintf( 'Header <strong>%s</strong> doesn\'t have a defined name', (string) $this )
-            );
-        }
-
-        if( ! isset( $this -> options -> value ) || empty( $this -> options -> value ) ) {
-
-            throw new InvalidArgumentException(
-
-                sprintf(
-
-                    'Header <strong>%s</strong> doesn\'t have a value to be set',
-
-                    $this -> options -> name
-                )
-            );
-        }
-
-        // Validator Interfaces Implementations
-
-        /**
-         * @internal
-         *
-         * AbstractField::getValidator() requires a value to to be used as
-         * Validator Constructor but here, before all the routines of adding
-         * the Header Field start, we just need to check the Validator iteself,
-         * so we use a dummy value just to get access of the object provided
-         */
-        $validator = $this -> getValidator( NULL );
-
-        if( ! $validator instanceof Validator ) {
-
-            throw new InvalidArgumentException(
-                'Header Fields Validators must implement <em>Next\Validate\Validator</em> Interface'
-            );
-        }
-    }
-
-    /**
      * Pre-Check Routines
      *
      * Before validation, some Headers can receive some treatment before they can
@@ -316,6 +230,74 @@ abstract class AbstractField extends Object implements Field {
      */
     protected function postCheck( $data ) {
         return $data;
+    }
+
+    // Accessory Methods
+
+    /**
+     * Get Header Name
+     *
+     * Header Name comes from Field Options instead of from string representation
+     * of Object Class not only because some Fields have hyphens in its name and
+     * this character is not allowed as PHP Class Name Definition,
+     * but because we're already overwriting this method to return the full string
+     * representation of Header Field
+     *
+     * @return string
+     *  Header Field Name
+     */
+    public function getName() {
+        return $this -> options -> name;
+    }
+
+    /**
+     * Get Header Value after treated and validated
+     *
+     * @return string
+     *  Header Field Value
+     */
+    public function getValue() {
+        return $this -> value;
+    }
+
+    // Verifiable Interface Method Implementation
+
+    /**
+     * Verifies Object Integrity
+     *
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Provided validator is not a Header Field Validator, characterized
+     *  as instance of \Next\Validate\HTTP\Headers\Headers
+     */
+    public function verify() {
+
+        // Validator Interfaces Implementations
+
+        /**
+         * @internal
+         *
+         * AbstractField::getValidator() requires a value to to be
+         * used as Validator Constructor but here, before all the
+         * routines of adding the Header Field start, we just need
+         * to check the Validator itself, so we use a dummy value
+         * just to get access of the object provided
+         */
+        $validator = $this -> getValidator( NULL );
+
+        if( ! $validator instanceof Validator ) {
+
+            throw new InvalidArgumentException(
+
+                sprintf(
+
+                    'Validator for Header Field <strong>%s</strong>
+                    must implement <em>Next\Validate\Validator</em>
+                    Interface',
+
+                    $this -> options -> name
+                )
+            );
+        }
     }
 
     // Abstract Method Definition

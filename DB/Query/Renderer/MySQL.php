@@ -10,9 +10,9 @@
  */
 namespace Next\DB\Query\Renderer;
 
-use Next\Components\Object;      # Object Class
-use Next\FileSystem\Path;        # FileSystem Path Data-type Class
-use Next\DB\Query\Expression;    # Query Expression Class
+use Next\Components\Object;          # Object Class
+use Next\Components\Types\String;    # Strings Data-type Class
+use Next\DB\Query\Expression;        # Query Expression Class
 
 /**
  * MySQL Query Renderer Class
@@ -432,7 +432,7 @@ class MySQL extends Object implements Renderer {
             );
         }
 
-        $expression = new Path( [ 'value' => $expression ] );
+        $expression = new String( [ 'value' => $expression ] );
 
         return $expression -> quote( $this -> options -> quoteIdentifier ) -> get();
     }

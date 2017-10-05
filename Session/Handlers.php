@@ -166,7 +166,10 @@ class Handlers extends Object {
 
         // Restarting Session
 
-        $this -> manager -> init( $this -> manager -> getSessionName(), $this -> manager -> getSessionID() );
+        $this -> manager -> init(
+            $this -> manager -> getSessionName(),
+            $this -> manager -> getSessionID()
+        );
     }
 
     // Accessors

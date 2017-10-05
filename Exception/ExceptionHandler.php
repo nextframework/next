@@ -122,7 +122,7 @@ class ExceptionHandler implements Handler {
 
         self::handle(
 
-            'Next\Exception\Handlers\Controllers\ErrorController', 'status',
+            'Next\Exception\Handlers\Controllers\ErrorHandlerController', 'status',
 
             [ 'code' => $code ], $code
         );

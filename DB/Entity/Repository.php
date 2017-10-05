@@ -17,11 +17,8 @@ use Next\Exception\Exceptions\InvalidArgumentException;
 
 use Next\Components\Interfaces\Verifiable;    # Verifiable Interface
 use Next\DB\Query\Query;                      # Query Interface
-
 use Next\Components\Object;                   # Object Class
 use Next\Components\Invoker;                  # Invoker Class
-
-use Next\DB\Table\Manager;                    # Entities Manager Class
 
 /**
  * Entity Repository Base Class
@@ -29,79 +26,40 @@ use Next\DB\Table\Manager;                    # Entities Manager Class
  * @package      Next\DB
  *
  * @uses         \Next\DB\Query\Query, \Next\Components\Object,
- *               \Next\Components\Invoker, \Next\DB\Table\Manager
+ *               \Next\Components\Invoker, \Next\DB\Entity\Manager
  *               \Next\DB\Entity\EntityException
  */
 class Repository extends Object implements Verifiable {
 
     /**
-     * Table Manager
+     * Parameter Options Definition
      *
-     * @var \Next\DB\Table\Manager
+     * @var array $parameters
      */
-    protected $manager;
+    protected $parameters = [
+        'entity' => [ 'type' => 'Next\DB\Entity\Entity', 'required' => FALSE ]
+    ];
 
     /**
-     * Table Name
-     * Not to confuse with \Next\DB\Table\Table Object
+     * Finds an Entity by one of its Database Table Columns
      *
-     * @var string
-     */
-    protected $table;
-
-    /**
-     * Entity Repository Constructor.
-     * If provided, initializes the Table Manager and extends this
-     * class' context to it
+     * @param array $condition
+     *  An associative array being the Database Table Column to search
+     *  the key and the value the condition to match
      *
-     * @param \Next\DB\Table\Manager|optional $manager
-     *  Optional Entity Manager
-     */
-    public function __construct( Manager $manager = NULL ) {
-
-        if( ! is_null( $manager ) ) {
-
-            $this -> manager = $manager;
-
-            /**
-             * @internal
-             *
-             * Invoking the parent constructor must occur after set the property above
-             * in order to trigger Object::init() from child classes which may change
-             * the Table Object used by Manager
-             *
-             * Also because of Repository Integrity Check
-             *
-             * @see Repository::verify()
-             */
-            parent::__construct();
-
-            $this -> table = $this -> manager -> getTable() -> getTableName();
-
-            // Extend Object Context to Entity Manager
-
-            $this -> extend( new Invoker( $this, $this -> manager ) );
-        }
-    }
-
-    /**
-     * Finds an Entity by its Primary Key / Unique Identifier
-     *
-     * @param array $id
-     *  Primary Key / Unique Identifier of the Entity being looked for
-     *
-     * @return \Next\DB\Table\RowSet
+     * @return \Next\DB\DataGateway\RowSet
      *  RowSet Object with Entity data, if any
      *
      * @see \Next\DB\Statement\Statement::fetch()
      */
-    public function find( array $id ) {
+    public function find( array $condition ) {
 
-        $this -> manager -> select()
-                         -> from( [ $this -> table ] )
-                         -> where( sprintf( '%1$s = :%1$s', key( $id ) ), $id );
+        $this -> verify();
 
-        return $this -> manager -> fetch();
+        $this -> select() -> from( $this -> options -> entity -> getEntityName() )
+                          -> where( sprintf( '%1$s = :%1$s', key( $condition ) ), $condition );
+
+        return $this -> fetch();
     }
 
     /**
@@ -110,23 +68,36 @@ class Repository extends Object implements Verifiable {
      * @param \Next\DB\Query\Expression|string|array|optional $columns
      *  Columns to be included in SELECT Statement
      *
-     * @return \Next\DB\Table\RowSet
+     * @return \Next\DB\DataGateway\RowSet
      *  RowSet Object with fetched data, if any
      *
      * @see \Next\DB\Statement\Statement::fetchAll()
      */
     public function findAll( $columns = Query::WILDCARD ) {
 
-        $this -> manager -> select( $columns ) -> from( $this -> table );
+        $this -> verify();
 
-        return $this -> manager -> fetchAll();
+        $this -> select( $columns ) -> from( $this -> options -> entity -> getEntityName() );
+
+        return $this -> fetchAll();
     }
 
     /**
-     * Finds Entities in the Repository that matches a set of criteria
+     * Finds Entities in the Repository that match a set of criteria,
+     * optionally limiting the number of records on the resulting
+     * RowSet and with a custom ordering Clause
      *
-     * @param array $criteria
-     *  One or more criteria to condition the Entity
+     * ````
+     * # Find data by User ID — PRIMARY KEY `user` — restricted by
+     * # IDs '1' and '2' in descendant order
+     *
+     * $manager -> findBy(
+     *     [ [ 'user = :user', [ 'user' => [ 1, 2 ] ] ] ], [ 'user' => Query::ORDER_DESCENDING ]
+     * );
+     * ````
+     *
+     * @param array $conditions
+     *  One or more conditions to condition the Entity
      *
      * @param string|array|optional $order
      *  One or more fields to order the Entity in the resultset
@@ -135,24 +106,31 @@ class Repository extends Object implements Verifiable {
      *  Restrictions on how many Entities will be present in the resultset and
      *  from which offset the finding process will start
      *
-     * @return \Next\DB\Table\RowSet
+     * @return \Next\DB\DataGateway\RowSet
      *  RowSet Object with fetched data, if any
      *
      * @see \Next\DB\Statement\Statement::fetchAll()
      */
-    public function findBy( array $criteria, $order = NULL, $limit = NULL ) {
+    public function findBy( array $conditions, array $order = [], $limit = NULL ) {
 
-        $this -> manager -> select() -> from( $this -> table );
+        $this -> verify();
+
+        $statement = $this -> select() -> from(
+                        $this -> options -> entity -> getEntityName()
+                     );
 
         // WHERE Conditions
 
-        foreach( $criteria as $condition => $replacement ) {
-            $this -> manager -> where( $condition, $replacement );
+        foreach( $conditions as $condition ) {
+
+            list( $criteria, $replacements, $type ) = $condition + [ NULL, [], Query::SQL_OR ];
+
+            $statement -> where( $criteria, $replacements, $type );
         }
 
         // ORDER Clause(s)
 
-        if( ! is_null( $order ) ) $this -> manager -> order( (array) $order );
+        if( ! is_null( $order ) ) $statement -> order( $order );
 
         // LIMIT Clause
 
@@ -160,98 +138,61 @@ class Repository extends Object implements Verifiable {
 
             list( $count, $offset ) = (array) $limit + [ NULL, NULL ];
 
-            $this -> manager -> limit( $count, $offset );
+            $statement -> limit( $count, $offset );
         }
 
-        return $this -> manager -> fetchAll();
+        return $this -> fetchAll();
     }
 
     /**
      * Finds one Entity in the Repository that matches a set of criteria
      *
-     * It's an acting interface alias for Repository::findBy()
+     * It's an alias for Repository::findBy()
      *
-     * @param array $criteria
-     *  One or more criteria to condition the Entity
+     * @param array $condition
+     *  One or more condition to condition the Entity
      *
      * @param string|array|optional $order
      *  One or more fields to order the Entity in the resultset
      *
-     * @return \Next\DB\Table\RowSet
+     * @return \Next\DB\DataGateway\RowSet
      *  RowSet Object with fetched data, if any
      *
      * @see \Next\DB\Entity\Repository::findBy()
      */
-    public function findOneBy( array $criteria, $order = NULL ) {
-        return $this -> findBy( $criteria, $order, 1 );
-    }
-
-    // Verifiable Interface Method Implementation
-
-    /**
-     * Verifies Object Integrity
-     *
-     * @internal
-     *
-     *  Because none of the methods here are declared as static,
-     *  `\Next\Components\Interfaces\Verifiable::verify()`
-     *  is called by `\Next\Components\Object` constructor -AND- the
-     *  constructor is called under parent context only when a
-     *  Table Manager is defined, these routines will only be called
-     *  when invoking any method under an Object instance ;)
-     *
-     * @throws \Next\Exception\Exceptions\InvalidArgumentException
-     *  Thrown if there's no \Next\Table\manager Object defined
-     *
-     * @throws \Next\Exception\Exceptions\InvalidArgumentException
-     *  Thrown if there's no \Next\Table\Table Object associated to
-     *  the `\Next\DB\Table\Manager provided` — i.e. Manager::setTable()
-     */
-    public function verify() {
-
-        if( is_null( $this -> manager ) ) {
-
-            throw new InvalidArgumentException(
-                'Repository requires an Object instance of
-                <em>Next\DB\Table\Manager</em> to work'
-            );
-        }
-
-        if( is_null( $this -> manager -> getTable() ) ) {
-
-            throw new InvalidArgumentException(
-                'Repository requires an Object instance of
-                <em>Next\DB\Table\Table</em> properly associated to the
-                <em>Next\DB\Table\Manager</em> to work'
-            );
-        }
+    public function findOneBy( array $condition, $order = NULL ) {
+        $this -> findBy( $condition, $order, 1 );
     }
 
     // Accessory Methods
 
     /**
-     * Get Entity Manager used with the Entity Repository
+     * Get Entity Object associated to this Repository
      *
-     * @return \Next\DB\Table\Manager
-     *  Table Manager
+     * @return \Next\DB\Entity\Entity
+     *  Entity Object
      */
-    public function getManager() {
-        return $this -> manager;
+    public function getEntity() {
+        return $this -> options -> entity;
     }
 
+    // Auxiliary Methods
+
     /**
-     * Get Entity Table associated to the Entity Manager used
-     * with Entity Repository
+     * Verifies Object Integrity
      *
-     * @return \Next\DB\Table\Table
-     *  Entity Table
-     *
-     * @throws \Next\DB\Entity\EntityException
-     *  Thrown if trying to use resources from Entity Manager without having one
-     *
-     * @see \Next\DB\Table\Manager::getTable()
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if there's no \Next\DB\Entity\Entity Object defined
      */
-    public function getTable() {
-        return $this -> manager -> getTable();
+    public function verify() {
+
+        if( is_null( $this -> options -> entity ) ) {
+
+            throw new InvalidArgumentException(
+                'Repository Objects requires an Object instance of
+                <em>Next\DB\Entity\Entity</em> to be operated by the
+                <em>Next\DB\Entity\Manager</em>'
+            );
+        }
     }
 }

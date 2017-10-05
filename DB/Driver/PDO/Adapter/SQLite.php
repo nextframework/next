@@ -38,7 +38,7 @@ class SQLite extends AbstractPDO {
         'dbPath' => [ 'required' => TRUE ]
     ];
 
-    // Abstract Methods Implementation
+    // Abstract Method Implementation
 
     /**
      * Get SQLite Adapter DSN
@@ -50,15 +50,18 @@ class SQLite extends AbstractPDO {
         return sprintf( 'sqlite:%s', $this -> options -> dbPath );
     }
 
-    /**
-     * Check for SQLite Adapter Requirements
-     *
-     * @throws \Next\DB\Driver\DriverException
-     *  PDO_SQLITE Extension was not loaded
-     */
-    protected function checkRequirements() {
+    // Verifiable Interface Method Implementation
 
-        parent::checkRequirements();
+    /**
+     * Verifies Object Integrity.
+     * Checks if PDO SQLite Extension has been loaded
+     *
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown if PDO SQLite Extension has not been loaded
+     */
+    public function verify() {
+
+        parent::verify();
 
         if( ! in_array( 'sqlite', \PDO::getAvailableDrivers() ) ) {
             throw new RuntimeException( 'PDO SQLite Extension not loaded' );
@@ -68,15 +71,15 @@ class SQLite extends AbstractPDO {
     // Driver Interface Method Implementation
 
     /**
-     * Set an SQL Statement Renderer
+     * Get an SQL Statement Renderer
      *
      * For now there is no needs to use a SQLite-specific
      * SQL Statement Renderer Class, so let's reuse MySQL Renderer,
      * only with a different Quote Identifier Symbol.
      *
      * IMPORTANT: The Symbol CANNOT be a single quote ( ' ),
-     *             Otherwise SQLite will return the column's name
-     *             instead of column's value
+     *            Otherwise SQLite will return the column's name
+     *            instead of column's value
      *
      * @return \Next\DB\Query\Renderer\Renderer
      *  MySQL Renderer Object

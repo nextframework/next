@@ -15,9 +15,11 @@ namespace Next\DB\Driver\PDO;
  */
 use Next\Exception\Exceptions\RuntimeException;
 
+use Next\Components\Interfaces\Verifiable;      # Verifiable Interface
 use Next\Components\Interfaces\Configurable;    # Configurable Interface
+use Next\DB\Driver\Driver;                      # Driver Interface
 
-use Next\DB\Driver\AbstractDriver;              # Connection Driver Abstract Class
+use Next\Components\Object;                     # Object Class
 
 /**
  * PDO Driver Abstract Adapter Class
@@ -27,12 +29,29 @@ use Next\DB\Driver\AbstractDriver;              # Connection Driver Abstract Cla
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-abstract class AbstractPDO extends AbstractDriver {
-
-    // Adapter Interface Methods Implementation
+abstract class AbstractPDO extends Object implements Verifiable, Driver {
 
     /**
-     * Connect
+     * Parameter Options Definition
+     *
+     * @var array $parameters
+     */
+    protected $parameters = [
+        'username' => [ 'required' => FALSE, 'default' => 'root' ],
+        'password' => [ 'required' => FALSE, 'default' => '' ]
+    ];
+
+    /**
+     * Connection Object
+     *
+     * @var mixed $connection
+     */
+    protected $connection;
+
+    // Driver Interface Methods Implementation
+
+    /**
+     * Establishes a Database Connection
      *
      * @return PDO
      *  PDO Connection Link
@@ -89,12 +108,13 @@ abstract class AbstractPDO extends AbstractDriver {
     }
 
     /**
-     * Disconnect
+     * Disestablishes a Database Connection
      */
     public function disconnect() {
 
         /**
          * @internal
+         *
          * PDO closes itself automatically ^^
          * But we must unset the Connection Adapter defined
          */
@@ -102,13 +122,30 @@ abstract class AbstractPDO extends AbstractDriver {
     }
 
     /**
-     * Check if it's Connected
+     * Checks if there's a Database Connection Link active
      *
      * @return boolean
      *  TRUE if we have a valid connection and FALSE otherwise
      */
     public function isConnected() {
         return ( $this -> connection instanceof \PDO );
+    }
+
+    /**
+     * Get Database Connection Link
+     *
+     * @return mixed
+     *  Database Connection Link
+     */
+    public function getConnection() {
+
+        // Connecting if needed
+
+        if( ! $this -> isConnected() ) {
+            $this -> connect();
+        }
+
+        return $this -> connection;
     }
 
         // Query-related Methods
@@ -124,6 +161,8 @@ abstract class AbstractPDO extends AbstractDriver {
      *
      * @throws \Next\Exception\Exceptions\RuntimeException
      *  Thrown with \PDOException's message if one is caught
+     *
+     * @see \Next\DB\Statement\Statement
      */
     public function query( $statement ) {
 
@@ -147,6 +186,8 @@ abstract class AbstractPDO extends AbstractDriver {
      *
      * @throws \Next\Exception\Exceptions\RuntimeException
      *  Thrown with \PDOException's message if one is caught
+     *
+     * @see \Next\DB\Statement\Statement
      */
     public function prepare( $statement ) {
 
@@ -160,15 +201,8 @@ abstract class AbstractPDO extends AbstractDriver {
     }
 
     /**
-     * Get Last inserted ID
-     *
-     * @param string|optional $name
-     *
-     *   <p>
-     *       Name of the sequence object from which the ID should be returned.
-     *   </p>
-     *
-     *   <p>Used by PDO_PGSQL, for example (according to manual)</p>
+     * Get Last inserted ID.
+     * Returns the ID of the last inserted row or sequence value
      *
      * @return integer|string
      *  ID of last inserted record
@@ -187,37 +221,26 @@ abstract class AbstractPDO extends AbstractDriver {
         }
     }
 
+    // Verifiable Interface Method Implementation
+
+    /**
+     * Verifies Object Integrity.
+     * Checks if PDO Extension has been loaded
+     *
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown if PDO Extension has not been loaded
+     */
+    public function verify() {
+
+        if( ! extension_loaded( 'pdo' ) ) {
+            throw new RuntimeException( 'PDO Extension not loaded' );
+        }
+    }
+
     // Abstract Methods Definition
 
     /**
      * Get Connection Adapter DSN
      */
     abstract protected function getDSN();
-
-    // Abstract Methods Implementation
-
-    /**
-     * Connection Driver Extra initialization
-     *
-     * <p>Driver-specific extra initialization</p>
-     *
-     * <p>
-     *     Implemented here because not all the drivers requires extra
-     *     initialization
-     * </p>
-     */
-    protected function configure() {}
-
-    /**
-     * Check for Connection Driver Requirements
-     *
-     * @throws \Next\Exception\Exceptions\RuntimeException
-     *  PDO Extension was not loaded
-     */
-    protected function checkRequirements() {
-
-        if( ! extension_loaded( 'pdo' ) ) {
-            throw new RuntimeException( 'PDO Extension not loaded' );
-        }
-    }
 }

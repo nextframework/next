@@ -10,20 +10,15 @@
  */
 namespace Next\Components;
 
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\BadMethodCallException;
+use Next\Exception\Exceptions\InvalidArgumentException;
+
 use Next\Components\Types\Type;                 # Data-type Interface
 use Next\Components\Interfaces\Prototypical;    # Prototypical Interface
 use Next\Components\Interfaces\Prototypable;    # Prototypable Interface
-
-/**
- * Bad Method Call Exception Class
- */
-use Next\Exception\Exceptions\BadMethodCallException;
-
-/**
- * InvalidArgumentException Class
- */
-use Next\Exception\Exceptions\InvalidArgumentException;
-
 use Next\Components\Utils\ArrayUtils;           # ArrayUtils Class
 
 /**
@@ -130,18 +125,18 @@ abstract class Prototype implements Prototypical {
                 );
             }
 
-            if( $caller instanceof Type ) {
+            try {
 
-                try {
-
+                if( $caller instanceof Type ) {
                     return new $caller( [ 'value' => $result ] );
-
-                } catch( InvalidArgumentException $e ) {
-                    return $result;
                 }
-            }
 
-            return $result;
+                return $result;
+
+            } catch( InvalidArgumentException $e ) {
+
+                return $result;
+            }
         }
 
         throw new BadMethodCallException(

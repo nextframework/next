@@ -10,9 +10,15 @@
  */
 namespace Next\View;
 
-use Next\Components\Object;     # Object Class
-use Next\FileSystem\Path;       # FileSystem Path Data-type Class
-use Next\View\ViewException;    # View Exception Class
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
+use Next\Components\Interfaces\Verifiable;    # Verifiable Interface
+use Next\Components\Object;                   # Object Class
+use Next\FileSystem\Path;                     # FileSystem Path Data-type Class
+use Next\View\ViewException;                  # View Exception Class
 
 /**
  * Standard View Engine Class
@@ -22,7 +28,7 @@ use Next\View\ViewException;    # View Exception Class
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class Standard extends Object implements View {
+class Standard extends Object implements Verifiable, View {
 
     /**
      * Parameter Options Definition
@@ -113,7 +119,7 @@ class Standard extends Object implements View {
          * called without arguments or even letting
          * AbstractController::__destruct() to do everything for you ;)
          */
-        'defaultTemplate' => [ 'required' => FALSE ]
+        'defaultTemplate' => [ 'required' => FALSE, 'default' => NULL ]
     ];
 
     /**
@@ -491,7 +497,7 @@ class Standard extends Object implements View {
         return $response;
     }
 
-    // Accessors
+    // Accessory Methods
 
     /**
      * Disable Rendering process
@@ -517,6 +523,32 @@ class Standard extends Object implements View {
         $this -> _shouldRender = TRUE;
 
         return $this;
+    }
+
+    // Verifiable Interface Method Implementation
+
+    /**
+     * Verifies Object Integrity
+     *
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if provided Template View FileSpec is not minimally
+     *  valid (i.e at least one string led by a colon)
+     */
+    public function verify() {
+
+        if( preg_match( '/(:\w+\/?)+/', $this -> options -> fileSpec ) == 0 ) {
+
+            throw new InvalidArgumentException(
+
+                sprintf(
+
+                    'Invalid Template View FileSpec for
+                    Application <strong>%s</strong>',
+
+                    $this -> options -> application -> getClass() -> getName()
+                )
+            );
+        }
     }
 
     // OverLoading
@@ -713,39 +745,37 @@ class Standard extends Object implements View {
          */
         if( count( $this -> _paths ) == 0 ) {
 
-            // Building the Filename
+            // Building and cleaning the full filepath
 
-            $templateFile = sprintf( '%s/%s%s', $this -> options -> basepath, $this -> options -> subpath, $file );
+            $file = new Path(
+                [
+                    'value' => sprintf(
+                        '%s/%s%s', $this -> options -> basepath, $this -> options -> subpath, $file
+                    )
+                ]
+            );
 
-            // And a cleaned version (without basepath) for possible Exceptions
+            $file = $file -> clean() -> get();
 
-            $file = sprintf( '%s%s', $this -> options -> subpath, $file );
-
-            // Checking if the file exists and if it is readable
-
-            if( file_exists( $templateFile ) && is_readable( $templateFile ) ) {
-
-                return $templateFile;
-            }
+            if( is_readable( $file ) ) return $file;
 
         } else {
 
             foreach( $this -> _paths as $path ) {
 
-                // Building the Filename
+                // Building and cleaning the full filepath
 
-                $templateFile = sprintf( '%s/%s/%s%s', $this -> options -> basepath, $path, $this -> options -> subpath, $file );
+                $file = new Path(
+                    [
+                        'value' => sprintf(
+                            '%s/%s/%s%s', $this -> options -> basepath, $path, $this -> options -> subpath, $file
+                        )
+                    ]
+                );
 
-                // And a cleaned version (without basepath) for possible Exceptions
+                $file = $file -> clean() -> get();
 
-                $file = sprintf( '%s/%s%s', $path, $this -> options -> subpath, $file );
-
-                // Checking if the file exists and if it is readable
-
-                if( file_exists( $templateFile ) && is_readable( $templateFile ) ) {
-
-                    return $templateFile;
-                }
+                if( is_readable( $file ) ) return $file;
             }
         }
 
@@ -835,15 +865,8 @@ class Standard extends Object implements View {
 
                     '/' );
 
-        $spec = new Path( [ 'value' => $spec ] );
-
         return sprintf(
-
-            '%s.%s',
-
-            strtolower( $spec -> clean() -> get() ),
-
-            $this -> options -> extension
+            '%s.%s', strtolower( $spec ), $this -> options -> extension
         );
     }
 }

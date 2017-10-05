@@ -15,7 +15,9 @@ namespace Next\Application;
  */
 use Next\Exception\Exception;
 use Next\Exception\Exceptions\FatalException;
+use Next\Exception\Exceptions\InvalidArgumentException;
 
+use Next\Components\Interfaces\Verifiable;       # Verifiable Interface
 use Next\Controller\Router\Router;               # Router Interface
 use Next\Components\Object;                      # Object Class
 use Next\Cache\Schemas\Chain as CachingChain;    # Caching Schemas Chain Class
@@ -30,7 +32,7 @@ use Next\Session\Manager as Session;             # Session Manager
  *
  * @package    Next\Application
  */
-abstract class AbstractApplication extends Object implements Application {
+abstract class AbstractApplication extends Object implements Verifiable, Application {
 
     /**
      * Request Object
@@ -96,74 +98,75 @@ abstract class AbstractApplication extends Object implements Application {
      */
     public function __construct() {
 
-        // Request and Response Objects
-
-        $this -> request  = new Request;
-        $this -> response = new Response;
-
-        // Router
-
-        $this -> router = $this -> setupRouter();
-
-        // Database Connections
-
-        $this -> setupDatabase();
-
-        /**
-         * Session
-         *
-         * @internal
-         *
-         * Session Manager is initialized before the View Engine
-         * because View Engines *should* provide a way for
-         * Templates to access Session Environment Data, but if a
-         * Session is not yet available that wouldn't be possible
-         *
-         * If an Exception is caught here we'll re-throw it as a
-         * \Next\Exception\Exceptions\FatalException, the lowest
-         * possible kind of Exception handled directly by the
-         * Controllers' Dispatcher
-         */
         try {
 
+            // Request and Response Objects
+
+            $this -> request  = new Request;
+            $this -> response = new Response;
+
+            // Router
+
+            $this -> router = $this -> setupRouter();
+
+            // Database Connections
+
+            $this -> setupDatabase();
+
+            /**
+             * Session
+             *
+             * @internal
+             *
+             * Session Manager is initialized before the View Engine
+             * because View Engines *should* provide a way for
+             * Templates to access Session Environment Data, but if a
+             * Session is not yet available that wouldn't be possible
+             */
             $this -> session = $this -> initSession();
 
-        } catch( Exception $e ) {
+            // View Engine
 
-            throw new FatalException(
-                $e -> getMessage(), NULL, NULL, $e -> getResponseCode()
-            );
-        }
+            $this -> view = $this -> setupView();
 
-        // View Engine
+            /**
+             * Controllers' Chain and classes
+             *
+             * @internal
+             *
+             * They're only needed when the DEVELOPMENT_MODE constant is
+             * defined and set to '2', case in which the Routes Generator
+             * would take place
+             */
+            if( defined( 'DEVELOPMENT_MODE' ) && DEVELOPMENT_MODE == 2 ) {
 
-        $this -> view = $this -> setupView();
+                $this -> controllers = new ControllerChain;
 
-        /**
-         * Controllers' Chain and classes
-         *
-         * @internal
-         *
-         * They're only needed when the DEVELOPMENT_MODE constant is
-         * defined and set to '2', case in which the Routes Generator
-         * would take place
-         */
-        if( defined( 'DEVELOPMENT_MODE' ) && DEVELOPMENT_MODE == 2 ) {
-
-            $this -> controllers = new ControllerChain;
-
-            $this -> setupControllers();
-        }
+                $this -> setupControllers();
+            }
 
             // Caching
 
-        $this -> cache = new CachingChain;
+            $this -> cache = new CachingChain;
 
-        $this -> initCache();
+            $this -> initCache();
 
-        // Checking Application's Integrity. @todo replace with Verifiable::verify()
+        } catch( Exception $e ) {
 
-        $this -> checkIntegrity();
+            /**
+             * @internal
+             *
+             * A `Next\Application\Application` is one of the
+             * foundations of Next Framework's MVC so if any problem
+             * at all happens here we just re-throw as a
+             * `\Next\Exception\Exceptions\FatalException`, the lowest
+             * possible kind of Exception handled directly by the
+             * Controllers' Dispatcher
+             */
+            throw new FatalException(
+                $e -> getMessage(), $e -> getCode(), $e -> getResponseCode()
+            );
+        }
 
         parent::__construct();
     }
@@ -342,17 +345,13 @@ abstract class AbstractApplication extends Object implements Application {
 
     /**
      * Controllers Setup
-     *
-     * @internal
-     *
-     * Abstract because every Application must define its own Controllers
      */
     abstract protected function setupControllers();
 
-    // Auxiliary Methods
+    // Verifiable Interface Method Implementation
 
     /**
-     * Checks Application Integrity
+     * Verifies Object Integrity
      *
      * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Thrown if an HTTP Router has been assigned but it's not valid
@@ -367,7 +366,7 @@ abstract class AbstractApplication extends Object implements Application {
      *  valid because, currently, only Objects instance of
      *  `\Next\Session\Manager` are accepted
      */
-    private function checkIntegrity() {
+    public function verify() {
 
         if( ! is_null( $this -> router ) && ! $this -> router instanceof Router ) {
 

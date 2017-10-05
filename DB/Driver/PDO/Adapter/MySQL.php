@@ -29,7 +29,7 @@ use Next\DB\Query\Renderer\MySQL as Renderer;    # MySQL Query Renderer Class
  * @copyright     Copyright (c) 2010 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class MySQL extends AbstractPDO {
+class MySQL extends AbstractPDO implements Configurable {
 
     /**
      * Parameter Options Definition
@@ -37,7 +37,9 @@ class MySQL extends AbstractPDO {
      * @var array $parameters
      */
     protected $parameters = [
-        'database' => [ 'required' => TRUE ]
+
+        'host'     => [ 'required' => FALSE, 'default' => 'localhost' ],
+        'database' => [ 'required' => FALSE, 'default' => '' ]
     ];
 
     // Configurable Interface method Implementation
@@ -45,12 +47,14 @@ class MySQL extends AbstractPDO {
     /**
      * Post-initialization Configuration
      */
-    protected function configure() {
+    public function configure() {
 
         $this -> connection -> setAttribute( \PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, TRUE );
 
         $this -> connection -> setAttribute( \PDO::MYSQL_ATTR_FOUND_ROWS, TRUE );
     }
+
+    // Abstract Method Implementation
 
     /**
      * Get MySQL Adapter DSN
@@ -68,25 +72,28 @@ class MySQL extends AbstractPDO {
         );
     }
 
-    /**
-     * Check for MySQL Adapter Requirements
-     *
-     * @throws \Next\Exception\Exceptions\InvalidArgumentException
-     *  PDO_MYSQL Extension was not loaded
-     */
-    protected function checkRequirements() {
+    // Verifiable Interface Method Implementation
 
-        parent::checkRequirements();
+    /**
+     * Verifies Object Integrity.
+     * Checks if PDO MySQL Extension has been loaded
+     *
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown if PDO MySQL Extension has not been loaded
+     */
+    public function verify() {
+
+        parent::verify();
 
         if( ! in_array( 'mysql', \PDO::getAvailableDrivers() ) ) {
-            throw new RuntimeException( 'PDO MySQL extension not loaded' );
+            throw new RuntimeException( 'PDO MySQL Extension not loaded' );
         }
     }
 
     // Driver Interface Method Implementation
 
     /**
-     * Set an SQL Statement Renderer
+     * Get an SQL Statement Renderer
      *
      * @return \Next\DB\Query\Renderer\Renderer
      *  MySQL Renderer Object

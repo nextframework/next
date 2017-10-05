@@ -32,11 +32,11 @@ class MIME extends Object implements Validator {
 
                     # MIME Types "Categories"/* (i.e. text/*)
 
-                    (?:application|audio|image|message|model|multipart|text|video)/\*|
+                    (?:application|audio|font|image|message|model|multipart|text|video)/\*|
 
                     # MIME Types "Categories"/[Alpha, hyphen and plus] (i.e text/plain)
 
-                    (?:application|audio|image|message|model|multipart|text|video)/[A-Za-z0-9._+-]+
+                    (?:application|audio|font|image|message|model|multipart|text|video)/[A-Za-z0-9._+-]+
                    )';
 
     /**
@@ -44,7 +44,7 @@ class MIME extends Object implements Validator {
      *
      * @var string
      */
-    const MIME = '(?:application|audio|example|image|message|model|multipart|text|video)/[A-Za-z0-9._+-]+';
+    const MIME = '(?:application|audio|font|example|image|message|model|multipart|text|video)/[A-Za-z0-9._+-]+';
 
     /**
      * MIME Types
@@ -544,6 +544,10 @@ class MIME extends Object implements Validator {
             'vnd.nuera.ecelp9600', 'vnd.octel.sbc', 'vnd.qcelp',
             'vnd.rhetorex.32kadpcm', 'vnd.rip',
             'vnd.sealedmedia.softseal.mpeg', 'vnd.vmx.cvsd', 'vorbis',
+        ],
+
+        'font' => [
+            'collection', 'otf', 'sfnt', 'ttf', 'woff', 'woff2'
         ],
 
         'image' => [

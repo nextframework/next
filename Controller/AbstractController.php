@@ -10,11 +10,9 @@
  */
 namespace Next\Controller;
 
-use Next\HTTP\Request\RequestException;    # HTTP Request Exception
-use Next\View\ViewException;               # View Exception
-use Next\View\View;                        # View Engine Interface
-use Next\Application\Application;          # Applications Interface
-use Next\Components\Object;                # Object Class
+use Next\Application\Application;    # Applications Interface
+use Next\View\View;                  # View Engine Interface
+use Next\Components\Object;          # Object Class
 
 /**
  * Defines the base structure for a Controller to be used in
@@ -89,9 +87,15 @@ abstract class AbstractController extends Object implements Controller {
                 $this -> session = $session;
             }
 
-            // HTTP GET Parameters (a.k.a. Dynamic Parameters) as Template Variables
-
-            $this -> view -> assign( $this -> request -> getQuery() );
+            /**
+             * @internal
+             *
+             * HTTP GET Parameters (a.k.a. Dynamic Parameters)
+             * as Template Variables if a \Next\View\View Engine has been provided
+             */
+            if( $this -> view instanceof View ) {
+                $this -> view -> assign( $this -> request -> getQuery() );
+            }
 
             // Constructing parent Object, which executes additional initialization routines
 
@@ -202,7 +206,9 @@ abstract class AbstractController extends Object implements Controller {
          * because Controller Constructor did not receive a
          * `\Next\Application\Application` to work with
          */
-        if( ! defined( 'DEVELOPMENT_MODE' ) || DEVELOPMENT_MODE >= 2 ) {
+        if( ( ! defined( 'DEVELOPMENT_MODE' ) || DEVELOPMENT_MODE < 2 ) &&
+                $this -> view instanceof View ) {
+
             $this -> view -> render();
         }
     }

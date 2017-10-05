@@ -318,7 +318,7 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
      *  TRUE if Parameter Identifier exists and FALSE otherwise
      */
     public function offsetExists( $identifier ) {
-        return ( isset( $this -> parameters -> {$identifier} ) );
+        return ( property_exists( $this -> parameters, $identifier ) );
     }
 
     /**

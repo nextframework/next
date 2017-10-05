@@ -74,7 +74,7 @@ class Response extends Object implements Schema {
         // Images
 
         'png' => 'image/png', 'jpg' => 'image/jpeg',    'jpeg' => 'image/jpeg',
-        'gif' => 'image/gif', 'svg' => 'image/svg+xml', 'ico'  => 'image/x-icon',
+        'gif' => 'image/gif', 'svg' => 'image/svg+xml', 'ico'  => 'image/vnd.microsoft.icon',
 
         // Fonts
 

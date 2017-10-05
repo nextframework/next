@@ -11,7 +11,7 @@
 namespace Next\Components\Types;
 
 /**
- * InvalidArgumentException Class
+ * Exception Class(es)
  */
 use Next\Exception\Exceptions\InvalidArgumentException;
 
@@ -39,13 +39,7 @@ class Float extends Number {
                 is_int( $this -> options -> value ) ) {
 
             throw new InvalidArgumentException(
-
-                sprintf(
-
-                    'Argument <strong>%s</strong> is not a valid Float',
-
-                    ( $this -> options -> value !== NULL ? $this -> options -> value : 'NULL' )
-                )
+                'Argument is not a valid Float'
             );
         }
     }
