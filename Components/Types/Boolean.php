@@ -35,7 +35,7 @@ class Boolean extends AbstractTypes {
      */
     public function verify() {
 
-        if( is_null( $this -> options -> value ) || ! is_bool( $this -> options -> value ) ) {
+        if( $this -> options -> value === NULL || ! is_bool( $this -> options -> value ) ) {
 
             throw new InvalidArgumentException(
                 'Argument is not a valid Boolean'

@@ -68,7 +68,7 @@ abstract class AbstractController extends Object implements Controller {
      */
     final public function __construct( Application $application = NULL ) {
 
-        if( ! is_null( $application ) ) {
+        if( $application !== NULL ) {
 
             $this -> application = $application;
 

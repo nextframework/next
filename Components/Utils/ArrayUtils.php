@@ -75,9 +75,7 @@ class ArrayUtils {
      */
     public static function search( $haystack, $needle, $index = NULL ) {
 
-        if( is_null( $haystack ) ) {
-            return -1;
-        }
+        if( $haystack === NULL ) return -1;
 
         $arrayIterator = new \RecursiveArrayIterator( $haystack );
 
@@ -108,7 +106,7 @@ class ArrayUtils {
      */
     public static function map( $param ) {
 
-        if( is_array( $param ) || $param instanceof \stdClass ) {
+        if( (array) $param === $param || $param instanceof \stdClass ) {
             return array_map( __METHOD__, (array) $param );
         }
 
@@ -171,7 +169,7 @@ class ArrayUtils {
 
             if( isset( $a[ $index ] ) ) {
 
-                if( is_array( $value ) ) {
+                if( (array) $value === $value ) {
 
                     $a[ $index ] = self::union( $a[ $index ], $value );
 
@@ -243,7 +241,7 @@ class ArrayUtils {
 
         foreach( $array as $index => $value ) {
 
-            if( is_array( $array[ $index ] ) && $recursive ) {
+            if( (array) $array[ $index ] === $array[ $index ] && $recursive ) {
 
                 $array[ $index ] = self::clean( $array[ $index ], $recursive, $destruct, $reindex );
 

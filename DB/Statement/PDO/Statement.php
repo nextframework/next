@@ -39,7 +39,7 @@ class Statement extends \PDOStatement {
 
         $adapter -> setStatement( $this );
 
-        $this -> adapter =& $adapter;
+        $this -> adapter = $adapter;
     }
 
     // Execution-related Methods

@@ -130,11 +130,11 @@ class Repository extends Object implements Verifiable {
 
         // ORDER Clause(s)
 
-        if( ! is_null( $order ) ) $statement -> order( $order );
+        if( $order !== NULL ) $statement -> order( $order );
 
         // LIMIT Clause
 
-        if( ! is_null( $limit ) ) {
+        if( $limit !== NULL ) {
 
             list( $count, $offset ) = (array) $limit + [ NULL, NULL ];
 
@@ -186,7 +186,7 @@ class Repository extends Object implements Verifiable {
      */
     public function verify() {
 
-        if( is_null( $this -> options -> entity ) ) {
+        if( $this -> options -> entity === NULL ) {
 
             throw new InvalidArgumentException(
                 'Repository Objects requires an Object instance of

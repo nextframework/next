@@ -81,7 +81,7 @@ class Standard extends Object implements Verifiable, Writer {
 
                     "<?php\n\n\$map = %s;",
 
-                    str_replace( '\\\\', '\\', var_export( $map, TRUE ) )
+                    strtr( var_export( $map, TRUE ), [ '\\\\' => '\\' ] )
                 )
             );
 

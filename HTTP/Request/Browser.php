@@ -398,12 +398,7 @@ class Browser extends Object {
      */
     public function getIP() {
 
-        // Detecting IP if not detected yet
-
-        if( is_null( $this -> info -> IP ) ) {
-
-            $this -> detectIP();
-        }
+        if( $this -> info -> IP === NULL ) $this -> detectIP();
 
         return $this -> info -> IP;
     }
@@ -416,12 +411,7 @@ class Browser extends Object {
      */
     public function getPlatform() {
 
-        // Detecting Platform if not detected yet
-
-        if( is_null( $this -> info -> platform ) ) {
-
-            $this -> detectPlatform();
-        }
+        if( $this -> info -> platform === NULL ) $this -> detectPlatform();
 
         return $this -> info -> platform;
     }
@@ -444,9 +434,7 @@ class Browser extends Object {
      */
     public function getBrowser( $includeVersion = FALSE ) {
 
-        // Detecting Browser if not detected yet
-
-        if( is_null( $this -> info -> browser ) || is_null( $this -> info -> version ) ) {
+        if( $this -> info -> browser === NULL || $this -> info -> version === NULL ) {
             $this -> detectBrowser();
         }
 
@@ -501,7 +489,7 @@ class Browser extends Object {
 
                 if( preg_match( self::IP_REGEX, $value ) ) {
 
-                    $this -> info -> IP =& $value;
+                    $this -> info -> IP = $value;
 
                 } else if( strpos( ',', $value ) !== FALSE ) {
 
@@ -518,7 +506,7 @@ class Browser extends Object {
 
                     if( preg_match( self::IP_REGEX, $occurrence ) != 0 ) {
 
-                        $this -> info -> IP =& $occurrence;
+                        $this -> info -> IP = $occurrence;
                     }
                 }
             }
@@ -546,7 +534,7 @@ class Browser extends Object {
 
             if( stripos( $this -> info -> agent, $search ) !== FALSE ) {
 
-                $this -> info -> platform =& $platform;
+                $this -> info -> platform = $platform;
 
                 break;
             }
@@ -646,7 +634,7 @@ class Browser extends Object {
 
                 $version = explode( ' ', $occurrence[ 1 ] );
 
-                $this -> info -> version =& $version[ 0 ];
+                $this -> info -> version = $version[ 0 ];
             }
 
             return TRUE;
@@ -696,17 +684,17 @@ class Browser extends Object {
                 // Version
 
                 $version = explode( ' ', stristr(
-                    str_replace( ';', '; ', $this -> info -> agent ), 'MSN' )
+                    strtr( $this -> info -> agent, [ ';' => '; ' ] ), 'MSN' )
                 );
 
                 if( isset( $version[ 1 ] ) ) {
-                    $this -> info -> version = str_replace( [ '(', ')', ';' ], '', $version[ 1 ] );
+                    $this -> info -> version = strtr( $version[ 1 ], [ '(' => '', ')' => '', ';' => '' ] );
                 }
 
             } else {
 
                 $version = explode( ' ', stristr(
-                    str_replace( ';', '; ', $this -> info -> agent ), 'msie' )
+                    strtr( $this -> info -> agent, [ ';' => '; ' ] ), 'msie' )
                 );
 
                 $this -> info -> browser = self::IE;
@@ -715,8 +703,8 @@ class Browser extends Object {
 
                 if( isset( $version[ 1 ] ) ) {
 
-                    $this -> info -> version = str_replace(
-                        [ '(', ')', ';' ], '', $version[ 1 ]
+                    $this -> info -> version = strtr(
+                        $version[ 1 ], [ '(' => '', ')' => '', ';' => '' ]
                     );
                 }
             }
@@ -828,7 +816,7 @@ class Browser extends Object {
 
             else if( strpos( $opera, '/' ) !== FALSE ) {
 
-                $version = explode( '/', str_replace( '(', ' ', $opera ) );
+                $version = explode( '/', strtr( $opera, [ '(' => ' ' ] ) );
 
                 if( isset( $version[ 1 ] ) ) {
 
@@ -876,7 +864,7 @@ class Browser extends Object {
 
             if( isset( $version[ 1 ] ) ) {
 
-                $this -> info -> version =& $version[ 1 ];
+                $this -> info -> version = $version[ 1 ];
             }
 
             return TRUE;
@@ -901,7 +889,7 @@ class Browser extends Object {
 
                 $this -> info -> browser = self::NETSCAPE_NAVIGATOR;
 
-                $this -> info -> version =& $matches[ 1 ];
+                $this -> info -> version = $matches[ 1 ];
 
                 return TRUE;
             }
@@ -912,7 +900,7 @@ class Browser extends Object {
 
                 $this -> info -> browser = self::NETSCAPE_NAVIGATOR;
 
-                $this -> info -> version =& $matches[ 1 ];
+                $this -> info -> version = $matches[ 1 ];
 
                 return TRUE;
             }
@@ -939,7 +927,7 @@ class Browser extends Object {
 
             if( preg_match( '/Firefox[\/ \(]([^ ;\)]+)/i', $this -> info -> agent, $matches ) ) {
 
-                $this -> info -> version =& $matches[ 1 ];
+                $this -> info -> version = $matches[ 1 ];
             }
 
             return TRUE;
@@ -1079,7 +1067,7 @@ class Browser extends Object {
 
                 $version = explode( ' ', $version[ 1 ] );
 
-                $this -> info -> version =& $version[ 0 ];
+                $this -> info -> version = $version[ 0 ];
             }
 
             return TRUE;
@@ -1114,7 +1102,7 @@ class Browser extends Object {
 
                 $version = explode( ' ', $version[ 1 ] );
 
-                $this -> info -> version =& $version[ 0 ];
+                $this -> info -> version = $version[ 0 ];
             }
 
             return TRUE;
@@ -1149,7 +1137,7 @@ class Browser extends Object {
 
                 $version = explode( ' ', $version[ 1 ] );
 
-                $this -> info -> version =& $version[ 0 ];
+                $this -> info -> version = $version[ 0 ];
             }
 
             return TRUE;
@@ -1186,7 +1174,7 @@ class Browser extends Object {
 
                 $version = explode( ' ', $version[ 1 ] );
 
-                $this -> info -> version =& $version[ 0 ];
+                $this -> info -> version = $version[ 0 ];
             }
 
             return TRUE;
@@ -1209,7 +1197,7 @@ class Browser extends Object {
 
             // Version
 
-            $this -> info -> version =& $matches[ 2 ];
+            $this -> info -> version = $matches[ 2 ];
 
             // Feature: Mobile
 
@@ -1262,7 +1250,7 @@ class Browser extends Object {
 
                 $version = explode( ' ', $version[ 1 ] );
 
-                $this -> info -> version = str_replace( ';', '', $version[ 0 ] );
+                $this -> info -> version = strtr( $version[ 0 ], [ ';' => '' ] );
             }
 
             return TRUE;
@@ -1300,7 +1288,7 @@ class Browser extends Object {
 
                 $version = explode( ' ', $version[ 1 ] );
 
-                $this -> info -> version = str_replace( ';', '', $version[ 0 ] );
+                $this -> info -> version = strtr( $version[ 0 ], [ ';' => '' ] );
             }
 
             return TRUE;
@@ -1337,7 +1325,7 @@ class Browser extends Object {
 
                 $version = explode( ' ', $version[ 1 ] );
 
-                $this -> info -> version =& $version[ 0 ];
+                $this -> info -> version = $version[ 0 ];
             }
 
             return TRUE;
@@ -1371,7 +1359,7 @@ class Browser extends Object {
 
                 $version = explode( ' ', $version[ 1 ] );
 
-                $this -> info -> version =& $version[ 0 ];
+                $this -> info -> version = $version[ 0 ];
             }
 
             return TRUE;
@@ -1406,8 +1394,8 @@ class Browser extends Object {
 
                 $version = explode(' ',$version[ 1 ] );
 
-                $this -> info -> version = str_replace(
-                    [ '(', ')', ';' ], '', $version[ 0 ]
+                $this -> info -> version = strtr(
+                    $version[ 0 ], [ '(' => '', ')' => '', ';' => '' ]
                 );
             }
 
@@ -1437,7 +1425,7 @@ class Browser extends Object {
 
             if( isset( $version[ 1 ] ) ) {
 
-                $this -> info -> version =& $version[ 1 ];
+                $this -> info -> version = $version[ 1 ];
             }
 
             return TRUE;
@@ -1468,7 +1456,7 @@ class Browser extends Object {
 
             if( isset( $version[ 1 ] ) ) {
 
-                $this -> info -> version =& $version[ 1 ];
+                $this -> info -> version = $version[ 1 ];
             }
 
             return TRUE;
@@ -1487,7 +1475,7 @@ class Browser extends Object {
      */
     private function Icab() {
 
-        $occurrence = stristr( str_replace( '/', ' ', $this -> info -> agent ), 'icab' );
+        $occurrence = stristr( strtr( $this -> info -> agent, [ '/' => ' ' ] ), 'icab' );
 
         if( $occurrence !== FALSE ) {
 
@@ -1499,7 +1487,7 @@ class Browser extends Object {
 
             if( isset( $version[ 1 ] ) ) {
 
-                $this -> info -> version =& $version[ 1 ];
+                $this -> info -> version = $version[ 1 ];
             }
 
             return TRUE;
@@ -1530,7 +1518,7 @@ class Browser extends Object {
 
             if( isset( $version[ 1 ] ) ) {
 
-                $this -> info -> version =& $version[ 1 ];
+                $this -> info -> version = $version[ 1 ];
             }
 
             return TRUE;
@@ -1563,7 +1551,7 @@ class Browser extends Object {
 
                 $version = explode( ' ', $version[ 1 ] );
 
-                $this -> info -> version =& $version[ 0 ];
+                $this -> info -> version = $version[ 0 ];
             }
 
             return TRUE;
@@ -1597,7 +1585,7 @@ class Browser extends Object {
                 $version = explode( ' ', $version[ 1 ] );
             }
 
-            $this -> info -> version =& $version[ 0 ];
+            $this -> info -> version = $version[ 0 ];
 
             return TRUE;
         }
@@ -1622,7 +1610,7 @@ class Browser extends Object {
 
             // Version
 
-            $this -> info -> version =& $matches[ 1 ];
+            $this -> info -> version = $matches[ 1 ];
 
             return TRUE;
         }
@@ -1647,7 +1635,7 @@ class Browser extends Object {
 
             // Version
 
-            $this -> info -> version =& $matches[ 1 ];
+            $this -> info -> version = $matches[ 1 ];
 
             return TRUE;
         }
@@ -1677,7 +1665,7 @@ class Browser extends Object {
 
                 $version = explode( ' ', $version[ 1 ] );
 
-                $this -> info -> version =& $version[ 0 ];
+                $this -> info -> version = $version[ 0 ];
             }
 
             return TRUE;
@@ -1688,7 +1676,7 @@ class Browser extends Object {
 
             // Some of the Validator versions do not delineate w/ a slash - add it back in
 
-            $agent = str_replace( 'W3C_Validator ', 'W3C_Validator/', $this -> info -> agent );
+            $agent = strtr( $this -> info -> agent, [ 'W3C_Validator ' => 'W3C_Validator/' ] );
 
             // Version
 
@@ -1698,7 +1686,7 @@ class Browser extends Object {
 
                 $version = explode( ' ', $version[ 1 ] );
 
-                $this -> info -> version =& $version[ 0 ];
+                $this -> info -> version = $version[ 0 ];
             }
 
             return TRUE;
@@ -1731,7 +1719,7 @@ class Browser extends Object {
 
                 $version = explode( ' ', $version[ 1 ] );
 
-                $this -> info -> version =& $version[ 0 ];
+                $this -> info -> version = $version[ 0 ];
             }
 
             return TRUE;
@@ -1760,7 +1748,7 @@ class Browser extends Object {
 
                 $version = explode( ' ', stristr( $this -> info -> agent, 'rv:' ) );
 
-                $this -> info -> version = str_replace( 'rv:', '' , $version[ 0 ] );
+                $this -> info -> version = strtr( $version[ 0 ], [ 'rv:' => '' ] );
 
                 return TRUE;
             }
@@ -1768,13 +1756,13 @@ class Browser extends Object {
 
                 $version = explode( '', stristr( $this -> info -> agent, 'rv:' ) );
 
-                $this -> info -> version = str_replace( 'rv:', '', $version[ 0 ] );
+                $this -> info -> version = strtr( $version[ 0 ], [ 'rv:' => '' ] );
 
                 return TRUE;
             }
             elseif( preg_match( '/mozilla\/([^ ]*)/i', $this -> info -> agent, $matches ) ) {
 
-                $this -> info -> version =& $matches[ 1 ];
+                $this -> info -> version = $matches[ 1 ];
 
                 return TRUE;
             }

@@ -250,7 +250,7 @@ abstract class AbstractApplication extends Object implements Verifiable, Applica
      */
     public function setRequest( Request $request ) {
 
-        $this -> request =& $request;
+        $this -> request = $request;
 
         return $this;
     }
@@ -276,7 +276,7 @@ abstract class AbstractApplication extends Object implements Verifiable, Applica
      */
     public function setResponse( Response $response ) {
 
-        $this -> response =& $response;
+        $this -> response = $response;
 
         return $this;
     }
@@ -368,21 +368,21 @@ abstract class AbstractApplication extends Object implements Verifiable, Applica
      */
     public function verify() {
 
-        if( ! is_null( $this -> router ) && ! $this -> router instanceof Router ) {
+        if( $this -> router !== NULL && ! $this -> router instanceof Router ) {
 
             throw new InvalidArgumentException(
                 'Routers must implement <em>Next\Controller\Router\Router</em> Interface'
             );
         }
 
-        if( ! is_null( $this -> view ) && ! $this -> view instanceof View ) {
+        if( $this -> view !== NULL && ! $this -> view instanceof View ) {
 
             throw new InvalidArgumentException(
                 'View Engines must implement View <em>Next\View\View</em> Interface'
             );
         }
 
-        if( ! is_null( $this -> session ) && ! $this -> session instanceof Session ) {
+        if( $this -> session !== NULL && ! $this -> session instanceof Session ) {
 
             throw new InvalidArgumentException(
                 'Session Manager must be an instance of <em>Next\Session\Manager</em>'

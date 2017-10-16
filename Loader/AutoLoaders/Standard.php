@@ -81,7 +81,7 @@ class Standard implements AutoLoader {
      */
     public function call() {
 
-        $map =& self::$map;
+        $map = self::$map;
 
         return function( $classname ) use( $map ) {
 

@@ -35,7 +35,7 @@ class Number extends AbstractTypes {
      */
     public function verify() {
 
-        if( is_null( $this -> options -> value ) ||
+        if( $this -> options -> value === NULL ||
                 ! is_numeric( $this -> options -> value ) &&
                     ! is_int( $this -> options -> value ) &&
                         ! is_float( $this -> options -> value ) ) {

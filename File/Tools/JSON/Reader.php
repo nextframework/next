@@ -73,7 +73,7 @@ class Reader extends Object {
 
         $content = json_decode( $buffer, $assoc );
 
-        if( is_null( $content )  ) {
+        if( $content === NULL  ) {
 
             throw new Exception(
 

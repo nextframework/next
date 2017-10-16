@@ -107,7 +107,7 @@ class Manager {
 
             // Setting Save Handler, if different than default
 
-            if( ! is_null( $handler ) ) {
+            if( $handler !== NULL ) {
 
                 session_set_save_handler(
 
@@ -325,7 +325,7 @@ class Manager {
      */
     public function setSessionLifetime( $lifetime ) {
 
-        self::$lifetime =& $lifetime;
+        self::$lifetime = $lifetime;
 
         session_cache_expire( $lifetime );
     }
@@ -351,7 +351,7 @@ class Manager {
      */
     public function setSessionSavePath( $savePath ) {
 
-        $this -> savePath =& $savePath;
+        $this -> savePath = $savePath;
 
         session_save_path( $savePath );
 

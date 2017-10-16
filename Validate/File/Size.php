@@ -43,7 +43,7 @@ class Size extends Object implements Validator {
 
         $data = $this -> options -> value;
 
-        $size = ( is_array( $data ) ? $data[ 1 ] : $data );
+        $size = ( (array) $data === $data ? $data[ 1 ] : $data );
 
         return ( (int) $size < $this -> options -> maxFileSize );
     }

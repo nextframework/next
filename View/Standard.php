@@ -365,7 +365,7 @@ class Standard extends Object implements Verifiable, View {
 
         // Working recursively...
 
-        if( is_array( $tplVar ) ) {
+        if( (array) $tplVar === $tplVar ) {
 
             foreach( $tplVar as $_tplVar => $_value ) {
 
@@ -644,7 +644,7 @@ class Standard extends Object implements Verifiable, View {
         // Should/Must we return?
 
         if( $this -> options -> returnVariables !== FALSE ||
-              ( is_array( $this -> _tplVars[ $tplVar ] )  ||
+              ( (array) $this -> _tplVars[ $tplVar ] === $this -> _tplVars[ $tplVar ]  ||
                   is_object( $this -> _tplVars[ $tplVar ] ) ) ) {
 
             return $this -> _tplVars[ $tplVar ];
@@ -723,7 +723,7 @@ class Standard extends Object implements Verifiable, View {
 
         // No paths to iterate?
 
-        if( count( $this -> _paths ) == 0 && is_null( $this -> options -> basepath ) )  {
+        if( count( $this -> _paths ) == 0 && $this -> options -> basepath === NULL )  {
             throw ViewException::noPaths( $file );
         }
 
@@ -827,43 +827,47 @@ class Standard extends Object implements Verifiable, View {
          */
         $controllerBasename = implode( '', array_slice( explode( '\\', $controller ) , -1 ) );
 
-        $subpath = str_replace(
+        $subpath = strtr(
 
-                       [ $application, self::CONTROLLERS_KEYWORD, $controllerBasename ],
+            $controller,
 
-                       '', $controller
-                   );
+            [ $application => '', self::CONTROLLERS_KEYWORD => '', $controllerBasename => '' ]
+       );
 
         // Windows, Windows, Windows... <_<
 
-        $subpath = trim( str_replace( '\\\\', '\\', $subpath ), '\\' );
+        $subpath = trim( strtr( $subpath, [ '\\\\' => '\\' ] ), '\\' );
 
         // Cleaning Controller Class to find its "Real Name"
 
-        $controller = str_replace( 'Controller', '', $controllerBasename );
+        $controller = strtr( $controllerBasename, [ 'Controller' => '' ] );
 
         // Cleaning known Action suffixes
 
-        $action = str_replace(
+        $action = strtr(
 
-            [ self::ACTION_METHOD_SUFFIX_VIEW, self::ACTION_METHOD_SUFFIX_ACTION ],
+            $action,
 
-            '', $action
+            [ self::ACTION_METHOD_SUFFIX_VIEW => '', self::ACTION_METHOD_SUFFIX_ACTION => '' ]
         );
 
         // Replacing known matches
 
         $spec = trim(
 
-                    str_replace(
+            strtr(
 
-                        [ self::APPLICATION, self::CONTROLLER, self::ACTION, self::SUBPATH ],
+                $this -> options -> fileSpec,
 
-                        [ $application, $controller, $action, $subpath ],
+                [
+                    self::APPLICATION => $application,
+                    self::CONTROLLER  => $controller,
+                    self::ACTION      => $action,
+                    self::SUBPATH     => $subpath
+                ]
 
-                        $this -> options -> fileSpec ),
-
-                    '/' );
+            ), '/'
+        );
 
         return sprintf(
             '%s.%s', strtolower( $spec ), $this -> options -> extension

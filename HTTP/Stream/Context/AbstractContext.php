@@ -98,7 +98,7 @@ abstract class AbstractContext implements Context {
      */
     public function getOptions( $option = NULL, $wrapper = NULL ) {
 
-        if( ! is_null( $option ) ) {
+        if( $option !== NULL ) {
 
             // Looking for the array key where the option COULD be
 
@@ -129,7 +129,7 @@ abstract class AbstractContext implements Context {
 
         // Create Stream Context if not created yet
 
-        if( is_null( $this -> context ) ) {
+        if( $this -> context === NULL ) {
             $this -> context = $this -> createContext();
         }
 

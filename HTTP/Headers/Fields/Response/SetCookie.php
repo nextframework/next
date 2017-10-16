@@ -82,7 +82,15 @@ class SetCookie extends AbstractField implements Response {
 
         // But, at least so far, we have correctable a side-effect
 
-        return str_replace( [ ';~', '; ~' ], [ ';', '~ ' ], $data );
+        return strtr(
+
+            $data,
+
+            [
+                ';~' => '; ~',
+                ';'  => '~ '
+            ]
+        );
     }
 
     /**

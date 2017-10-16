@@ -148,7 +148,7 @@ class NextAPI extends Object implements Decorator, Linkify {
 
                         self::NEXT_API_URL, $matches['namespace'], $method,
 
-                        str_replace( '\\', '.', $matches['namespace'] ), $method
+                        strtr( $matches['namespace'], [ '\\' => '.' ] ), $method
                     );
                 }
 

@@ -73,7 +73,7 @@ class Standard extends Object implements Verifiable, Adapter {
      */
     public function verify() {
 
-        if( ! is_array( $this -> options -> source ) ) {
+        if( (array) $this -> options -> source !== $this -> options -> source ) {
 
             throw new InvalidArgumentException(
                 'Parameter Option <strong>source</strong> must be an array'

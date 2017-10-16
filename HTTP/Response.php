@@ -921,7 +921,7 @@ class Response extends Object {
 
             // ... but we change it if we're dealing with a Relative URI
 
-            $url = str_replace( $request -> getRequestURI(), '', $request -> getURL() );
+            $url = strtr( $request -> getURL(), [ $request -> getRequestURI() => '' ] );
 
             // No double slashes
 
@@ -1413,7 +1413,7 @@ class Response extends Object {
          */
         $headers = $data;
 
-        if( ! is_null( $data ) && count( $data ) != 0 ) {
+        if( $data !== NULL && count( $data ) != 0 ) {
 
             // HTTP Status Code
 
@@ -1426,7 +1426,7 @@ class Response extends Object {
 
             if( count( $code ) != 0 ) {
 
-                $this -> statusCode =& $code[ 1 ];
+                $this -> statusCode = $code[ 1 ];
 
                 /**
                  *  If we got the HTTP Status Header, let's remove its

@@ -166,7 +166,7 @@ class ExceptionHandler implements Handler {
 
             // Sending the Response
 
-            if( ! is_null( $code ) ) {
+            if( $code !== NULL ) {
                 $response -> addHeader( $code );
             }
 
@@ -177,6 +177,10 @@ class ExceptionHandler implements Handler {
             // If fail here, you're in serious troubles XD
 
             echo $e -> getMessage();
+
+            if( defined( 'DEVELOPMENT_MODE' ) && DEVELOPMENT_MODE >= 1 ) {
+                echo ' - ', $e -> getFile(), '[', $e -> getLine(), ']';
+            }
         }
     }
 }

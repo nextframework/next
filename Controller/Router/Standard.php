@@ -69,7 +69,7 @@ class Standard extends AbstractRouter implements Verifiable {
 
         $data = ( isset( $routes ) ? $routes : NULL );
 
-        if( is_array( $data ) ) {
+        if( (array) $data === $data ) {
 
             // Parsing content as a PHP array
 

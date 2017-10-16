@@ -25,30 +25,6 @@ use Next\Components\Types\String;    # Strings Data-type Class
  */
 class Path extends String {
 
-    // Verifiable Interface Method Overwriting
-
-    /**
-     * Verifies Object Integrity.
-     * Checks whether or not given value is acceptable by data-type class
-     *
-     * @throws Next\Exception\Exceptions\InvalidArgumentException
-     *  Thrown if Parameter Option 'value' is not a valid string,
-     *  is NULL or is not a resolvable filepath
-     *
-     * @see Next\Components\Types\String::verify()
-     */
-    public function verify() {
-
-        parent::verify();
-
-        if( stream_resolve_include_path( $this -> options -> value ) === FALSE ) {
-
-            throw new InvalidArgumentException(
-                'Argument is not a valid filepath'
-            );
-        }
-    }
-
     // Prototypable Method Implementation
 
     /**
@@ -85,7 +61,7 @@ class Path extends String {
         $this -> implement( $this, 'clean', function( $path ) {
 
             return new Path(
-                [ 'value' => str_replace( '\\', '/', rtrim( trim( $path ), '/\\' ) ) ]
+                [ 'value' => strtr( rtrim( trim( $path ), '/\\' ), [ '\\' => '/' ] ) ]
             );
 
         }, $this -> _value );

@@ -61,7 +61,7 @@ class Listener extends Object implements Verifiable {
 
         array_shift( $args );
 
-        if( is_array( $this -> callback ) ) {
+        if( (array) $this -> callback === $this -> callback ) {
 
             $reflector = new \ReflectionMethod(
                 $this -> callback[ 0 ], $this -> callback[ 1 ]

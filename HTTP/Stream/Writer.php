@@ -46,7 +46,7 @@ class Writer extends Object implements Writer\Writer {
 
         $adapter -> open();
 
-        $this -> adapter =& $adapter;
+        $this -> adapter = $adapter;
     }
 
     /**
@@ -72,7 +72,7 @@ class Writer extends Object implements Writer\Writer {
 
         // Writing with length...
 
-        if( ! is_null( $length ) ) {
+        if( $length !== NULL ) {
 
             $length = (int) $length;
 

@@ -70,7 +70,7 @@ abstract class AbstractOptions extends Object implements Option {
 
         // Recursion...
 
-        if( is_array( $option ) ) {
+        if( (array) $option === $option ) {
 
             foreach( $option as $_option => $_value ) {
 
@@ -81,7 +81,7 @@ abstract class AbstractOptions extends Object implements Option {
 
             if( $this -> accept( $option ) ) {
 
-                if( ! is_null( $value ) ) {
+                if( $value !== NULL ) {
 
                     $this -> values[ $option ] = $value;
                 }

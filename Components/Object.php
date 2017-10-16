@@ -154,7 +154,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
                 );
             }
 
-            if( is_array( $v ) ) {
+            if( (array) $v === $v ) {
 
                 $keys = array_keys( $v );
 
@@ -231,7 +231,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      */
     final public function extend( Invoker $invoker, $methods = NULL, $properties = NULL ) {
 
-        if( is_null( $this -> context ) ) {
+        if( $this -> context === NULL ) {
             throw ComponentsException::extendedContextFailure( $this );
         }
 

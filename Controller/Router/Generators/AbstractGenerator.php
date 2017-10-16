@@ -63,7 +63,7 @@ abstract class AbstractGenerator extends Object implements Generator {
 
         // Applications' Chain
 
-        $this -> applications =& $applications;
+        $this -> applications = $applications;
 
         parent::__construct( $options );
     }

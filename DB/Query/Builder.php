@@ -304,7 +304,7 @@ class Builder extends Object {
          * The same rules apply: The alias will be first character of
          * the \Next\DB\Entity\Entity
          */
-        if( ! is_array( $tables ) ) {
+        if( (array) $tables !== $tables ) {
 
             if( strpos( $this -> columns[ 0 ], '.' ) !== FALSE ) {
 
@@ -431,14 +431,14 @@ class Builder extends Object {
      */
     public function where( $condition, $replacements = [], $type = Query::SQL_AND ) {
 
-        if( is_null( $condition ) ) {
+        if( $condition === NULL ) {
 
             throw new BadMethodCallException(
                 'Empty Clause (Builder::where)'
             );
         }
 
-        if( is_array( $condition ) ) {
+        if( (array) $condition === $condition ) {
 
             throw new BadMethodCallException(
                 'Multiple conditions are not allowed (Builder::where)'
@@ -467,7 +467,7 @@ class Builder extends Object {
             $key = (array) array_keys( $replacements );
             $key = array_shift( $key );
 
-            if( is_null( $key ) ) {
+            if( $key === NULL ) {
 
                 throw new InvalidArgumentException(
 
@@ -495,11 +495,11 @@ class Builder extends Object {
 
                 // Replacing `$key` occurrences found in `$condition`
 
-                $this -> where[ $type ][] = str_replace(
+                $this -> where[ $type ][] = strtr(
 
-                    sprintf( ':%s', $key ),
+                    $condition,
 
-                    sprintf( ':%s_%s', $key, $uniqid ), $condition
+                    [ sprintf( ':%s', $key ) => sprintf( ':%s_%s', $key, $uniqid ) ]
                 );
 
                 /**
@@ -555,7 +555,7 @@ class Builder extends Object {
      */
     public function join( $table, $on, $type = Query::INNER_JOIN ) {
 
-        $table = ( is_array( $table ) ?
+        $table = ( (array) $table === $table ?
                     array_slice( $table, 0, 1 ) : $table );
 
         $this -> joins[] = $this -> options
@@ -587,7 +587,7 @@ class Builder extends Object {
      */
     public function having( $condition, $values = [], $type = Query::SQL_AND ) {
 
-        $this -> having[ $type ][] = ( is_array( $condition ) ? array_shift( $condition ) : $condition );
+        $this -> having[ $type ][] = ( (array) $condition === $condition ? array_shift( $condition ) : $condition );
 
         $this -> addReplacements( $values );
 
@@ -639,7 +639,7 @@ class Builder extends Object {
             return $this;
         }
 
-        $this -> order[] = ( is_array( $field ) ? $field : [ $field => $orientation ] );
+        $this -> order[] = ( (array) $field === $field ? $field : [ $field => $orientation ] );
 
         return $this;
     }

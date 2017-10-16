@@ -56,7 +56,7 @@ class AlphaID implements Prototypable {
 
         if( $integer instanceof Integer ) $integer = $integer -> get();
 
-        if( is_null( $integer ) ) {
+        if( $integer === NULL ) {
 
             throw new \InvalidArgumentException(
                 'An integer must be informed in order to be converted to an AlphaID string'

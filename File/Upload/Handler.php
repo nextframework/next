@@ -91,7 +91,7 @@ class Handler extends Object {
          *
          * What?! o.O
          */
-        /*if( ! is_null( $method ) && $method === Request::DELETE ) {
+        /*if( $method !== NULL && $method === Request::DELETE ) {
             return new Methods\Delete;
         }*/
 

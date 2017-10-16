@@ -202,13 +202,13 @@ class Environment extends Object {
 
         $this -> isLocked();
 
-        if( is_array( $name ) ) {
+        if( (array) $name === $name ) {
 
             $_SESSION[ $this -> environment ][ key( $name ) ] = array_values( $name );
 
         } else {
 
-            if( is_array( $value ) ) {
+            if( (array) $value === $value ) {
 
                 $_SESSION[ $this -> environment ][ $name ][] = $value;
 

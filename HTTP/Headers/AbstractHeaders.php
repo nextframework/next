@@ -188,9 +188,7 @@ abstract class AbstractHeaders extends Object {
      */
     public function addHeader( $header, $value = NULL ) {
 
-        if( is_null( $header ) ) {
-            return $this;
-        }
+        if( $header === NULL ) return $this;
 
         // Well-formed Header Field. Don't need to be known
 
@@ -206,7 +204,7 @@ abstract class AbstractHeaders extends Object {
 
         // Recursion...
 
-        if( is_array( $header ) ) {
+        if( (array) $header === $header ) {
 
             foreach( $header as $n => $v ) {
 
@@ -226,7 +224,7 @@ abstract class AbstractHeaders extends Object {
 
             // Preparing Header Name for Classname Mapping
 
-            $header = strtolower( str_replace( 'HTTP_', '', $header ) );
+            $header = strtolower( strtr( $header, [ 'HTTP_' => '' ] ) );
 
             $header = ucfirst(
 

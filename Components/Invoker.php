@@ -43,8 +43,8 @@ class Invoker extends Object {
      */
     public function __construct( Object $caller, Object $callee ) {
 
-        $this -> caller =& $caller;
-        $this -> callee =& $callee;
+        $this -> caller = $caller;
+        $this -> callee = $callee;
     }
 
     /**

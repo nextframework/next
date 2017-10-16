@@ -108,8 +108,8 @@ class ErrorHandlerController extends AbstractController {
 
                 shuffle( $this -> data[ $this -> code ]['phrases'] );
 
-                $this -> view -> quote = str_replace(
-                    '\n', '<br />', array_shift( $this -> data[ $this -> code ]['phrases'] )
+                $this -> view -> quote = strtr(
+                    array_shift( $this -> data[ $this -> code ]['phrases'] ), [ '\n' => '<br />' ]
                 );
 
                 $this -> view -> title = $this -> data[ $this -> code ]['title'];

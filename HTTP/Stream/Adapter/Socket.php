@@ -235,15 +235,15 @@ class Socket extends AbstractAdapter {
 
         $this -> filename = trim( $filename );
 
-        $mode = sprintf( '%sb', strtolower( trim( str_replace( 'b', '', $mode ) ) ) );
+        $mode = sprintf( '%sb', strtolower( trim( strtr( $mode, [ 'b' => '' ] ) ) ) );
 
         if( ! in_array( $mode, $constants = $this -> getClass() -> getConstants() ) ) {
             throw AdapterException::invalidOpeningMode( $constants );
         }
 
-        $this -> mode =& $mode;
+        $this -> mode = $mode;
 
-        $this -> context = ( ! is_null( $context ) ? $context : new SocketContext );
+        $this -> context = ( $context !== NULL ? $context : new SocketContext );
     }
 
     // Adapter Interface Methods Implementation

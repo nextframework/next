@@ -54,7 +54,7 @@ class String extends AbstractTypes {
      */
     public function verify() {
 
-        if( is_null( $this -> options -> value ) || ! is_string( $this -> options -> value ) ) {
+        if( $this -> options -> value === NULL || ! is_string( $this -> options -> value ) ) {
 
             throw new InvalidArgumentException(
                 'Argument is not a valid String'
@@ -117,11 +117,11 @@ class String extends AbstractTypes {
 
         }, [ 0 => $this -> _value ] );
 
-            // str_replace()
+            // strtr()
 
-        $this -> implement( $this, 'replace', function( $string, $search, $replacement, &$count = NULL ) {
+        $this -> implement( $this, 'replace', function( $string, $search, $replacement ) {
 
-            return str_replace( $search, $replacement, $string, $count );
+            return strtr( $string, [ $search => $replacement ] );
 
         }, [ 0 => $this -> _value ] );
 

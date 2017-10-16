@@ -60,7 +60,7 @@ class Adapter extends Object implements Statement {
      */
     public function setStatement( \PDOStatement $stmt ) {
 
-        $this -> stmt =& $stmt;
+        $this -> stmt = $stmt;
 
         return $this;
     }

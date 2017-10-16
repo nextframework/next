@@ -46,7 +46,7 @@ class Reader extends Object implements Reader\Reader {
 
         $adapter -> open();
 
-        $this -> adapter =& $adapter;
+        $this -> adapter = $adapter;
     }
 
     /**

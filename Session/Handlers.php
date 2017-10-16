@@ -162,7 +162,7 @@ class Handlers extends Object {
 
         // Changing current Session Handler
 
-        $this -> handler =& $handler;
+        $this -> handler = $handler;
 
         // Restarting Session
 

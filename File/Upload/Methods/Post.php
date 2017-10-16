@@ -86,7 +86,7 @@ class Post extends AbstractMethod {
 
         // Normalizing single and multiple uploads structure
 
-        if( reset( $files ) !== FALSE && ! is_array( $files[ key( $files ) ] ) ) {
+        if( reset( $files ) !== FALSE && (array) $files[ key( $files ) ] !== $files[ key( $files ) ] ) {
 
             $files = [ $files ];
 

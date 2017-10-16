@@ -266,7 +266,7 @@ class Request extends Object {
 
             // Do we have an HTTP Stream Adapter?
 
-        if( ! is_null( $this -> options -> adapter ) ) {
+        if( $this -> options -> adapter !== NULL ) {
 
             $this -> adapter = $this -> options -> adapter;
 
@@ -348,7 +348,7 @@ class Request extends Object {
              */
             if( empty( $this -> options -> basepath ) ) {
 
-                $path = trim( str_replace( $_SERVER['DOCUMENT_ROOT'], '', $_SERVER['SCRIPT_FILENAME'] ), DIRECTORY_SEPARATOR );
+                $path = trim( strtr( $_SERVER['SCRIPT_FILENAME'], [ $_SERVER['DOCUMENT_ROOT'] => '' ] ), DIRECTORY_SEPARATOR );
 
                 if( ( $slash = strpos( $path, DIRECTORY_SEPARATOR ) ) !== FALSE ) {
                     $this -> basepath = substr( $path, 0, $slash );
@@ -416,7 +416,7 @@ class Request extends Object {
 
         // Should we return the Requested URI (almost) untouched?
 
-        if( ! $stripBasePath || ! is_null( $scheme ) ) {
+        if( ! $stripBasePath || $scheme !== NULL ) {
             return trim( $this -> uri, '/' );
         }
 
@@ -428,7 +428,7 @@ class Request extends Object {
 
         $uri = trim( $uri, '/' );
 
-        return str_replace( '//', '/', ( empty( $uri ) ? '/' : $uri ) );
+        return strtr( ( empty( $uri ) ? '/' : $uri ), [ '//' => '/' ] );
     }
 
     /**
@@ -445,7 +445,7 @@ class Request extends Object {
 
         $scheme = parse_url( $this -> uri, PHP_URL_SCHEME );
 
-        if( is_null( $scheme ) ) {
+        if( $scheme === NULL ) {
 
             $rUri = $this -> getRequestURI();
 
@@ -735,7 +735,7 @@ class Request extends Object {
      */
     public function setPostData( $field, $value = NULL ) {
 
-        if( is_array( $field ) ) {
+        if( (array) $field === $field ) {
 
             foreach( $field as $f => $v ) {
 
@@ -744,7 +744,7 @@ class Request extends Object {
 
         } else {
 
-            if( is_null( $value ) ) {
+            if( $value === NULL ) {
 
                 throw new BadMethodCallException(
 
@@ -754,7 +754,7 @@ class Request extends Object {
                 );
             }
 
-               $this -> postData[ $field ] =& $value;
+               $this -> postData[ $field ] = $value;
         }
 
         return $this;
@@ -777,7 +777,7 @@ class Request extends Object {
      */
     public function setRawPostData( $field, $value = NULL ) {
 
-        if( is_array( $field ) ) {
+        if( (array) $field === $field ) {
 
             foreach( $field as $f => $v ) {
 
@@ -786,13 +786,13 @@ class Request extends Object {
 
         } else {
 
-            if( ! is_null( $value ) ) {
+            if( $value !== NULL ) {
 
-                $this -> rawPostData[ $field ] =& $value;
+                $this -> rawPostData[ $field ] = $value;
 
             } else {
 
-                $this -> rawPostData[] =& $field;
+                $this -> rawPostData[] = $field;
             }
         }
 
@@ -930,7 +930,7 @@ class Request extends Object {
      */
     public function getData( array $source, $key = NULL ) {
 
-        if( is_null( $key ) ) return $source;
+        if( $key === NULL ) return $source;
 
         return array_key_exists( $key, $source ) ? $source[ $key ] : NULL;
     }
@@ -953,7 +953,7 @@ class Request extends Object {
 
         // Setting Up a Fallback HTTP Stream Adapter
 
-        if( is_null( $this -> adapter ) ) {
+        if( $this -> adapter === NULL ) {
 
             $this -> adapter = new Socket(
 

@@ -50,7 +50,7 @@ class Applications implements Annotations {
      */
     public function __construct( ApplicationInterface $application ) {
 
-        $this -> application =& $application;
+        $this -> application = $application;
     }
 
     // Annotations Interface Method Implementation

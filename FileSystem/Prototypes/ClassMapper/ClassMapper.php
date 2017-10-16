@@ -69,7 +69,7 @@ class ClassMapper extends \FilterIterator {
 
             $token = $tokens[ $i ];
 
-            if( ! is_array( $token ) ) {
+            if( (array) $token !== $token ) {
 
                 // Single character token found... Skip!
 

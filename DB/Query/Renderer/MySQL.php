@@ -284,7 +284,7 @@ class MySQL extends Object implements Renderer {
 
         // Do we have an alias?
 
-        if( is_array( $table ) ) {
+        if( (array) $table === $table ) {
             $table = $this -> from( key( $table ), current( $table ) );
         }
 
@@ -310,7 +310,7 @@ class MySQL extends Object implements Renderer {
 
             function( $condition, $type ) use( &$clause ) {
 
-                if( count( $condition ) == 1 && ! is_null( $clause ) ) {
+                if( count( $condition ) == 1 && $clause !== NULL ) {
 
                     $clause .= sprintf( ' %s %s', $type, implode( $type, $condition ) );
 

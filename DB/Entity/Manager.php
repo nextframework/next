@@ -113,7 +113,7 @@ class Manager extends Object {
      */
     public function setSource( array $source ) {
 
-        $this -> source =& $source;
+        $this -> source = $source;
 
         return $this;
     }

@@ -77,7 +77,7 @@ abstract class AbstractAdapter extends Object implements Adapter {
      */
     public function setContext( Context $context ) {
 
-        $this -> context =& $context;
+        $this -> context = $context;
 
         return $this;
     }

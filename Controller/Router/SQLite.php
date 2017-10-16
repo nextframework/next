@@ -114,7 +114,7 @@ class SQLite extends Standard {
          * Route, counter-balancing the lack of gluttony
          * of preg_match() that doesn't match as much as possible
          */
-        $data = Object::map( ( is_array( $data ) ? array_shift( $data ) : $data ) );
+        $data = Object::map( ( (array) $data === $data ? array_shift( $data ) : $data ) );
 
         /**
          * @internal

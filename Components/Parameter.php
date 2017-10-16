@@ -104,7 +104,7 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
 
         if( $parameter === NULL ) return;
 
-        if( is_array( $parameter ) ) $parameter = Object::map( $parameter );
+        if( (array) $parameter === $parameter ) $parameter = Object::map( $parameter );
 
         if( $parameter instanceof Parameter ) {
             return $this -> merge( $parameter -> getParameters() );
@@ -252,7 +252,7 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
      */
     public function offsetSet( $identifier, $value ) {
 
-        if( is_array( $value ) ) {
+        if( (array) $value === $value ) {
 
             /**
              * @internal

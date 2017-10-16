@@ -137,7 +137,7 @@ class Delete implements Prototypable {
                      * If we have an array of Files to be deleted,
                      * but we don't have them as sub-array...
                      */
-                    if( ! is_array( $f ) ) {
+                    if( (array) $f !== $f ) {
 
                         /**
                          * @internal

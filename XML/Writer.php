@@ -202,7 +202,7 @@ class Writer extends Object {
 
         $this -> endDocument();
 
-        if( ! is_null( $response ) ) {
+        if( $response !== NULL ) {
 
             // Trying to send the header
 
@@ -228,8 +228,7 @@ class Writer extends Object {
             $output = $this -> outputMemory();
 
             if( ! $this -> options -> indent -> enabled ) {
-
-                $output = str_replace( "\n", '', $output );
+                $output = strtr( $output, [ "\n" => '' ] );
             }
 
             if( $decode ) {

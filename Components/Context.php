@@ -60,7 +60,7 @@ class Context implements Contextualizable {
 
         // Methods
 
-        if( is_null( $methods ) ) {
+        if( $methods === NULL ) {
             $methods = $reflector -> getMethods( \ReflectionMethod::IS_PUBLIC );
         }
 

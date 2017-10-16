@@ -66,7 +66,7 @@ class Tree implements Prototypable {
             print '<pre>';
 
             foreach( $iterator as $path ) {
-                echo str_replace( $directory, '', $path ), "\n";
+                echo strtr( $path, [ $directory => '' ] ), "\n";
             }
 
         } catch( \UnexpectedValueException $e ) {

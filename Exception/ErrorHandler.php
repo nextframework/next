@@ -95,6 +95,10 @@ class ErrorHandler implements Handler {
                     // If fail here, you're in serious troubles XD
 
                     echo $e -> getMessage();
+
+                    if( defined( 'DEVELOPMENT_MODE' ) && DEVELOPMENT_MODE >= 1 ) {
+                        echo ' - ', $e -> getFile(), '[', $e -> getLine(), ']';
+                    }
                 }
             }
         });

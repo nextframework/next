@@ -129,7 +129,7 @@ class Response extends Object implements Schema {
              * PHP's file functions and thus filemtime won't file (hopefully >.<)
              */
             if( isset( $matches[ 2 ] ) ) {
-                $URI = str_replace( $matches[ 2 ], '', $URI );
+                $URI = strtr( $URI, [ $matches[ 2 ] => '' ] );
             }
 
             // File not found

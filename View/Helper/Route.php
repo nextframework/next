@@ -43,7 +43,7 @@ class Route implements Helper {
 
         $route = sprintf( '%s/%s', trim( $route ), implode( $params, '/' ) );
 
-        return ( is_null( $text ) ? $route : sprintf( '<a href="%s">%s</a>', $route, trim( $text ) ) );
+        return ( $text === NULL ? $route : sprintf( '<a href="%s">%s</a>', $route, trim( $text ) ) );
     }
 
     // Helper Interface Method Implementation

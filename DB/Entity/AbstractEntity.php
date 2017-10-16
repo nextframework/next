@@ -54,7 +54,7 @@ abstract class AbstractEntity extends Object implements Entity {
      */
     public function init() {
 
-        if( is_null( $this -> _primary ) ) {
+        if( $this -> _primary === NULL ) {
 
             throw new InvalidArgumentException(
 
@@ -83,7 +83,7 @@ abstract class AbstractEntity extends Object implements Entity {
      *  Entity Class' short name otherwise
      */
     public function getEntityName() {
-        return ( ! is_null( $this -> _entity ) ? $this -> _entity : strtolower( $this ) );
+        return ( $this -> _entity !== NULL ? $this -> _entity : strtolower( $this ) );
     }
 
     /**

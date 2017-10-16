@@ -68,7 +68,7 @@ class Cookies extends Object {
 
         // Recursion...
 
-        if( is_array( $cookie ) ) {
+        if( (array) $cookie === $cookie ) {
 
             foreach( $cookie as $n => $v ) {
 
@@ -89,7 +89,7 @@ class Cookies extends Object {
              *
              * Let's build the full Cookie representation before add it
              */
-            if( ! is_null( $value ) && strpos( $value, '=' ) === FALSE ) {
+            if( $value !== NULL && strpos( $value, '=' ) === FALSE ) {
                 $cookie = sprintf( '%s=%s', $cookie, $value );
             }
 

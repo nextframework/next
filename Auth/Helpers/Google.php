@@ -151,7 +151,7 @@ class Google extends Object implements Verifiable, Helper {
      */
     public function getData() {
 
-        if( is_null( $this -> options -> model ) ||
+        if( $this -> options -> model === NULL ||
             ( ! $this -> options -> model instanceof Entity ) ) {
 
             throw new InvalidArgumentException(
@@ -210,7 +210,7 @@ class Google extends Object implements Verifiable, Helper {
 
         $token = $this -> getAccessToken();
 
-        if( is_null( $token ) ) {
+        if( $token === NULL ) {
 
             throw new BadMethodCallException(
                 'An Access Token is required in order to access Google OAuth Service'
