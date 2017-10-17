@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Routes Generator Standard Output Writer Class (Arrays) | Controller\Router\Generators\Writer\Standard.php
+ * Routes Generator Standard Output Writer Class (Arrays) | HTTP\Router\Generators\Writer\Standard.php
  *
  * @author       Bruno Augusto
  *
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace Next\Controller\Router\Generators\Writer;
+namespace Next\HTTP\Router\Generators\Writer;
 
 use Next\Components\Object;                # Object Class
 use Next\HTTP\Stream\Writer as Adapter;    # HHTP Stream Writer Class
@@ -118,8 +118,9 @@ class Standard extends Object implements Writer {
 
         /**
          * @internal
-         * We don't need to write anything, but \Next\HTTP\Stream\Writer\Writer::write()
-         * must be called so the 'wb' opening mode used in \Next\HTTP\Stream\Adapter\Socket
+         * We don't need to write anything, but
+         * \Next\HTTP\Stream\Writer\Writer::write() must be called so
+         * the 'wb' opening mode used in \Next\HTTP\Stream\Adapter\Socket
          * constructor above can do its job emptying the file
          */
         $writer -> write( '' );

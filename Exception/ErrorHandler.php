@@ -10,11 +10,14 @@
  */
 namespace Next\Exception;
 
-use Next\Controller\Controller;                  # Controller Interface
-use Next\Controller\Router\NullRouter;           # Null Router Class
-use Next\HTTP\Request;                           # HTTP Request
-use Next\HTTP\Response;                          # HTTP Response
-use Next\Exception\Handlers\Controllers\ErrorHandlerController;    # Error Handler Application Controller
+use Next\Controller\Controller;    # Controller Interface
+use Next\HTTP\Request;             # HTTP Request
+use Next\HTTP\Response;            # HTTP Response
+
+/**
+ * Error Handler Application Controller
+ */
+use Next\Exception\Handlers\Controllers\ErrorHandlerController;
 
 /**
  * Registers Error and Exception handlers to deal with runtime errors

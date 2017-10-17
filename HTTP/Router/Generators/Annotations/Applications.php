@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Routes Generators Applications' Annotations Class | Controller\Router\Generators\Annotations\Applications.php
+ * Routes Generators Applications' Annotations Class | HTTP\Router\Generators\Annotations\Applications.php
  *
  * @author       Bruno Augusto
  *
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace Next\Controller\Router\Generators\Annotations;
+namespace Next\HTTP\Router\Generators\Annotations;
 
 use Next\Application\Application as ApplicationInterface;    # Applications Interface
 use Next\Components\Object;                                  # Object Class
@@ -17,7 +17,7 @@ use Next\Components\Object;                                  # Object Class
  * Defines the Applications Analyzer, filtering through data
  * reflected and preparing structure for the Routes Generator process
  *
- * @package    Next\Tools\Routes\Generators
+ * @package    Next\HTTP
  */
 class Applications implements Annotations {
 

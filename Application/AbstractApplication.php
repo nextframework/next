@@ -18,7 +18,7 @@ use Next\Exception\Exceptions\FatalException;
 use Next\Exception\Exceptions\InvalidArgumentException;
 
 use Next\Components\Interfaces\Verifiable;       # Verifiable Interface
-use Next\Controller\Router\Router;               # Router Interface
+use Next\HTTP\Router\Router;                     # Router Interface
 use Next\Components\Object;                      # Object Class
 use Next\Cache\Schemas\Chain as CachingChain;    # Caching Schemas Chain Class
 use Next\Controller\Chain as ControllerChain;    # Controllers Chain Class
@@ -51,7 +51,7 @@ abstract class AbstractApplication extends Object implements Verifiable, Applica
     /**
      * Router
      *
-     * @var \Next\Controller\Router\Router $router
+     * @var \Next\HTTP\Router\Router $router
      */
     protected $router;
 
@@ -294,7 +294,7 @@ abstract class AbstractApplication extends Object implements Verifiable, Applica
     /**
      * Get Router
      *
-     * @return \Next\Controller\Router\Router
+     * @return \Next\HTTP\Router\Router
      *  Router Object
      */
     public function getRouter() {
@@ -355,7 +355,7 @@ abstract class AbstractApplication extends Object implements Verifiable, Applica
      *
      * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Thrown if an HTTP Router has been assigned but it's not valid
-     *  because it doesn't implement `\Next\Controller\Router\Router`
+     *  because it doesn't implement `\Next\HTTP\Router\Router`
      *
      * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Thrown if a View Engine has been assigned but it's not valid
@@ -371,7 +371,7 @@ abstract class AbstractApplication extends Object implements Verifiable, Applica
         if( $this -> router !== NULL && ! $this -> router instanceof Router ) {
 
             throw new InvalidArgumentException(
-                'Routers must implement <em>Next\Controller\Router\Router</em> Interface'
+                'Routers must implement <em>Next\HTTP\Router\Router</em> Interface'
             );
         }
 

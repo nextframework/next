@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Routes Generators Data Generators Interface | Controller\Router\Generators\Generator.php
+ * Routes Generators Data Generators Interface | HTTP\Router\Generators\Generator.php
  *
  * @author       Bruno Augusto
  *
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace Next\Controller\Router\Generators;
+namespace Next\HTTP\Router\Generators;
 
 /**
  * Routes Generator Interface
@@ -21,7 +21,7 @@ namespace Next\Controller\Router\Generators;
 interface Generator {
 
     /**
-     * Find Routes from Controllers Methods DocBlocks
+     * Find Routes from Controllers' Methods DocBlocks
      */
     public function find();
 

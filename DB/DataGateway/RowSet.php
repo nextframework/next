@@ -349,8 +349,8 @@ class RowSet extends Object implements DataGateway, \Iterator, \ArrayAccess {
      *
      * @see \Next\DB\DataGateway\RowSet::offsetGet()
      */
-    public function __get( $column ) {
-        return $this -> offsetGet( $column );
+    public function __get( $offset ) {
+        return $this -> offsetGet( $offset );
     }
 
     /**
@@ -365,8 +365,8 @@ class RowSet extends Object implements DataGateway, \Iterator, \ArrayAccess {
      *
      * @see \Next\DB\DataGateway\RowSet::offsetSet()
      */
-    public function __set( $column, $value ) {
-        $this -> offsetSet( $column, $value );
+    public function __set( $offset, $data ) {
+        $this -> offsetSet( $offset, $data );
     }
 
     /**
@@ -381,8 +381,8 @@ class RowSet extends Object implements DataGateway, \Iterator, \ArrayAccess {
      *
      * @see \Next\DB\DataGateway\RowSet::offsetExists()
      */
-    public function __isset( $column ) {
-        return $this -> offsetExists( $column );
+    public function __isset( $offset ) {
+        return $this -> offsetExists( $offset );
     }
 
     /**
@@ -393,8 +393,8 @@ class RowSet extends Object implements DataGateway, \Iterator, \ArrayAccess {
      *
      * @see \Next\DB\DataGateway\RowSet::offsetUnset()
      */
-    public function __unset( $column ) {
-        $this -> offsetUnset( $column );
+    public function __unset( $offset ) {
+        $this -> offsetUnset( $offset );
     }
 
     // Auxiliary Methods

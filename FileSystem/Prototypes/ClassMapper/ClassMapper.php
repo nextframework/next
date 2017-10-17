@@ -1,7 +1,21 @@
 <?php
 
+/**
+ * ClassMapper Prototype Class: Tokens Identifier | FileSystem\Prototypes\ClassMapper\ClassMapper.php
+ *
+ * @author       Bruno Augusto
+ *
+ * @copyright    Copyright (c) 2017 Next Studios
+ * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
+ */
 namespace Next\FileSystem\Prototypes\ClassMapper;
 
+/**
+ * Iterates a \RecursiveIteratorIterator parsing all PHP files tokens
+ * to find all classes and interfaces to build the classmap
+ *
+ * @package    Next\FileSystem
+ */
 class ClassMapper extends \FilterIterator {
 
     /**

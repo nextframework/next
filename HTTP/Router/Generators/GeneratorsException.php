@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Routes Generators, Generators Exception Class | Controller\Router\GeneratorsException.php
+ * Routes Generators, Generators Exception Class | HTTP\Router\GeneratorsException.php
  *
  * @author       Bruno Augusto
  *
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace Next\Controller\Router\Generators;
+namespace Next\HTTP\Router\Generators;
 
 /**
  * Routes Generators Exception Class
@@ -155,7 +155,7 @@ class GeneratorsException extends \Next\Exception\Exception {
     }
 
     /**
-     * Define Route URI was already assigned to another Controller Action
+     * Defined Route URI was already assigned to another Controller Action
      *
      * @param array $args
      *  Variable list of arguments to build final message

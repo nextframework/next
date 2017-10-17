@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Routes Generator Abstract Generator Class | Controller\Router\Generators\AbstractGenerator.php
+ * Routes Generator Abstract Generator Class | HTTP\Router\Generators\AbstractGenerator.php
  *
  * @author       Bruno Augusto
  *
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace Next\Controller\Router\Generators;
+namespace Next\HTTP\Router\Generators;
 
 use Next\Components\Object;                    # Object Class
 use Next\Application\Chain as Applications;    # Application Chain Class

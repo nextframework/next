@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Routes Generator SQLite Output Writer Class | Controller\Router\Generators\Writer\SQLite.php
+ * Routes Generator SQLite Output Writer Class | HTTP\Router\Generators\Writer\SQLite.php
  *
  * @author       Bruno Augusto
  *
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace Next\Controller\Router\Generators\Writer;
+namespace Next\HTTP\Router\Generators\Writer;
 
 /**
  * Exception Class(es)

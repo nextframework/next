@@ -1,21 +1,21 @@
 <?php
 
 /**
- * Controller Router Abstract Class | Controller\Router\AbstractRouter.php
+ * HTTP Request Router Abstract Class | HTTP\Router\AbstractRouter.php
  *
  * @author       Bruno Augusto
  *
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace Next\Controller\Router;
+namespace Next\HTTP\Router;
 
 use Next\Components\Object;    # Object Class
 
 /**
- * Defines the base structure for a Controller Router
+ * Defines the base structure for an HTTP Request Router
  *
- * @package    Next\Controller\Router
+ * @package    Next\HTTP
  */
 abstract class AbstractRouter extends Object implements Router {
 
@@ -62,7 +62,7 @@ abstract class AbstractRouter extends Object implements Router {
      * Sets the Router to abort its flow, not routing anything,
      * so the Front Controller can keep going
      *
-     * @return \Next\Controller\Router\Router
+     * @return \Next\HTTP\Router\Router
      *  Router Object (Fluent Interface)
      */
     public function abortFlow() {
@@ -85,7 +85,7 @@ abstract class AbstractRouter extends Object implements Router {
     // Accessors
 
     /**
-     * Get match Controller
+     * Get matching Controller
      *
      * @return string
      *  Match Controller Class
@@ -95,7 +95,7 @@ abstract class AbstractRouter extends Object implements Router {
     }
 
     /**
-     * Get match Action Method
+     * Get matching Action Method
      *
      * @return string
      *  Match Action Method

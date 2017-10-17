@@ -1,23 +1,23 @@
 <?php
 
 /**
- * Controller Routers Interface | Controller\Router\Router.php
+ * HTTP Request Routers Interface | HTTP\Router\Router.php
  *
  * @author       Bruno Augusto
  *
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace Next\Controller\Router;
+namespace Next\HTTP\Router;
 
 use Next\Application\Application;    # Application Interface
 
 /**
  * Defines the Router Type, with all methods that must be present
- * in an Router, be it through \Next\Controller\Router\AbstractRouter
+ * in an Router, be it through \Next\HTTP\Router\AbstractRouter
  * or the concrete implementations of it
  *
- * @package    Next\Controller\Router
+ * @package    Next\HTTP
  */
 interface Router {
 
@@ -29,12 +29,12 @@ interface Router {
     // Accessors
 
     /**
-     * Get match Controller
+     * Get matching Controller
      */
     public function getController() ;
 
     /**
-     * Get match Action Method
+     * Get matching Action Method
      */
     public function getMethod();
 }

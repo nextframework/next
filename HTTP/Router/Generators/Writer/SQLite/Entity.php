@@ -1,16 +1,16 @@
 <?php
 
 /**
- * Routes Generator SQLite Output Writer Entity Class | Controller\Router\Generators\Writer\SQLite\Entity.php
+ * Routes Generator SQLite Output Writer Entity Class | HTTP\Router\Generators\Writer\SQLite\Entity.php
  *
  * @author       Bruno Augusto
  *
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace Next\Controller\Router\Generators\Writer\SQLite;
+namespace Next\HTTP\Router\Generators\Writer\SQLite;
 
-use Next\DB\Entity\AbstractEntity;
+use Next\DB\Entity\AbstractEntity;    # Entity Abstract Class
 
 /**
  * Annotations Routes Generator: SQLite Annotations Entity Class
@@ -46,21 +46,21 @@ class Entity extends AbstractEntity {
     protected $requestMethod;
 
     /**
-     * Controller Application
+     * Application classname the Controller belongs to
      *
      * @var string $application
      */
     protected $application;
 
     /**
-     * Controller Class
+     * Controller Classname
      *
      * @var string $controller
      */
     protected $controller;
 
     /**
-     * Controller Action Method
+     * Controller's Action Method
      *
      * @var string $method
      */

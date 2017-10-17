@@ -14,30 +14,32 @@ namespace Next\Controller;
  * Exception Class(es)
  */
 use Next\Exception\Exceptions\BadMethodCallException;
-use Next\Controller\Router\RouterException;
+use Next\HTTP\Router\RouterException;
 
-use Next\Components\Object;                 # Object Class
-use Next\Controller\Dispatcher\Standard;    # Standard Dispatcher Class
-use Next\Exception\ExceptionHandler;        # Exceptions Handlers Class
-use Next\HTTP\Request;                      # Request Class
-use Next\HTTP\Response;                     # Response Class
+use Next\Components\Object;             # Object Class
+use Next\Controller\Dispatcher;         # Standard Dispatcher Class
+use Next\Exception\ExceptionHandler;    # Exceptions Handlers Class
+use Next\HTTP\Request;                  # Request Class
+use Next\HTTP\Response;                 # Response Class
 
 /**
  * The Front Controller Class, one of the most busy classes in the
  * Routing/Dispatching process:
  *
- * - Iterates through all \Next\Application\Application added to \Next\Application\Chain;
- * - Executes all \Next\Cache\Schemas\Schema added to their \Next\Cache\Schemas\Chain;
- * - Checks with their \Next\Controller\Router\Router if current
+ * - Iterates through all `\Next\Application\Application` added to
+ *   `\Next\Application\Chain`;
+ * - Executes all `\Next\Cache\Schemas\Schema` added to their
+ *   `\Next\Cache\Schemas\Chain`;
+ * - Checks with their `\Next\HTTP\Router\Router` if current
  *   Request should be routed or delivered "as is";
  * - Communes with their Routers until one of them becomes able to
  *   handle current Request;
- * - Deals with their associated \Next\Controller\Dispatcher\Dispatcher,
- *   checking if its \Next\HTTP\Response should output a Response Body
- *   or return it for later;
- * - And if anything at fail in the process deal with \Next\Exception\ExceptionHandler
- *   to create an Error Response or then send 503 or 404 Headers
- *   to the browser;
+ * - Deals with the `\Next\Controller\Dispatcher`, checking if its
+ *   `\Next\HTTP\Response` should output a Response Body or return
+ *   it for later;
+ * - And if anything at fail in the process deal with
+ *   `\Next\Exception\ExceptionHandler` to create an Error Response or
+ *   then send 503 or 404 Headers to the browser;
  *
  * @package    Next\Controller
  */
@@ -49,30 +51,29 @@ class Front extends Object {
      * @var array $parameters
      */
     protected $parameters = [
-
-        'applications' => [ 'type' => 'Next\Application\Chain', 'required' => TRUE ],
-        'dispatcher'   => [ 'type' => 'Next\Controller\Dispatcher\Dispatcher', 'required' => FALSE ]
+        'applications' => [ 'type' => 'Next\Application\Chain', 'required' => TRUE ]
     ];
 
     /**
+     * Controllers' Dispatcher
+     *
+     * @var \Next\Controller\Dispatcher $dispatcher
+     */
+    protected $dispatcher;
+
+    /**
      * Additional Initialization.
-     * Assigns a default Controller Dispatcher if none has been provided
+     * Instantiates the Controllers' Dispatcher
      */
     protected function init() {
-
-        // Setting up a default Dispatcher Object
-
-        if( $this -> options -> dispatcher === NULL ) {
-            $this -> options -> dispatcher = new Standard;
-        }
+        $this -> dispatcher = new Dispatcher;
     }
 
     /**
      * Dispatches a Controller
      *
      * @return mixed|void
-     *  Returns what the chosen Dispatcher have dispatched,
-     *  if configured to do so
+     *  Returns what the Dispatcher dispatched, if configured to do so
      */
     public function dispatch() {
 
@@ -106,17 +107,16 @@ class Front extends Object {
                      * Dispatching Controller, if nothing was wrongly
                      * dispatched before
                      */
-                    if( ! $this -> options -> dispatcher -> isDispatched() ) {
+                    if( ! $this -> dispatcher -> isDispatched() ) {
 
                         try {
 
-                            $dispatched = $this -> options
-                                                -> dispatcher
+                            $dispatched = $this -> dispatcher
                                                 -> dispatch( $application, $match );
 
                             // Should we return what was dispatched?
 
-                            if( $this -> options -> dispatcher -> shouldReturn() ) {
+                            if( $this -> dispatcher -> shouldReturn() ) {
                                 return $dispatched;
                             }
 
@@ -155,7 +155,7 @@ class Front extends Object {
 
             } catch( RouterException $e ) {
 
-                $this -> options -> dispatcher -> setDispatched( TRUE );
+                $this -> dispatcher -> setDispatched( TRUE );
 
                 /**
                  * @internal
@@ -175,8 +175,8 @@ class Front extends Object {
          * Instead of send 404 header we'll display the Error Template File
          * only if we still allowed to do it
          */
-        if( ! $this -> options -> dispatcher -> isDispatched() &&
-            ! $this -> options -> dispatcher -> shouldReturn() ) {
+        if( ! $this -> dispatcher -> isDispatched() &&
+            ! $this -> dispatcher -> shouldReturn() ) {
 
             ExceptionHandler::response( 404 );
         }

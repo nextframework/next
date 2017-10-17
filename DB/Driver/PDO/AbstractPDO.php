@@ -204,6 +204,11 @@ abstract class AbstractPDO extends Object implements Verifiable, Driver {
      * Get Last inserted ID.
      * Returns the ID of the last inserted row or sequence value
      *
+     * @param string $name
+     *  Name of the sequence object from which the ID should be returned
+     *  According to PHP Manual it's used, for example, by PDO_PGSQL
+     *  as sequence object identifier
+     *
      * @return integer|string
      *  ID of last inserted record
      *

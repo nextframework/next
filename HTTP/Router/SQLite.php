@@ -1,14 +1,14 @@
 <?php
 
 /**
- * SQLite Controller Router Class | Controller\Router\SQLite.php
+ * HTTP Request "SQLite" Router Class | HTTP\Router\SQLite.php
  *
  * @author       Bruno Augusto
  *
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace Next\Controller\Router;
+namespace Next\HTTP\Router;
 
 /**
  * Exception Class(es)
@@ -23,11 +23,11 @@ use Next\HTTP\Request;                                # Request Class
 use Next\DB\Driver\PDO\Adapter\SQLite as Adapter;     # SQLite DB Adapter
 
 /**
- * Controller Router based on SQLite Databases
- * It uses most of the logics of `\Next\Controller\Router\Standard`
+ * HTTP Request Router based on SQLite Databases
+ * It uses most of the logics of `\Next\HTTP\Router\Standard`
  * as it derives only the way of finding the Routes, having the same parser
  *
- * @package    Next\Controller\Router
+ * @package    Next\HTTP
  */
 class SQLite extends Standard {
 
@@ -80,8 +80,19 @@ class SQLite extends Standard {
             $URI = rtrim( $URI, '/' );
         }
 
-        // Searching the Request in Routes Database
-
+        /**
+         * Searching the Request in Routes Database
+         *
+         * @internal
+         *
+         * To be a matching route it must:
+         *
+         * - Belong to the same Application (classname)
+         * - Correspond to the same Request Method of
+         *   the current Request
+         * - Have its route RegExp matching the Request URI
+         *   of current Request
+         */
         $stmt = $this -> dbh -> prepare( 'SELECT `requestMethod`, `controller`, `method`,
                                                  `requiredParams`, `optionalParams`
                                             FROM `routes`
@@ -119,8 +130,8 @@ class SQLite extends Standard {
         /**
          * @internal
          *
-         * Setting Up Found Controller and its action to be used in View,
-         * as part of findFilebySpec() method
+         * Setting Up Found Controller and its action method to be used
+         * in View, as part of Template File Detection by FileSpec
          */
         $this -> controller = $data -> controller;
         $this -> method     = $data -> method;
@@ -188,7 +199,7 @@ class SQLite extends Standard {
     /**
      * Verifies Object Integrity
      *
-     * @throws \Next\Controller\Router\RouterException
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Filepath to the SQLite Database File was not informed or it's empty
      */
     public function verify() {
@@ -237,7 +248,7 @@ class SQLite extends Standard {
      * Extends SQLITE functionality adding a UDF (User Defined Function)
      * for REGEXP keyword use
      *
-     * @throws \Next\Controller\Router\RouterException
+     * @throws \Next\Exception\Exceptions\BadMethodCallException
      *  Current Database Connection Adapter doesn't have the
      *  sqliteCreateFunction() method
      */

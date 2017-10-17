@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Routes Generator Output Writers Interface | Controller\Router\Generators\Writer\Writer.php
+ * Routes Generator Output Writers Interface | HTTP\Router\Generators\Writer\Writer.php
  *
  * @author       Bruno Augusto
  *
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace Next\Controller\Router\Generators\Writer;
+namespace Next\HTTP\Router\Generators\Writer;
 
 /**
  * Routes Generator Output Writer Interface

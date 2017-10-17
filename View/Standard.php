@@ -801,8 +801,8 @@ class Standard extends Object implements Verifiable, View {
      *  Template View FilePath from defined FileSpec
      *
      * @see
-     *  \Next\Controller\Router\Router::getController()
-     *  \Next\Controller\Router\Router::getMethod()
+     *  \Next\HTTP\Router\Router::getController()
+     *  \Next\HTTP\Router\Router::getMethod()
      */
     private function findFileBySpec() {
 

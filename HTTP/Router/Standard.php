@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Standard Controller Router Class | Controller\Router\Standard.php
+ * HTTP Request "Standard" Router Class | HTTP\Router\Standard.php
  *
  * @author       Bruno Augusto
  *
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace Next\Controller\Router;
+namespace Next\HTTP\Router;
 
 /**
  * Exception Class(es)
@@ -24,7 +24,7 @@ use Next\HTTP\Request;                        # Request Class
 /**
  * Standard Controller Router based on PHP Arrays
  *
- * @package    Next\Controller\Router
+ * @package    Next\HTTP
  */
 class Standard extends AbstractRouter implements Verifiable {
 
@@ -84,7 +84,7 @@ class Standard extends AbstractRouter implements Verifiable {
                      *
                      * To be a matching route it must:
                      *
-                     * - Belong to the same Application Controller (classname)
+                     * - Belong to the same Application (classname)
                      * - Correspond to the same Request Method of
                      *   the current Request
                      * - Have its route RegExp matching the Request URI
@@ -113,8 +113,9 @@ class Standard extends AbstractRouter implements Verifiable {
             /**
              * @internal
              *
-             * Setting Up Controller and its Action found to be used
-             * later, maybe by View Engines as part of FileSpec detection
+             * Setting Up Found Controller and its action method to be
+             * used in View, as part of Template File Detection
+             * by FileSpec
              */
             $this -> controller = $data -> controller;
             $this -> method     = $data -> method;
@@ -184,7 +185,7 @@ class Standard extends AbstractRouter implements Verifiable {
     /**
      * Verifies Object Integrity
      *
-     * @throws \Next\Controller\Router\RouterException
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Filepath to the PHP array was not informed or it's empty
      */
     public function verify() {
@@ -227,7 +228,7 @@ class Standard extends AbstractRouter implements Verifiable {
      * @param string $URI
      *  Request URI to be checked against
      *
-     * @throws \Next\Controller\Router\RouterException
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Any of the Required Parameters is missing or has no value
      */
     protected function lookup( array $params, $URI ) {
@@ -274,7 +275,7 @@ class Standard extends AbstractRouter implements Verifiable {
      * @param string $URI
      *  Route URI
      *
-     * @throws \Next\Controller\Router\RouterException
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Any of the Required Parameters has an invalid value from a
      *   [list|of|possible|values]
      */

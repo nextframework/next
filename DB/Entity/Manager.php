@@ -215,8 +215,9 @@ class Manager extends Object {
      * provided Entity
      *
      * @param string|optional $name
-     *  Name of the sequence object from which the ID should be returned.
-     *  Used by PDO_PGSQL, for example (according to PHP manual)
+     *  Name of the sequence object from which the ID should be returned
+     *  According to PHP Manual it's used, for example, by PDO_PGSQL
+     *  as sequence object identifier
      *
      * @return integer|string
      *  The ID of last record inserted

@@ -1,20 +1,20 @@
 <?php
 
 /**
- * Routes Generators Classes' Actions Annotations Class | Controller\Router\Generators\Annotations\Actions.php
+ * Routes Generators Classes' Actions Annotations Class | HTTP\Router\Generators\Annotations\Actions.php
  *
  * @author       Bruno Augusto
  *
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace Next\Controller\Router\Generators\Annotations;
+namespace Next\HTTP\Router\Generators\Annotations;
 
 use Next\Tools\Routes\Generators\GeneratorsException;    # Routes Generators Exception Class
 use Next\Components\Utils\ArrayUtils;                    # Array Utils Class
 
 /**
- * Defines the Controller Actions Analyzer, filtering through data
+ * Defines the Controllers' Actions Analyzer, filtering through data
  * reflected and preparing structure for the Routes Generator process
  *
  * @package    Next\Tools\Routes\Generators
@@ -50,10 +50,14 @@ class Actions extends \FilterIterator implements Annotations {
     protected $reflector;
 
     /**
-     * Controller Actions Annotations Constructor
+     * Controller Actions Annotations Constructor.
+     * Configures the \ReflectorClass Object that'll be used and, after
+     * initializing the \FilterIterator under parent context, rewinds
+     * the iterator before allowing it to be used
      *
      * @param \ReflectionClass $reflector
-     *  ReflectionClass Object from where to retrieve the Action Methods and build an \ArrayIterator with
+     *  ReflectionClass Object from where to retrieve the Action Methods
+     *  and build an \ArrayIterator with
      */
     public function __construct( \ReflectionClass $reflector ) {
 
@@ -177,12 +181,14 @@ class Actions extends \FilterIterator implements Annotations {
                   *
                   * This is not a user-defined rule!
                   *
-                  * This condition ensures that we're listing only methods of
-                  * the class being reflected instead of all its parent altogether
+                  * This condition ensures that we're listing only
+                  * methods of the class being reflected instead of
+                  * all its parent altogether
                   *
-                  * This grants the ability to have a hierarchical structure of
-                  * small Controllers one descending to another, not in the
-                  * Object Orientation way, but instead more like a skeleton structure
+                  * This grants the ability to have a hierarchical
+                  * structure of small Controllers one descending to
+                  * another, not in the Object Orientation way, but
+                  * instead more like a skeleton structure
                   */
                  ( $method -> class === $this -> reflector -> getName() )
                );

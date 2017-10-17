@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Routes Generators Classes' Annotations Class | Controller\Router\Generators\Annotations.php
+ * Routes Generators Classes' Annotations Class | HTTP\Router\Generators\Annotations.php
  *
  * @author       Bruno Augusto
  *
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace Next\Controller\Router\Generators;
+namespace Next\HTTP\Router\Generators;
 
 use Next\Tools\Routes\Generators\GeneratorsException;    # Routes Generator Exception Class
 

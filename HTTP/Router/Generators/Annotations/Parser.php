@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Routes Generator Annotations Parser Class | Controller\Router\Generators\Annotation\Parser.php
+ * Routes Generator Annotations Parser Class | HTTP\Router\Generators\Annotation\Parser.php
  *
  * @author       Bruno Augusto
  *
  * @copyright    Copyright (c) 2017 Next Studios
  * @license      http://www.gnu.org/licenses/agpl-3.0.txt GNU Affero General Public License 3.0
  */
-namespace Next\Controller\Router\Generators\Annotations;
+namespace Next\HTTP\Router\Generators\Annotations;
 
 use Next\Tools\Routes\Generators\GeneratorsException;    # Routes Generators Exception Class
 
@@ -19,7 +19,7 @@ use Next\Components\Utils\ArrayUtils;                    # Array Utils Class
  * Defines the Routes Parser, listing, checking and preparing
  * structure for the Routes Generator process
  *
- * @package    Next\Tools\Routes\Generators
+ * @package    Next\HTTP
  */
 class Parser extends Object {
 
@@ -56,15 +56,16 @@ class Parser extends Object {
      *  Routes Argument(s)
      *
      * @param string $controller
-     *  Controller to whom belongs the Route(s)
+     *  Controller's classname where the Route has been found
      *
      * @param string $method
-     *  Method to whom belongs the Route(s)
+     *  Method's name where the Route has been found
      *
-     * @param string|optional *  Route Domain, prepended to every route
+     * @param string|optional
+     * Routes' Domain, prepended to every route
      *
      * @param string|optional $basepath
-     *  Routes Basepath, appended to every route
+     *  Routes' Basepath, appended to every route
      *
      * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
      *  Optional Configuration Options for Annotations Parser
@@ -99,25 +100,25 @@ class Parser extends Object {
      *  Routes Argument(s)
      *
      * @param string $controller
-     *  Controller to whom belongs the Route(s)
+     *  Controller's classname where the Route has been found
      *
      * @param string $method
-     *  Method to whom belongs the Route(s)
+     *  Method's name where the Route has been found
      *
-     * @param string $domain
-     *  Domain to whom belongs the Route(s)
+     * @param string
+     * Routes' Domain, prepended to every route
      *
-     * @param string basepath
-     *  Path to whom belongs the Route(s)
+     * @param string $basepath
+     *  Routes' Basepath, appended to every route
      *
-     * @throws \Next\Tools\Routes\Generators\GeneratorsException
+     * @throws \Next\HTTP\Router\Generators\GeneratorsException
      *  Route has less than 2 Components (a Request Method and a Route)
      *
-     * @throws \Next\Tools\Routes\Generators\GeneratorsException
+     * @throws \Next\HTTP\Router\Generators\GeneratorsException
      *  Routes defined as single slash (usually for homepages) DO have
      *  arguments (hierarchy concept)
      *
-     * @throws \Next\Tools\Routes\Generators\GeneratorsException
+     * @throws \Next\HTTP\Router\Generators\GeneratorsException
      *  There is another Route with exactly the same definition, including
      *  the Request Method
      */
