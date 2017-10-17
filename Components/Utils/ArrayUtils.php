@@ -66,16 +66,26 @@ class ArrayUtils {
      * @param mixed|optional $index
      *  Allow to define a specific index where the data will be searched
      *
+     * @param boolean|optional $strict
+     *  Deactivates case strictness when comparing.
+     *  This is available only is `$needle` is of a scalar
+     *  type (i.e. integer, float, string or boolean)
+     *  Defaults to TRUE, which means that, by default, the routine is
+     *  case-sensitive
+     *
      * @return integer|string
      *  If given needle can be found in given haystack, its index will
      *  be returned. Otherwise, -1 will
      *
+     * If provided haystack is NULL or empty, -1 will be returned as well
+     *
      * @see http://www.php.net/manual/en/function.array-search.php#97645
-     *  Original source authored by "giulio provasi"
+     *  Original version without checkings and strictness
+     *  authored by "giulio provasi"
      */
-    public static function search( $haystack, $needle, $index = NULL ) {
+    public static function search( $haystack, $needle, $index = NULL, $strict = TRUE ) {
 
-        if( $haystack === NULL ) return -1;
+        if( $haystack === NULL || count( $haystack ) == 0 ) return -1;
 
         $arrayIterator = new \RecursiveArrayIterator( $haystack );
 
@@ -83,10 +93,24 @@ class ArrayUtils {
 
         while( $iterator -> valid() ) {
 
-            if( ( ( isset( $index ) and ( $iterator -> key() == $index ) ) or
-                ( ! isset( $index ) ) ) and ( $iterator -> current() == $needle ) ) {
+            if( $strict !== FALSE ) {
 
-                return $arrayIterator -> key();
+                if( ( ( isset( $index )     AND ( $iterator -> key() == $index ) ) OR
+                    ( ! isset( $index ) ) ) AND ( $iterator -> current() == $needle ) ) {
+
+                    return $arrayIterator -> key();
+                }
+
+            } else {
+
+                if( is_scalar( $needle ) ) {
+
+                    if( ( ( isset( $index )     AND ( strcasecmp( $iterator -> key(), $index ) == 0 ) ) OR
+                        ( ! isset( $index ) ) ) AND ( strcasecmp( $iterator -> current(), $needle ) == 0 ) ) {
+
+                        return $arrayIterator -> key();
+                    }
+                }
             }
 
             $iterator -> next();

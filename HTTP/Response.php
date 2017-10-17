@@ -15,19 +15,18 @@ namespace Next\HTTP;
  */
 use Next\Exception\Exceptions\Exception;
 use Next\Exception\Exceptions\RuntimeException;
+use Next\Exception\Exceptions\InvalidArgumentException;
 
-use Next\HTTP\Headers\Fields\FieldsException;      # Headers Fields Exception Class
+use Next\HTTP\Headers\Field;                # Header Field Interface
 
-use Next\HTTP\Headers\Fields\Field;                # Header Field Interface
+use Next\Components\Object;                 # Object Class
+use Next\Components\Invoker;                # Invoker Class
 
-use Next\Components\Object;                        # Object Class
-use Next\Components\Invoker;                       # Invoker Class
+use Next\Components\Utils\ArrayUtils;       # Array Utils Class
 
-use Next\Components\Utils\ArrayUtils;              # Array Utils Class
-
-use Next\HTTP\Headers\Fields\Response\Location;    # Location Header Class
-use Next\HTTP\Headers\Fields\Raw;                  # Raw Data Header Class
-use Next\HTTP\Headers\Fields\Generic;              # Generic Data Header Class
+use Next\HTTP\Headers\Response\Location;    # Location Header Class
+use Next\HTTP\Headers\Raw;                  # Raw Data Header Class
+use Next\HTTP\Headers\Generic;              # Generic Data Header Class
 
 /**
  * Response Class
@@ -681,7 +680,7 @@ class Response extends Object {
     /**
      * Headers Management Object
      *
-     * @var \Next\HTTP\ResponseHeaders $headers
+     * @var \Next\HTTP\Manager $headers
      */
     private $headers;
 
@@ -731,7 +730,7 @@ class Response extends Object {
 
         // Headers Management Object
 
-        $this -> headers = new Headers\ResponseHeaders;
+        $this -> headers = new Headers\Manager;
 
         // Extend Object Context to Headers', Cookies and Browser Classes
 
@@ -746,15 +745,15 @@ class Response extends Object {
                     $this -> headers
                           -> addHeader( apache_response_headers() );
 
-                } catch( Exception $e ) {
+                } catch( InvalidArgumentException $e ) {
 
                     /**
                      * @internal
-                     * We're silencing the FieldsException in order to not
-                     * break the Response Flow
+                     * We're silencing the InvalidArgumentException in
+                     * order to not break the Response Flow
                      *
-                     * However, if this Exception is caught, no Response
-                     * Headers will be available
+                     * However, if this Exception is caught, no
+                     * Response Headers will be available
                      */
                 }
             }
@@ -932,13 +931,15 @@ class Response extends Object {
 
             // Location Header should be sent ONLY with Absolute URIs
 
-            $this -> headers -> addHeader( new Location( [ 'value' => $url ] ) );
+            $this -> headers -> addHeader(
+                new Location( [ 'value' => $url ] )
+            );
 
-        } catch( FieldsException $e ) {
+        } catch( InvalidArgumentException $e ) {
 
             /**
-             *  If a FieldsException is caught, we have a Relative URI so
-             *  we'll send it as a Raw Header
+             *  If an InvalidArgumentException is caught, we have a
+             *  Relative URI so we'll send it as a Raw Header
              */
             $this -> headers -> addHeader(
                 new Raw( [ 'value' => sprintf( 'Location: %s', $to ) ] )
@@ -1097,7 +1098,7 @@ class Response extends Object {
      *
      *               <p>
      *                   A well-formed Header Field, instance of
-     *                   \Next\HTTP\Headers\Fields\Field
+     *                   \Next\HTTP\Headers\Field
      *               </p>
      *
      *               <p>In this case it'll be used "as is"</p>
@@ -1157,15 +1158,28 @@ class Response extends Object {
 
                 $this -> headers -> addHeader( new Raw( [ 'value' => $message ] ) );
 
-           } catch( FieldsException $e ) {}
+            } catch( InvalidArgumentException $e ) {
+
+                /**
+                 * @internal
+                 * We're silencing the InvalidArgumentException in
+                 * order to not break the Response Flow
+                 *
+                 * However, if this Exception is caught, no
+                 * Response Headers will be available
+                 */
+            }
 
         } else {
 
-           try {
+            try {
 
-               $this -> headers -> addHeader( $header, $value );
+                $this -> headers -> addHeader( $header, $value );
 
-           } catch( FieldsException $e  ) {}
+            } catch( InvalidArgumentException $e  ) {
+
+                // Same as above
+            }
         }
 
         return $this;

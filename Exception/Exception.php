@@ -13,7 +13,7 @@ namespace Next\Exception;
 require_once __DIR__ . '/../Components/Interfaces/Verifiable.php';
 
 use Next\Components\Interfaces\Verifiable;    # Verifiable Interface Class
-use Next\Validate\HTTP\Headers\Code;          # HTTP Status Code Validator Class
+use Next\Validation\HTTP\Headers\Code;        # HTTP Status Code Validator Class
 
 /**
  * Defines a variation of native Exception Class with native support

@@ -12,9 +12,9 @@ namespace Next\File\Upload\Methods;
 
 use Next\Components\Object;                                        # Object Class
 
-use Next\Validate\Validator;                                       # Validator Interface
+use Next\Validation\Validator;                                     # Validator Interface
 
-use Next\Validate\Chain as ValidatorsChain;                        # Validator Chain
+use Next\Validation\Chain as ValidatorsChain;                      # Validator Chain
 use Next\File\Upload\PostProcessor\Chain as PostProcessorChain;    # Post-Processor Chain
 
 use Next\File\Upload\PostProcessor\PostProcessor;                  # Post-Processor Interface
@@ -37,7 +37,7 @@ abstract class AbstractMethod extends Object implements Method {
     /**
      * Validators Chain
      *
-     * @var \Next\Validate\Chain $validators
+     * @var \Next\Validation\Chain $validators
      */
     protected $validators;
 
@@ -86,7 +86,7 @@ abstract class AbstractMethod extends Object implements Method {
     /**
      * Add an external Validator to the Chain
      *
-     * @param \Next\Validate\Validator $validator
+     * @param \Next\Validation\Validator $validator
      *  External Validator
      *
      * @return \Next\File\Upload\Methods\Method
@@ -102,7 +102,7 @@ abstract class AbstractMethod extends Object implements Method {
     /**
      * Get Validators Chain
      *
-     * @return \Next\Validate\Chain
+     * @return \Next\Validation\Chain
      *  Validators Chain
      */
     public function getValidators() {

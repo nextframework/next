@@ -21,7 +21,7 @@ use Next\Components\Interfaces\Verifiable;    # Verifiable Interface
 use Next\Components\Object;                   # Object Class
 use Next\Components\Utils\ArrayUtils;         # Array Utils Class
 use Next\DB\Entity\Entity;                    # DB Entity Interface
-use Next\Validate\Validators\URL;             # URL Validator Class
+use Next\Validation\Validators\URL;           # URL Validator Class
 
 /**
  * Google Auth Helper is a simple helper to ease out a little bit
@@ -36,7 +36,7 @@ use Next\Validate\Validators\URL;             # URL Validator Class
  *             Next\Components\Object,
  *             Next\Components\Utils\ArrayUtils,
  *             Next\DB\Entity\Entity,
- *             Next\Validate\Validators\URL
+ *             Next\Validation\Validators\URL
  */
 class Google extends Object implements Verifiable, Helper {
 

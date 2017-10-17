@@ -10,13 +10,13 @@
  */
 namespace Next\Cache\Schemas;
 
-use Next\Components\Object;                           # Object Class
-use Next\HTTP\Headers\Fields\Entity\ContentType;      # Content-Type Header Class
-use Next\HTTP\Headers\Fields\Entity\ContentLength;    # Content-Length Header Class
-use Next\HTTP\Headers\Fields\Entity\LastModified;     # Last-Modified Header Class
-use Next\HTTP\Headers\Fields\Common\CacheControl;     # Cache-Control Header Class
-use Next\HTTP\Headers\Fields\Response\ETag;           # ETag Header Class
-use Next\HTTP\Headers\Fields\Raw;                     # Raw Header Field Class
+use Next\Components\Object;                    # Object Class
+use Next\HTTP\Headers\Entity\ContentType;      # Content-Type Header Class
+use Next\HTTP\Headers\Entity\ContentLength;    # Content-Length Header Class
+use Next\HTTP\Headers\Entity\LastModified;     # Last-Modified Header Class
+use Next\HTTP\Headers\Common\CacheControl;     # Cache-Control Header Class
+use Next\HTTP\Headers\Response\ETag;           # ETag Header Class
+use Next\HTTP\Headers\Raw;                     # Raw Header Field Class
 
 /**
  * Defines a Caching Schema through HTTP Response Headers, sending

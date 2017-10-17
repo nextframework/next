@@ -19,7 +19,7 @@ use Next\Exception\Exceptions\BadMethodCallException;
 use Next\HTTP\Stream\Adapter\AdapterException;      # Adapter Exception Class
 
 use Next\Components\Interfaces\Verifiable;          # Verifiable Interface
-use Next\HTTP\Headers\Fields\Field;                 # Header Fields Interface
+use Next\HTTP\Headers\Field;                        # Header Fields Interface
 use Next\HTTP\Stream\Adapter\Adapter;               # HTTP Stream Adapter Interface
 
 use Next\Components\Object;                         # Object Class
@@ -28,7 +28,7 @@ use Next\Components\Parameter;                      # Parameter Object
 use Next\Components\Invoker;                        # Invoker Class
 use Next\HTTP\Stream\Adapter\Socket;                # HTTP Stream Socket Adapter Class
 use Next\HTTP\Stream\Context\SocketContext;         # HTTP Stream Socket Context Class
-use Next\HTTP\Headers\Fields\Entity\ContentType;    # Content-Type Header Class
+use Next\HTTP\Headers\Entity\ContentType;           # Content-Type Header Class
 use Next\HTTP\Stream\Reader;                        # HTTP Stream Reader
 use Next\File\Tools;                                # File Tools Class
 
@@ -154,7 +154,7 @@ class Request extends Object {
     /**
      * Headers Management Object
      *
-     * @var \Next\HTTP\Headers\RequestHeaders $headers
+     * @var \Next\HTTP\Headers\Manager $headers
      */
     private $headers;
 
@@ -246,7 +246,7 @@ class Request extends Object {
 
         // Request Headers Management Object
 
-        $this -> headers = new Headers\RequestHeaders;
+        $this -> headers = new Headers\Manager;
 
         // Extend Object Context to Headers', Cookies and Browser Classes
 

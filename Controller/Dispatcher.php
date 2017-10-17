@@ -140,7 +140,17 @@ class Dispatcher extends Object {
 
                 $response -> addHeader( $e -> getResponseCode() );
 
-            } catch( FieldsException $e ) {}
+            } catch( InvalidArgumentException $e ) {
+
+                /**
+                 * @internal
+                 * We're silencing the InvalidArgumentException in
+                 * order to not break the Response Flow
+                 *
+                 * However, if this Exception is caught, no
+                 * Response Headers will be available
+                 */
+            }
 
             try {
 

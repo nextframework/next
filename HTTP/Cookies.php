@@ -10,9 +10,9 @@
  */
 namespace Next\HTTP;
 
-use Next\Components\Object;                     # Object Class
-use Next\Components\Collections\Lists;          # Lists Class
-use Next\HTTP\Headers\Fields\Request\Cookie;    # HTTP Cookie Header Class
+use Next\Components\Object;              # Object Class
+use Next\Components\Collections\Lists;   # Lists Class
+use Next\HTTP\Headers\Request\Cookie;    # HTTP Cookie Header Class
 
 /**
  * HTTP Cookies Management Class
@@ -52,7 +52,7 @@ class Cookies extends Object {
      * @return \Next\HTTP\Cookies
      *  Cookies Object (Fluent Interface)
      *
-     * @throws \Next\HTTP\Headers\Fields\FieldsException
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Invalid or mal-formed Cookie Value
      */
     public function addCookie( $cookie, $value = NULL ) {
@@ -79,13 +79,14 @@ class Cookies extends Object {
 
             /**
              * @internal
-             * In case \Next\HTTP\Cookies::addCookie() was invoked like:
              *
-             * $cookies -> addCookie( 'cookiename', 'cookievalue' )
+             * In case `\Next\HTTP\Cookies::addCookie()` was invoked like:
+             *
+             * `$cookies -> addCookie( 'cookiename', 'cookievalue' )`
              *
              * Instead of:
              *
-             * $cookies -> addCookie( 'cookiename=cookievalue' )
+             * `$cookies -> addCookie( 'cookiename=cookievalue' )`
              *
              * Let's build the full Cookie representation before add it
              */
@@ -107,7 +108,7 @@ class Cookies extends Object {
      * @param boolean $asString
      *  If TRUE, instead a Collection, a string of all the cookies will be returned
      *
-     * @return \Next\Components\Collections\Lists|\Next\HTTP\Headers\Fields\Request\Cookie
+     * @return \Next\Components\Collections\Lists|\Next\HTTP\Headers\Request\Cookie
      *
      *   <p>
      *     If <strong>$asString</strong> is set to FALSE, the Cookies

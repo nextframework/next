@@ -10,14 +10,14 @@
  */
 namespace Next\XML;
 
-use Next\HTTP\Response\ResponseException;           # Response Exception Class
+use Next\HTTP\Response\ResponseException;    # Response Exception Class
 
-use Next\Components\Object;                         # Object Class
-use Next\Components\Invoker;                        # Invoker Class
-use Next\Components\Mimicker;                       # Object Mimicker Class
+use Next\Components\Object;                  # Object Class
+use Next\Components\Invoker;                 # Invoker Class
+use Next\Components\Mimicker;                # Object Mimicker Class
 
-use Next\HTTP\Response;                             # Response Class
-use Next\HTTP\Headers\Fields\Entity\ContentType;    # Content-Type Entity Header
+use Next\HTTP\Response;                      # Response Class
+use Next\HTTP\Headers\Entity\ContentType;    # Content-Type Entity Header
 
 /**
  * XML Writer Class

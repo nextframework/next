@@ -16,9 +16,9 @@ use Next\Components\Types\Number;        # Number Data-type Class
 use Next\Components\Utils\ArrayUtils;    # Array Utils Class
 use Next\File\Tools;                     # File Tools Class
 
-use Next\Validate\File\Size;             # File Size Validation Class
-use Next\Validate\File\Extension;        # File Extensions Validation Class
-use Next\Validate\File\MimeType;         # File Type Validation Class
+use Next\Validation\File\Size;           # File Size Validation Class
+use Next\Validation\File\Extension;      # File Extensions Validation Class
+use Next\Validation\File\MimeType;       # File Type Validation Class
 
 /**
  * Defines a File Uploading through different POST Request methods
