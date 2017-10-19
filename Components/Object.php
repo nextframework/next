@@ -18,7 +18,6 @@ use Next\Exception\Exceptions\NullException;
 use Next\Components\Interfaces\Contextualizable;    # Contextualizable Interface
 use Next\Components\Interfaces\Informational;       # Informational Interface
 use Next\Components\Interfaces\Parameterizable;     # Parameterizable Interface
-use Next\Components\Interfaces\Filterable;          # Filterable Interface
 use Next\Components\Interfaces\Verifiable;          # Verifiable Interface
 
 /**
@@ -95,7 +94,6 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      *
      * - Creates the Extended Context
      * - Merges all Parameter Options in one
-     * - Calls \Next\Components\Interfaces\Filterable::filter if needed
      * - Runs Additional Initialization
      * - Calls \Next\Components\Interfaces\Verifiable::verify() if needed
      *
@@ -109,8 +107,6 @@ class Object extends Prototype implements Contextualizable, Informational, Param
         $this -> context = new Context;
 
         $this -> options = new Parameter( $this -> parameters, $this -> setOptions(), $options );
-
-        if( $this instanceof Filterable ) $this -> filter();
 
         if( $this instanceof Verifiable ) $this -> verify();
 

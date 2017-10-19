@@ -81,13 +81,13 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
 
         $this -> merge( $this -> instanceOptions );
 
-        // Verifying Parameter Options Integrity
-
-        $this -> verify();
-
         // Discarding unused informations
 
         $this -> discard();
+
+        // Verifying Parameter Options Integrity
+
+        $this -> verify();
     }
 
     /**

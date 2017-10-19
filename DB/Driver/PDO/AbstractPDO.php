@@ -82,6 +82,10 @@ abstract class AbstractPDO extends Object implements Verifiable, Driver {
 
             $this -> connection -> setAttribute( \PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_OBJ );
 
+                // Disabling Prepared Statements Emulation
+
+            $this -> connection -> setAttribute( \PDO::ATTR_EMULATE_PREPARES, FALSE );
+
                 // Using a custom Statement Class
 
             $this -> connection -> setAttribute(

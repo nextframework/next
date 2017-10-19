@@ -47,6 +47,7 @@ class Google extends Object implements Verifiable, Helper {
      */
     protected $parameters = [
 
+        'model'           => [ 'type' => 'Next\DB\Entity\Entity',    'required' => TRUE ],
         'credentialsFile' => [ 'required' => TRUE ],
         'clientID'        => [ 'required' => TRUE ],
         'clientSecret'    => [ 'required' => TRUE ],
@@ -150,14 +151,6 @@ class Google extends Object implements Verifiable, Helper {
      * @see Google::negotiate()
      */
     public function getData() {
-
-        if( $this -> options -> model === NULL ||
-            ( ! $this -> options -> model instanceof Entity ) ) {
-
-            throw new InvalidArgumentException(
-                'Data Models must must be instance of \Next\DB\Entity\Entity'
-            );
-        }
 
         $this -> negotiate();
 

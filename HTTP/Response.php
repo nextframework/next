@@ -14,6 +14,7 @@ namespace Next\HTTP;
  * Exception Class(es)
  */
 use Next\Exception\Exceptions\Exception;
+use Next\Exception\Exceptions\FatalException;
 use Next\Exception\Exceptions\RuntimeException;
 use Next\Exception\Exceptions\InvalidArgumentException;
 
@@ -27,6 +28,8 @@ use Next\Components\Utils\ArrayUtils;       # Array Utils Class
 use Next\HTTP\Headers\Response\Location;    # Location Header Class
 use Next\HTTP\Headers\Raw;                  # Raw Data Header Class
 use Next\HTTP\Headers\Generic;              # Generic Data Header Class
+
+use Next\Validation\HTTP\Headers\Header;    # Generic Data Header Class
 
 /**
  * Response Class
@@ -886,69 +889,45 @@ class Response extends Object {
     /**
      * Send a Redirect Header
      *
-     * @param string $to
+     * @param string $destination
      *  URL to be Redirected
-     *
-     * @param boolean $raw
-     *  Defines whether or not the value of <strong>$to</strong
-     *  will be used as defined
-     *  When FALSE (default), the current full URL minus the current
-     *  Request URI will be prepended to given URL
-     *
-     * @throws \Next\Exception\Exceptions\RuntimeException
-     *  Thrown if any Header has already been sent
      *
      * @see Response::canSendHeaders()
      */
-    public function redirect( $to, $raw = FALSE ) {
+    public function redirect( $destination ) {
 
         self::canSendHeaders();
 
-        $to = (string) $to;
+        // Making Relative URLs absolute, if needed
 
-        /**
-         * @internal
-         *
-         * By default, $url used for Absolute URLs is the same
-         * of the informed destination...
-         */
-        $url = $to;
+        $request = new Request;
 
-        if( ! (bool) $raw ) {
-
-            $request = new Request;
-
-            // ... but we change it if we're dealing with a Relative URI
-
-            $url = strtr( $request -> getURL(), [ $request -> getRequestURI() => '' ] );
-
-            // No double slashes
-
-            if( $to != '/' ) $url .= $to;
+        if( $destination == '/' ) {
+            $destination = $request -> getBaseURL();
+        } else {
+            $destination = sprintf( '%s/%s', $request -> getBaseURL(), trim( $destination, '/' ) );
         }
 
         try {
 
-            // Location Header should be sent ONLY with Absolute URIs
-
             $this -> headers -> addHeader(
-                new Location( [ 'value' => $url ] )
+                new Location( [ 'value' => $destination ] )
             );
+
+            $this -> send();
 
         } catch( InvalidArgumentException $e ) {
 
             /**
-             *  If an InvalidArgumentException is caught, we have a
-             *  Relative URI so we'll send it as a Raw Header
+             * @internal
+             *
+             * If an InvalidArgumentException is caught here it means
+             * that something went wrong when dealing with the
+             * Location Header and because this prevents the normal
+             * Response flow to continue, it's a Fatal Error
              */
-            $this -> headers -> addHeader(
-                new Raw( [ 'value' => sprintf( 'Location: %s', $to ) ] )
-            );
+            throw new FatalException( $e -> getMessage() );
         }
-
-        // Sending the Response Immediately
-
-        $this -> send();
     }
 
     /**

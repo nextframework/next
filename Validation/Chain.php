@@ -28,7 +28,7 @@ use Next\Components\Collections\AbstractCollection;    # Abstract Collection Cla
  * @copyright     Copyright (c) 2014 Next Studios
  * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
  */
-class Chain extends AbstractCollection {
+class Chain extends AbstractCollection implements Validator {
 
     /**
      * Executes all Validators added to the Chain
