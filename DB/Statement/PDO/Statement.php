@@ -13,12 +13,12 @@ namespace Next\DB\Statement\PDO;
 use Next\DB\Statement\Statement as StatementInterface;    # Statement Interface
 
 /**
- * PDOStatement derived Class
+ * Custom PDOStatement Class
  *
- * @author        Bruno Augusto
+ * @package    Next\DB
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\DB\Statement\Statement
+ *             PDOStatement
  */
 class Statement extends \PDOStatement {
 
@@ -52,7 +52,7 @@ class Statement extends \PDOStatement {
      *
      * @return boolean TRUE on success and FALSE on failure
      */
-    public function execute( $input_parameters = NULL ) {
+    public function execute( $input_parameters = NULL ) : bool {
         return $this -> adapter -> execute( [ $input_parameters ] );
     }
 
@@ -140,7 +140,7 @@ class Statement extends \PDOStatement {
      * @return integer
      *  The number of rows affected
      */
-    public function rowCount() {
+    public function rowCount() : int {
         return $this -> adapter -> rowCount();
     }
 
@@ -151,7 +151,7 @@ class Statement extends \PDOStatement {
      *
      * @return string The SQLSTATE Error Code of performed PDOStatement operation
      */
-    public function errorCode() {
+    public function errorCode() : string {
         return $this -> adapter -> errorCode();
     }
 
@@ -160,7 +160,7 @@ class Statement extends \PDOStatement {
      *
      * @return array Extended error Information
      */
-    public function errorInfo() {
+    public function errorInfo() : array {
         return $this -> adapter -> errorInfo();
     }
 
@@ -176,7 +176,7 @@ class Statement extends \PDOStatement {
      * @return boolean
      *  TRUE on success and FALSE otherwise
      */
-    public function setFetchMode( $fetchStyle, $params = NULL ) {
+    public function setFetchMode( $fetchStyle, $params = NULL ) : bool {
         return $this -> adapter -> setFetchMode( $fetchStyle, $params );
     }
 
@@ -190,7 +190,7 @@ class Statement extends \PDOStatement {
      * @return boolean
      *  TRUE on success and FALSE otherwise
      */
-    public function closeCursor() {
+    public function closeCursor() :  bool {
         return $this -> adapter -> closeCursor();
     }
 }

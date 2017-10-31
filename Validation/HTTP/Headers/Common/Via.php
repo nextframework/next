@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Entity Header Field Validator Class: Allow | Validate\Headers\Entity\Allow.php
+ * HTTP Entity Header Field Validator Class: Allow | Validation\Headers\Entity\Allow.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,13 @@ use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
 use Next\Components\Object;                 # Object Class
 
 /**
- * Via Header Validation Class
+ * The 'Via' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.45
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class Via extends Object implements Header {
 
@@ -54,7 +55,7 @@ class Via extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.45
      *  RFC 2616 Section 14.45
      */
-    public function validate() {
+    public function validate() : bool {
 
         $test = preg_match(
 
@@ -75,7 +76,7 @@ class Via extends Object implements Header {
                 self::TOKEN, self::TOKEN, self::TOKEN
             ),
 
-            $this -> options -> value, $match
+            $this -> options -> value
         );
 
         return ( $test != 0 );

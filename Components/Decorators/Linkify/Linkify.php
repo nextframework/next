@@ -11,10 +11,10 @@
 namespace Next\Components\Decorators\Linkify;
 
 /**
- * Describes Linkify Objects that decorate resources by adding links
- * to predefined keywords/expressions
+ * Linkify Objects decorates resources by adding links to predefined
+ * keywords or expressions
  *
- * @package    Next\Decorators\Linkify
+ * @package    Next\Components\Decorators
  */
 interface Linkify {
 

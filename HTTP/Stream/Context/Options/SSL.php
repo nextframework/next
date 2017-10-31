@@ -11,12 +11,15 @@
 namespace Next\HTTP\Stream\Context\Options;
 
 /**
- * Stream Context SSL Options Class
+ * HTTP Stream Context Options Class for SSL Contexts
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\HTTP\Stream\Context\Options\AbstractOptions
+ *
+ * @deprecated
+ *
+ * @FIXME
  */
 class SSL extends AbstractOptions {
 
@@ -28,7 +31,7 @@ class SSL extends AbstractOptions {
      * @return string
      *  Context Wrapper Name
      */
-    public function getWrapperName() {
+    public function getWrapperName() : string {
         return 'ssl';
     }
 
@@ -41,7 +44,7 @@ class SSL extends AbstractOptions {
      * @return boolean
      *  TRUE if Context Options is acceptable and FALSE otherwise
      */
-    public function accept( $option ) {
+    public function accept( $option ) : bool {
 
         $valid = [
             'verify_peer', 'allow_self_signed', 'cafile', 'capath', 'local_cert',

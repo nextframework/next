@@ -11,12 +11,15 @@
 namespace Next\HTTP\Stream\Context\Options;
 
 /**
- * Stream Context Phar Options Class
+ * HTTP Stream Context Options Class for PHAR Contexts
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\HTTP\Stream\Context\Options\AbstractOptions
+ *
+ * @deprecated
+ *
+ * @FIXME
  */
 class Phar extends AbstractOptions {
 
@@ -28,7 +31,7 @@ class Phar extends AbstractOptions {
      * @return string
      *  Context Wrapper Name
      */
-    public function getWrapperName() {
+    public function getWrapperName() : string {
         return 'phar';
     }
 
@@ -41,7 +44,7 @@ class Phar extends AbstractOptions {
      * @return boolean
      *  TRUE if Context Options is acceptable and FALSE otherwise
      */
-    public function accept( $option ) {
+    public function accept( $option ) : bool {
         return ( in_array( $option, [ 'compress', 'metadata' ] ) );
     }
 }

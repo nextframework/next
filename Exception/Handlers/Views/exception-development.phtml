@@ -7,7 +7,7 @@
 
 <style type="text/css" media="screen">
 
-*{margin:0;padding:0;outline:0;list-style-type:none}a:link,a:active,a:visited{color:#00f;text-decoration:none}a:hover{text-decoration:underline}body{background-color:#141414 !important;color:#2c2c2c;font:12px Verdana;text-align:center}#exception{background-color:#fafafa;border:3px solid #ccc;margin:2% 5% 0 5%;padding:15px;text-align:left}#footer{color:#FFF}p{line-height:35px}p.trace{margin-right:2%}ul.items li{list-style-type:disc}ul.items li{line-height:20px;margin-left:25px}.details{display:none;margin:0 0 0 2%}p.label{display:inline-block;font-weight:bold;padding-right:10px;text-align:right;width:80px}.details a.args{color:#2c2c2c}.details a.args:hover{color:#2c2c2c}.details pre{border:1px solid #000;display:none;font-size:10px;margin:1% 0 2% 0;padding:10px;overflow:auto}
+*{margin:0;padding:0;outline:0;list-style-type:none}a:link,a:active,a:visited{color:#00f;text-decoration:none}a:hover{text-decoration:underline}body{background-color:#141414 !important;color:#2c2c2c;font:12px Verdana;text-align:center}#exception{background-color:#fafafa;border:3px solid #ccc;margin:5% 5% 0 5%;padding:15px;text-align:left}#footer{color:#FFF}p{line-height:35px}p.trace{margin-right:2%}ul.items li{list-style-type:disc}ul.items li{line-height:20px;margin-left:25px}.details{display:none;margin:0 0 0 2%}p.label{display:inline-block;font-weight:bold;padding-right:10px;text-align:right;width:80px}.details a.args{color:#2c2c2c}.details a.args:hover{color:#2c2c2c}.details pre{border:1px solid #000;display:none;font-size:10px;margin:1% 0 2% 0;padding:10px;overflow:auto}
 
 </style>
 
@@ -18,7 +18,13 @@
 <div id="exception">
 
     <p>
-        <?php if( ( $class = basename( get_class( $this -> e ) ) ) !== 'Exception' ) : ?>
+        <?php
+
+        $class = $class = basename( get_class( $this -> e ) );
+
+        if( $class !== 'Error' && $class !== 'Exception' ) :
+
+        ?>
         <strong><?php echo $class; ?></strong> threw an Exception
         <?php else: ?>
         An Exception has been thrown

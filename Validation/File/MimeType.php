@@ -1,7 +1,7 @@
 <?php
 
 /**
- * File MIME-Type Validator Class | Validate\File\MIME.php
+ * File MIME-Type Validator Class | Validation\File\MIME.php
  *
  * @author       Bruno Augusto
  *
@@ -15,12 +15,14 @@ use Next\Components\Object;              # Object Class
 use Next\Components\Utils\ArrayUtils;    # Array Utils Class
 
 /**
- * File MimeType Validation Class
+ * The File MIME-Type Validator checks if given MIME-Type is accepted
+ * towards a predefined set of MIME-Types
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\Validator
+ *             Next\Components\Object
+ *             Next\Components\Utils\ArrayUtils
  */
 class MimeType extends Object implements Validator {
 
@@ -49,7 +51,7 @@ class MimeType extends Object implements Validator {
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      */
-    public function validate() {
+    public function validate() : bool {
 
         if( count( (array) $this -> options -> acceptedFileTypes ) == 0 ) return TRUE;
 

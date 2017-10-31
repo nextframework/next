@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ISO-639 Validator Class | Validate\ISO\ISO639.php
+ * ISO-639 Validator Class | Validation\ISO\ISO639.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,13 @@ use Next\Validation\Validator;    # Validator Interface
 use Next\Components\Object;       # Object Class
 
 /**
- * ISO-639 Validation Class
+ * The ISO-639 Validator checks if input string is a valid
+ * Language Name Representation in accordance to the standards of ISO-639
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\Validator
+ *             Next\Components\Object
  */
 class ISO639 extends Object implements Validator {
 
@@ -31,18 +32,22 @@ class ISO639 extends Object implements Validator {
      * @see http://www.loc.gov/standards/iso639-2/php/code_list.php
      */
     const CODES = [
-        'aa', 'ab', 'af', 'ak', 'sq', 'am', 'ar', 'an', 'hy', 'as', 'av', 'ae', 'ay', 'az', 'ba', 'bm',
-        'eu', 'be', 'bn', 'bh', 'bi', 'bo', 'bs', 'br', 'bg', 'my', 'ca', 'cs', 'ch', 'ce', 'zh', 'cu',
-        'cv', 'kw', 'co', 'cr', 'cy', 'cs', 'da', 'de', 'dv', 'nl', 'dz', 'el', 'en', 'eo', 'et', 'eu',
-        'ee', 'fo', 'fa', 'fj', 'fi', 'fr', 'fr', 'fy', 'ff', 'ka', 'de', 'gd', 'ga', 'gl', 'gv', 'el',
-        'gn', 'gu', 'ht', 'ha', 'he', 'hz', 'hi', 'ho', 'hr', 'hu', 'hy', 'ig', 'is', 'io', 'ii', 'iu',
-        'ie', 'ia', 'id', 'ik', 'is', 'it', 'jv', 'ja', 'kl', 'kn', 'ks', 'ka', 'kr', 'kk', 'km', 'ki',
-        'rw', 'ky', 'kv', 'kg', 'ko', 'kj', 'ku', 'lo', 'la', 'lv', 'li', 'ln', 'lt', 'lb', 'lu', 'lg',
-        'mk', 'mh', 'ml', 'mi', 'mr', 'ms', 'mk', 'mg', 'mt', 'mn', 'mi', 'ms', 'my', 'na', 'nv', 'nr',
-        'nd', 'ng', 'ne', 'nl', 'nn', 'nb', 'no', 'ny', 'oc', 'oj', 'or', 'om', 'os', 'pa', 'fa', 'pi',
-        'pl', 'pt', 'ps', 'qu', 'rm', 'ro', 'ro', 'rn', 'ru', 'sg', 'sa', 'si', 'sk', 'sk', 'sl', 'se',
-        'sm', 'sn', 'sd', 'so', 'st', 'es', 'sq', 'sc', 'sr', 'ss', 'su', 'sw', 'sv', 'ty', 'ta', 'tt',
-        'te', 'tg', 'tl', 'th', 'bo', 'ti', 'to', 'tn', 'ts', 'tk', 'tr', 'tw', 'ug', 'uk', 'ur', 'uz',
+        'aa', 'ab', 'af', 'ak', 'sq', 'am', 'ar', 'an', 'hy', 'as', 'av', 'ae',
+        'ay', 'az', 'ba', 'bm', 'eu', 'be', 'bn', 'bh', 'bi', 'bo', 'bs', 'br',
+        'bg', 'my', 'ca', 'cs', 'ch', 'ce', 'zh', 'cu', 'cv', 'kw', 'co', 'cr',
+        'cy', 'cs', 'da', 'de', 'dv', 'nl', 'dz', 'el', 'en', 'eo', 'et', 'eu',
+        'ee', 'fo', 'fa', 'fj', 'fi', 'fr', 'fr', 'fy', 'ff', 'ka', 'de', 'gd',
+        'ga', 'gl', 'gv', 'el', 'gn', 'gu', 'ht', 'ha', 'he', 'hz', 'hi', 'ho',
+        'hr', 'hu', 'hy', 'ig', 'is', 'io', 'ii', 'iu', 'ie', 'ia', 'id', 'ik',
+        'is', 'it', 'jv', 'ja', 'kl', 'kn', 'ks', 'ka', 'kr', 'kk', 'km', 'ki',
+        'rw', 'ky', 'kv', 'kg', 'ko', 'kj', 'ku', 'lo', 'la', 'lv', 'li', 'ln',
+        'lt', 'lb', 'lu', 'lg', 'mk', 'mh', 'ml', 'mi', 'mr', 'ms', 'mk', 'mg',
+        'mt', 'mn', 'mi', 'ms', 'my', 'na', 'nv', 'nr', 'nd', 'ng', 'ne', 'nl',
+        'nn', 'nb', 'no', 'ny', 'oc', 'oj', 'or', 'om', 'os', 'pa', 'fa', 'pi',
+        'pl', 'pt', 'ps', 'qu', 'rm', 'ro', 'ro', 'rn', 'ru', 'sg', 'sa', 'si',
+        'sk', 'sk', 'sl', 'se', 'sm', 'sn', 'sd', 'so', 'st', 'es', 'sq', 'sc',
+        'sr', 'ss', 'su', 'sw', 'sv', 'ty', 'ta', 'tt', 'te', 'tg', 'tl', 'th',
+        'bo', 'ti', 'to', 'tn', 'ts', 'tk', 'tr', 'tw', 'ug', 'uk', 'ur', 'uz',
         've', 'vi', 'vo', 'cy', 'wa', 'wo', 'xh', 'yi', 'yo', 'za', 'zh', 'zu'
     ];
 
@@ -63,23 +68,11 @@ class ISO639 extends Object implements Validator {
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      */
-    public function validate() {
+    public function validate() : bool {
 
         $value = $this -> options -> value;
 
-        if( ! is_string( $value ) ) {
-
-            $this -> _error = vsprintf(
-
-                'Validator <strong>%s</strong> expects a string, %s given',
-
-                [
-                  $this -> getClass() -> getNamespaceName(), gettype( $value )
-                ]
-            );
-
-            return FALSE;
-        }
+        if( ! is_string( $value ) ) return FALSE;
 
         /**
          * @internal
@@ -102,6 +95,6 @@ class ISO639 extends Object implements Validator {
          */
         $this -> _info = $value;
 
-        return ( strlen( $value ) == 2 && in_array( $value, self::CODES ) );
+        return ( mb_strlen( $value ) == 2 && in_array( $value, self::CODES ) );
     }
 }

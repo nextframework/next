@@ -11,12 +11,9 @@
 namespace Next\FileSystem\Prototypes\ClassMapper\Writer;
 
 /**
- * Mapper Output Format Interface
+ * An Interface for all ClassMapper Output Writing Strategies
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2017 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\FileSystem
  */
 interface Writer {
 

@@ -10,14 +10,26 @@
  */
 namespace Next\HTTP\Router\Generators\Annotations;
 
-use Next\Tools\Routes\Generators\GeneratorsException;    # Routes Generators Exception Class
-use Next\Components\Utils\ArrayUtils;                    # Array Utils Class
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
+use Next\Components\Utils\ArrayUtils;    # Array Utils Class
 
 /**
- * Defines the Controllers' Actions Analyzer, filtering through data
- * reflected and preparing structure for the Routes Generator process
+ * The Page Controllers' Actions Methods Parser parses, filters reflected data
+ * and prepares a data-structure for the Routes Generator to process
  *
- * @package    Next\Tools\Routes\Generators
+ * @package    Next\HTTP
+ *
+ * @uses       Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Components\Utils\ArrayUtils
+ *             Next\HTTP\Router\Generators\Annotations\Annotations
+ *             FilterIterator
+ *             ReflectionClass
+ *             ReflectionMethod
+ *             ArrayIterator
  */
 class Actions extends \FilterIterator implements Annotations {
 
@@ -79,10 +91,11 @@ class Actions extends \FilterIterator implements Annotations {
      * @return array
      *  Found annotations
      *
-     * @throws \Next\Tools\Routes\Generators\GeneratorsException
-     *  Route argument has less than 2 Components (a Name and a Type)
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if an Action Method has an malformed Argument Definition,
+     *  with has less than 2 Components — a Name and a Type
      */
-    public function getAnnotations() {
+    public function getAnnotations() : array {
 
         $data = [];
 
@@ -94,7 +107,7 @@ class Actions extends \FilterIterator implements Annotations {
 
             $args = [];
 
-            foreach( $this -> findActionAnnotations( $current, self::ARGS_PREFIX ) as $index => $arg ) {
+            foreach( $this -> findActionAnnotations( $current, self::ARGS_PREFIX ) as $arg ) {
 
                 $temp = explode( ',', $arg, 5 );
 
@@ -102,9 +115,21 @@ class Actions extends \FilterIterator implements Annotations {
 
                 if( count( $temp )  < 2 ) {
 
-                    throw GeneratorsException::malformedArguments(
+                    throw new InvalidArgumentException(
 
-                        [ $current -> class, $current -> name ]
+                        sprintf(
+
+                            'Action Method <em>%s</em> of Controller
+                            class <em>%s</em> has an malformed
+                            Route Arguments Definition
+
+                            Routes\' Arguments must be composed of at
+                            least two components: an
+                            <strong>Argument Name</strong> and a
+                            <strong>Type</strong>',
+
+                            $current -> name, $current -> class
+                        )
                     );
                 }
 
@@ -116,7 +141,7 @@ class Actions extends \FilterIterator implements Annotations {
 
                 $temp = array_map(
 
-                    function( $current ) {
+                    function( $current ) :? string {
 
                         $current = trim( $current );
 
@@ -168,7 +193,7 @@ class Actions extends \FilterIterator implements Annotations {
      * @return boolean
      *  TRUE if annotation is acceptable as Action Annotation and FALSE otherwise
      */
-    public function accept() {
+    public function accept() : bool {
 
         $method = $this -> getInnerIterator() -> current();
 
@@ -208,7 +233,7 @@ class Actions extends \FilterIterator implements Annotations {
      * @return array
      *  Found Annotations
      */
-    private function findActionAnnotations( \ReflectionMethod $action, $annotationPrefix ) {
+    private function findActionAnnotations( \ReflectionMethod $action, $annotationPrefix ) : array {
 
         $annotation = preg_grep(
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Request Header Field Validator Class: Accept | Validate\Headers\Request\Accept.php
+ * HTTP Request Header Field Validator Class: Accept | Validation\Headers\Request\Accept.php
  *
  * @author       Bruno Augusto
  *
@@ -15,12 +15,14 @@ use Next\Components\Object;                 # Object Class
 use Next\Validation\IANA\MIME as IANA;      # IANA MIME-Type Validation Class
 
 /**
- * Accept Header Validation Validation Class
+ * The 'Accept' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.1
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
+ *             Next\Validation\IANA\MIME
  */
 class Accept extends Object implements Header {
 
@@ -62,7 +64,7 @@ class Accept extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
      *  RFC 2616 Section 14.1
      */
-    public function validate() {
+    public function validate() : bool {
 
         preg_match(
 

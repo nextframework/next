@@ -19,12 +19,17 @@ use Next\Components\Object;              # Object Class
 use Next\Components\Utils\ArrayUtils;    # ArrayUtils Class
 
 /**
- * Defines a structure derived from \Next\Components\Collections\AbstractCollection
- * through which a Collection can be accessed directly through their offsets
+ * A variation of of Objects' Collection with always sequential indexes through
+ * which Objects can be accessed directly by offsets
  *
  * @package    Next\Components\Collections
+ *
+ * @uses       Next\Exception\Exceptions\OutOfRangeException
+ *             Next\Components\Object
+ *             Next\Components\Utils\ArrayUtils
+ *             ArrayAccess
  */
-class Lists extends AbstractCollection implements \ArrayAccess {
+class Lists extends Collection implements \ArrayAccess {
 
     /**
      * Get an Object from specified index, name or hash
@@ -36,7 +41,7 @@ class Lists extends AbstractCollection implements \ArrayAccess {
      *  Object at given offset or -1 if unable to find it within
      *  the Collection
      *
-     * @see \Next\Components\Collections\AbstractCollection::find()
+     * @see \Next\Components\Collections\Collection::find()
      */
     public function item( $reference ) {
 
@@ -46,13 +51,13 @@ class Lists extends AbstractCollection implements \ArrayAccess {
     }
 
     /**
-     * Get Collection Neighbors
+     * Get Collection Neighbours
      *
      * @param  integer|optional $offset
      *  An Object offset within the Collection to serve as start point
      *
      * @param  integer|optional $limit
-     *  A limit for how many neighbors before and after given offset
+     *  A limit for how many neighbours before and after given offset
      *  will be retrieved
      *
      * @return array
@@ -64,9 +69,9 @@ class Lists extends AbstractCollection implements \ArrayAccess {
      *
      * @todo Check the possibility of `$end` returns a negative value
      */
-    public function getNeighbors( $offset = 0, $limit = 1 ) {
+    public function getNeighbours( $offset = 0, $limit = 1 ) : Lists {
 
-        if( $offset >= $this -> count() ) {
+        if( $offset > count( $this ) ) {
 
             throw new OutOfRangeException(
                 'Requested offset exceeds the size of Collection'
@@ -76,7 +81,9 @@ class Lists extends AbstractCollection implements \ArrayAccess {
         $start = ( $offset - $limit ) >= 0 ? ( $offset - $limit ) : 0;
         $end   = $offset - $start + $limit + 1;
 
-        return array_slice( $this -> collection, $start, $end, TRUE );
+        return new Lists(
+            [ 'collection' => array_slice( $this -> collection, $start, $end, TRUE ) ]
+        );
     }
 
     // ArrayAccess Interface Methods Implementation
@@ -93,7 +100,7 @@ class Lists extends AbstractCollection implements \ArrayAccess {
      *
      * @see Lists::item()
      */
-    public function offsetExists( $offset ) {
+    public function offsetExists( $offset ) : bool {
         return ( $this -> item( $offset ) !== FALSE );
     }
 
@@ -115,7 +122,7 @@ class Lists extends AbstractCollection implements \ArrayAccess {
 
     /**
      * Assign a value to the specified offset in the Collection
-     * as an Interface alias to AbstractCollection::add()
+     * as an Interface alias to Collection::add()
      *
      * @param mixed|string|integer $offset
      *  Offset where new data will be stored
@@ -123,9 +130,9 @@ class Lists extends AbstractCollection implements \ArrayAccess {
      * @param \Next\Components\Object $object
      *  Object to add
      *
-     * @see \Next\Components\Collection\AbstractCollection::add()
+     * @see \Next\Components\Collection\Collection::add()
      */
-    public function offsetSet( $offset, $object ) {
+    public function offsetSet( $offset, $object ) : void {
         $this -> add( $object, $offset );
     }
 
@@ -138,7 +145,7 @@ class Lists extends AbstractCollection implements \ArrayAccess {
      *
      * @see \Next\Components\Collections\AbsractCollection::remove()
      */
-    public function offsetUnset( $offset ) {
+    public function offsetUnset( $offset ) : void {
         $this -> remove( $offset );
     }
 
@@ -153,7 +160,7 @@ class Lists extends AbstractCollection implements \ArrayAccess {
      * @return boolean
      *  Always TRUE, because a Collection Lists accepts everything
      */
-    protected function accept( Object $object ) {
+    protected function accept( Object $object ) : bool {
 
         // Lists accepts everything
 

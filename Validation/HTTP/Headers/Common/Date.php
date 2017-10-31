@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Common Header Field Validator Class: Date | Validate\Headers\Common\Date.php
+ * HTTP Common Header Field Validator Class: Date | Validation\Headers\Common\Date.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,13 @@ use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
 use Next\Components\Object;                 # Object Class
 
 /**
- * RFC 2616 Date Header Validation Class
+ * The 'Date' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.18
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class Date extends Object implements Header {
 
@@ -74,7 +75,7 @@ class Date extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.18
      *  RFC 2616 Section 14.18
      */
-    public function validate() {
+    public function validate() : bool {
 
         if( ! is_string( $this -> options -> value ) ) return FALSE;
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Response Header Field Validator Class: Accept-Ranges | Validate\Headers\Response\AcceptRanges.php
+ * HTTP Response Header Field Validator Class: Accept-Ranges | Validation\Headers\Response\AcceptRanges.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,13 @@ use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
 use Next\Components\Object;                 # Object Class
 
 /**
- * RFC 2616 Accept-Ranges Header Validation Class
+ * The 'Accept-Ranges' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.5
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class AcceptRanges extends Object implements Header {
 
@@ -50,7 +51,7 @@ class AcceptRanges extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.5
      *  RFC 2616 Section 14.5
      */
-    public function validate() {
+    public function validate() : bool {
 
         return ( strcasecmp( $this -> options -> value, 'none'  ) == 0 ||
                  strcasecmp( $this -> options -> value, 'bytes' ) == 0 );

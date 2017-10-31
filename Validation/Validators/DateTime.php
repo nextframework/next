@@ -1,7 +1,7 @@
 <?php
 
 /**
- * W3C DateTime Validator Class | Validate\Validators\DateTime.php
+ * W3C DateTime Validator Class | Validation\Validators\DateTime.php
  *
  * @author       Bruno Augusto
  *
@@ -14,11 +14,14 @@ use Next\Validation\Validator;    # Validator Interface
 use Next\Components\Object;       # Object Class
 
 /**
- * Validates given input against W3C's DateTime specification
+ * The DateTime Validator checks if input string is a valid DateTime
+ * representation in accordance to the standards of World Wide Web Consortium (W3C)
  *
  * @package    Next\Validation
  *
- * @uses       \Next\Validation\Validator, \Next\Components\Object
+ * @uses       Next\Validation\Validator
+ *             Next\Components\Object
+ *             DateTime
  *
  * @see        https://www.w3.org/TR/NOTE-datetime
  */
@@ -32,7 +35,7 @@ class DateTime extends Object implements Validator {
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      */
-    public function validate() {
+    public function validate() : bool {
 
         /**
          * @internal

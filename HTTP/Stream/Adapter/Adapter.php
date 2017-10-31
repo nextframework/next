@@ -13,12 +13,12 @@ namespace Next\HTTP\Stream\Adapter;
 use Next\HTTP\Stream\Context\Context;    # Stream Context Interface
 
 /**
- * Stream Adapter Interface
+ * An Interface for all HTTP Stream Adapters
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\HTTP\Stream\Context\Context
+ *             SeekableIterator
  */
 interface Adapter extends \SeekableIterator {
 

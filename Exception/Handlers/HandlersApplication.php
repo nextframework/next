@@ -10,37 +10,36 @@
  */
 namespace Next\Exception\Handlers;
 
-use Next\Application\AbstractApplication;    # Abstract Application Class
-use Next\View\Standard as View;              # View Engine
+use Next\View\View;                     # View Interface
+use Next\Application\Application;       # Application Abstract Class
+use Next\View\Standard;                 # View Engine
+use Next\Session\Manager as Session;    # Session Manager Class
 
 /**
- * A \Next\Application\Application for our custom Error and Exception Handlers
+ * An Application for our custom Error and Exception Handlers
  *
  * @package    Next\Exception
  *
- * @uses       Next\Application\AbstractApplication, Next\View\Standard
+ * @uses       Next\Application\Application
+ *             Next\HTTP\Router\NullRouter
+ *             Next\View\Standard
+ *             Next\Session\Manager
  */
-class HandlersApplication extends AbstractApplication {
+class HandlersApplication extends Application {
 
     /**
      * View Engine Setup
+     *
+     * @return \Next\View\Standard
+     *  View Engine Object configured for Exceptions Handler Application
      */
-    public function setupView() {
+    public function setupView() : View {
 
-        return new View(
+        return new Standard(
             [
                 'application' => $this,
                 'basepath'    => sprintf( '%s/Views', __DIR__ )
             ]
         );
     }
-
-    // Abstract Methods Implementation
-
-    /**
-     * Controllers Setup
-     *
-     * It's not needed because there is no routing for this Application
-     */
-    protected function setupControllers() {}
 }

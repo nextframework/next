@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Response Header Field Validator Class: Retry-After | Validate\Headers\Response\RetryAfter.php
+ * HTTP Response Header Field Validator Class: Retry-After | Validation\Headers\Response\RetryAfter.php
  *
  * @author       Bruno Augusto
  *
@@ -10,16 +10,19 @@
  */
 namespace Next\Validation\HTTP\Headers\Response;
 
-use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
-use Next\Components\Object;                 # Object Class
+use Next\Validation\HTTP\Headers\Header;         # HTTP Headers Validator Interface
+use Next\Components\Object;                      # Object Class
+use Next\Validation\HTTP\Headers\Common\Date;    # HTTP Headers Date Validator Class
 
 /**
- * RFC 2616 Retry-After Header Validation Class
+ * The 'Retry-After' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.37
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
+ *             Next\Validation\HTTP\Headers\Common\Date
  */
 class RetryAfter extends Object implements Header {
 
@@ -68,22 +71,19 @@ class RetryAfter extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.37
      *  RFC 2616 Section 14.37
      */
-    public function validate() {
+    public function validate() : bool {
 
         $data = $this -> options -> value;
 
         // Trying to validate as HTTP-date
 
-        if( gmdate( 'D, d M Y H:i:s T', strtotime( $data ) ) != $data ) {
+        $validator = new Date( [ 'value' => $data ] );
 
-            // Trying to validate as Delta Seconds
+        if( ! $validator -> validate() ) {
 
-            if( preg_match( '/^[1-9][0-9]*$/', $data ) != 0 ) {
+            // Validating as Delta Seconds
 
-                return TRUE;
-            }
-
-            return FALSE;
+            return ( preg_match( '/^[1-9][0-9]*$/', $data ) != 0 );
         }
 
         return TRUE;

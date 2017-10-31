@@ -10,18 +10,25 @@
  */
 namespace Next\Pagination\Styles;
 
-use Next\Components\Interfaces\Verifiable;                 # Verifiable Interface
-use Next\Exception\Exceptions\InvalidArgumentException;    # Invalid Argument Exception Class
-use Next\Components\Object;                                # Object Class
-use Next\Pagination\Paginator;                               # Paginator Class
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
+use Next\Validation\Verifiable;    # Verifiable Interface
+use Next\Components\Object;        # Object Class
+use Next\Pagination\Paginator;     # Paginator Class
 
 /**
- * Standard Pagination Style Class
+ * The 'Standard' Pagination Style builds an Interval with a configurable amount
+ * of items before and after the Current Page, resembling a curvy mountain
  *
- * @author        Bruno Augusto
+ * @package    Next\Pagination
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Components\Interfaces\Configurable
+ *             Next\Pagination\Paginator
+ *             Next\Pagination\Styles\Style
  */
 class Standard extends Object implements Verifiable, Style {
 
@@ -74,14 +81,14 @@ class Standard extends Object implements Verifiable, Style {
      * @return Next\Pagination\Styles\Style
      *  Pagination Style Object (Fluent Interface)
      */
-    public function setPaginator( Paginator $paginator ) {
+    public function setPaginator( Paginator $paginator ) : Standard {
 
         $this -> paginator = $paginator;
 
         return $this;
     }
 
-    // Boundable Interface Methods Implementation
+    // Boundable Interval Interface Methods Implementation
 
     /**
      * Get the Lower Bound of a Subset.
@@ -95,7 +102,7 @@ class Standard extends Object implements Verifiable, Style {
      * @return integer
      *  The Lowest Page Number visible
      */
-    public function getLowerBound() {
+    public function getLowerBound() : int {
 
         $this -> lowerBound = ( $this -> paginator -> getCurrentPage() - $this -> options -> before );
 
@@ -114,7 +121,7 @@ class Standard extends Object implements Verifiable, Style {
      * @return integer
      *  The highest Page Number visible
      */
-    public function getUpperBound() {
+    public function getUpperBound() : int {
 
         $total = count( $this -> paginator );
 
@@ -134,9 +141,12 @@ class Standard extends Object implements Verifiable, Style {
      *
      * To put it simple, this means a range between the Lower Bound and the Upper Bound
      *
+     * @return array
+     *  Pagination range
+     *
      * @see https://en.wikipedia.org/wiki/Interval_(mathematics)
      */
-    public function getInterval() {
+    public function getInterval() : array {
 
         if( $this -> lowerBound === NULL || $this -> upperBound === NULL ) {
 
@@ -161,7 +171,7 @@ class Standard extends Object implements Verifiable, Style {
      *  Thrown if initial value of Parameter Option 'before' is not an
      *  integer or it's less than 1
      */
-    public function verify() {
+    public function verify() : void {
 
         if( ! is_int( $this -> options -> before ) || $this -> options -> before < 1 ) {
 
@@ -179,7 +189,7 @@ class Standard extends Object implements Verifiable, Style {
      * @return integer
      *  Number of elements within the Interval
      */
-    public function count() {
+    public function count() : int {
         return ( $this -> count !== NULL ? $this -> count : count( $this -> getInterval() ) );
     }
 }

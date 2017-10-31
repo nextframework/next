@@ -10,19 +10,30 @@
  */
 namespace Next\Exception\Handlers\Controllers;
 
-use Next\View\ViewException;               # View Exception
-use Next\Controller\AbstractController;    # Abstract Controller Class
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exception;
+use Next\Exception\Exceptions\InvalidArgumentException;
+use Next\Exception\Exceptions\RuntimeException;
+use Next\Exception\Exceptions\AccessViolationException;
 
-use Next\Exception\Handlers;                   # Next Debug Handlers Class
+use Next\Controller\Controller;    # Abstract Controller Class
+use Next\Exception\Handlers;       # Next Debug Handlers Class
 
 /**
- * A \Next\Controller\Controller Class to be used by our custom Error Handler
+ * Page Controller Class to be used by our custom Error Handler
  *
  * @package    Next\Exception
  *
- * @uses       Next\View\Exception, Next\Controller\AbstractController
+ * @uses       Next\Exception\Exception
+ *             Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Exception\Exceptions\RuntimeException
+ *             Next\Exception\Exceptions\AccessViolationException
+ *             Next\Controller\Controller
+ *             Next\Exception\Handlers
  */
-class ErrorHandlerController extends AbstractController {
+class ErrorHandlerController extends Controller {
 
     /**
      * Collection of (funny?) messages for some of the most common Status Code Errors
@@ -98,7 +109,7 @@ class ErrorHandlerController extends AbstractController {
     /**
      * Status Code Error Action Handler
      */
-    final public function status() {
+    final public function status() : void {
 
         // Trying to render a specific Template File
 
@@ -127,8 +138,15 @@ class ErrorHandlerController extends AbstractController {
 
             $this -> view -> render( 'status.phtml' );
 
-        } catch( ViewException $e ) {
+        } catch( InvalidArgumentException | RuntimeException | AccessViolationException | Exception $e ) {
 
+            /**
+             * @internal
+             *
+             * These are all Exceptions thrown by Next\View\ViewException,
+             * but if everything else fails, the base Exception is also
+             * there as fallback
+             */
             Handlers::development( $e );
         }
     }
@@ -136,8 +154,7 @@ class ErrorHandlerController extends AbstractController {
     /**
      * Regular Error Message Action Handler
      */
-    final public function error() {
-
+    final public function error() : void {
         $this -> view -> assign( 'e', $this -> e ) -> render( 'error.phtml' );
     }
 }

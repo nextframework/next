@@ -15,19 +15,24 @@ namespace Next\DB\Entity;
  */
 use Next\Exception\Exceptions\InvalidArgumentException;
 
-use Next\Components\Interfaces\Verifiable;    # Verifiable Interface
-use Next\DB\Query\Query;                      # Query Interface
-use Next\Components\Object;                   # Object Class
-use Next\Components\Invoker;                  # Invoker Class
+use Next\Validation\Verifiable;    # Verifiable Interface
+use Next\DB\Query\Query;           # Query Interface
+use Next\Components\Object;        # Object Class
+use Next\Components\Invoker;       # Invoker Class
+use Next\DB\DataGateway\RowSet;    # RowSet Class
 
 /**
- * Entity Repository Base Class
+ * The Entity Repository handles the Entity directly, encapsulating complex
+ * statements in simple wrappers
  *
- * @package      Next\DB
+ * @package    Next\DB
  *
- * @uses         \Next\DB\Query\Query, \Next\Components\Object,
- *               \Next\Components\Invoker, \Next\DB\Entity\Manager
- *               \Next\DB\Entity\EntityException
+ * @uses       Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Validation\Verifiable
+ *             Next\DB\Query\Query
+ *             Next\Components\Object
+ *             Next\Components\Invoker
+ *             Next\DB\DataGateway\RowSet
  */
 class Repository extends Object implements Verifiable {
 
@@ -52,7 +57,7 @@ class Repository extends Object implements Verifiable {
      *
      * @see \Next\DB\Statement\Statement::fetch()
      */
-    public function find( array $condition ) {
+    public function find( array $condition ) : RowSet {
 
         $this -> verify();
 
@@ -73,7 +78,7 @@ class Repository extends Object implements Verifiable {
      *
      * @see \Next\DB\Statement\Statement::fetchAll()
      */
-    public function findAll( $columns = Query::WILDCARD ) {
+    public function findAll( $columns = Query::WILDCARD ) : RowSet {
 
         $this -> verify();
 
@@ -111,7 +116,7 @@ class Repository extends Object implements Verifiable {
      *
      * @see \Next\DB\Statement\Statement::fetchAll()
      */
-    public function findBy( array $conditions, array $order = [], $limit = NULL ) {
+    public function findBy( array $conditions, array $order = [], $limit = NULL ) : RowSet {
 
         $this -> verify();
 
@@ -160,7 +165,7 @@ class Repository extends Object implements Verifiable {
      *
      * @see \Next\DB\Entity\Repository::findBy()
      */
-    public function findOneBy( array $condition, $order = NULL ) {
+    public function findOneBy( array $condition, $order = NULL ) : RowSet {
         $this -> findBy( $condition, $order, 1 );
     }
 
@@ -172,7 +177,7 @@ class Repository extends Object implements Verifiable {
      * @return \Next\DB\Entity\Entity
      *  Entity Object
      */
-    public function getEntity() {
+    public function getEntity() : Entity {
         return $this -> options -> entity;
     }
 
@@ -182,16 +187,16 @@ class Repository extends Object implements Verifiable {
      * Verifies Object Integrity
      *
      * @throws \Next\Exception\Exceptions\InvalidArgumentException
-     *  Thrown if there's no \Next\DB\Entity\Entity Object defined
+     *  Thrown if there's no Next\DB\Entity\Entity Object defined
      */
-    public function verify() {
+    public function verify() : void {
 
         if( $this -> options -> entity === NULL ) {
 
             throw new InvalidArgumentException(
                 'Repository Objects requires an Object instance of
-                <em>Next\DB\Entity\Entity</em> to be operated by the
-                <em>Next\DB\Entity\Manager</em>'
+                <em>Next\DB\Entity\Entity</em> so they can later be operated
+                by the a <em>Next\DB\Entity\Manager</em>'
             );
         }
     }

@@ -13,11 +13,13 @@ namespace Next\HTTP\Request;
 use Next\Components\Object;    # Object Class
 
 /**
- * Defines a class to obtain various informations by analyzing Request and Server variables
+ * The Browser Class obtains various informations by analyzing Server variables
  *
- * @package    Next\Request
+ * @package    Next\HTTP
  *
- * @todo       Needs a SERIOUS rewriting >.<
+ * @uses       Next\Components\Object
+ *             stdClass
+ *             ArrayIterator
  */
 class Browser extends Object {
 
@@ -25,6 +27,8 @@ class Browser extends Object {
      * IP Address Regular Expression
      *
      * @var string
+     *
+     * @todo Move to a standalone validator
      */
     const IP_REGEX = '/\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/';
 
@@ -360,12 +364,10 @@ class Browser extends Object {
     private $info;
 
     /**
-     * Additional Initialization
+     * Additional Initialization.
+     * Resets all found data
      */
-    public function init() {
-
-        $this -> info = new \stdClass;
-
+    protected function init() : void {
         $this  ->  reset();
     }
 
@@ -374,12 +376,10 @@ class Browser extends Object {
     /**
      * Get ALL Detected Information
      *
-     * @return \Next\HTTP\Request\Browser
-     *  Browser Object (Information are stored in a stdClass)
+     * @return \stdClass
+     *  Browser Informations
      */
-    public function getInfo() {
-
-        // We'll detect information just when requested
+    public function getInfo() : \stdClass {
 
         $this  -> detectIP();
 
@@ -396,7 +396,7 @@ class Browser extends Object {
      * @return string
      *  User IP Address
      */
-    public function getIP() {
+    public function getIP() : string {
 
         if( $this -> info -> IP === NULL ) $this -> detectIP();
 
@@ -409,7 +409,7 @@ class Browser extends Object {
      * @return string
      *  User Platform, Operating System or Mobile Device Name
      */
-    public function getPlatform() {
+    public function getPlatform() : string {
 
         if( $this -> info -> platform === NULL ) $this -> detectPlatform();
 
@@ -432,7 +432,7 @@ class Browser extends Object {
      *
      *   <p>Otherwise only browser name will</p>
      */
-    public function getBrowser( $includeVersion = FALSE ) {
+    public function getBrowser( $includeVersion = FALSE ) : string {
 
         if( $this -> info -> browser === NULL || $this -> info -> version === NULL ) {
             $this -> detectBrowser();
@@ -448,7 +448,9 @@ class Browser extends Object {
     /**
      * Resets all detected Information
      */
-    private function reset() {
+    private function reset() : void {
+
+        $this -> info = new \stdClass;
 
         $this -> info -> agent = ( isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : NULL );
 
@@ -468,7 +470,7 @@ class Browser extends Object {
     /**
      * Detects User's IP
      */
-    private function detectIP() {
+    private function detectIP() : void {
 
         $headers = [
 
@@ -516,7 +518,7 @@ class Browser extends Object {
     /**
      * Detects Platform
      */
-    private function detectPlatform() {
+    private function detectPlatform() : void {
 
         $platforms = [
 
@@ -533,10 +535,7 @@ class Browser extends Object {
         foreach( $platforms as $search => $platform ) {
 
             if( stripos( $this -> info -> agent, $search ) !== FALSE ) {
-
-                $this -> info -> platform = $platform;
-
-                break;
+                $this -> info -> platform = $platform; break;
             }
         }
     }
@@ -544,7 +543,7 @@ class Browser extends Object {
     /**
      * Detects Browser
      */
-    private function detectBrowser() {
+    private function detectBrowser() : void {
 
         /**
          * @internal
@@ -563,7 +562,7 @@ class Browser extends Object {
          * Netscape 9+ is based on Firefox, so it needs to be checked
          * before FireFox
          */
-        $methodsIterator = new \ArrayIterator(
+        $iterator = new \ArrayIterator(
 
             [
 
@@ -594,15 +593,15 @@ class Browser extends Object {
             ]
         );
 
-        while( $methodsIterator -> valid() ) {
+        while( $iterator -> valid() ) {
 
             $result = (bool) call_user_func(
-                [ $this, $methodsIterator -> current() ]
+                [ $this, $iterator -> current() ]
             );
 
             if( $result !== FALSE ) break;
 
-            $methodsIterator -> next();
+            $iterator -> next();
         }
     }
 
@@ -618,7 +617,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is WebTV Browser and FALSE otherwise
      */
-    private function WebTv() {
+    private function WebTv() : bool {
 
         $occurrence = stristr( $this -> info -> agent, 'webtv' );
 
@@ -653,7 +652,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is Internet Explorer Browser and FALSE otherwise
      */
-    private function InternetExplorer() {
+    private function InternetExplorer() : bool {
 
         // Test for v1 - v1.5 IE
 
@@ -761,7 +760,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is Opera Browser and FALSE otherwise
      */
-    private function Opera() {
+    private function Opera() : bool {
 
         $opera     = stristr( $this -> info -> agent, 'opera' );
 
@@ -850,7 +849,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is Galeon Browser and FALSE otherwise
      */
-    private function Galeon() {
+    private function Galeon() : bool {
 
         $occurrence = stristr( $this -> info -> agent, 'galeon' );
 
@@ -881,7 +880,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is etscape Navigator Browser and FALSE otherwise
      */
-    private function NetscapeNavigator() {
+    private function NetscapeNavigator() : bool {
 
         if( stripos( $this -> info -> agent, 'Firefox' ) !== FALSE ) {
 
@@ -917,7 +916,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is Firefox Browser and FALSE otherwise
      */
-    private function Firefox() {
+    private function Firefox() : bool {
 
         if( stripos( $this -> info -> agent, 'safari' ) === FALSE ) {
 
@@ -944,7 +943,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is Chrome Browser and FALSE otherwise
      */
-    private function Chrome() {
+    private function Chrome() : bool {
 
         $occurrence = stristr( $this -> info -> agent, 'Chrome' );
 
@@ -977,7 +976,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is OmniWeb Browser and FALSE otherwise
      */
-    private function OmniWeb() {
+    private function OmniWeb() : bool {
 
         $occurrence = stristr( $this -> info -> agent, 'omniweb' );
 
@@ -1012,7 +1011,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is under an Android Device and FALSE otherwise
      */
-    private function Android() {
+    private function Android() : bool {
 
         $occurrence = stristr( $this -> info -> agent, 'Android' );
 
@@ -1049,7 +1048,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is under iPad Browser and FALSE otherwise
      */
-    private function iPad() {
+    private function iPad() : bool {
 
         if( stripos( $this -> info -> agent, 'iPad' ) !== FALSE ) {
 
@@ -1084,7 +1083,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is under iPod Device and FALSE otherwise
      */
-    private function iPod() {
+    private function iPod() : bool {
 
         if( stripos( $this -> info -> agent, 'iPod' ) !== FALSE ) {
 
@@ -1119,7 +1118,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is under iPhone Device and FALSE otherwise
      */
-    private function iPhone() {
+    private function iPhone() : bool {
 
         if( stripos( $this -> info -> agent, 'iPhone' ) !== FALSE ) {
 
@@ -1154,7 +1153,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is under Blackberry Device and FALSE otherwise
      */
-    private function BlackBerry() {
+    private function BlackBerry() : bool {
 
         $occurrence = stristr( $this -> info -> agent, 'blackberry' );
 
@@ -1191,7 +1190,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is Nokia Device and FALSE otherwise
      */
-    private function Nokia() {
+    private function Nokia() : bool {
 
         if( preg_match( '/Nokia([^\/]+)\/([^ SP]+)/i', $this -> info -> agent, $matches ) ) {
 
@@ -1230,7 +1229,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is the Google Crawler Bot and FALSE otherwise
      */
-    private function GoogleBot() {
+    private function GoogleBot() : bool {
 
         $occurrence = stristr( $this -> info -> agent, 'googlebot' );
 
@@ -1268,7 +1267,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is the MSN Crawler Bot and FALSE otherwise
      */
-    private function MSNBot() {
+    private function MSNBot() : bool {
 
         $occurrence = stristr( $this -> info -> agent, 'msnbot' );
 
@@ -1305,7 +1304,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is the Yahoo! Slurp Crawler Bot and FALSE otherwise
      */
-    private function Slurp() {
+    private function Slurp() : bool {
 
         $occurrence = stristr( $this -> info -> agent, 'Slurp' );
 
@@ -1344,7 +1343,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is Safari Browser and FALSE otherwise
      */
-    private function Safari() {
+    private function Safari() : bool {
 
         if( stripos( $this -> info -> agent, 'Safari' ) !== FALSE &&
             stripos( $this -> info -> agent, 'iPhone' ) === FALSE && stripos( $this -> info -> agent, 'iPod' ) === FALSE ) {
@@ -1378,7 +1377,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is Net Positive Browser and FALSE otherwise
      */
-    private function NetPositive() {
+    private function NetPositive() : bool {
 
         $occurrence = stristr( $this -> info -> agent, 'NetPositive' );
 
@@ -1413,7 +1412,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is Firebird Browser and FALSE otherwise
      */
-    private function Firebird() {
+    private function Firebird() : bool {
 
         $occurrence = stristr( $this -> info -> agent, 'Firebird' );
 
@@ -1442,7 +1441,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is Konqueror Browser and FALSE otherwise
      */
-    private function Konqueror() {
+    private function Konqueror() : bool {
 
         $occurrence = stristr( $this -> info -> agent, 'Konqueror' );
 
@@ -1473,7 +1472,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is iCab Browser and FALSE otherwise
      */
-    private function Icab() {
+    private function Icab() : bool {
 
         $occurrence = stristr( strtr( $this -> info -> agent, [ '/' => ' ' ] ), 'icab' );
 
@@ -1504,7 +1503,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is Phoenix Browser and FALSE otherwise
      */
-    private function Phoenix() {
+    private function Phoenix() : bool {
 
         $occurrence = stristr( $this -> info -> agent, 'Phoenix' );
 
@@ -1535,7 +1534,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is Amaya Browser and FALSE otherwise
      */
-    private function Amaya() {
+    private function Amaya() : bool {
 
         $occurrence = stristr( $this -> info -> agent, 'Amaya' );
 
@@ -1568,7 +1567,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is Lynx Browser and FALSE otherwise
      */
-    private function Lynx() {
+    private function Lynx() : bool {
 
         $occurrence = stristr( $this -> info -> agent, 'Lynx' );
 
@@ -1601,7 +1600,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is Shiretoko Browser and FALSE otherwise
      */
-    private function Shiretoko() {
+    private function Shiretoko() : bool {
 
         if( stripos( $this -> info -> agent, 'Mozilla' ) !== FALSE &&
             preg_match( '/Shiretoko\/([^ ]*)/i', $this -> info -> agent, $matches ) ) {
@@ -1626,7 +1625,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is Ice Cat Browser and FALSE otherwise
      */
-    private function IceCat() {
+    private function IceCat() : bool {
 
         if( stripos( $this -> info -> agent, 'Mozilla' ) !== FALSE &&
             preg_match( '/IceCat\/([^ ]*)/i', $this -> info -> agent, $matches ) ) {
@@ -1651,7 +1650,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is W3CValidator Access and FALSE otherwise
      */
-    private function W3CValidator() {
+    private function W3CValidator() : bool {
 
         $checkLink = stristr( $this -> info -> agent, 'W3C-checklink' );
 
@@ -1670,6 +1669,7 @@ class Browser extends Object {
 
             return TRUE;
         }
+
         else if( stripos( $this -> info -> agent, 'W3C_Validator' ) !== FALSE ) {
 
             $this -> info -> browser = self::W3CVALIDATOR;
@@ -1703,7 +1703,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is IceWheasel Browser and FALSE otherwise
      */
-    private function IceWeasel() {
+    private function IceWeasel() : bool {
 
         $occurrence = stristr( $this -> info -> agent, 'Iceweasel' );
 
@@ -1736,7 +1736,7 @@ class Browser extends Object {
      * @return boolean
      *  TRUE if is generic Mozilla Browser and FALSE otherwise
      */
-    private function Mozilla() {
+    private function Mozilla() : bool {
 
         if( stripos( $this -> info -> agent, 'mozilla' ) !== FALSE && stripos( $this -> info -> agent, 'netscape' ) === FALSE ) {
 

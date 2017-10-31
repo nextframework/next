@@ -21,12 +21,18 @@ use Next\Exception\Exceptions\AccessViolationException;
 use Next\Components\Object;    # Object Class;
 
 /**
- * View Exception Class
+ * A wrapper class for reusable Exceptions within the Next\View Module
  *
- * @author        Bruno Augusto
+ * Note that the ViewException itself is not returned. Instead one of the
+ * Exceptions of Next\Exception module are
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\View
+ *
+ * @uses       Next\Exception\Exception
+ *             Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Exception\Exceptions\RuntimeException
+ *             Next\Exception\Exceptions\AccessViolationException
+ *             Next\Components\Object
  */
 class ViewException extends Exception {
 
@@ -42,7 +48,7 @@ class ViewException extends Exception {
      * @return \Next\Exception\Exceptions\InvalidArgumentException
      *  Exception for forbidden variable name
      */
-    public static function forbiddenVariable( $tplVar ) {
+    public static function forbiddenVariable( $tplVar ) : InvalidArgumentException {
 
         return new InvalidArgumentException(
 
@@ -65,7 +71,7 @@ class ViewException extends Exception {
      * @return \Next\Exception\Exceptions\RuntimeException
      *  Exception for Template View File findability failure
      */
-    public static function unableToFindFile() {
+    public static function unableToFindFile() : RuntimeException {
 
         return new RuntimeException(
 
@@ -86,7 +92,7 @@ class ViewException extends Exception {
      * @return \Next\Exception\Exceptions\RuntimeException
      *  Exception for missing Template View File
      */
-    public static function missingFile( $file ) {
+    public static function missingFile( $file ) : RuntimeException {
 
         return new RuntimeException(
 
@@ -106,7 +112,7 @@ class ViewException extends Exception {
      * @return \Next\Exception\Exceptions\AccessViolationException
      *  Exception for missing Template Variable being used
      */
-    public static function missingVariable( $tplVar ) {
+    public static function missingVariable( $tplVar ) : AccessViolationException {
 
         return new AccessViolationException(
 
@@ -128,7 +134,7 @@ class ViewException extends Exception {
      * @return \Next\Exception\Exceptions\InvalidArgumentException
      *  Exception for unknown View Helper
      */
-    public static function unknownHelper( $helper ) {
+    public static function unknownHelper( $helper ) : InvalidArgumentException {
 
         return new InvalidArgumentException(
 
@@ -147,7 +153,7 @@ class ViewException extends Exception {
      *  Exception for when no Template View name is provided and
      *  auto-search by Template View FileSpec is disabled
      */
-    public static function disabledFileSpec() {
+    public static function disabledFileSpec() : RuntimeException {
 
         return new RuntimeException(
 
@@ -167,7 +173,7 @@ class ViewException extends Exception {
      *  Exception for impossibility to find a Template View File
      *  when no paths were provided
      */
-    public static function noPaths( $filename ) {
+    public static function noPaths( $filename ) : RuntimeException {
 
         return new RuntimeException(
 
@@ -195,7 +201,7 @@ class ViewException extends Exception {
      * @return \Next\Exception\Exceptions\RuntimeException
      *  Exception for subpaths being wrongly used
      */
-    public static function wrongUseOfSubpath( $file ) {
+    public static function wrongUseOfSubpath( $file ) : RuntimeException {
 
         return new RuntimeException(
 
@@ -222,7 +228,7 @@ class ViewException extends Exception {
      * @return \Next\Exception\Exceptions\RuntimeException
      *  Exception for impossibility to find Template View File
      */
-    public static function unableToFindUnderFileSpec( $file ) {
+    public static function unableToFindUnderFileSpec( $file ) : RuntimeException {
 
         return new RuntimeException(
 

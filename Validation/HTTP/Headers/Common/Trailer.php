@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Common Header Field Validator Class: Trailer | Validate\Headers\Common\Trailer.php
+ * HTTP Common Header Field Validator Class: Trailer | Validation\Headers\Common\Trailer.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,13 @@ use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
 use Next\Components\Object;                 # Object Class
 
 /**
- * Trailer Header Validation Class
+ * The 'Trailer' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.40
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class Trailer extends Object implements Header {
 
@@ -39,7 +40,7 @@ class Trailer extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.40
      *  RFC 2616 Section 14.40
      */
-    public function validate() {
+    public function validate() : bool {
 
         // Insufficient information :(
 

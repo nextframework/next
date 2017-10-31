@@ -10,20 +10,22 @@
  */
 namespace Next\HTTP\Headers\Common;
 
-use Next\HTTP\Headers\Field;    # Header Field Abstract Class
+use Next\Validation\Validator as Validators;    # Validators Interface
+use Next\HTTP\Headers\Field;                    # Header Field Abstract Class
 
 /**
- * 'Cache Control' Header Field Validator Class
+ * Common Header Field Validation Class: 'Cache Control'
  */
 use Next\Validation\HTTP\Headers\Common\CacheControl as Validator;
 
 /**
- * 'Cache-Control' Header Field Class
+ * Common Header Field: 'Cache-Control'
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\Validator
+ *             Next\HTTP\Headers\Field
+ *             Next\Validation\HTTP\Headers\CacheControl
  */
 class CacheControl extends Field {
 
@@ -38,7 +40,7 @@ class CacheControl extends Field {
      * @return \Next\Validation\Validator
      *  Associated Validator
      */
-    protected function getValidator( $value ) {
+    protected function getValidator( $value ) : Validators {
         return new Validator( [ 'value' => $value ] );
     }
 
@@ -48,7 +50,7 @@ class CacheControl extends Field {
      * @return array
      *  Header Field Validation Options
      */
-    public function setOptions() {
+    public function setOptions() : array {
         return [ 'name' => 'Cache-Control', 'acceptMultiples' => TRUE ];
     }
 }

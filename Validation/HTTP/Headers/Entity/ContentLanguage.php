@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Entity Header Field Validator Class: Content-Language | Validate\Headers\Entity\ContentLanguage.php
+ * HTTP Entity Header Field Validator Class: Content-Language | Validation\Headers\Entity\ContentLanguage.php
  *
  * @author       Bruno Augusto
  *
@@ -16,12 +16,15 @@ use Next\Validation\ISO\ISO639;              # ISO 639 Validation Class
 use Next\Validation\ISO\ISO3166;             # ISO 3166 Validation Class
 
 /**
- * Content-Language Header Validation Class
+ * The 'Content-Language' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.12
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
+ *             Next\Validation\ISO\ISO639
+ *             Next\Validation\ISO\ISO3166
  */
 class ContentLanguage extends Object implements Header {
 
@@ -50,7 +53,7 @@ class ContentLanguage extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.12
      *  RFC 2616 Section 14.12
      */
-    public function validate() {
+    public function validate() : bool {
 
         /**
          * @internal

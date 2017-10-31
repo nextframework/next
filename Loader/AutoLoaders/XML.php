@@ -24,10 +24,10 @@ use Next\Loader\AutoLoaders\AutoLoader;      # AutoLoader Interface
 /**
  * XML Class Map File AutoLoader
  *
- * @author        Bruno Augusto
+ * @package    Next\Loader
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Loader\AutoLoaders\AutoLoader
  */
 class XML implements AutoLoader {
 
@@ -81,11 +81,11 @@ class XML implements AutoLoader {
      * @return Closure
      *  An anonymous function to be invoked as SPL Autoloader callback
      */
-    public function call() {
+    public function call() : callable {
 
         $iterator = new \SimpleXMLElement( self::$map );
 
-        return function( $classname ) use( $iterator ) {
+        return function( $classname ) use( $iterator ) : bool {
 
             $xpath = $iterator -> xpath(
 
@@ -100,6 +100,8 @@ class XML implements AutoLoader {
 
                 return TRUE;
             }
+
+            return FALSE;
         };
     }
 }

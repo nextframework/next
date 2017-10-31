@@ -13,12 +13,16 @@ namespace Next\HTTP\Stream\Context\Options;
 use Next\Components\Object;    # Object Class
 
 /**
- * Abstract Stream Context Options Class
+ * Base structure for all HTTP Stream Context Options Classes
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Components\Object
+ *             Next\HTTP\Stream\Context\Options\Option
+ *
+ * @deprecated
+ *
+ * @FIXME
  */
 abstract class AbstractOptions extends Object implements Option {
 

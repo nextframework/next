@@ -14,19 +14,30 @@ namespace Next\View;
  * Exception Class(es)
  */
 use Next\Exception\Exceptions\InvalidArgumentException;
+use Next\Exception\Exceptions\RuntimeException;
 
-use Next\Components\Interfaces\Verifiable;    # Verifiable Interface
-use Next\Components\Object;                   # Object Class
-use Next\FileSystem\Path;                     # FileSystem Path Data-type Class
-use Next\View\ViewException;                  # View Exception Class
+use Next\Validation\Verifiable;          # Verifiable Interface
+use Next\Components\Object;              # Object Class
+use Next\Components\Utils\ArrayUtils;    # Object Class
+use Next\FileSystem\Path;                # FileSystem Path Data-type Class
+use Next\HTTP\Response;                  # HTTP Response Class
 
 /**
- * Standard View Engine Class
+ * The Standard View Engine
  *
- * @author        Bruno Augusto
+ * @package    Next\View
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Exception\Exceptions\RuntimeException
+ *             Next\Validation\Verifiable
+ *             Next\Components\Object
+ *             Next\Components\Utils\ArrayUtils
+ *             Next\FileSystem\Path
+ *             Next\HTTP\Response
+ *             Next\View\Helpers\Helper
+ *             Next\View\Helpers\Route
+ *             ReflectionClass
+ *             ReflectionException
  */
 class Standard extends Object implements Verifiable, View {
 
@@ -42,7 +53,7 @@ class Standard extends Object implements Verifiable, View {
         /**
          * Template Variables Behaviour
          *
-         * This will be used in \Next\View\Standard::__get() to define
+         * This will be used in Next\View\Standard::__get() to define
          * if a template variable will be echoed or just returned —
          * for variable assignment, manual echo...
          *
@@ -65,8 +76,8 @@ class Standard extends Object implements Verifiable, View {
          * Template Files Subpath
          *
          * A Subpath is a substring common to all Template File Paths,
-         * present in every call to \next\View\View::render()
-         * within a next\Controller\Controller
+         * present in every call to Next\View\View::render()
+         * within a Next\Controller\Controller
          *
          * If defined and not empty — otherwise it could end up resulting
          * in malformed filepaths — the subpath will be inserted between
@@ -87,7 +98,7 @@ class Standard extends Object implements Verifiable, View {
          * Defaults to TRUE, after all, if disabled every single call
          * to View::render() would have to provide a File to be rendered,
          * which defeats the purpose of the auto-rendering provided
-         * by \Next\Controller\AbstractController::_destruct()
+         * by Next\Controller\Controller::_destruct()
          */
         'useFileSpec'     => [ 'required' => FALSE, 'default' => TRUE ],
 
@@ -99,7 +110,7 @@ class Standard extends Object implements Verifiable, View {
          * - The Template Subpath (:subpath), if provided as a
          *   non-empty string (see above)
          * - A clean version — i.e. without the known keyword 'Controller' —
-         *   of the \Next\Controller\Controller (:controller) and the
+         *   of the Next\Controller\Controller (:controller) and the
          *   Action Method (:action) in which the call to View::render()
          *   occurred.
          */
@@ -113,11 +124,10 @@ class Standard extends Object implements Verifiable, View {
 
         /**
          * Default Template File
-         * For cases of such small applications that only one
-         * Template File is enough, setting this — usually through
-         * AbstractController::init() — allows View::render() to be
-         * called without arguments or even letting
-         * AbstractController::__destruct() to do everything for you ;)
+         * For cases of such small applications that only one Template File
+         * is enough, setting this — usually through Controller::init() —
+         * allows View::render() to be called without arguments or even letting
+         * Controller::__destruct() to do everything for you ;)
          */
         'defaultTemplate' => [ 'required' => FALSE, 'default' => NULL ]
     ];
@@ -127,11 +137,7 @@ class Standard extends Object implements Verifiable, View {
      *
      * @var array $_helpers
      */
-    private $_helpers = [
-
-        'route'   => 'Next\View\Helper\Route',
-        'session' => 'Next\View\Helper\Session'
-    ];
+    private $_helpers = [];
 
     /**
      * Template Variables
@@ -158,11 +164,10 @@ class Standard extends Object implements Verifiable, View {
         /**
          * @internal
          *
-         * These are internal resources coming from
-         * \Next\Application\Application or one of
-         * \Next\Controller\Controller when used through
-         * \Next\Controller\AbstractController::__get() or
-         * \Next\Controller\AbstractController::__set()
+         * These are internal resources coming from Next\Application\Application
+         * or one of Next\Controller\Controller when used through
+         * Next\Controller\Controller::__get() or
+         * Next\Controller\Controller::__set()
          */
         'view',
         'request',
@@ -185,10 +190,10 @@ class Standard extends Object implements Verifiable, View {
 
     /**
      * Additional Initialization.
-     * Configures resources based on \Next\Application\Application
+     * Configures resources based on Next\Application\Application
      * provided and apply quik fixes over optional Parameter Options
      */
-    protected function init() {
+    protected function init() : void {
 
         // Resetting Default Assignments
 
@@ -221,15 +226,23 @@ class Standard extends Object implements Verifiable, View {
      * @return \Next\View\View
      *  View Object (Fluent Interface)
      */
-    public function resetDefaults() {
+    public function resetDefaults() : View {
 
-        $this -> _tplVars[ 'request' ]  = $this -> options -> application -> getRequest();
+        $request = $this -> options -> application -> getRequest();
+
+        $this -> _tplVars[ 'request' ]  = $request;
 
         if( ( $session = $this -> options -> application -> getSession() ) !== NULL &&
                 session_status() == PHP_SESSION_ACTIVE ) {
 
             $this -> _tplVars[ 'session' ]  = $session -> getEnvironment();
         }
+
+        // Registering default View Helpers
+
+        $this -> registerHelper(
+            'route', new Helpers\Route( [ 'request' => $request ] )
+        );
 
         // Unregistering any possible Exception Message
 
@@ -243,17 +256,88 @@ class Standard extends Object implements Verifiable, View {
     /**
      * Register a new Template View Helper
      *
-     * @param \Next\View\Helper\Helper|string $helper
-     *  Template View Helper
+     * @param string $name
+     *  Template View Helper name, through which it'll be accessed
+     *  within Template Views
+     *
+     * @param Next\View\Helpers\Helper|string|callable $resource
+     *  Resource being registered as a View Helper.
+     *  It can be a Fully Qualified Classname of an Object implementing
+     *  *Next\View\Helper\Helper*
+     *  Or it can be any other callable resource as well, like arrays, anonymous
+     *  function, an internal function...
      *
      * @return \Next\View\View
      *  View Object (Fluent Interface)
+     *
+     * @throws Next\Exception\Exceptions\RuntimeException
+     *  Thrown if `$resource` is an FQCN but something went wrong while
+     *  reflecting over it
+     *
+     * @throws Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if `$resource` is a FQCN but its not an instance of
+     *  Next\Components\Object and/or it doesn't implement
+     *  Next\View\Helpers\Helper Interface
      */
-    public function registerHelper( $helper ) {
+    public function registerHelper( $name, $resource ) : View {
 
-        $this -> _helpers[ (string) $helper ] = $helper;
+        // Resource is a well-formed View Engine Helper
 
-        return $this;
+        if( $resource instanceof Object && $resource instanceof Helpers\Helper ) {
+
+            $this -> _helpers[ $name ] = $resource;
+
+            return $this;
+        }
+
+        // Resource *might* be a callable
+
+        if( is_callable( $resource ) ) {
+
+            $this -> _helpers[ $name ] = $resource;
+
+            return $this;
+        }
+
+        // Resource *might* be an Object
+
+        try {
+
+            $reflector = new \ReflectionClass( $resource );
+
+            if( ! $reflector -> isSubClassOf( 'Next\Components\Object' ) ||
+                    ! $reflector -> isSubClassOf( 'Next\View\Helpers\Helper' ) ) {
+
+                throw new InvalidArgumentException(
+
+                    'Provided Resource is not a valid View Helper
+
+                    Only classes instance of <em>Next\Components\Object</em>
+                    can be used as View Helper that also implements
+                    <em>Next\View\Helpers\Helper</em> can be used as
+                    View Helper'
+                );
+            }
+
+            $this -> _helpers[ $name ] = $reflector -> newInstance(
+                [ 'request' => $this -> options -> application -> getRequest() ]
+            );
+
+            return $this;
+
+        } catch( \ReflectionException $e ) {
+
+            throw new RuntimeException( $e -> getMessage(), ReflectionException::PHP_ERROR );
+        }
+    }
+
+    /**
+     * Get all registered View Helpers
+     *
+     * @return array
+     */
+    public function getHelpers() : array {
+        return $this -> _helpers;
     }
 
     // Views File-related Methods
@@ -264,7 +348,7 @@ class Standard extends Object implements Verifiable, View {
      * @return string
      *  Template Views File Extensions
      */
-    public function getExtension() {
+    public function getExtension() :? string {
         return $this -> options -> extension;
     }
 
@@ -276,7 +360,7 @@ class Standard extends Object implements Verifiable, View {
      * @return string
      *  Template Views Files Basepath
      */
-    public function getBasepath() {
+    public function getBasepath() :? string {
         return $this -> options -> basepath;
     }
 
@@ -286,7 +370,7 @@ class Standard extends Object implements Verifiable, View {
      * @return string
      *  Templates Views Files Subpath
      */
-    public function getSubpath() {
+    public function getSubpath() :? string {
         return $this -> options -> subpath;
     }
 
@@ -299,11 +383,11 @@ class Standard extends Object implements Verifiable, View {
      * @return \Next\View\View
      *  View Object (Fluent Interface)
      */
-    public function addPath( $path ) {
+    public function addPath( $path ) : View {
 
         // Cleaning extra boundaries slashes and reverting its slashes
 
-        $path = new String( [ 'value' => $path ] );
+        $path = new Strings( [ 'value' => $path ] );
 
         if( ! in_array( $path, $this -> _paths ) ) {
 
@@ -319,7 +403,7 @@ class Standard extends Object implements Verifiable, View {
      * @return array
      *  List of paths to search Template Views
      */
-    public function getPaths() {
+    public function getPaths() : array {
         return $this -> _paths;
     }
 
@@ -329,19 +413,19 @@ class Standard extends Object implements Verifiable, View {
      * @return string
      *  FileSpec Definition
      */
-    public function getFileSpec() {
+    public function getFileSpec() :? string {
         return $this -> options -> fileSpec;
     }
 
     // Template Variables-related Methods
 
     /**
-     * Get Variable Behavior
+     * Should Variables be returned or echoed
      *
      * @return boolean
-     *  Template Variables behavior
+     *  Template Variables behaviour
      */
-    public function getVariablesBehavior() {
+    public function shouldReturnVariables() : bool {
         return $this -> options -> returnVariables;
     }
 
@@ -361,7 +445,7 @@ class Standard extends Object implements Verifiable, View {
      * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Chosen Template Variable is defined as reserved
      */
-    public function assign( $tplVar, $value = NULL ) {
+    public function assign( $tplVar, $value = NULL ) : View {
 
         // Working recursively...
 
@@ -372,18 +456,18 @@ class Standard extends Object implements Verifiable, View {
                 $this -> assign( $_tplVar, $_value );
             }
 
-        } else {
-
-            if( in_array( $tplVar, $this -> _forbiddenTplVars ) ||
-                    array_key_exists( $tplVar, $this -> _helpers ) ) {
-
-                throw ViewException::forbiddenVariable( $tplVar );
-            }
-
-            // Creating a new Template Variable
-
-            $this -> _tplVars[ $tplVar ] = $value;
+            return $this;
         }
+
+        if( in_array( $tplVar, $this -> _forbiddenTplVars ) ||
+                array_key_exists( $tplVar, $this -> _helpers ) ) {
+
+            throw ViewException::forbiddenVariable( $tplVar );
+        }
+
+        // Creating a new Template Variable
+
+        $this -> _tplVars[ $tplVar ] = $value;
 
         return $this;
     }
@@ -394,7 +478,7 @@ class Standard extends Object implements Verifiable, View {
      * @return array
      *  Template Variables
      */
-    public function getVars() {
+    public function getVars() : array {
         return $this -> _tplVars;
     }
 
@@ -421,7 +505,7 @@ class Standard extends Object implements Verifiable, View {
      * @return string
      *  Default Template View File
      */
-    public function getDefaultTemplate() {
+    public function getDefaultTemplate() :? string {
         return $this -> options -> defaultTemplate;
     }
 
@@ -441,7 +525,7 @@ class Standard extends Object implements Verifiable, View {
      * @throws \Next\Exception\Exceptions\RuntimeException
      *  Thrown if unable to find Template View File
      */
-    public function render( $name = NULL, $search = TRUE ) {
+    public function render( $name = NULL, $search = TRUE ) : Response {
 
         $response = $this -> options -> application -> getResponse();
 
@@ -450,7 +534,7 @@ class Standard extends Object implements Verifiable, View {
          *
          * The Template Rendering will not happen if:
          *
-         * - It shouldn't, meaning \Next\View\View::disableRender()
+         * - It shouldn't, meaning Next\View\View::disableRender()
          *   has been called
          * - Any kind of output has already been sent,
          *   like a debugging purposes var_dump()
@@ -505,7 +589,7 @@ class Standard extends Object implements Verifiable, View {
      * @return \Next\View\View
      *  View Object (Fluent Interface)
      */
-    public function disableRender() {
+    public function disableRender() : View {
 
         $this -> _shouldRender = FALSE;
 
@@ -518,7 +602,7 @@ class Standard extends Object implements Verifiable, View {
      * @return \Next\View\View
      *  View Object (Fluent Interface)
      */
-    public function enableRender() {
+    public function enableRender() : View {
 
         $this -> _shouldRender = TRUE;
 
@@ -534,7 +618,7 @@ class Standard extends Object implements Verifiable, View {
      *  Thrown if provided Template View FileSpec is not minimally
      *  valid (i.e at least one string led by a colon)
      */
-    public function verify() {
+    public function verify() : void {
 
         if( preg_match( '/(:\w+\/?)+/', $this -> options -> fileSpec ) == 0 ) {
 
@@ -563,7 +647,7 @@ class Standard extends Object implements Verifiable, View {
      * @return boolean
      *  TRUE if desired Template Variable exists and FALSE otherwise
      */
-    public function __isset( $tplVar ) {
+    public function __isset( $tplVar ) : bool {
         return array_key_exists( $tplVar, $this -> _tplVars );
     }
 
@@ -581,7 +665,7 @@ class Standard extends Object implements Verifiable, View {
      *  Trying to unset a Template Variable whose name has been marked
      *  as forbidden or forbidden due an association with a View Engine Helper
      */
-    public function __unset( $tplVar ) {
+    public function __unset( $tplVar ) : void {
 
         if( in_array( $tplVar, $this -> _forbiddenTplVars ) ) {
             throw ViewException::forbiddenVariable( $tplVar );
@@ -607,7 +691,7 @@ class Standard extends Object implements Verifiable, View {
      *  Trying to set a Template Variable with a name that has been marked
      *  as forbidden or forbidden due an association with a View Engine Helper
      */
-    public function __set( $tplVar, $value = NULL ) {
+    public function __set( $tplVar, $value = NULL ) : void {
 
         if( in_array( $tplVar, $this -> _forbiddenTplVars ) ) {
             throw ViewException::forbiddenVariable( $tplVar );
@@ -664,9 +748,9 @@ class Standard extends Object implements Verifiable, View {
      * @param array|optional $args
      *  Variable list of arguments to the helper
      *
-     * @return mixed|boolean
+     * @return mixed
      *  Return what the helper returns or FALSE if a ReflectionException
-     *  is caught in \Next\Components\Context::call()
+     *  is caught in Next\Components\Context::call()
      *
      * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Thrown if View Helper cannot be recognized among registered ones
@@ -679,9 +763,11 @@ class Standard extends Object implements Verifiable, View {
 
         $helper = $this -> _helpers[ $helper ];
 
-        return call_user_func_array(
-            ( is_string( $helper ) ? new $this -> _helpers[ $helper ] : $helper ), $args
-        );
+        if( $helper instanceof Helpers\Helper ) {
+            return $helper( $args );
+        }
+
+        return call_user_func_array( $helper, $args );
     }
 
     // Auxiliary Methods
@@ -705,7 +791,7 @@ class Standard extends Object implements Verifiable, View {
      * @throws \Next\Exception\Exceptions\RuntimeException
      *  Thrown if a Template File could be found
      */
-    private function findFile( $file = NULL ) {
+    private function findFile( $file = NULL ) :? string {
 
         // If we don't have a file, let's use the Default Template, if any
 
@@ -804,7 +890,7 @@ class Standard extends Object implements Verifiable, View {
      *  \Next\HTTP\Router\Router::getController()
      *  \Next\HTTP\Router\Router::getMethod()
      */
-    private function findFileBySpec() {
+    private function findFileBySpec() : string {
 
         // Known Replacements
 

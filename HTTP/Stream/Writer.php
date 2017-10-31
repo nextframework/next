@@ -10,19 +10,28 @@
  */
 namespace Next\HTTP\Stream;
 
-use Next\HTTP\Stream\Writer\WriterException;      # HTTP Stream Writer Exception Class
-use Next\HTTP\Stream\Adapter\Adapter;             # HTTP Stream Adapter Interface
-use Next\Components\Object;                       # Object Class
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\LengthException;
+use Next\Exception\Exceptions\RuntimeException;
+
+use Next\Components\Object;              # Object Class
+use Next\Components\Invoker;             # Invoker Class
+use Next\HTTP\Stream\Adapter\Adapter;    # HTTP Stream Adapter Interface
 
 /**
- * File Writer Class
+ * HTTP Stream Writer writes data to an opened Stream
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Exception\Exceptions\LengthException;
+ *             Next\Exception\Exceptions\RuntimeException
+ *             Next\Components\Object
+ *             Next\Components\Invoker
+ *             Next\HTTP\Stream\Adapter\Adapter
  */
-class Writer extends Object implements Writer\Writer {
+class Writer extends Object {
 
     /**
      * Stream Adapter
@@ -36,21 +45,29 @@ class Writer extends Object implements Writer\Writer {
      *
      * @param \Next\HTTP\Stream\Adapter\Adapter $adapter
      *  Stream Adapter where data will be written
-     *
-     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
-     *  Optional Configuration Options for the HTTP Stream Writer
      */
-    public function __construct( Adapter $adapter, $options = NULL ) {
+    public function __construct( Adapter $adapter ) {
 
-        parent::__construct( $options );
+        parent::__construct();
 
         $adapter -> open();
 
         $this -> adapter = $adapter;
+
+        /**
+         * @internal
+         *
+         * Extending HTTP Stream Writer's Context to the associated
+         * HTTP Stream Adapter ONLY to allow the HTTP Stream can be closed
+         * from Writer Context
+         */
+        $this -> extend(
+            new Invoker( $this, $this -> adapter, [ 'close' ] )
+        );
     }
 
     /**
-     * Write some bytes in File Stream
+     * Write bytes to an opened Stream
      *
      * @param string $string
      *  Data to write
@@ -62,43 +79,34 @@ class Writer extends Object implements Writer\Writer {
      *  Always return the number of bytes written, because if failed
      *  to write an Exception is thrown
      *
-     * @throws \Next\HTTP\Stream\Writer\WriterException
-     *  Number of bytes is zero
+     * @throws \Next\Exception\Exceptions\LengthException
+     *  Thrown when the number of bytes to write is zero
      *
-     * @throws \Next\HTTP\Stream\Writer\WriterException
-     *  Fail when trying to write data
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown when something went wrong when trying to write data
      */
     public function write( $string, $length = NULL ) {
 
-        // Writing with length...
+        if( $length !== NULL && (int) $length == 0 ) {
 
-        if( $length !== NULL ) {
-
-            $length = (int) $length;
-
-            if( $length == 0 ) {
-
-                throw WriterException::logic(
-
-                    'Using zero-length when writing data, will result in a blank file/empty stream'
-                );
-            }
-
-            $write = fwrite( $this -> adapter -> getStream(), $string, $length );
-
-        } else {
-
-            // ... and without it
-
-            $write = fwrite( $this -> adapter -> getStream(), $string );
+            throw new LengthException(
+                'Using zero-length when writing data, will result in a
+                blank file/empty stream'
+            );
         }
 
-        if( $write === FALSE ) {
+        $written = fwrite(
 
-            throw WriterException::writeFailure();
+            $this -> adapter -> getStream(), $string,
+
+            ( $length !== NULL ? $length : mb_strlen( $string ) )
+        );
+
+        if( $written === FALSE ) {
+            throw new RuntimeException( 'Unable to write data to opened Stream' );
         }
 
-        return $write;
+        return $written;
     }
 
     // Interface Methods Implementation

@@ -13,12 +13,12 @@ namespace Next\DB\Query;
 use Next\Components\Object;     # Object Class
 
 /**
- * Query Builder Class
+ * A Query Expression is an SQL statement not supported by the Query Builder
+ * or that needs to be rendered untouched
  *
- * @author        Bruno Augusto
+ * @package    Next\DB
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Components\Object
  */
 class Expression extends Object {
 
@@ -60,7 +60,7 @@ class Expression extends Object {
      * @return string
      *  SQL Expression
      */
-    public function getExpression() {
+    public function getExpression() : string {
         return sprintf( '( %s )', $this -> options -> expression );
     }
 }

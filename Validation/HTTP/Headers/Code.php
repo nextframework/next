@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Status Code Validator Class | Validate\Headers\Code.php
+ * HTTP Status Code Validator Class | Validation\Headers\Code.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,16 @@ use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
 use Next\Components\Object;                 # Object Class
 
 /**
- * Validates HTTP Status Codes
+ * The HTTP Status Code Validator checks if input string is valid to be used
+ * as HTTP Status Code
  *
- * @author        Bruno Augusto
+ * HTTP Status Code aren't sequential and not all of them are official so we
+ * split the regular expressions
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Validation
+ *
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class Code extends Object implements Header {
 
@@ -67,7 +71,7 @@ class Code extends Object implements Header {
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      */
-    public function validate() {
+    public function validate() : bool {
 
         if( preg_match( sprintf( '/%s/x', self::OFFICIAL_CODES ), $this -> options -> value ) == 0 &&
                 preg_match( sprintf( '/%s/x', self::UNOFFICIAL_CODES ), $this -> options -> value ) == 0 ) {

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Response Header Field Validator Class: X-XSS-Protection | Validate\Headers\Response\XXSSProtection.php
+ * HTTP Response Header Field Validator Class: X-XSS-Protection | Validation\Headers\Response\XXSSProtection.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,16 @@ use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
 use Next\Components\Object;                 # Object Class
 
 /**
- * X-XSS-Protection Header Validation Class
+ * The 'X-XSS-Protection' Header Validator checks if input string is valid for
+ * a X-XSS-Protection string
  *
- * @author        Bruno Augusto
+ * Even though this is not an official as per the RFC, it's widely
+ * accepted and used as one
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Validation
+ *
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class XXSSProtection extends Object implements Header {
 
@@ -62,7 +66,7 @@ class XXSSProtection extends Object implements Header {
      * @link
      *  http://en.wikipedia.org/wiki/Cross-site_scripting
      */
-    public function validate() {
+    public function validate() : bool {
 
         $test = preg_match(
 

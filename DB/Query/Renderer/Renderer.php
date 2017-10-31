@@ -13,12 +13,11 @@ namespace Next\DB\Query\Renderer;
 use Next\DB\Query\Query;    # Query Renderer Interface
 
 /**
- * Query Renderer Interface
+ * An Interface for all Query Renderers
  *
- * @author        Bruno Augusto
+ * @package    Next\DB
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\DB\Query\Query
  */
 interface Renderer extends Query {
 

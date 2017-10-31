@@ -15,12 +15,13 @@ use Next\Components\Collections\Lists;   # Lists Class
 use Next\HTTP\Headers\Request\Cookie;    # HTTP Cookie Header Class
 
 /**
- * HTTP Cookies Management Class
+ * The HTTP Cookies Management Class
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Components\Object
+ *             Next\Components\Collections\Lists
+ *             Next\HTTP\Headers\Request\Cookie
  */
 class Cookies extends Object {
 
@@ -34,7 +35,7 @@ class Cookies extends Object {
     /**
      * Additional Initialization
      */
-    public function init() {
+    protected function init() : void {
         $this -> cookies = new Lists;
     }
 
@@ -53,9 +54,9 @@ class Cookies extends Object {
      *  Cookies Object (Fluent Interface)
      *
      * @throws \Next\Exception\Exceptions\InvalidArgumentException
-     *  Invalid or mal-formed Cookie Value
+     *  Invalid or malformed Cookie Value
      */
-    public function addCookie( $cookie, $value = NULL ) {
+    public function addCookie( $cookie, $value = NULL ) : Cookies {
 
         // Well-formed Request Cookie Header Field. Will be added "as is"
 
@@ -75,29 +76,29 @@ class Cookies extends Object {
                 $this -> addCookie( $n, $v );
             }
 
-        } else {
-
-            /**
-             * @internal
-             *
-             * In case `\Next\HTTP\Cookies::addCookie()` was invoked like:
-             *
-             * `$cookies -> addCookie( 'cookiename', 'cookievalue' )`
-             *
-             * Instead of:
-             *
-             * `$cookies -> addCookie( 'cookiename=cookievalue' )`
-             *
-             * Let's build the full Cookie representation before add it
-             */
-            if( $value !== NULL && strpos( $value, '=' ) === FALSE ) {
-                $cookie = sprintf( '%s=%s', $cookie, $value );
-            }
-
-            $this -> cookies -> add(
-                new Cookie( [ 'value' => $cookie ] )
-            );
+            return $this;
         }
+
+        /**
+         * @internal
+         *
+         * In case Next\HTTP\Cookies::addCookie()` was invoked like:
+         *
+         * `$cookies -> addCookie( 'cookiename', 'cookievalue' )`
+         *
+         * Instead of:
+         *
+         * `$cookies -> addCookie( 'cookiename=cookievalue' )`
+         *
+         * Let's build the full Cookie representation before add it
+         */
+        if( $value !== NULL && strpos( $value, '=' ) === FALSE ) {
+            $cookie = sprintf( '%s=%s', $cookie, $value );
+        }
+
+        $this -> cookies -> add(
+            new Cookie( [ 'value' => $cookie ] )
+        );
 
         return $this;
     }
@@ -106,33 +107,21 @@ class Cookies extends Object {
      * Get registered Cookies
      *
      * @param boolean $asString
-     *  If TRUE, instead a Collection, a string of all the cookies will be returned
+     *  If TRUE, instead of the Lists Collection where the Cookies have been
+     *  stored, a `Next\HTTP\Headers\Request\Cookie` Object with a string
+     *  representation of all Cookies will be returned instead
      *
      * @return \Next\Components\Collections\Lists|\Next\HTTP\Headers\Request\Cookie
+     *  If `$asString` is set to FALSE, the Lists Collection with all added
+     *  Cookies will be returned
      *
-     *   <p>
-     *     If <strong>$asString</strong> is set to FALSE, the Cookies
-     *     Lists Collection will be returned
-     *   </p>
-     *
-     *   <p>
-     *     If <strong>$asString</strong> is TRUE, a well formed Request
-     *     Cookie Header will be returned
-     *   </p>
+     *  Otherwise a well formed Request Cookie Header will be returned
      */
     public function getCookies( $asString = FALSE ) {
 
         if( $asString === FALSE ) {
             return $this -> cookies -> getCollection();
         }
-
-        // Is there something to return?
-
-        if( $this -> cookies -> count() == 0 ) {
-            return NULL;
-        }
-
-        // Let's return as string
 
         $cookieString = NULL;
 
@@ -142,7 +131,7 @@ class Cookies extends Object {
 
             $iterator,
 
-            function( \Iterator $iterator ) use( &$cookieString ) {
+            function( \Iterator $iterator ) use( &$cookieString ) : bool {
 
                 $cookieString .= sprintf( "%s;", $iterator -> current() -> getValue() );
 
@@ -161,7 +150,7 @@ class Cookies extends Object {
      * @return \Next\HTTP\Cookies
      *  Cookies Object (Fluent Interface)
      */
-    public function clearCookies() {
+    public function clearCookies() : Cookies {
 
         $this -> cookies -> clear();
 

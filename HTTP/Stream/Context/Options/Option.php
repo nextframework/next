@@ -11,12 +11,13 @@
 namespace Next\HTTP\Stream\Context\Options;
 
 /**
- * Stream Context Options Interface
+ * The Stream Context Options Type
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @deprecated
+ *
+ * @FIXME
  */
 interface Option {
 

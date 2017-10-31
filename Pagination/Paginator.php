@@ -10,18 +10,29 @@
  */
 namespace Next\Pagination;
 
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
 use Next\Components\Interfaces\Configurable;    # Configurable Interface
-use Next\Components\Interfaces\Verifiable;      # Verifiable Interface
+use Next\Validation\Verifiable;                 # Verifiable Interface
 use Next\Components\Object;                     # Object Class
 use Next\Pagination\Styles\Sliding;             # Default Pagination Scrolling Style
 
 /**
- * Paginator Class
+ * The Paginator provides a simple data-structure with all informations
+ * needed to render a pagination accordingly to chosen Style
  *
- * @author        Bruno Augusto
+ * @package    Next\Pagination
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Components\Interfaces\Configurable
+ *             Next\Validation\Verifiable
+ *             Next\Components\Object
+ *             Next\Pagination\Styles\Sliding
+ *             Countable
+ *             stdClass
  */
 class Paginator extends Object implements Verifiable, \Countable {
 
@@ -35,7 +46,7 @@ class Paginator extends Object implements Verifiable, \Countable {
         'adapter' => [ 'type' => 'Next\Pagination\Adapter\Adapter', 'required' => TRUE ],
         'style'   => [ 'type' => 'Next\Pagination\Styles\Style',    'required' => TRUE ],
 
-        'itemsPerPage' => [ 'required' => FALSE, 'default' => 5 ],
+        'visiblePages' => [ 'required' => FALSE, 'default' => 5 ],
         'currentPage'  => [ 'required' => FALSE, 'default' => 1 ]
     ];
 
@@ -53,7 +64,7 @@ class Paginator extends Object implements Verifiable, \Countable {
      *
      * @see \Next\Components\Interfaces\Configurable
      */
-    protected function init() {
+    protected function init() : void {
 
         $this -> count = count( $this -> options -> adapter );
 
@@ -74,7 +85,7 @@ class Paginator extends Object implements Verifiable, \Countable {
      * @return stdClass Object
      *  Pagination Informations
      */
-    public function getInfo() {
+    public function getInfo() : \stdClass {
 
         $data = new \stdClass;
 
@@ -91,7 +102,7 @@ class Paginator extends Object implements Verifiable, \Countable {
 
         // Pages Information
 
-        $data -> itemsPerPage   = $this -> options -> itemsPerPage;
+        $data -> visiblePages   = $this -> options -> visiblePages;
 
         $data -> current = ( $this -> options -> currentPage < $this -> count ?
                                 $this -> options -> currentPage : $this -> count );
@@ -138,26 +149,31 @@ class Paginator extends Object implements Verifiable, \Countable {
      * Verifies Object Integrity
      *
      * @throws Next\Exception\Exceptions\InvalidArgumentException
-     *  Thrown if initial value of Parameter Option 'itemsPerPage' is not an
+     *  Thrown if initial value of Parameter Option 'visiblePages' is not an
      *  integer or it's less than 1
      *
      * @throws Next\Exception\Exceptions\InvalidArgumentException
      *  Thrown if initial value of Parameter Option 'currentPage' is not an
      *  integer or it's less than 1
      */
-    public function verify() {
+    public function verify() : void {
 
-        if( ! is_int( $this -> options -> itemsPerPage ) || $this -> options -> itemsPerPage < 1 ) {
+        if( ! is_int( $this -> options -> visiblePages ) ||
+                $this -> options -> visiblePages < 1 ) {
 
             throw new InvalidArgumentException(
-                'Parameter Option <strong>itemsPerPage</strong> must be an integer greater or equal 1'
+
+                'Parameter Option <strong>visiblePages</strong>
+                must be an integer greater or equal 1'
             );
         }
 
-        if( ! is_int( $this -> options -> currentPage ) || $this -> options -> currentPage < 1 ) {
+        if( ! is_int( $this -> options -> currentPage ) ||
+                $this -> options -> currentPage < 1 ) {
 
             throw new InvalidArgumentException(
-                'Parameter Option <strong>currentPage</strong> must be an integer greater or equal 1'
+                'Parameter Option <strong>currentPage</strong> must be
+                an integer greater or equal 1'
             );
         }
     }
@@ -170,10 +186,11 @@ class Paginator extends Object implements Verifiable, \Countable {
      * @return integer
      *  Current Page
      */
-    public function getCurrentPage() {
+    public function getCurrentPage() : int {
 
-        return ( ( $this -> count > 0 && $this -> options -> currentPage > $this -> count ) ?
-                    $this -> count : $this -> options -> currentPage );
+        return ( ( $this -> count > 0 &&
+                    $this -> options -> currentPage > $this -> count ) ?
+                        $this -> count : $this -> options -> currentPage );
     }
 
     /**
@@ -182,10 +199,10 @@ class Paginator extends Object implements Verifiable, \Countable {
      * @return integer
      *  Number of Items to be displayed per page
      */
-    public function getItemsPerPage() {
+    public function getItemsPerPage() : int {
 
-        return ( $this -> options -> itemsPerPage > $this -> count ?
-                    $this -> options -> itemsPerPage : $this -> count );
+        return ( $this -> options -> visiblePages > $this -> count ?
+                    $this -> options -> visiblePages : $this -> count );
     }
 
     // Countable Interface Method Implementation
@@ -193,14 +210,15 @@ class Paginator extends Object implements Verifiable, \Countable {
     /**
      * Count elements of Paginator object
      *
-     * In fact this acts as a wrapper to
-     * \Next\Pagination\Adapter\Adapter::count() so counting routine
-     * is not triggered twice
+     * @internal
+     *
+     * This is an interface alias of Next\Pagination\Adapter\Adapter::count()`
+     * so counting routine is not triggered twice
      *
      * @return integer
      *  Number of paginated elements
      */
-    public function count() {
+    public function count() : int {
         return $this -> count;
     }
 }

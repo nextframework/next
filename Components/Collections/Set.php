@@ -13,10 +13,13 @@ namespace Next\Components\Collections;
 use Next\Components\Object;    # Object Class
 
 /**
- * Defines a variation of \Next\Components\Collections\Lists that
- * doesn't accept duplicated \Next\Components\Object
+ * A variation of of Objects' List Collection that doesn't accept
+ * duplicated Objects
  *
  * @package    Next\Components\Collections
+ *
+ * @uses       Next\Components\Object
+ *             Next\Components\Collections\Lists
  */
 class Set extends Lists {
 
@@ -24,13 +27,13 @@ class Set extends Lists {
      * Check Object acceptance
      *
      * @param \Next\Components\Object $object
-     *  Object to test before add to Collection
+     *  Object to have its acceptance in Collection checked
      *
      * @return boolean
-     *  TRUE if given Object is not present in Set Collection and FALSE otherwise
+     *  TRUE if given Object is not already present in Set Collectio
+     *  and FALSE otherwise
      */
-    protected function accept( Object $object ) {
-
+    protected function accept( Object $object ) : bool {
         return ( ! $this -> contains( $object ) );
     }
 }

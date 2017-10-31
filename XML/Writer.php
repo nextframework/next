@@ -10,7 +10,11 @@
  */
 namespace Next\XML;
 
-use Next\HTTP\Response\ResponseException;    # Response Exception Class
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+use Next\Exception\Exceptions\RuntimeException;
 
 use Next\Components\Object;                  # Object Class
 use Next\Components\Invoker;                 # Invoker Class
@@ -20,12 +24,20 @@ use Next\HTTP\Response;                      # Response Class
 use Next\HTTP\Headers\Entity\ContentType;    # Content-Type Entity Header
 
 /**
- * XML Writer Class
+ * The XML Writer simplifies the creation of XML Nodes through the native
+ * XmlWriter Class but also offers, through the Extended Context, the
+ * possibility of manually invoking other methods without need of inheritance
  *
- * @author        Bruno Augusto
+ * @package    Next\XML
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Exception\Exceptions\RuntimeException;
+ *             Next\Components\Object
+ *             Next\Components\Invoker
+ *             Next\Components\Mimicker
+ *             Next\HTTP\Response
+ *             Next\HTTP\Headers\Entity\ContentType
+ *             XmlWriter
  */
 class Writer extends Object {
 
@@ -53,7 +65,7 @@ class Writer extends Object {
      * Extends XML\Writer Context to native XmlWriter Class and
      * starts the XML document
      */
-    public function init() {
+    protected function init() : void {
 
         $this -> extend(
             new Invoker( $this, new Mimicker( [ 'resource' => new \XmlWriter ] ) )
@@ -95,7 +107,7 @@ class Writer extends Object {
      * @return \Next\XML\Writer
      *  XML Writer Object (Fluent Interface)
      */
-    public function addParent( $name, array $attributes = [] ) {
+    public function addParent( $name, array $attributes = [] ) : Writer {
 
         // Starting Parent Node. This node is closed automatically
 
@@ -132,7 +144,7 @@ class Writer extends Object {
      *
      * @link http://wikipedia.org/wiki/CDATA
      */
-    public function addChild( $name, $value = NULL, array $attributes = [], $close = FALSE, $addCDATABlock = FALSE ) {
+    public function addChild( $name, $value = NULL, array $attributes = [], $close = FALSE, $addCDATABlock = FALSE ) : Writer {
 
         // Creating Node
 
@@ -175,32 +187,29 @@ class Writer extends Object {
      * Otherwise the output will be returned 'as is'
      *
      * @param \Next\HTTP\Response|optional $response
-     *
-     *   <p>Response Object</p>
-     *
-     *   <p>If set, a Content-Type Header will also be sent</p>
+     *  Response Object
+     *  If set, a Content-Type Header will also be sent
      *
      * @param boolean|optional $decode
      *  When returning, defines whether or not the entities will be decoded
      *
-     * @return string|void
+     * @return \Next\HTTP\Response|string|void
+     *  If a Response Object has not been provided then the
+     *  [http://www.php.net/XMLWriter](XmlWriter) Memory Buffer will be
+     *  returned as string
      *
-     *   <p>
-     *      If a Response Object is not provided
-     *      {@link http://www.php.net/XMLWriter XmlWriter} Memory
-     *      will be returned
-     *   </p>
-     *
-     *   <p>
-     *       Otherwise, the Memory will be sent, with or without,
-     *       the proper Header
-     *   </p>
+     *  Otherwise the Memory Buffer will be flushed, with or without, the
+     *  proper Header. However, if the response Object provided has been
+     *  configured to be returned instead of flushed — through
+     *  Response::shouldReturn() — nothing is returned
      */
     public function output( Response $response = NULL, $decode = TRUE ) {
 
         // Ending XML Document (root node)
 
         $this -> endDocument();
+
+        $output = $this -> outputMemory();
 
         if( $response !== NULL ) {
 
@@ -212,32 +221,28 @@ class Writer extends Object {
                     new ContentType( [ 'value' => 'text/xml' ] )
                 );
 
-            } catch( ResponseException $e ) {
+                return $response -> appendBody( $output ) -> send();
+
+            } catch( InvalidArgumentException | RuntimeException $e ) {
 
                 /**
                  * @internal
-                 * Unable to send the header? Exception thrown?
-                 * Well, only the XML will be displayed instead be "styled"
+                 *
+                 * If an `Next\Exception\Exceptions\InvalidArgumentException`
+                 * or a `Next\Exception\Exceptions\RuntimeException` is caught
+                 * here the header couldn't be sent (unlikely) or, because
+                 * headers have already been sent, the whole Response couldn't
+                 * be sent
                  */
             }
 
-            $response -> appendBody( $this -> outputMemory() ) -> send();
-
-        } else {
-
-            $output = $this -> outputMemory();
-
-            if( ! $this -> options -> indent -> enabled ) {
-                $output = strtr( $output, [ "\n" => '' ] );
-            }
-
-            if( $decode ) {
-
-                return html_entity_decode( $output );
-            }
-
-            return $output;
         }
+
+        if( ! $this -> options -> indent -> enabled ) {
+            $output = strtr( $output, [ "\n" => '' ] );
+        }
+
+        return( $decode ? html_entity_decode( $output ) : $output );
     }
 
     // Auxiliary Methods
@@ -251,10 +256,9 @@ class Writer extends Object {
      * @param array $attributes
      *  XML Node Attributes
      */
-    private function writeAttributes( array $attributes ) {
+    private function writeAttributes( array $attributes ) : void {
 
         foreach( $attributes as $entry => $value ) {
-
             $this -> writeAttribute( (string) $entry, $value );
         }
     }

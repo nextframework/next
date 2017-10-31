@@ -16,15 +16,17 @@ namespace Next\Session;
 use Next\Exception\Exceptions\AccessViolationException;
 use Next\Exception\Exceptions\InvalidArgumentException;
 
-use Next\Components\Object;                           # Object Class
+use Next\Components\Object;    # Object Class
 
 /**
- * Session Environment Class
+ * The Session Environment manipulates one specific slice of $_SESSION with a
+ * few additional benefits like locking it to prevent accidental overwriting
  *
- * @author        Bruno Augusto
+ * @package    Next\Session
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Exception\Exceptions\AccessViolationException
+ *             Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Components\Object
  */
 class Environment extends Object {
 
@@ -61,7 +63,7 @@ class Environment extends Object {
      * Registers a new Session Environment, creating a new dimension
      * under $_SESSION, optionally, emptying it
      */
-    protected function init() {
+    protected function init() : void {
         $this -> registerEnvironment();
     }
 
@@ -71,7 +73,7 @@ class Environment extends Object {
      * @return string
      *  Environment Name
      */
-    public function getEnvironment() {
+    public function getEnvironment() :? string{
         return $this -> environment;
     }
 
@@ -85,7 +87,7 @@ class Environment extends Object {
      * @return \Next\Session\Environment
      *  Environment Object (Fluent Interface)
      */
-    public function lock() {
+    public function lock() : Environment {
 
         if( ! $this -> isDestroyed() ) {
             $this -> locked = TRUE;
@@ -100,7 +102,7 @@ class Environment extends Object {
      * @return \Next\Session\Environment
      *  Environment Object (Fluent Interface)
      */
-    public function unlock() {
+    public function unlock() : Environment {
 
         if( ! $this -> isDestroyed() ) {
             $this -> locked = FALSE;
@@ -115,7 +117,7 @@ class Environment extends Object {
      * @return boolean
      *  TRUE if Locked. FALSE otherwise
      */
-    public function isLocked() {
+    public function isLocked() : bool {
         return ( ! $this -> isDestroyed() && $this -> locked !== FALSE );
     }
 
@@ -130,7 +132,7 @@ class Environment extends Object {
      * @return \Next\Session\Environment
      *  Environment Object (Fluent Interface)
      */
-    public function destroy() {
+    public function destroy() : Environment {
 
         if( ! $this -> isDestroyed() ) {
             unset( $_SESSION[ $this -> environment ] );
@@ -145,7 +147,7 @@ class Environment extends Object {
      * @return boolean
      *  TRUE if Destroyed. FALSE otherwise
      */
-    public function isDestroyed() {
+    public function isDestroyed() : bool {
         return ( ! array_key_exists( $this -> environment, $_SESSION ) );
     }
 
@@ -157,7 +159,7 @@ class Environment extends Object {
      * @return \Next\Session\Environment
      *  Environment Object (Fluent Interface)
      */
-    public function unsetAll() {
+    public function unsetAll() : Environment {
 
         $_SESSION[ $this -> environment ] = [];
 
@@ -171,7 +173,7 @@ class Environment extends Object {
      *   Return the $_SESSION slice corresponding to the current Environment
      *   if it hasn't been explicitly destroyed, otherwise returns NULL
      */
-    public function getAll() {
+    public function getAll() :? array {
 
         if( ! $this -> isDestroyed() ) {
             return $_SESSION[ $this -> environment ];
@@ -198,7 +200,7 @@ class Environment extends Object {
      * @return \Next\Session\Environment
      *  Environment Object (Fluent Interface)
      */
-    public function append( $name, $value = NULL ) {
+    public function append( $name, $value = NULL ) : Environment {
 
         $this -> isLocked();
 
@@ -269,7 +271,7 @@ class Environment extends Object {
      * @param mixed $value
      *  Value of the new index
      */
-    public function __set( $name, $value ) {
+    public function __set( $name, $value ) : void {
 
         if( ! $this -> isLocked() ) {
             $_SESSION[ $this -> environment ][ $name ] = $value;
@@ -288,7 +290,7 @@ class Environment extends Object {
      *  TRUE if desired argument exists and FALSE otherwise.
      *  If Environment has been explicitly destroyed return FALSE as well
      */
-    public function __isset( $name ) {
+    public function __isset( $name ) : bool {
 
         if( ! $this -> isDestroyed() ) {
             return array_key_exists( $name, (array) $_SESSION[ $this -> environment ] );
@@ -305,7 +307,7 @@ class Environment extends Object {
      * @param string $name
      *  Index to be removed
      */
-    public function __unset( $name ) {
+    public function __unset( $name ) : void {
 
         if( ! $this -> isLocked() ) {
 
@@ -322,7 +324,7 @@ class Environment extends Object {
      * Registers a new Session Environment, creating a new dimension
      * under $_SESSION, optionally, emptying it
      */
-    private function registerEnvironment() {
+    private function registerEnvironment(): void {
 
         if( preg_match( '#(^[0-9])#i', $this -> options -> environment ) ) {
 

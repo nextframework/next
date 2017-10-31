@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Response Header Field Validator Class: Set-Cookie | Validate\Headers\Response\SetCookie.php
+ * HTTP Response Header Field Validator Class: Set-Cookie | Validation\Headers\Response\SetCookie.php
  *
  * @author       Bruno Augusto
  *
@@ -19,12 +19,14 @@ use Next\Components\Object;                  # Object Class
 use Next\Validation\HTTP\Headers\Common\Date;
 
 /**
- * Set-Cookie Header Validation Class
+ * The 'Set-Cookie' Header Validator checks if input string is valid in
+ * accordance to RFC 2109 Section 4.2.2
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
+ *             Next\Validation\HTTP\Headers\Common\Date
  */
 class SetCookie extends Object implements Header {
 
@@ -67,7 +69,7 @@ class SetCookie extends Object implements Header {
      * @link
      *  http://en.wikipedia.org/wiki/HTTP_Cookie
      */
-    public function validate() {
+    public function validate() : bool {
 
         preg_match(
 

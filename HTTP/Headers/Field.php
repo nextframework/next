@@ -15,17 +15,20 @@ namespace Next\HTTP\Headers;
  */
 use Next\Exception\Exceptions\InvalidArgumentException;
 
-use Next\Components\Interfaces\Verifiable;    # Verifiable Interface
-use Next\Validation\Validator;                # Validator Interface
-use Next\Components\Object;                   # Object Class
+use Next\Validation\Verifiable;    # Verifiable Interface
+use Next\Validation\Validator;     # Validator Interface
+use Next\Components\Object;        # Object Class
 
 /**
- * Header Class
+ * Base structure for all HTTP Header Fields, verifying their integrity and
+ * applying pre and post validation routines
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Validation\Verifiable
+ *             Next\Validation\Validator
+ *             Next\Components\Object
  */
 abstract class Field extends Object implements Verifiable {
 
@@ -71,7 +74,7 @@ abstract class Field extends Object implements Verifiable {
      * @param string $value
      *  Header Value
      */
-    protected function init() {
+    protected function init() : void {
         $this -> setValue( $this -> options -> value );
     }
 
@@ -92,7 +95,7 @@ abstract class Field extends Object implements Verifiable {
      * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  All possible values assigned to the Header are invalid
      */
-    public function setValue( $value ) {
+    public function setValue( $value ) : void {
 
         // Removing Header's Name from value, if present
 
@@ -210,7 +213,7 @@ abstract class Field extends Object implements Verifiable {
      * @return string
      *  Input Data
      */
-    protected function preCheck( $data ) {
+    protected function preCheck( $data ) : string {
         return $data;
     }
 
@@ -228,7 +231,7 @@ abstract class Field extends Object implements Verifiable {
      * @return string
      *  Input Data
      */
-    protected function postCheck( $data ) {
+    protected function postCheck( $data ) : string {
         return $data;
     }
 
@@ -246,7 +249,7 @@ abstract class Field extends Object implements Verifiable {
      * @return string
      *  Header Field Name
      */
-    public function getName() {
+    public function getName() : string {
         return $this -> options -> name;
     }
 
@@ -256,7 +259,7 @@ abstract class Field extends Object implements Verifiable {
      * @return string
      *  Header Field Value
      */
-    public function getValue() {
+    public function getValue() : string {
         return $this -> value;
     }
 
@@ -267,9 +270,9 @@ abstract class Field extends Object implements Verifiable {
      *
      * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Provided validator is not a Header Field Validator, characterized
-     *  as instance of \Next\Validation\HTTP\Headers\Headers
+     *  as instance of Next\Validation\HTTP\Headers\Headers
      */
-    public function verify() {
+    public function verify() : void {
 
         // Validator Interfaces Implementations
 
@@ -310,14 +313,14 @@ abstract class Field extends Object implements Verifiable {
      *
      * @abstract
      */
-    abstract protected function getValidator( $value );
+    abstract protected function getValidator( $value ) : Validator;
 
     // OverLoading
 
     /**
      * Return the full string representation of Header Field
      */
-    public function __toString() {
+    public function __toString() : string {
         return $this -> options -> name;
     }
 }

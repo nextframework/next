@@ -15,9 +15,10 @@ namespace Next\FileSystem\Prototypes\ClassMapper\Writer;
  */
 use Next\Exception\Exceptions\InvalidArgumentException;
 
-use Next\Components\Interfaces\Verifiable;    # Verifiable Interface
-use Next\Components\Object;                   # Object Class
-use Next\HTTP\Response;                       # Response Class
+use Next\Validation\Verifiable;      # Verifiable Interface
+use Next\Components\Object;          # Object Class
+use Next\HTTP\Response;              # Response Class
+use Next\XML\Writer as XMLWriter;    # XML Writer Class
 
 /**
  * The XML Output Format writes the generated classmap to a XML file
@@ -26,9 +27,11 @@ use Next\HTTP\Response;                       # Response Class
  * @package    Next\FileSystem
  *
  * @uses       Next\Exception\Exceptions\InvalidArgumentException,
- *             Next\Components\Interfaces\Verifiable,
+ *             Next\Validation\Verifiable,
  *             Next\Components\Object,
  *             Next\HTTP\Response
+ *             Next\XML\Writer
+ *             Next\FileSystem\Prototypes\ClassMapper\Writer
  */
 class XML extends Object implements Verifiable, Writer {
 
@@ -54,14 +57,14 @@ class XML extends Object implements Verifiable, Writer {
 
     /**
      * Additional Initialization.
-     * Initializes the \Next\XML\Writer Object and starts the root
+     * Initializes the Next\XML\Writer Object and starts the root
      * node of the XML structure
      */
-    protected function init() {
+    protected function init() : void {
 
         // Starting XML File
 
-        $this -> writer = new \Next\XML\Writer( $this -> options );
+        $this -> writer = new XMLWriter( $this -> options );
 
         // Adding top Level Parent Node
 
@@ -76,14 +79,13 @@ class XML extends Object implements Verifiable, Writer {
      * @param array $map
      *  Classmap array
      *
-     * @return string|void
-     *  If the Parameter Option 'save' is set to FALSE, the
-     *  XML Output Memory will be returned as string.
-     *  Otherwise the XML memory will flushed to a file named
-     *  accordingly to the Parameter Option 'filename' and
-     *  nothing is returned
+     * @return void
+     *  If the Parameter Option 'save' is set to FALSE, the XML Output Memory
+     *  will be flushed to the browser
+     *  Otherwise the XML memory will written to a file named accordingly to
+     *  the Parameter Option 'filename'
      */
-    public function build( array $map ) {
+    public function build( array $map ) : void {
 
         $this -> writer -> addParent( 'classes' );
 
@@ -95,7 +97,7 @@ class XML extends Object implements Verifiable, Writer {
         }
 
         if( ! $this -> options -> save ) {
-            return $this -> writer -> output( new Response );
+            $this -> writer -> output( new Response ); return;
         }
 
         file_put_contents(

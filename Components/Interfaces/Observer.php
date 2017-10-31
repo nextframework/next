@@ -11,11 +11,13 @@
 namespace Next\Components\Interfaces;
 
 /**
- * Observer Interface, part of Observer Design Pattern.
- * Observers are attached to a \Next\Components\Interfaces\Subject and
+ * Observer Interface is part of Observer Design Pattern.
+ * Observers are attached to a Next\Components\Interfaces\Subject` and
  * execute a routine whenever they're notified of a state change
  *
  * @package    Next\Components\Interfaces
+ *
+ * @uses       Next\Components\Interfaces\Subject
  */
 interface Observer {
 

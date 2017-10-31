@@ -15,12 +15,14 @@ use Next\Components\Object;                      # Object Class
 use Next\Validation\HTTP\Headers\Common\Date;    # RFC 2616 Date Header Validation Class
 
 /**
- * Expires Header Validation Class
+ * The 'Expires' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.21
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
+ *             Next\Validation\HTTP\Headers\Common\Date
  */
 class Expires extends Object implements Header {
 
@@ -71,7 +73,7 @@ class Expires extends Object implements Header {
      *
      * @see \Next\Validation\HTTP\Headers\Common\Date::validate()
      */
-    public function validate() {
+    public function validate() : bool {
 
         $date = new Date( [ 'value' => $this -> options -> value ] );
 

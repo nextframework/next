@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Request Header Field Validator Class: If-Match | Validate\Headers\Request\IfMatch.php
+ * HTTP Request Header Field Validator Class: If-Match | Validation\Headers\Request\IfMatch.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,13 @@ use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
 use Next\Components\Object;                 # Object Class
 
 /**
- * If-Match Header Validation Class
+ * The 'If-Match' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.24
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class IfMatch extends Object implements Header {
 
@@ -39,7 +40,7 @@ class IfMatch extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.24
      *  RFC 2616 Section 14.24
      */
-    public function validate() {
+    public function validate() : bool {
 
         // We can't validate ETags yet, so...
 

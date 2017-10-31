@@ -10,14 +10,22 @@
  */
 namespace  Next\FileSystem\Prototypes;
 
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
 use Next\Components\Interfaces\Prototypable;    # Prototypable Interface
 
 /**
- * Removes a File/Directory.
+ * Removes Files/Directories.
  * If removing a Directory, operates recursively, with file filters
  * and parent directory destruction if empty
  *
  * @package    Next\FileSystem
+ *
+ * @uses       Next\Components\Interfaces\Prototypable
+ *             Next\Exception\Exceptions\InvalidArgumentException
  */
 class Delete implements Prototypable {
 
@@ -27,14 +35,13 @@ class Delete implements Prototypable {
      * Prototypes the Directory/File Removal routine by proxying,
      * treating and handling the mixed arguments received
      *
-     * @return boolean
-     *  Returns TRUE if file(s) could be removed and FALSE otherwise
+     * @see Delete::delete()
      */
-    public function prototype() {
+    public function prototype() : void {
 
         list( $path, $files, $destroy ) = func_get_arg( 0 ) + [ NULL, [], FALSE ];
 
-        return $this -> delete( $path, $files, $destroy );
+        $this -> delete( $path, $files, $destroy );
     }
 
     /**
@@ -58,7 +65,6 @@ class Delete implements Prototypable {
      * // Delete all files and remove empty directory
      *
      * $path -> delete( [], TRUE );
-     *
      * ````
      *
      * @param string $path
@@ -73,10 +79,18 @@ class Delete implements Prototypable {
      *
      * @return boolean
      *  TRUE on success and FALSE otherwise
+     *
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if informed directory is not resolvable (i.e. doesn't exist)
      */
-    private function delete( $path, array $files = [], $destroy = FALSE ) {
+    private function delete( $path, array $files = [], $destroy = FALSE ) : bool {
 
-        if( $path === NULL || ( $path = stream_resolve_include_path( $path ) ) === FALSE ) return TRUE;
+        if( stream_resolve_include_path( $path ) === FALSE ) {
+
+            throw new InvalidArgumentException(
+                sprintf( 'Directory/File <strong>%s</strong> doesn\'t exist', $path )
+            );
+        }
 
         /**
          * @internal
@@ -95,15 +109,13 @@ class Delete implements Prototypable {
 
         // Listing files...
 
-        $items = scandir( $path );
+        $items = array_filter( scandir( $path ), function( $item ) {
+            return ( $item != '.' && $item != '..' );
+        });
 
         // Iterating...
 
         foreach( $items as $index => $item ) {
-
-            // Ignoring '.' and '..'
-
-            if( $item == '.' || $item == '..' ) continue;
 
             /**
              * @internal
@@ -183,10 +195,6 @@ class Delete implements Prototypable {
 
         // Should we remove empty directories?
 
-        if( $destroy && count( $items ) == 0 ) {
-            return rmdir( $path );
-        }
-
-        return TRUE;
+        return ( $destroy && count( $items ) == 0 ) ? rmdir( $path ) : TRUE;
     }
 }

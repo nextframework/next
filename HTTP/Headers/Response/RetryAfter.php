@@ -10,20 +10,22 @@
  */
 namespace Next\HTTP\Headers\Response;
 
-use Next\HTTP\Headers\Field;    # Header Field Abstract Class
+use Next\Validation\Validator as Validators;    # Validators Interface
+use Next\HTTP\Headers\Field;                    # Header Field Abstract Class
 
 /**
- * Response 'Retry-After' Header Field Validator Class
+ * Response Header Field Validation Class: 'Retry-After'
  */
 use Next\Validation\HTTP\Headers\Response\RetryAfter as Validator;
 
 /**
- * Response 'Retry-After' Header Field Class
+ * Response Header Field: 'Retry-After'
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\Validator
+ *             Next\HTTP\Headers\Field
+ *             Next\Validation\HTTP\Headers\RetryAfter
  */
 class RetryAfter extends Field {
 
@@ -38,7 +40,7 @@ class RetryAfter extends Field {
      * @return \Next\Validation\Validator
      *  Associated Validator
      */
-    protected function getValidator( $value ) {
+    protected function getValidator( $value ) : Validators {
         return new Validator( [ 'value' => $value ] );
     }
 
@@ -48,7 +50,7 @@ class RetryAfter extends Field {
      * @return array
      *  Header Field Validation Options
      */
-    public function setOptions() {
+    public function setOptions() : array {
         return [ 'name' => 'Retry-After', 'preserveWhitespace' => TRUE ];
     }
 }

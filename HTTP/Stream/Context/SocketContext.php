@@ -11,12 +11,11 @@
 namespace Next\HTTP\Stream\Context;
 
 /**
- * Stream Context Socket Context Class
+ * An HTTP Stream Context for Stream Sockets (FileSystem)
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\HTTP\Stream\Adapter\AbstractAdapter
  */
 class SocketContext extends AbstractContext {
 

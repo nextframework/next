@@ -11,17 +11,14 @@
 namespace Next\Loader\AutoLoaders;
 
 /**
- * AutoLoader Interface
+ * An Interface for all AutoLoader Strategies
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Loader
  */
 interface AutoLoader {
 
     /**
      * AutoLoading Function
      */
-    public function call();
+    public function call() : callable;
 }

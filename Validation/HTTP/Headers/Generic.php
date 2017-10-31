@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Generic Header Field Validator Class | Validate\HTTP\Headers\Generic.php
+ * HTTP Generic Header Field Validator Class | Validation\HTTP\Headers\Generic.php
  *
  * @author       Bruno Augusto
  *
@@ -13,12 +13,22 @@ namespace Next\Validation\HTTP\Headers;
 use Next\Components\Object;    # Object Class
 
 /**
- * Generic Header Validation Class
+ * The Generic Header Validator checks if input string if valid to be used as
+ * unfiltered, yet complete, Header Field
  *
- * @author        Bruno Augusto
+ * Because they must be manually — and carefully — set, the only concerns
+ * we take care of is for the value not to be NULL — otherwise this would
+ * result in an empty string when being used — and for the string to have
+ * a colon (:) which is what usually separates a Header Field name
+ * from its value
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * If a Generic Header must be sent without a Name, then it's not Generic,
+ * it's Raw ;)
+ *
+ * @package    Next\Validation
+ *
+ * @uses       Next\Components\Object
+ *             Next\Validation\HTTP\Headers\Header
  */
 class Generic extends Object implements Header {
 
@@ -37,17 +47,8 @@ class Generic extends Object implements Header {
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      */
-    public function validate() {
-
-        /**
-         * @internal
-         *
-         * Generic Headers accept everything without requiring any kind
-         * of validation routine BUT, in order to make sure the minimal
-         * requirements are being followed, let's look for a semi-colon
-         * and if the value is not the 'Generic' keyword
-         */
-        return ( ( strpos( $this -> options -> value, ':' ) === FALSE ||
-                   stripos( $this -> options -> value, 'Generic' ) !== FALSE ) ? FALSE : TRUE );
+    public function validate() : bool {
+        return ( $this -> options -> value !== NULL &&
+                    strpos( $this -> options -> value, ':' ) !== FALSE );
     }
 }

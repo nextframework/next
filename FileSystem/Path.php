@@ -15,15 +15,22 @@ namespace Next\FileSystem;
  */
 use Next\Exception\Exceptions\InvalidArgumentException;
 
-use Next\Components\Types\String;    # Strings Data-type Class
+use Next\Components\Types\Strings;    # Strings Data-type Class
 
 /**
- * Defines the Path Data-type Type and prototypes some external/custom
- * resources related to FileSystem operations
+ * The Path Data-type Type with prototypes of external/custom resources related
+ * to FileSystem operations
  *
  * @package    Next\FileSystem
+ *
+ * @uses       Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Components\Types\Strings
+ *             Next\FileSystem\Prototypes\Delete
+ *             Next\FileSystem\Prototypes\Copy
+ *             Next\FileSystem\Prototypes\Tree
+ *             Next\FileSystem\Prototypes\ClassMapper
  */
-class Path extends String {
+class Path extends Strings {
 
     // Prototypable Method Implementation
 
@@ -36,41 +43,50 @@ class Path extends String {
 
         parent::prototype();
 
-        /**
-         * Gets path extension
-         *
-         * @return \Next\FileSystem\Path
-         *  A new FileSystem Path Object with the extension of the input
-         *  Data-type filepath if present and NULL otherwise
-         */
-        $this -> implement( $this, 'getExtension', function( $path ) {
-
-            $extension = pathinfo( $path, PATHINFO_EXTENSION );
-
-            return ( ! empty( $extension ) ? new Path( [ 'value' => $extension ] ) : NULL );
-
-        }, $this -> _value );
-
-        /**
-         * Cleans boundary spaces, trailing slash and inverts
-         * backslashes from given path
-         *
-         * @return \Next\FileSystem\Path
-         *  A new FileSystem Path Object with the cleansed and fixed path
-         */
-        $this -> implement( $this, 'clean', function( $path ) {
-
-            return new Path(
-                [ 'value' => strtr( rtrim( trim( $path ), '/\\' ), [ '\\' => '/' ] ) ]
-            );
-
-        }, $this -> _value );
+        $this -> implement( $this, 'getExtension', [ $this, 'getExtension' ], $this -> _value );
+        $this -> implement( $this, 'clean',        [ $this, 'clean' ],        $this -> _value );
 
         // Custom Prototypes
 
-        $this -> implement( $this, 'delete',      new Prototypes\Delete,      $this -> _value )
-              -> implement( $this, 'copy',        new Prototypes\Copy,        $this -> _value )
-              -> implement( $this, 'tree',        new Prototypes\Tree,        $this -> _value )
-              -> implement( $this, 'classmapper', new Prototypes\ClassMapper, $this -> _value );
+        $this -> implement( $this, 'delete',      'Next\FileSystem\Prototypes\Delete',      $this -> _value )
+              -> implement( $this, 'copy',        'Next\FileSystem\Prototypes\Copy',        $this -> _value )
+              -> implement( $this, 'tree',        'Next\FileSystem\Prototypes\Tree',        $this -> _value )
+              -> implement( $this, 'classmapper', 'Next\FileSystem\Prototypes\ClassMapper', $this -> _value );
+    }
+
+    // Custom/Adapted Prototypes
+
+    /**
+     * Gets path extension
+     *
+     * @param string $path
+     *  Path to have its extension retrieved from
+     *
+     * @return \Next\FileSystem\Path|NULL
+     *  A new FileSystem Path Object with the extension of the input
+     *  Data-type filepath if present and NULL otherwise
+     */
+    protected function getExtension( string $path ) :? Path {
+
+        $extension = pathinfo( $path, PATHINFO_EXTENSION );
+
+        return ( ! empty( $extension ) ? new Path( [ 'value' => $extension ] ) : NULL );
+    }
+
+    /**
+     * Cleans boundary spaces, trailing slash and inverts
+     * backslashes from given path
+     *
+     * @param string $path
+     *  Path string to clean
+     *
+     * @return \Next\FileSystem\Path
+     *  A new FileSystem Path Object with the cleansed and fixed path
+     */
+    protected function clean( string $path ) : Path {
+
+        return new Path(
+            [ 'value' => strtr( rtrim( trim( $path ), '/\\' ), [ '\\' => '/' ] ) ]
+        );
     }
 }

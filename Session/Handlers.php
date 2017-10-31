@@ -15,18 +15,21 @@ namespace Next\Session;
  */
 use Next\Exception\Exceptions\InvalidArgumentException;
 
-use Next\Components\Object;                     # Object Class
+use Next\Components\Object;             # Object Class
 
-use Next\Session\Handlers\Handler;              # Session Handlers Interface
-use Next\Components\Collections\Set;            # Set Iterator Class
+use Next\Session\Handlers\Handler;      # Session Handlers Interface
+use Next\Components\Collections\Set;    # Set Iterator Class
 
 /**
- * Session Handlers Class
+ * The Session Handlers Manager controls different Session Handlers, by adding
+ * them to a Set Collection but more important it deals with the Handler switching
  *
- * @author        Bruno Augusto
+ * @package    Next\Session
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Components\Object
+ *             Next\Session\Handlers\Handler
+ *             Next\Components\Collections\Set
  */
 class Handlers extends Object {
 
@@ -63,9 +66,9 @@ class Handlers extends Object {
     /**
      * Additional Initialization.
      * Creates a new Collection set for all Session Handlers to be
-     * registered and a shortcut for \Next\Session\Manager
+     * registered and a shortcut for Next\Session\Manager
      */
-    protected function init() {
+    protected function init() : void {
 
         $this -> handlers = new Set;
 
@@ -84,7 +87,7 @@ class Handlers extends Object {
      * @return \Next\Session\Handlers
      *  Session Handlers Object (Fluent Interface)
      */
-    public function addHandler( Handler $handler, $activate = FALSE ) {
+    public function addHandler( Handler $handler, $activate = FALSE ) : Handlers {
 
         // Adding Session Handler
 
@@ -100,16 +103,16 @@ class Handlers extends Object {
     }
 
     /**
-     * Change current Session Handler
+     * Switch to a different Session Handler
      *
      * @param string|\Next\Session\Handlers\Handler $handler
      *  Handler Object or Handler Name
      *
      * @throws \Next\Session\Handlers\HandlerException
      *  Changing Session Handler to a invalid Handler, characterized as
-     *  instance of \Next\Session\Hndlers\Handler
+     *  instance of Next\Session\Handlers\Handler
      */
-    public function changeHandler( $handler ) {
+    public function switch( $handler ) : void {
 
         // If we don't have a true Handler...
 
@@ -177,9 +180,10 @@ class Handlers extends Object {
     /**
      * Get active Session Handler
      *
-     * @return \Next\Session\Handlers\Handler
+     * @return \Next\Session\Handlers\Handler|void
+     *  Active Handler, after Handlers::change() has been called
      */
-    public function getHandler() {
+    public function getHandler() :? Handler {
         return $this -> handler;
     }
 }

@@ -11,12 +11,11 @@
 namespace Next\Pagination\Adapter;
 
 /**
- * Pagination Adapter Interface
+ * An Interface for for all Pagination Adapters
  *
- * @author        Bruno Augusto
+ * @package    Next\Pagination
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Countable
  */
 interface Adapter extends \Countable {
 
@@ -26,8 +25,8 @@ interface Adapter extends \Countable {
      * @param integer $offset
      *  Offset to start the range
      *
-     * @param integer $itemsPerPage
+     * @param integer $visiblePages
      *  Number of Items per Page
      */
-    public function getItems( $offset, $itemsPerPage );
+    public function getItems( $offset, $visiblePages ) : iterable;
 }

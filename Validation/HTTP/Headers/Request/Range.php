@@ -14,12 +14,13 @@ use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
 use Next\Components\Object;                 # Object Class
 
 /**
- * Range Header Validation Class
+ * The 'Range' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.35
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class Range extends Object implements Header {
 
@@ -62,7 +63,7 @@ class Range extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35
      *  RFC 2616 Section 14.35
      */
-    public function validate() {
+    public function validate() : bool {
 
         $test = preg_match(
 

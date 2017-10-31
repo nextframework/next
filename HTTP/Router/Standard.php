@@ -15,18 +15,27 @@ namespace Next\HTTP\Router;
  */
 use Next\Exception\Exceptions\InvalidArgumentException;
 
-use Next\Components\Interfaces\Verifiable;    # Verifiable Interface
-use Next\Application\Application;             # Application Interface
+use Next\Validation\Verifiable;      # Verifiable Interface
+use Next\Application\Application;    # Application Interface
 
-use Next\Components\Object;                   # Object Class
-use Next\HTTP\Request;                        # Request Class
+use Next\Components\Object;          # Object Class
+use Next\Components\Parameter;       # Parameter Class
+use Next\HTTP\Request;               # Request Class
 
 /**
- * Standard Controller Router based on PHP Arrays
+ * Standard HTTP Request Router based on PHP Arrays
  *
  * @package    Next\HTTP
+ *
+ * @uses       Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Validation\Verifiable
+ *             Next\Application\Application
+ *             Next\Components\Object
+ *             Next\Components\Parameter
+ *             Next\HTTP\Request
+ *             Next\HTTP\Router\Router
  */
-class Standard extends AbstractRouter implements Verifiable {
+class Standard extends Router implements Verifiable {
 
     // RegExp and String Delimiter Constants
 
@@ -47,9 +56,9 @@ class Standard extends AbstractRouter implements Verifiable {
      *  array or an object will be returned (depending on Connection
      *  Driver configuration).
      *
-     *  If none could, FALSE will be returned
+     *  If none could, nothing is returned
      */
-    public function find() {
+    public function find() :? Parameter {
 
         // Shortening Declarations
 
@@ -77,7 +86,7 @@ class Standard extends AbstractRouter implements Verifiable {
 
                 $data,
 
-                function( $route ) use( $request, $URI ) {
+                function( $route ) use( $request, $URI ) : bool {
 
                     /**
                      * @internal
@@ -98,7 +107,7 @@ class Standard extends AbstractRouter implements Verifiable {
 
             // No matches found!
 
-            if( count( $data ) == 0 ) return FALSE;
+            if( count( $data ) == 0 ) return NULL;
 
             /**
              * @internal
@@ -151,7 +160,7 @@ class Standard extends AbstractRouter implements Verifiable {
 
                     $requiredParams,
 
-                    function( $current ) {
+                    function( $current ) : bool {
 
                         return ( ! empty( $current['acceptable'] ) ||
                                     ! empty( $current['regex'] ) );
@@ -176,8 +185,6 @@ class Standard extends AbstractRouter implements Verifiable {
 
             return $data;
         }
-
-        return FALSE;
     }
 
     // Verifiable Interface Method Implementation
@@ -188,7 +195,7 @@ class Standard extends AbstractRouter implements Verifiable {
      * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Filepath to the PHP array was not informed or it's empty
      */
-    public function verify() {
+    public function verify() : void {
 
         // Checking if PHP File Exists
 
@@ -213,7 +220,7 @@ class Standard extends AbstractRouter implements Verifiable {
      * Set Class Options.
      * Defines a default filepath for PHP-array with Generated Routes
      */
-    public function setOptions() {
+    public function setOptions() : array {
         return [ 'filePath' => __DIR__ . '/routes.php' ];
     }
 
@@ -231,13 +238,13 @@ class Standard extends AbstractRouter implements Verifiable {
      * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Any of the Required Parameters is missing or has no value
      */
-    protected function lookup( array $params, $URI ) {
+    protected function lookup( array $params, $URI ) : void {
 
         array_walk(
 
             $params,
 
-            function( $current ) use( $URI ) {
+            function( $current ) use( $URI ) : void {
 
                 preg_match( sprintf( '/\/%s(?:\/|\?).+\/?/', $current['name'] ), $URI, $matches );
 
@@ -279,7 +286,7 @@ class Standard extends AbstractRouter implements Verifiable {
      *  Any of the Required Parameters has an invalid value from a
      *   [list|of|possible|values]
      */
-    protected function validate( array $params, $URI ) {
+    protected function validate( array $params, $URI ) : void {
 
         // Nothing to validate
 
@@ -289,7 +296,7 @@ class Standard extends AbstractRouter implements Verifiable {
 
             $params,
 
-            function( $current ) use( $URI ) {
+            function( $current ) use( $URI ) : void {
 
                 // Finding argument value
 
@@ -299,7 +306,7 @@ class Standard extends AbstractRouter implements Verifiable {
 
                 // No values to check
 
-                if( count( $value ) == 0 ) return TRUE;
+                if( count( $value ) == 0 ) return;
 
                 // Validating parameter value against a predefined REGEXP
 
@@ -328,40 +335,40 @@ class Standard extends AbstractRouter implements Verifiable {
                         );
                     }
 
-                } else {
+                    return;
+                }
 
-                    $valid = explode( self::SEPARATOR_TOKEN, $current['acceptable'] );
+                /**
+                 * @internal
+                 *
+                 * There's not a RegExp to validate, then
+                 * let's check against a list|of|valid|values
+                 */
+                $valid = explode( self::SEPARATOR_TOKEN, $current['acceptable'] );
+
+                if( ! in_array( $value[ 1 ], $valid ) ) {
 
                     /**
                      * @internal
                      *
-                     * There's not a RegExp to validate, then
-                     * let's check against a list|of|valid|values
+                     * A Route Argument might be defined as required
+                     * but it doesn't need to be defined by the
+                     * User so let's check if a default Value has
+                     * been provided as fallback
                      */
-                    if( ! in_array( $value[ 1 ], $valid ) ) {
+                    if( ! empty( $current['default'] ) ) {
 
-                        /**
-                         * @internal
-                         *
-                         * A Route Argument might be defined as required
-                         * but it doesn't need to be defined by the
-                         * User so let's check if a default Value has
-                         * been provided as fallback
-                         */
-                        if( ! empty( $current['default'] ) ) {
+                        throw new InvalidArgumentException(
 
-                            throw new InvalidArgumentException(
+                            sprintf(
 
-                                sprintf(
+                                'Invalid Required Parameter <strong>%s</strong>',
 
-                                    'Invalid Required Parameter <strong>%s</strong>',
+                                $current['name']
+                            ),
 
-                                    $current['name']
-                                ),
-
-                                NULL, 400
-                            );
-                        }
+                            NULL, 400
+                        );
                     }
                 }
             }
@@ -380,7 +387,7 @@ class Standard extends AbstractRouter implements Verifiable {
      * @return array
      *  An array with all parsed Dynamic Parameters and their proper values
      */
-    protected function process( array $params, $URI ) {
+    protected function process( array $params, $URI ) : array {
 
         // Nothing to process
 
@@ -446,11 +453,11 @@ class Standard extends AbstractRouter implements Verifiable {
      *
      * @return string
      *  - Input Parameter Value, if parameter is present and is valid
-     *  - Default Parameter Value, if parameter is missing or is
+     *  - Default Parameter Value, if parameter is missing -OR- it's
      *    invalid -AND- a Default Value is defined in Router
      *  - `NULL`, in any other cases
      */
-    private function findParameterValue( $param, $value ) {
+    private function findParameterValue( $param, $value ) :? string {
 
         /**
          * @internal

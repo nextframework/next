@@ -10,14 +10,20 @@
  */
 namespace Next\Filter;
 
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
 use Next\Components\Object;    # Object Class
 
 /**
- * Adds slashes before special characters
+ * Adds slashes before special or custom-defined characters
  *
  * @package    Next\Filter
  *
- * @uses       Next\Components\Object,
+ * @uses       Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Components\Object,
  *             Next\Filter\Filterable
  */
 class Slashify extends Object implements Filterable {
@@ -61,11 +67,19 @@ class Slashify extends Object implements Filterable {
      * Filters input data
      *
      * @return string
-     *  Input data sanitized
+     *  Input data with slashes added before special or defined characters
+     *
+     * @see \Next\Filter\Blacklist
+     *  Detailed explanation on why the Exception is thrown
+     *
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if Parameter Option 'data' has no value (see above)
      */
-    public function filter() {
+    public function filter() : string {
 
-        if( $this -> options -> data === NULL ) return;
+        if( $this -> options -> data === NULL ) {
+            throw new InvalidArgumentException( 'Nothing to filter' );
+        }
 
         if( count( $this -> options -> characters ) == 0 ) {
             return addslashes( $this -> options -> data );

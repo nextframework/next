@@ -1,7 +1,7 @@
 <?php
 
 /**
- * File Extension Validator Class | Validate\File\Extension.php
+ * File Extension Validator Class | Validation\File\Extension.php
  *
  * @author       Bruno Augusto
  *
@@ -16,12 +16,15 @@ use Next\FileSystem\Path;                # FileSystem Path Data-type Class
 use Next\Components\Utils\ArrayUtils;    # Array Utils Class
 
 /**
- * File Extensions Validation Class
+ * The File Extension Validator checks if given File Extension is accepted
+ * towards a predefined set of Extensions
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\Validator
+ *             Next\Components\Object
+ *             Next\FileSystem\Path
+ *             Next\Components\Utils\ArrayUtils
  */
 class Extension extends Object implements Validator {
 
@@ -50,7 +53,7 @@ class Extension extends Object implements Validator {
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      */
-    public function validate() {
+    public function validate() : bool {
 
         if( count( (array) $this -> options -> acceptedFileExtensions ) == 0 ) {
             return TRUE;

@@ -15,10 +15,11 @@ namespace Next\Components;
  */
 use Next\Exception\Exceptions\NullException;
 
+use Next\Components\Interfaces\Hashable;            # Hashable Interface
 use Next\Components\Interfaces\Contextualizable;    # Contextualizable Interface
 use Next\Components\Interfaces\Informational;       # Informational Interface
 use Next\Components\Interfaces\Parameterizable;     # Parameterizable Interface
-use Next\Components\Interfaces\Verifiable;          # Verifiable Interface
+use Next\Validation\Verifiable;                     # Verifiable Interface
 
 /**
  * The Object is the base Class of (almost) all classes in Next Framework.
@@ -44,8 +45,19 @@ use Next\Components\Interfaces\Verifiable;          # Verifiable Interface
  * the way type-hinting does
  *
  * @package    Next\Components
+ *
+ * @uses       Next\Exception\Exceptions\NullException
+ *             Next\Components\Prototype
+ *             Next\Components\Interfaces\Hashable
+ *             Next\Components\Interfaces\Contextualizable
+ *             Next\Components\Interfaces\Informational
+ *             Next\Components\Interfaces\Parameterizable
+ *             Next\Validation\Verifiable
+ *             Next\Components\Context
+ *             Next\Components\Parameter
+ *             ReflectionObject
  */
-class Object extends Prototype implements Contextualizable, Informational, Parameterizable {
+class Object extends Prototype implements Hashable, Contextualizable, Informational, Parameterizable {
 
     /**
      * Parameter Options Definition
@@ -95,7 +107,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      * - Creates the Extended Context
      * - Merges all Parameter Options in one
      * - Runs Additional Initialization
-     * - Calls \Next\Components\Interfaces\Verifiable::verify() if needed
+     * - Calls Next\Validation\Verifiable::verify() if needed
      *
      * Phew!
      *
@@ -116,7 +128,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
     /**
      * Additional initialization. Must be overwritten
      */
-    protected function init() {}
+    protected function init() : void {}
 
     /**
      * Map given array to stdClass Object recursively
@@ -137,13 +149,13 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      *
      * This is accepted by PHP (for whatever reason), but we don't accept
      */
-    public static function map( $param ) {
+    public static function map( $param ) : Parameter {
 
         $obj = new Parameter;
 
         foreach( $param as $k => $v ) {
 
-            if( strlen( $k ) == 0 ) {
+            if( mb_strlen( $k ) == 0 ) {
 
                 throw new RuntimeException(
                     'Although accepted as valid by PHP, all dimensions must have a key'
@@ -188,19 +200,23 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      * @return ReflectionClass
      *  Reflector instance of Object
      */
-    public function getClass() {
+    public function getClass() : \ReflectionObject {
         return new \ReflectionObject( $this );
     }
 
+    // Hashable Interface Method Implementation
+
     /**
-     * Retrieves Object Hash
+     * Get Object hash
      *
-     * Child classes may overwrite this method in order to implement their own way
-     * to define a class hash
+     * @internal
+     *
+     * Child classes may overwrite this method in order to implement their own
+     * way to define an object hash but they are bound to return a string
      *
      * @return string Object Hash
      */
-    public function getHash() {
+    public function hash() : string {
         return spl_object_hash( $this );
     }
 
@@ -225,7 +241,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      *
      * @see \Next\Components\Context::extend()
      */
-    final public function extend( Invoker $invoker, $methods = NULL, $properties = NULL ) {
+    final public function extend( Invoker $invoker, $methods = NULL, $properties = NULL ) : Object {
 
         if( $this -> context === NULL ) {
             throw ComponentsException::extendedContextFailure( $this );
@@ -244,7 +260,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      *
      * @see \Next\Components\Context::getCallables()
      */
-    public function getCallables() {
+    public function getCallables() : array {
          return $this -> context -> getCallables();
     }
 
@@ -256,7 +272,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      * @return string
      *  Success Message
      */
-    public function getSuccessMessage() {
+    public function getSuccessMessage() :? string {
         return $this -> _success;
     }
 
@@ -266,7 +282,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      * @return string
      *  Error Message
      */
-    public function getErrorMessage() {
+    public function getErrorMessage() :? string {
         return $this -> _error;
     }
 
@@ -276,7 +292,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      * @return string
      *  Informational Message
      */
-    public function getInformationalMessage() {
+    public function getInformationalMessage() :? string {
         return $this -> _info;
     }
 
@@ -284,8 +300,12 @@ class Object extends Prototype implements Contextualizable, Informational, Param
 
     /**
      * Get Class Options
+     *
+     * @return \Next\Components\Parameter
+     *  Parameter Object with all Default, Custom (inherited)
+     *  and Instance Parameter Options merged
      */
-    public function getOptions() {
+    public function getOptions() : Parameter {
         return $this -> options;
     }
 
@@ -296,6 +316,11 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      *
      * It's not really implemented because not all child classes
      * have something to be configured
+     *
+     * @return \Next\Components\Parameter|array|void
+     *  If overwritten, it must return an array or a well-formed
+     *  instance of Next\Components\Parameter.
+     *  Otherwise, nothing is returned
      */
     public function setOptions() {}
 
@@ -350,7 +375,7 @@ class Object extends Prototype implements Contextualizable, Informational, Param
      * @return string
      *  Classname without namespaces
      */
-    public function __toString() {
+    public function __toString() : string {
         return $this -> getClass() -> getShortName();
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Response Header Field Validator Class: WWW-Authenticate | Validate\Headers\Response\WWWAuthenticate.php
+ * HTTP Response Header Field Validator Class: WWW-Authenticate | Validation\Headers\Response\WWWAuthenticate.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,13 @@ use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
 use Next\Components\Object;                 # Object Class
 
 /**
- * RFC 2616 WWW-Authenticate Header Validation Class
+ * The 'WWWAuthenticate' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.47
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class WWWAuthenticate extends Object implements Header {
 
@@ -39,7 +40,7 @@ class WWWAuthenticate extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.47
      *  RFC 2616 Section 14.47
      */
-    public function validate() {
+    public function validate() : bool {
         return TRUE;
     }
 }

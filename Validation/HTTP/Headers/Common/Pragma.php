@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Common Header Field Validator Class: Pragma | Validate\Headers\Common\Pragma.php
+ * HTTP Common Header Field Validator Class: Pragma | Validation\Headers\Common\Pragma.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,13 @@ use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
 use Next\Components\Object;                 # Object Class
 
 /**
- * Pragma Header Validation Class
+ * The 'Pragma' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.32
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class Pragma extends Object implements Header {
 
@@ -52,7 +53,7 @@ class Pragma extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.32
      *  RFC 2616 Section 14.32
      */
-    public function validate() {
+    public function validate() : bool {
 
         $test = preg_match(
 

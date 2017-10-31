@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Response Header Field Validator Class: X-Content-Type-Options | Validate\Headers\Response\XContentTypeOptions.php
+ * HTTP Response Header Field Validator Class: X-Content-Type-Options | Validation\Headers\Response\XContentTypeOptions.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,16 @@ use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
 use Next\Components\Object;                 # Object Class
 
 /**
- * X-Content-Type-Options Header Validation Class
+ * The 'X-Content-Type-Options' Header Validator checks if input string is
+ * valid for a X-Content-Type-Options string
  *
- * @author        Bruno Augusto
+ * Even though this is not an official as per the RFC, it's widely
+ * accepted and used as one
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Validation
+ *
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class XContentTypeOptions extends Object implements Header {
 
@@ -57,7 +61,7 @@ class XContentTypeOptions extends Object implements Header {
      * @link
      *  http://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Common_non-standard_response_headers
      */
-    public function validate() {
+    public function validate() : bool {
         return ( strcasecmp( $this -> options -> value, 'nosniff' ) == 0 );
     }
 }

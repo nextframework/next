@@ -10,12 +10,20 @@
  */
 namespace  Next\FileSystem\Prototypes;
 
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
 use Next\Components\Interfaces\Prototypable;    # Prototypable Interface
 
 /**
  * Copies all files from given directory to another one
  *
  * @package    Next\FileSystem
+ *
+ * @uses       Next\Components\Interfaces\Prototypable
+ *             Next\Exception\Exceptions\InvalidArgumentException
  */
 class Copy implements Prototypable {
 
@@ -24,12 +32,14 @@ class Copy implements Prototypable {
     /**
      * Prototypes the Directory Copy routine by proxying, treating and
      * handling the mixed arguments received
+     *
+     * @see Copy::copy()
      */
-    public function prototype() {
+    public function prototype() : void {
 
         list( $source, $destination ) = func_get_arg( 0 ) + [ NULL, NULL ];
 
-        return $this -> copy( $source, $destination );
+        $this -> copy( $source, $destination );
     }
 
     /**
@@ -40,10 +50,18 @@ class Copy implements Prototypable {
      *
      * @param string $destination
      *  Destination path
+     *
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if informed directory is not resolvable (i.e. doesn't exist)
      */
-    private function copy( $source, $destination ) {
+    private function copy( string $source, string $destination ) : void {
 
-        if( $source === NULL || ( $source = stream_resolve_include_path( $source ) ) === FALSE ) return;
+        if( stream_resolve_include_path( $source ) === FALSE ) {
+
+            throw new InvalidArgumentException(
+                sprintf( 'Directory <strong>%s</strong> cannot be traversed', $directory )
+            );
+        }
 
         $directory = opendir( $source );
 
@@ -57,13 +75,10 @@ class Copy implements Prototypable {
             if( ( $file != '.' ) && ( $file != '..' ) ) {
 
                 if( is_dir( $from ) ) {
-
-                    $this -> copy( $from, $to );
-
-                } else {
-
-                    copy( sprintf( '%s/%s', $source, $file ), $to );
+                    $this -> copy( $from, $to ); return;
                 }
+
+                copy( sprintf( '%s/%s', $source, $file ), $to );
             }
         }
 

@@ -10,18 +10,22 @@
  */
 namespace Next\HTTP\Headers;
 
+use Next\Validation\Validator as Validators;    # Validators Interface
+
 /**
- * Generic Header Field Validator Class
+ * Generic Header Field Validation Class
  */
 use Next\Validation\HTTP\Headers\Generic as Validator;
 
 /**
- * Generic Header Field Class
+ * The Generic Header Field represents Headers unofficial Headers or Headers
+ * that are unrecognised by Next Framework
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\Validator
+ *             Next\HTTP\Headers\Field
+ *             Next\Validation\HTTP\Headers\Generic
  */
 class Generic extends Field {
 
@@ -36,7 +40,7 @@ class Generic extends Field {
      * @return \Next\Validation\Validator
      *  Associated Validator
      */
-    protected function getValidator( $value ) {
+    protected function getValidator( $value ) : Validators {
         return new Validator( [ 'value' => $value ] );
     }
 
@@ -46,7 +50,7 @@ class Generic extends Field {
      * @return array
      *  Header Field Validation Options
      */
-    public function setOptions() {
+    public function setOptions() : array {
         return [ 'name' => 'Generic', 'acceptMultiples' => TRUE, 'preserveWhitespace' => TRUE ];
     }
 }

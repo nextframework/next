@@ -11,16 +11,19 @@
 namespace Next\HTTP\Router\Generators\Writer;
 
 use Next\Components\Object;                # Object Class
-use Next\HTTP\Stream\Writer as Adapter;    # HHTP Stream Writer Class
+use Next\HTTP\Stream\Writer as Adapter;    # HTTP Stream Writer Class
 use Next\HTTP\Stream\Adapter\Socket;       # HTTP Stream Socket Adapter
 
 /**
- * Routes Generator Tool: Standard Output Writer (PHP arrays)
+ * The Standard Routes Generator Writer records all Routes Informations found in
+ * an PHP-array
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Components\Object
+ *             Next\HTTP\Stream\Writer
+ *             Next\HTTP\Stream\Adapter\Socket
+ *             Next\HTTP\Router\Generators\Writer\Writer
  */
 class Standard extends Object implements Writer {
 
@@ -44,7 +47,7 @@ class Standard extends Object implements Writer {
      * @return integer
      *  Number of records processed
      */
-    public function save( array $data ) {
+    public function save( array $data ) : int {
 
         set_time_limit( 0 );
 
@@ -102,7 +105,7 @@ class Standard extends Object implements Writer {
             "<?php\n\n\$routes = " . var_export( $structure, TRUE ) . ';'
         );
 
-        $writer -> getAdapter() -> close();
+        $writer -> close();
 
         return $records;
     }
@@ -110,7 +113,7 @@ class Standard extends Object implements Writer {
     /**
      * Empties the PHP-array file before record found Routes
      */
-    public function reset() {
+    public function reset() : void {
 
         $writer = new Adapter(
             new Socket( $this -> options -> filePath, Socket::TRUNCATE_WRITE )
@@ -118,15 +121,14 @@ class Standard extends Object implements Writer {
 
         /**
          * @internal
+         *
          * We don't need to write anything, but
-         * \Next\HTTP\Stream\Writer\Writer::write() must be called so
-         * the 'wb' opening mode used in \Next\HTTP\Stream\Adapter\Socket
+         * \Next\HTTP\Stream\Writer::write() must be called so
+         * the 'wb' opening mode used in Next\HTTP\Stream\Adapter\Socket
          * constructor above can do its job emptying the file
          */
         $writer -> write( '' );
 
-        $writer -> getAdapter() -> close();
-
-        return $this;
+        $writer -> close();
     }
 }

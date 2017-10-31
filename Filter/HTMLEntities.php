@@ -10,6 +10,11 @@
  */
 namespace Next\Filter;
 
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
 use Next\Components\Object;    # Object Class
 
 /**
@@ -18,7 +23,8 @@ use Next\Components\Object;    # Object Class
  *
  * @package    Next\Filter
  *
- * @uses       Next\Components\Object,
+ * @uses       Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Components\Object,
  *             Next\Filter\Filterable
  */
 class HTMLEntities extends Object implements Filterable {
@@ -103,11 +109,19 @@ class HTMLEntities extends Object implements Filterable {
      * Filters input data
      *
      * @return string
-     *  Input data sanitized
+     *  Input data (H)HTML Entities encoded
+     *
+     * @see \Next\Filter\Blacklist
+     *  Detailed explanation on why the Exception is thrown
+     *
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if Parameter Option 'data' has no value (see above)
      */
-    public function filter() {
+    public function filter() : string {
 
-        if( $this -> options -> data === NULL ) return;
+        if( $this -> options -> data === NULL ) {
+            throw new InvalidArgumentException( 'Nothing to filter' );
+        }
 
         if( $this -> options -> full !== FALSE ) {
 

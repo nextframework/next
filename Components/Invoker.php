@@ -11,10 +11,12 @@
 namespace Next\Components;
 
 /**
- * Wraps two \Next\Components\Object, a Caller Object and a Callee Object,
- * encapsulating them in a common interface as part of Extended Context Concept
+ * Wraps two Objects, a Caller and a Callee, encapsulating them in a common
+ * interface as part of Extended Context Concept
  *
  * @package    Next\Components
+ *
+ * @uses       Next\Components\Object
  */
 class Invoker extends Object {
 
@@ -53,7 +55,7 @@ class Invoker extends Object {
      * @return \Next\Components\Object
      *  Caller Object
      */
-    public function getCaller() {
+    public function getCaller() : Object {
         return $this -> caller;
     }
 
@@ -63,7 +65,7 @@ class Invoker extends Object {
      * @return \Next\Components\Object
      *  Callee Object
      */
-    public function getCallee() {
+    public function getCallee() : Object {
         return $this -> callee;
     }
 }

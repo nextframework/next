@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Common Header Field Validator Class: Cache-Control | Validate\Headers\Common\CacheControl.php
+ * HTTP Common Header Field Validator Class: Cache-Control | Validation\Headers\Common\CacheControl.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,13 @@ use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
 use Next\Components\Object;                 # Object Class
 
 /**
- * Cache-Control Header Validation Class
+ * The 'Cache-Control' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.9
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class CacheControl extends Object implements Header {
 
@@ -94,7 +95,7 @@ class CacheControl extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9
      *  RFC 2616 Section 14.9
      */
-    public function validate() {
+    public function validate() : bool {
 
         $test = preg_match(
 

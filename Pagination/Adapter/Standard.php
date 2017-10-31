@@ -10,17 +10,24 @@
  */
 namespace Next\Pagination\Adapter;
 
-use Next\Components\Interfaces\Verifiable;                 # Verifiable interface
-use Next\Exception\Exceptions\InvalidArgumentException;    # Invalid Argument Exception Class
-use Next\Components\Object;                                # Object Class
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
+use Next\Validation\Verifiable;   # Verifiable interface
+use Next\Components\Object;       # Object Class
 
 /**
- * Standard Pagination Adapter Class
+ * The Standard Pagination Adapter simply returns a slice of given data-source,
+ * from the starting offset and up to the Number of Items per Page
  *
- * @author        Bruno Augusto
+ * @package    Next\Pagination
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Validation\Verifiable
+ *             Next\Components\Object
+ *             Next\Pagination\Adapter\Adapter
  */
 class Standard extends Object implements Verifiable, Adapter {
 
@@ -38,17 +45,19 @@ class Standard extends Object implements Verifiable, Adapter {
     /**
      * Get items from given offset
      *
+     * Method implemented as interface compliance only
+     *
      * @param integer $offset
      *  Offset to start the range
      *
-     * @param integer $itemsPerPage
+     * @param integer $visiblePages
      *  Number of Items per Page
      *
-     * @return array
+     * @return array|iterable
      *  Range of pages
      */
-    public function getItems( $offset, $itemsPerPage ) {
-        return new \ArrayObject( array_slice( $this -> options -> source, $offset, $itemsPerPage ) );
+    public function getitems( $offset, $visiblePages ) : iterable {
+        return new array_slice( $this -> options -> source, $offset, $visiblePages );
     }
 
     // Countable Interface Method Implementation
@@ -59,7 +68,7 @@ class Standard extends Object implements Verifiable, Adapter {
      * @return integer
      *  Number of elements present in given source
      */
-    public function count() {
+    public function count() : int {
         return count( $this -> options -> source );
     }
 
@@ -71,7 +80,7 @@ class Standard extends Object implements Verifiable, Adapter {
      * @throws Next\Exception\Exceptions\InvalidArgumentException
      *  Thrown if required Parameter Option 'source' is not an array
      */
-    public function verify() {
+    public function verify() : void {
 
         if( (array) $this -> options -> source !== $this -> options -> source ) {
 

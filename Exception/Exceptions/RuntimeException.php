@@ -17,7 +17,7 @@ use Next\Exception\Exception;    # Exception Class
 /**
  * The RuntimeException defines an Exception Type for when
  * something unexpected happens only in runtime, something that requires
- * external interference (i.e. user input) to be occur
+ * external interference (i.e. server environment) to occur
  *
  * However, obviously, this should be used only if the situation doesn't
  * fit the purpose of any other Exception Classes first

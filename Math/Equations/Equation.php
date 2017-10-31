@@ -11,7 +11,7 @@
 namespace Next\Math\Equations;
 
 /**
- * The Equation Type describes a Mathematical Equations implemented within the Math Module
+ * An Interface for all Equations
  *
  * @package    Next\Math
  */

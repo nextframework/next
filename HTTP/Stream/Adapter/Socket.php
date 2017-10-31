@@ -10,15 +10,28 @@
  */
 namespace Next\HTTP\Stream\Adapter;
 
-use Next\HTTP\Stream\Context\Context;             # Stream Context Interface
-use Next\HTTP\Stream\Context\SocketContext;       # Stream Context Socket ContextClass
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+use Next\Exception\Exceptions\RuntimeException;
+
+use Next\Validation\Verifiable;                # Verifiable Interface
+use Next\HTTP\Stream\Context\Context;          # Stream Context Interface
+use Next\HTTP\Stream\Context\SocketContext;    # Stream Context Socket ContextClass
 
 /**
- * Defines an Adapter Class using regular FileSystem
+ * An HTTP Stream Adapter with Stream Sockets (FileSystem)
  *
- * @package    Next\Stream
+ * @package    Next\HTTP
+ *
+ * @uses       Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Exception\Exceptions\RuntimeException
+ *             Next\Validation\Verifiable
+ *             Next\HTTP\Stream\Adapter\AbstractAdapter
+ *             SplFileInfo
  */
-class Socket extends AbstractAdapter {
+class Socket extends AbstractAdapter implements Verifiable {
 
     // Opening Modes Constants
 
@@ -35,174 +48,144 @@ class Socket extends AbstractAdapter {
     const READ                   =   'rb';
 
     /**
-     * Read and Write
-     *
-     * <p>
-     *     Open the stream for reading and writing, placing the pointer at
-     *     the beginning of the file
-     * </p>
+     * Read and Write.
+     * Open the stream for reading and writing, placing the pointer at the
+     * beginning of the file
      *
      * @var string
      */
-    const READ_WRITE                = 'r+b';
+    const READ_WRITE = 'r+b';
 
     /**
-     * Write-only
+     * Write-only.
+     * Open the stream for writing, placing the pointer at the beginning of the
+     * file and truncating the file to zero length.
      *
-     * <p>
-     *     Open the stream for writing, placing the pointer at the beginning
-     *     of the file and truncating the file to zero length.
-     * </p>
-     *
-     * <p>If the file does not exist, attempt to create it</p>
+     * If the file does not exist, attempt to create it
      *
      * @var string
      */
     const TRUNCATE_WRITE            = 'wb';
 
     /**
-     * Read and Write
+     * Read and Write.
+     * Open the stream for reading and writing, placing the pointer at the
+     * beginning of the file and truncating the file to zero length.
      *
-     * <p>
-     *     Open the stream for reading and writing, placing the pointer at
-     *     the beginning of the file and truncating the file to zero length.
-     * </p>
-     *
-     * <p>If the file does not exist, attempt to create it</p>
+     * If the file does not exist, attempt to create it
      *
      * @var string
      */
-    const TRUNCATE_READ_WRITE       = 'w+b';
+    const TRUNCATE_READ_WRITE = 'w+b';
 
     /**
-     * Append Write-only
+     * Append Write-only.
+     * Open the stream for writing, placing the pointer at the end of the file
+     * and truncating the file to zero length.
      *
-     * <p>
-     *     Open the stream for writing, placing the pointer at the end
-     *     of the file and truncating the file to zero length.
-     * </p>
-     *
-     * <p>If the file does not exist, attempt to create it</p>
+     * If the file does not exist, attempt to create it
      *
      * @var string
      */
-    const APPEND_WRITE              = 'ab';
+    const APPEND_WRITE = 'ab';
 
     /**
-     * Append Read and Write
+     * Append Read and Write.
+     * Open the stream for writing, placing the pointer at the end of the file
+     * and truncating the file to zero length.
      *
-     * <p>
-     *     Open the stream for writing, placing the pointer at the end
-     *     of the file and truncating the file to zero length.
-     * </p>
-     *
-     * <p>If the file does not exist, attempt to create it</p>
+     * If the file does not exist, attempt to create it
      *
      * @var string
      */
-    const APPEND_READ_WRITE         = 'a+b';
+    const APPEND_READ_WRITE = 'a+b';
 
     /**
-     * Exclusive Read
+     * Exclusive Write.
+     * Create and open the stream for writing only, placing the pointer in the
+     * beginning of file.
      *
-     * <p>
-     *     Create and open the stream for writing only, placing the pointer in
-     *     the beginning of file
-     * </p>
-     *
-     * <p>
-     *     If the file does not exist doesn't try to create it but the opening
-     *     routine returns FALSE em emits an E_WARNING error
-     * </p>
+     * If the file does not exist doesn't try to create it but the opening
+     * routine returns FALSE em emits an E_WARNING error
      *
      * @var string
      */
-    const EXCLUSIVE_WRITE           = 'xb';
+    const EXCLUSIVE_WRITE = 'xb';
 
     /**
-     * Exclusive Read and Write
+     * Exclusive Read and Write.
+     * Create and open the stream for writing only, placing the pointer in the
+     * beginning of file.
      *
-     * <p>
-     *     Create and open the stream for writing only, placing the pointer in
-     *     the beginning of file
-     * </p>
-     *
-     * <p>
-     *     If the file does not exist doesn't try to create it but the opening
-     *     routine returns FALSE em emits an E_WARNING error
-     * </p>
+     * If the file does not exist doesn't try to create it but the opening
+     * routine returns FALSE em emits an E_WARNING error
      *
      * @var string
      */
-    const EXCLUSIVE_READ_WRITE      = 'x+b';
+    const EXCLUSIVE_READ_WRITE = 'x+b';
 
     /**
-     * Conditional Read
+     * Conditional Read.
+     * The same as WRITE ONLY, but the file is not truncated nor any error is
+     * is raised if the file already exists (opposed to EXCLUSIVE).
      *
-     * <p>
-     *     The same as WRITE ONLY, but the file is not truncated nor any error
-     *     is raised if the file already exists (opposed to EXCLUSIVE)
-     * </p>
+     * Useful for advisory locks before attempt to modify the file.
      *
-     * <p>
-     *     Useful for advisory locks before attempt to modify the file.
+     * E.g: A simplified but equivalent implementation of
+     * `\Next\HTTP\Stream\Writer::write()` that prevents a zero-length data to
+     * be written, warning the user about possible data loss.
      *
-     *     E.g: A simplified but equivalent implementation of
-     *     \Next\HTTP\Stream\Writer::write() that prevents a zero-length data to
-     *     be written, warning the user about possible data loss.
+     * ````
+     * function write( $string, $length = NULL ) {
      *
-     *     ````
-     *         function write( $string, $length = NULL ) {
+     *     $handler = fopen( './file.txt', 'w' );
      *
-     *             $handler = fopen( './file.txt', 'w' );
+     *     if( $length !== NULL ) {
      *
-     *             if( $length !== NULL ) {
+     *         if( (int) $length === 0 ) {
      *
-     *                 if( (int) $length === 0 ) {
-     *                     throw new Exception(
-     *                         'Using zero-length when writing data, will result in a blank file/empty stream'
-     *                     );
-     *                 }
-     *
-     *                 $bytes = fwrite( $handler, $string, $length );
-     *
-     *             } else {
-     *
-     *                 $bytes = fwrite( $handler, $string );
-     *             }
-     *
-     *             return $bytes;
+     *             throw new Exception(
+     *                 'Using zero-length when writing data, will result in a blank file/empty stream'
+     *             );
      *         }
      *
-     *         try {
+     *         $bytes = fwrite( $handler, $string, $length );
      *
-     *             var_dump( write( 'some text', 0 ) );
+     *     } else {
      *
-     *         } catch( Exception $e ) {
+     *        $bytes = fwrite( $handler, $string );
+     *     }
      *
-     *             echo $e -> getMessage();
-     *         }
-     *     ````
+     *     return $bytes;
+     * }
      *
-     * Because of the WRITE mode (w) the code above will output the Exception
-     * message, but the file named <strong>file.txt</strong> will already be emptied
-     * not because of fwrite(), but because of fopen() already truncated the file
+     * try {
+     *
+     *     var_dump( write( 'some text', 0 ) );
+     *
+     * } catch( Exception $e ) {
+     *
+     *     echo $e -> getMessage();
+     * }
+     * ````
+     *
+     * Because of the WRITE mode (`w`) the code above will output the Exception
+     * message, but the file named <strong>file.txt</strong> will already be
+     * emptied not because of fwrite(), but because of fopen() already
+     * truncated the file
      *
      * By using the "c" or "c+" mode (see below), this does not happen.
      */
-    const CONDITIONAL_WRITE         = 'cb';
+    const CONDITIONAL_WRITE = 'cb';
 
     /**
-     * Conditional Read and Write
-     *
-     * <p>
-     *     The same as READ and WRITE (w+), but the file is not truncated nor any error
-     *     is raised if the file already exists (opposed to EXCLUSIVE)
-     * </p>
+     * Conditional Read and Write.
+     * The same as READ and WRITE (w+), but the file is not truncated nor any
+     * error is raised if the file already exists (opposed to EXCLUSIVE)
      *
      * @var string
      */
-    const CONDITIONAL_READ_WRITE    = 'c+b';
+    const CONDITIONAL_READ_WRITE = 'c+b';
 
     /**
      * Opening Mode
@@ -222,28 +205,31 @@ class Socket extends AbstractAdapter {
      *
      * @param \Next\HTTP\Stream\Context\Context|optional $context
      *  Optional Stream Context to be used
-     *
-     * @throws \Next\HTTP\Stream\Adapter\AdapterException
-     *  Chosen mode is invalid
-     *
-     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
-     *  Optional Configuration Options for Caching Schema
      */
-    public function __construct( $filename, $mode = self::READ, Context $context = NULL, $options = NULL ) {
-
-        parent::__construct( $options );
+    public function __construct( $filename, $mode = self::READ, Context $context = NULL ) {
 
         $this -> filename = trim( $filename );
 
-        $mode = sprintf( '%sb', strtolower( trim( strtr( $mode, [ 'b' => '' ] ) ) ) );
-
-        if( ! in_array( $mode, $constants = $this -> getClass() -> getConstants() ) ) {
-            throw AdapterException::invalidOpeningMode( $constants );
-        }
-
-        $this -> mode = $mode;
+        $this -> mode = sprintf( '%sb', strtolower( trim( strtr( $mode, [ 'b' => '' ] ) ) ) );
 
         $this -> context = ( $context !== NULL ? $context : new SocketContext );
+
+        parent::__construct();
+    }
+
+    // Verifiable Interface Method Implementation
+
+    /**
+     * Verifies Object Integrity
+     *
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if chosen opening mode is invalid
+     */
+    public function verify() {
+
+        if( ! in_array( $this -> mode, [ 'rb', 'r+b', 'wb', 'w+b', 'ab', 'a+b', 'xb', 'x+b', 'cb', 'c+b' ] ) ) {
+            throw new InvalidArgumentException( 'Invalid opening mode' );
+        }
     }
 
     // Adapter Interface Methods Implementation
@@ -251,23 +237,27 @@ class Socket extends AbstractAdapter {
     /**
      * Open a File (or URL)
      *
-     * @throws \Next\HTTP\Stream\Adapter\AdapterException
-     *  Unable to open stream
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown when unable to open the Stream
      */
-    public function open() {
+    public function open() : void {
 
         try {
 
             $this -> isOpened();
 
-        } catch( AdapterException $e ) {
+        } catch( InvalidArgumentException $e ) {
 
             // Checking Opening Permissions
 
             $this -> checkPermissions();
 
-            // Note: We are using the error suppression just because we want ONLY our Exception
-
+            /**
+             * @internal
+             *
+             * We are using the error suppression just because we want
+             * ONLY our Exception
+             */
             $this -> stream = @fopen(
 
                 $this -> filename, $this -> mode,
@@ -275,11 +265,17 @@ class Socket extends AbstractAdapter {
                 FALSE, $this -> context -> getContext()
             );
 
-            // Is that an error?
+            if( $this -> stream === FALSE ) {
 
-            if( $this -> stream == FALSE ) {
+                throw new RuntimeException(
 
-                throw AdapterException::unableToOpen( $this -> filename );
+                    sprintf(
+
+                        'Unable to open a File/URL Stream to <strong>%s</strong>',
+
+                        $this -> filename
+                    )
+                );
             }
         }
     }
@@ -290,7 +286,7 @@ class Socket extends AbstractAdapter {
      * @return boolean
      *  TRUE on success and FALSE otherwise
      */
-    public function close() {
+    public function close() : bool {
 
         try {
 
@@ -298,7 +294,7 @@ class Socket extends AbstractAdapter {
 
             return ( fclose( $this -> stream ) !== FALSE );
 
-        } catch( AdapterException $e ) {
+        } catch( InvalidArgumentException $e ) {
 
             return FALSE;
         }
@@ -308,60 +304,58 @@ class Socket extends AbstractAdapter {
      * Test if Stream has achieved the End of File
      *
      * @return boolean
-     *  TRUE if EOF (End-of-File) was achieved and FALSE otherwise
-     *
-     * @throws \Next\HTTP\Stream\Adapter\AdapterException
-     *  Stream is not opened
+     *  TRUE if EOF (End-of-File) was achieved -OR- if a
+     *  `Next\Exception\Exceptions\InvalidArgumentException` has been caught
+     *  because the Stream is not opened — in order to abort any sort of
+     *  reading process — and FALSE otherwise
      */
-    public function eof() {
+    public function eof() : bool {
 
-        if( $this -> isOpened() ) {
-            return feof( $this -> stream );
+        try {
+            return ( $this -> isOpened() ? feof( $this -> stream ) : FALSE );
+        } catch( InvalidArgumentException $e ) {
+            return TRUE;
         }
-
-        return FALSE;
     }
 
     /**
      * Tell the current position of Stream Pointer
      *
-     * @return integer|boolean
+     * @return integer
      *  Pointer position if it could be retrieved and FALSE otherwise
      *
-     * @throws \Next\HTTP\Stream\Adapter\AdapterException
-     *  Pointer position could be be retrieved
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown if unable to retrieve the current position of Stream Pointer
+     *  because the Stream is not valid or because an error occurred while
+     *  using fseek()
      */
-    public function tell() {
+    public function tell() : int {
 
-        if( $this -> valid() ) {
-
-            $tell = ftell( $this -> stream );
-
-            if( $tell === FALSE ) {
-                throw AdapterException::unableToTell();
-            }
-
-            return $tell;
+        if( ! $this -> valid() || ( $tell = ftell( $this -> stream ) ) === FALSE ) {
+            throw new RuntimeException( 'Unable to retrieve current Stream Pointer' );
         }
 
-        return FALSE;
+        return $tell;
     }
 
     /**
      * Get the size of Stream
      *
-     * @return integer|boolean
+     * @return integer
      *  Returns the length of the Stream if it's valid and FALSE otherwise
+     *
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown if unable to retrieve Stream size because the Stream is not valid
      *
      * @see \Next\HTTP\Stream\Adapter\Adapter::valid()
      */
-    public function size() {
+    public function size() : int {
 
-        if( $this -> valid() ) {
-            return strlen( stream_get_contents( $this -> stream ) );
+        if( ! $this -> valid() ) {
+            throw new RuntimeException( 'Unable to retrieve Stream size' );
         }
 
-        return FALSE;
+        return mb_strlen( stream_get_contents( $this -> stream ) );
     }
 
     /**
@@ -371,19 +365,18 @@ class Socket extends AbstractAdapter {
      *  Always TRUE, because if Stream is not opened an Exception
      *  will be thrown
      *
-     * @throws \Next\HTTP\Stream\Adapter\AdapterException
-     *  Stream is not a valid Resource.
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if opened Stream is not a valid Resource.
      */
-    public function isOpened() {
+    public function isOpened() : bool {
 
         if( ! is_resource( $this -> stream ) ) {
 
-            throw new AdapterException(
+            throw new InvalidArgumentException(
 
-                'Stream must be opened before perform any operation over it'
+                'Opened Stream is not a valid resource and, therefore,
+                can\'t be manipulated'
             );
-
-            return FALSE;
         }
 
         return TRUE;
@@ -394,11 +387,18 @@ class Socket extends AbstractAdapter {
      *
      * @return array
      *  Stream Metadata
+     *
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown if unable to retrieve Stream Metadata because the Stream is
+     *  not valid
      */
-    public function getMetaData() {
+    public function getMetaData() : array {
 
-        return ( $this -> valid() ?
-            stream_get_meta_data( $this -> stream ) : [] );
+        if( ! $this -> valid() ) {
+            throw new RuntimeException( 'Unable to retrieve Stream Metadata' );
+        }
+
+        return stream_get_meta_data( $this -> stream );
     }
 
     // SeekableIterator Interface Method Implementation
@@ -415,21 +415,15 @@ class Socket extends AbstractAdapter {
      *  If Stream is not valid, -1 will be returned, just as
      *  fomality
      *
-     * @throws \Next\HTTP\Stream\Adapter\AdapterException
-     *  Unable to seek a position in Stream
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown if unable to seek to a Stream position because the Stream is not
+     *  valid or because an error occurred while using fseek()
      */
-    public function seek( $position ) {
+    public function seek( $position ) : void {
 
-        if( $this -> valid() ) {
-
-            if( fseek( $this -> stream, $position ) == -1 ) {
-                throw AdapterException::unableToSeek();
-            }
-
-            return 0;
+        if( ! $this -> valid() || fseek( $this -> stream, $position ) == -1 ) {
+            throw new RuntimeException( 'Unable to seek to Stream position' );
         }
-
-        return -1;
     }
 
     // Iterator Interface Methods Implementation
@@ -451,46 +445,37 @@ class Socket extends AbstractAdapter {
      * Return the key of the current element
      *
      * @return integer|boolean
-     *
-     *  If Pointer position could be retrieved, it will be returned
-     *
-     *  If it couldn't or if Stream is not valid, FALSE will.
+     *  If Pointer position can be retrieved, it will be returned
+     *  Otherwise — or if Stream is not valid — FALSE will
      */
     public function key() {
 
-        if( $this -> valid() ) {
-
-            try {
-
-                return $this -> tell();
-
-            } catch( AdapterException $e ) {
-
-                return FALSE;
-            }
-        }
-
-        return FALSE;
-    }
-
-    /**
-     * Move forward to next element
-     *
-     * @return ineteger|NULL
-     *  If Pointer position can be retrieved and Stream can be seeked to
-     *  its position, zero will be returned, as returned by fseek()
-     *
-     *  Otherwise, NULL will
-     */
-    public function next() {
+        if( ! $this -> valid() ) return FALSE;
 
         try {
 
-            return ( $this -> valid() ? $this -> seek( $this -> tell() ) : NULL );
+            return $this -> tell();
 
-        } catch( AdapterException $e ) {
+        } catch( RuntimeException $e ) {
 
-            return NULL;
+            return FALSE;
+        }
+    }
+
+    /**
+     * Move forward to next element, if possible
+     *
+     * @see Socket::seek()
+     * @see Socket::tell()
+     */
+    public function next() : void {
+
+        try {
+
+            $this -> seek( $this -> tell() );
+
+        } catch( RuntimeException $e ) {
+            return;
         }
     }
 
@@ -500,12 +485,13 @@ class Socket extends AbstractAdapter {
      * <p>In Stream context, moves pointer to beginning of file</p>
      *
      * @return boolean
-     *  TRUE if Stream is valid and Pointer could be rewinded.
-     *
-     *  FALSE otherwise
+     *  TRUE if Stream is valid and Pointer can be rewinded and FALSE otherwise
      */
-    public function rewind() {
-        return ( $this -> valid() && rewind( $this -> stream ) );
+    public function rewind() : void {
+
+        if( ! $this -> valid() ) return;
+
+        rewind( $this -> stream );
     }
 
     /**
@@ -514,21 +500,15 @@ class Socket extends AbstractAdapter {
      * This method is called after Iterator::rewind() and Iterator::next()
      * to check if the current position still valid
      *
-     * This a "Interface Alias" for \Next\HTTP\Stream\Adapter\Adapter::eof()
+     * This a "Interface Alias" for Next\HTTP\Stream\Adapter\Adapter::eof()
      *
      * @return boolean
-     *  TRUE if EOF (End-of-File) was NOT achieved and FALSE otherwise
+     *  TRUE if EOF (End-of-File) was NOT achieved
+     *
+     * @see Next\HTTP\Stream\Adapter\Socket::eof()
      */
     public function valid() {
-
-        try {
-
-            return ( ! $this -> eof() );
-
-        } catch( AdapterException $e ) {
-
-            return FALSE;
-        }
+        return ( ! $this -> eof() );
     }
 
     // Auxiliary Methods
@@ -540,14 +520,14 @@ class Socket extends AbstractAdapter {
      * @return boolean
      *  Always TRUE, because on failure an Exception is thrown
      *
-     * @throws \Next\HTTP\Stream\Adapter\AdapterException
-     *  Stream is not readable and opening more requires readability
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown if Stream is not readable and opening more requires readability
      *
-     * @throws \Next\HTTP\Stream\Adapter\AdapterException
-     *  Stream is not writable (nor its parnt directory) and opening mode
-     *  required writability
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown if Stream is not writable — nor its parent directory — and
+     *  opening mode required writability
      */
-    private function checkPermissions() {
+    private function checkPermissions() : void {
 
         // Setting Up FileInfo Object
 
@@ -564,7 +544,16 @@ class Socket extends AbstractAdapter {
             case self::APPEND_READ_WRITE:
 
                 if( $info -> isFile() && ! $info -> isReadable() ) {
-                    throw AdapterException::unableToRead( $this -> filename );
+
+                    throw new RuntimeException(
+
+                        sprintf(
+
+                            'File <strong>%s</strong> is not readable',
+
+                            $this -> filename
+                        )
+                    );
                 }
 
             break;
@@ -584,14 +573,31 @@ class Socket extends AbstractAdapter {
 
                 if( $info -> isFile() && ! $info -> isWritable() ) {
 
-                    throw AdapterException::unableToWrite( $this -> filename );
+                    throw new RuntimeException(
+
+                        sprintf(
+
+                            'File <strong>%s</strong> is not writeable',
+
+                            $this -> filename
+                        )
+                    );
 
                 } else {
 
                     $path = new \SplFileInfo( $info -> getPath() );
 
                     if( ! $path -> isWritable() ) {
-                        throw AdapterException::unableToWrite( $this -> filename );
+
+                        throw new RuntimeException(
+
+                            sprintf(
+
+                                'Directory <strong>%s</strong> is not writeable',
+
+                                $path
+                            )
+                        );
                     }
                 }
 
@@ -604,20 +610,36 @@ class Socket extends AbstractAdapter {
 
                 if( $info -> isFile() ) {
 
-                    throw AdapterException::unableToExclusivelyWrite( $this -> filename );
+                    throw new RuntimeException(
+
+                        sprintf(
+
+                            'File <strong>%s</strong> already exists and cannot
+                            be opened for exclusive writing',
+
+                            $this -> filename
+                        )
+                    );
 
                 } else {
 
                     $path = new \SplFileInfo( $info -> getPath() );
 
                     if( ! $path -> isWritable() ) {
-                        throw AdapterException::unableToWrite( $this -> filename );
+
+                        throw new RuntimeException(
+
+                            sprintf(
+
+                                'Directory <strong>%s</strong> is not writeable',
+
+                                $path
+                            )
+                        );
                     }
                 }
 
             break;
         }
-
-        return TRUE;
     }
 }

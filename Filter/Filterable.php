@@ -11,10 +11,10 @@
 namespace Next\Filter;
 
 /**
- * Filterable Objects filters, by removing or treating, unwanted values
+ * Filterable Objects filters, by removing or treating, unwanted values,
  * pretty much like native FilterIterator class only that being an
- * Interface does imply inheritance, preventing Filterable Objects
- * to be children of \Next\Components\Object
+ * Interface does not imply inheritance, preventing Filterable Objects
+ * to be children of Next\Components\Object
  *
  * @package    Next\Filter
  */

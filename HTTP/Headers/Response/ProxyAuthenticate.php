@@ -10,20 +10,22 @@
  */
 namespace Next\HTTP\Headers\Response;
 
-use Next\HTTP\Headers\Field;    # Header Field Abstract Class
+use Next\Validation\Validator as Validators;    # Validators Interface
+use Next\HTTP\Headers\Field;                    # Header Field Abstract Class
 
 /**
- * Response 'Proxy-Authenticate' Header Field Validator Class
+ * Response Header Field Validation Class: 'Proxy-Authenticate'
  */
 use Next\Validation\HTTP\Headers\Response\ProxyAuthenticate as Validator;
 
 /**
- * Response 'Proxy-Authenticate' Header Field Class
+ * Response Header Field: 'Proxy-Authenticate'
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\Validator
+ *             Next\HTTP\Headers\Field
+ *             Next\Validation\HTTP\Headers\ProxyAuthenticate
  */
 class ProxyAuthenticate extends Field {
 
@@ -38,7 +40,7 @@ class ProxyAuthenticate extends Field {
      * @return \Next\Validation\Validator
      *  Associated Validator
      */
-    protected function getValidator( $value ) {
+    protected function getValidator( $value ) : Validators {
         return new Validator( [ 'value' => $value ] );
     }
 
@@ -48,7 +50,7 @@ class ProxyAuthenticate extends Field {
      * @return array
      *  Header Field Validation Options
      */
-    public function setOptions() {
+    public function setOptions() : array {
         return [ 'name' => 'Proxy-Authenticate', 'preserveWhitespace' => TRUE ];
     }
 }

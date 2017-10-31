@@ -17,10 +17,12 @@ use Next\Exception\Exception;
 use Next\Exception\Exceptions\FatalException;
 
 /**
- * Defines wrapper static methods for all Exceptions thrown
- * within the Components Module
+ * Wrapper static methods for all Exceptions thrown within the Components Module
  *
  * @package    Next\Components
+ *
+ * @uses       Next\Exception\Exception
+ *             Next\Exception\Exceptions\FatalException
  */
 class ComponentsException extends Exception {
 
@@ -37,7 +39,7 @@ class ComponentsException extends Exception {
      * @return \Next\Exception\Exceptions\FatalException
      *  Exception for constructor overwritten
      */
-    public static function extendedContextFailure( Object $object, $method = NULL ) {
+    public static function extendedContextFailure( Object $object, $method = NULL ) : FatalException {
 
         if( $method !== NULL ) {
 

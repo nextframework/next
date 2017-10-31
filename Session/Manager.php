@@ -16,11 +16,13 @@ namespace Next\Session;
 use Next\Exception\Exceptions\RuntimeException;
 
 /**
- * Defines the Session Manager Class handling everything, from the
- * Session initialization to its destruction, including
- * with custom Session Handlers
+ * The Session Manager handles everything Session-related, from its
+ * initialization to its destruction, including custom Session Handlers
  *
  * @package    Next\Session
+ *
+ * @uses       Next\Exception\Exceptions\RuntimeException
+ *             Next\Session\Environment
  */
 class Manager {
 
@@ -81,14 +83,14 @@ class Manager {
      *  Optional Session ID.
      *  Mostly used by custom Session Handlers
      *
-     * @return Session
-     *  Session Instance
+     * @return Manager
+     *  Session Manager Instance
      *
      * @throws \Next\Session\SessionException
      *  Session has been already initialized, through a manually
      *  called session_start()
      */
-    public static function start( $name = NULL, $id = NULL ) {
+    public static function start( $name = NULL, $id = NULL ) : Manager {
 
         if( NULL === self::$instance ) {
 
@@ -146,7 +148,7 @@ class Manager {
      * @throws \Next\Session\SessionException
      *  session_start() failed, returning FALSE
      */
-    public function init( $name = NULL, $id = NULL ) {
+    public function init( $name = NULL, $id = NULL ) : void {
 
         // Setting Up Session Name
 
@@ -178,7 +180,7 @@ class Manager {
     /**
      * Destroy the Session and the Session Object
      */
-    public function destroy() {
+    public function destroy() : void {
 
         // This should be done manually, through Environment::unsetAll(), but in any case...
 
@@ -219,7 +221,7 @@ class Manager {
      * @return Session
      *  Session Object (Fluent Interface)
      */
-    public function regenerateID() {
+    public function regenerateID() : Manager {
 
         session_regenerate_id();
 
@@ -229,7 +231,7 @@ class Manager {
     /**
      * Commit current Session Data
      */
-    public function commit() {
+    public function commit() : void {
         session_write_close();
     }
 
@@ -241,7 +243,7 @@ class Manager {
      * @return string
      *  Encoded Session Data
      */
-    public function getSessionData() {
+    public function getSessionData() : string {
         return session_encode();
     }
 
@@ -251,7 +253,7 @@ class Manager {
      * @return \Next\Session\Handlers
      *  Session Handler Management Object
      */
-    public function getHandlersManager() {
+    public function getHandlersManager() : Handlers {
         return $this -> handlers;
     }
 
@@ -261,7 +263,7 @@ class Manager {
      * @return \Next\Session\Environment
      *  Default Session Environment
      */
-    public function getEnvironment() {
+    public function getEnvironment() : Environment {
         return $this -> environment;
     }
 
@@ -273,7 +275,7 @@ class Manager {
      * @return string
      *  Session Name
      */
-    public function getSessionName() {
+    public function getSessionName() : string {
         return session_name();
     }
 
@@ -283,7 +285,7 @@ class Manager {
      * @param string $sessionName
      *  Session Name
      */
-    public static function setSessionName( $sessionName ) {
+    public static function setSessionName( $sessionName ) : void {
         session_name( $sessionName );
     }
 
@@ -293,7 +295,7 @@ class Manager {
      * @return string
      *  Session ID
      */
-    public function getSessionID() {
+    public function getSessionID() : string {
         return session_id();
     }
 
@@ -303,7 +305,7 @@ class Manager {
      * @param string $id
      *  Session ID
      */
-    public static function setSessionID( $id ) {
+    public static function setSessionID( $id ) : void {
         session_id( $id );
     }
 
@@ -313,7 +315,7 @@ class Manager {
      * @return integer
      *  Session Max Lifetime
      */
-    public function getSessionLifetime() {
+    public function getSessionLifetime() : int {
         return self::$lifetime;
     }
 
@@ -323,7 +325,7 @@ class Manager {
      * @param integer $lifetime
      *  Session Lifetime
      */
-    public function setSessionLifetime( $lifetime ) {
+    public function setSessionLifetime( $lifetime ) : void {
 
         self::$lifetime = $lifetime;
 
@@ -336,7 +338,7 @@ class Manager {
      * @return string
      *  Session SavePath
      */
-    public function getSessionSavePath() {
+    public function getSessionSavePath() : string {
         return $this -> savePath;
     }
 
@@ -349,7 +351,7 @@ class Manager {
      * @return Session
      *  Session Object (Fluent Interface)
      */
-    public function setSessionSavePath( $savePath ) {
+    public function setSessionSavePath( $savePath ) : Manager {
 
         $this -> savePath = $savePath;
 

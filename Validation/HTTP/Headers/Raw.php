@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Raw Header Field Validator Class | Validate\HTTP\Headers\Raw.php
+ * HTTP Raw Header Field Validator Class | Validation\HTTP\Headers\Raw.php
  *
  * @author       Bruno Augusto
  *
@@ -13,12 +13,21 @@ namespace Next\Validation\HTTP\Headers;
 use Next\Components\Object;    # Object Class
 
 /**
- * Raw Header Validation Class
+ * The Raw Header Validator checks if input string if valid to be used as
+ * unfiltered — thus "raw" — Header Field
  *
- * @author        Bruno Augusto
+ * Because they must be manually — and carefully — set, the only concerns
+ * we take care of is for the value not to be NULL, otherwise this would
+ * result in an empty string when being used and for the string to not
+ * have a colon (:) which is what usually separates a Header Field name
+ * from its value
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * If a Raw Header must be sent with a Name, then it's not Raw, it's Generic ;)
+ *
+ * @package    Next\Validation
+ *
+ * @uses       Next\Components\Object
+ *             Next\Validation\HTTP\Headers\Header
  */
 class Raw extends Object implements Header {
 
@@ -37,14 +46,8 @@ class Raw extends Object implements Header {
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      */
-    public function validate() {
-
-        /**
-         * @internal
-         *
-         * Raw Headers accept anything, but we'll enforce it's at
-         * least not NULL
-         */
-        return ( $this -> options -> value !== NULL );
+    public function validate() : bool {
+        return ( $this -> options -> value !== NULL &&
+                    strpos( $this -> options -> value, ':' ) === FALSE );
     }
 }

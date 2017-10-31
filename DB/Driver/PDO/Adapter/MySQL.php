@@ -22,12 +22,18 @@ use Next\DB\Driver\PDO\AbstractPDO;              # PDO Abstract Class
 use Next\DB\Query\Renderer\MySQL as Renderer;    # MySQL Query Renderer Class
 
 /**
- * MySQL Connection Adapter Class
+ * The PDO MySQL Connector.
+ * Sets additional PDO attributes, defines the DSN PDO will use and which
+ * Query Renderer to render the Query Clauses
  *
- * @author        Bruno Augusto
+ * @package    Next\DB
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Exception\Exceptions\RuntimeException
+ *             Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Components\Interfaces\Configurable
+ *             Next\DB\Driver\PDO\AbstractPDO
+ *             Next\DB\Query\Renderer\MySQL
+ *             PDO
  */
 class MySQL extends AbstractPDO implements Configurable {
 
@@ -47,7 +53,7 @@ class MySQL extends AbstractPDO implements Configurable {
     /**
      * Post-initialization Configuration
      */
-    public function configure() {
+    public function configure() : void {
 
         $this -> connection -> setAttribute( \PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, TRUE );
 
@@ -62,7 +68,7 @@ class MySQL extends AbstractPDO implements Configurable {
      * @return string
      *  MySQL Adapter DSN used by PDO Connection
      */
-    protected function getDSN() {
+    protected function getDSN() : string {
 
         return sprintf(
 
@@ -81,7 +87,7 @@ class MySQL extends AbstractPDO implements Configurable {
      * @throws \Next\Exception\Exceptions\RuntimeException
      *  Thrown if PDO MySQL Extension has not been loaded
      */
-    public function verify() {
+    public function verify() : void {
 
         parent::verify();
 
@@ -98,7 +104,7 @@ class MySQL extends AbstractPDO implements Configurable {
      * @return \Next\DB\Query\Renderer\Renderer
      *  MySQL Renderer Object
      */
-    public function getRenderer() {
+    public function getRenderer() : Renderer {
         return new Renderer( [ 'quoteIdentifier' => '`' ] );
     }
 }

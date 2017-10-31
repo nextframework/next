@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Response Header Field Validator Class: Content-Disposition | Validate\Headers\Response\ContentDisposition.php
+ * HTTP Response Header Field Validator Class: Content-Disposition | Validation\Headers\Response\ContentDisposition.php
  *
  * @author       Bruno Augusto
  *
@@ -19,12 +19,13 @@ use Next\Components\Object;                 # Object Class
 use Next\Validation\HTTP\Headers\Common\Date;
 
 /**
- * Content-Disposition Header Validation Class
+ * The 'Content-Disposition' Header Validator checks if input string is valid in
+ * accordance to RFC 2183 Section 2
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class ContentDisposition extends Object implements Header {
 
@@ -81,7 +82,7 @@ class ContentDisposition extends Object implements Header {
      *  http://tools.ietf.org/html/rfc2183#section-2
      *  RFC 2183 Section 2
      */
-    public function validate() {
+    public function validate() : bool {
 
         preg_match(
 

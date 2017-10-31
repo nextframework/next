@@ -17,9 +17,19 @@
 
 <div id="exception">
 
-    <p><h2><?php echo $this -> e; ?></h2></p>
+    <p>
+        <?php
 
-    <br />
+        $class = $class = basename( get_class( $this -> e ) );
+
+        if( $class !== 'Error' && $class !== 'Exception' ) :
+
+        ?>
+        <strong><?php echo $class; ?></strong> threw an Exception
+        <?php else: ?>
+        An Exception has been thrown
+        <?php endif; ?>
+    </p>
 
     <p>
         <strong>Message:</strong> <?php echo nl2br( utf8_encode( $this -> e -> getMessage() ) ); ?>

@@ -10,18 +10,22 @@
  */
 namespace Next\HTTP\Headers;
 
+use Next\Validation\Validator as Validators;    # Validators Interface
+
 /**
- * Raw Header Field Validator Class
+ * Raw Header Field Validation Class
  */
 use Next\Validation\HTTP\Headers\Raw as Validator;
 
 /**
- * Raw Header Field Class
+ * The Raw Header Field represents Headers that needs to be manually sent or
+ * Headers that doesn't have a name, like HTTP Status Codes
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\Validator
+ *             Next\HTTP\Headers\Field
+ *             Next\Validation\HTTP\Headers\Raw
  */
 class Raw extends Field {
 
@@ -36,7 +40,7 @@ class Raw extends Field {
      * @return \Next\Validation\Validator
      *  Associated Validator
      */
-    protected function getValidator( $value ) {
+    protected function getValidator( $value ) : Validators {
         return new Validator( [ 'value' => $value ] );
     }
 
@@ -46,7 +50,7 @@ class Raw extends Field {
      * @return array
      *  Header Field Validation Options
      */
-    public function setOptions() {
+    public function setOptions() : array {
         return [ 'name' => 'Raw', 'acceptMultiples' => FALSE, 'preserveWhitespace' => TRUE ];
     }
 }

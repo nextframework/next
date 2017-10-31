@@ -10,19 +10,26 @@
  */
 namespace Next\HTTP\Stream;
 
-use Next\HTTP\Stream\Reader\ReaderException;      # HTTP Stream Reader Exception Class
-use Next\HTTP\Stream\Adapter\Adapter;             # HTTP Stream Adapter Interface
-use Next\Components\Object;                       # Object Class
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\LengthException;
+use Next\Exception\Exceptions\RuntimeException;
+
+use Next\HTTP\Stream\Adapter\Adapter;    # HTTP Stream Adapter Interface
+use Next\Components\Object;              # Object Class
 
 /**
- * File Reader Class
+ * HTTP Stream Reader reads data from an opened Stream
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Exception\Exceptions\LengthException;
+ *             Next\Exception\Exceptions\RuntimeException
+ *             Next\HTTP\Stream\Adapter\Adapter
+ *             Next\Components\Object
  */
-class Reader extends Object implements Reader\Reader {
+class Reader extends Object {
 
     /**
      * Stream Adapter
@@ -36,13 +43,10 @@ class Reader extends Object implements Reader\Reader {
      *
      * @param \Next\HTTP\Stream\Adapter\Adapter $adapter
      *  Stream Adapter from which data will be read
-     *
-     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
-     *  Optional Configuration Options for the HTTP Stream Reader
      */
-    public function __construct( Adapter $adapter, $options = NULL ) {
+    public function __construct( Adapter $adapter ) {
 
-        parent::__construct( $options );
+        parent::__construct();
 
         $adapter -> open();
 
@@ -53,38 +57,34 @@ class Reader extends Object implements Reader\Reader {
      * Read some bytes from File Stream
      *
      * @param integer|optional $length
-     *  Optional number of bytes to rwad
+     *  Optional number of bytes to read
      *
      * @return string
      *  Always return the read data, because if failed
      *  to read an Exception is thrown
      *
-     * @throws \Next\HTTP\Stream\Reader\ReaderException
-     *  Number of bytes is equal zero
+     * @throws \Next\Exception\Exceptions\LengthException
+     *  Thrown when the number of bytes to read is zero
      *
-     * @throws \Next\HTTP\Stream\Reader\ReaderException
-     *  Fail when trying to read
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown when something went wrong when trying to read data
      */
-    public function read( $length = 4096 ) {
+    public function read( $length = 4096 ) : string {
 
         if( $length == 0 ) {
 
-            throw ReaderException::logic(
-
-                'You have to define how many bytes will be read from Stream'
+            throw new LengthException(
+                'The amount of bytes to be read from opened Stream must be defined'
             );
         }
 
         // Reading Stream
 
-        $read = fread( $this -> adapter -> getStream(), $length );
-
-        if( $read === FALSE ) {
-
-            throw ReaderException::readFailure();
+        if( ( $data = fread( $this -> adapter -> getStream(), $length ) ) === FALSE ) {
+            throw new RuntimeException( 'Unable to read data from opened Stream' );
         }
 
-        return $read;
+        return $data;
     }
 
     /**
@@ -96,23 +96,28 @@ class Reader extends Object implements Reader\Reader {
      * @return string Always return the read data, because if failed
      * to read an Exception is thrown
      *
-     * @throws \Next\HTTP\Stream\Reader\ReaderException
-     *  Number of bytes is zero
+     * @throws \Next\Exception\Exceptions\LengthException
+     *  Thrown when the number of bytes to read is zero
      *
-     * @throws \Next\HTTP\Stream\Reader\ReaderException
-     *  Fail when trying to read
+     * @throws \Next\Exception\Exceptions\RuntimeException
+     *  Thrown when something went wrong when trying to read data
      */
-    public function readLine( $length = 1024 ) {
+    public function readLine( $length = 1024 ) : string {
 
         if( $length == 0 ) {
 
-            throw ReaderException::logic(
-
-                'You have to define how many bytes will be read from Stream'
+            throw new LengthException(
+                'The amount of bytes to be read from opened Stream must be defined'
             );
         }
 
-        return fgets( $this -> adapter -> getStream(), $length );
+        // Reading Stream
+
+        if( ( $data = fgets( $this -> adapter -> getStream(), $length ) ) === FALSE ) {
+            throw new RuntimeException( 'Unable to read data from opened Stream' );
+        }
+
+        return $data;
     }
 
     /**
@@ -121,45 +126,24 @@ class Reader extends Object implements Reader\Reader {
      * @return string
      *  Read data
      */
-    public function readAll() {
+    public function readAll() : string {
 
-        $output = '';
+        $data = '';
 
         /**
          * @internal
-         * Using do...while() instead of "normal" while in order to avoid
-         * a infinite loop.
          *
-         * Tip from "Jet" (http://br.php.net/manual/en/function.feof.php#77912)
+         * Using do...while() instead of "normal" while in order to avoid
+         * an infinite loop.
+         *
+         * Tip from "Jet" (http://php.net/manual/en/function.feof.php#77912)
          */
         do {
 
-            $output .= $this -> read();
+            $data .= $this -> read();
 
         } while( ! $this -> adapter -> eof() );
 
-        return $output;
-    }
-
-    // Interface Methods Implementation
-
-    /**
-     * Get Adapter Object
-     *
-     * @return \Next\HTTP\Stream\Adapter\Adapter
-     *  HTTP Stream Adapter
-     */
-    public function getAdapter() {
-        return $this -> adapter;
-    }
-
-    /**
-     * Get Stream Resource
-     *
-     * @return resource
-     *  HTTP Stream
-     */
-    public function getStream() {
-        return $this -> adapter -> getStream();
+        return $data;
     }
 }

@@ -17,11 +17,11 @@ use Next\Exception\Exceptions\RuntimeException;
 use Next\Exception\Exceptions\InvalidArgumentException;
 use Next\Exception\Exceptions\BadMethodCallException;
 
-use Next\Components\Interfaces\Verifiable;    # Verifiable Interface
-use Next\Components\Object;                   # Object Class
-use Next\Components\Utils\ArrayUtils;         # Array Utils Class
-use Next\DB\Entity\Entity;                    # DB Entity Interface
-use Next\Validation\Validators\URL;           # URL Validator Class
+use Next\Validation\Verifiable;          # Verifiable Interface
+use Next\Components\Object;              # Object Class
+use Next\Components\Utils\ArrayUtils;    # Array Utils Class
+use Next\DB\Entity\Entity;               # DB Entity Interface
+use Next\Validation\Validators\URL;      # URL Validator Class
 
 /**
  * Google Auth Helper is a simple helper to ease out a little bit
@@ -29,14 +29,16 @@ use Next\Validation\Validators\URL;           # URL Validator Class
  *
  * @package    Next\Auth
  *
- * @uses       Next\Exception\Exceptions\RuntimeException,
- *             Next\Exception\Exceptions\InvalidArgumentException,
- *             Next\Exception\Exceptions\BadMethodCallException,
- *             Next\Auth\Helpers\Helper,
- *             Next\Components\Object,
- *             Next\Components\Utils\ArrayUtils,
- *             Next\DB\Entity\Entity,
+ * @uses       Next\Exception\Exceptions\RuntimeException
+ *             Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Exception\Exceptions\BadMethodCallException
+ *             Next\Validation\Verifiable
+ *             Next\Components\Object
+ *             Next\Components\Utils\ArrayUtils
+ *             Next\DB\Entity\Entity
  *             Next\Validation\Validators\URL
+ *             Next\Auth\Helpers\Helper
+ *             Google_Client
  */
 class Google extends Object implements Verifiable, Helper {
 
@@ -47,7 +49,7 @@ class Google extends Object implements Verifiable, Helper {
      */
     protected $parameters = [
 
-        'model'           => [ 'type' => 'Next\DB\Entity\Entity',    'required' => TRUE ],
+        'model'           => [ 'type' => 'Next\DB\Entity\Entity', 'required' => TRUE ],
         'credentialsFile' => [ 'required' => TRUE ],
         'clientID'        => [ 'required' => TRUE ],
         'clientSecret'    => [ 'required' => TRUE ],
@@ -72,7 +74,7 @@ class Google extends Object implements Verifiable, Helper {
      * Additional Initialization.
      * Checks Helper Integrity and configures Google Client Object
      */
-    protected function init() {
+    protected function init() : void {
 
         $client = new \Google_Client;
 
@@ -97,21 +99,26 @@ class Google extends Object implements Verifiable, Helper {
      *
      * @return string
      *  The Authentication URL
+     *
+     * @see \Google_Client::createAuthUrl()
      */
-    public function getAuthenticationURL() {
+    public function getAuthenticationURL() : string {
         return $this -> client -> createAuthUrl();
     }
 
     /**
      * Retrieve Access Token from provided Request Code
      *
-     * @return string
-     *  The Access Token
+     * @return array
+     *  The Access Token informations
      *
      * @throws \Next\Exception\Exceptions\InvalidArgumentException
-     *  Thrown if Access Token hasn't been obtained yet -AND- Request Code is missing
+     *  Thrown if Access Token hasn't been obtained yet -AND-
+     *  Request Code is missing
+     *
+     * @see \Google_Client::fetchAccessTokenWithAuthCode()
      */
-    public function getAccessToken() {
+    public function getAccessToken() : array {
 
         if( ! isset( $this -> options -> token ) ) {
 
@@ -141,8 +148,10 @@ class Google extends Object implements Verifiable, Helper {
      *  Provided Data Model modified with User's e-mail Address
      *
      * @throws \Next\Exception\Exception\InvalidArgumentException
-     *  Thrown if an Data Model hasn't been provided -OR- if it's not a valid one
-     *  In order to be valid the Data model must be an instance of \Next\DB\Entity\Entity
+     *  Thrown if an Data Model hasn't been provided -OR- if it's not
+     *  a valid one.
+     *  In order to be valid the Data model must be an instance of
+     *  \Next\DB\Entity\Entity
      *
      * @throws \Next\Exception\Exceptions\BadMethodCallException
      *  Thrown if no Access Token could be fetched because both
@@ -150,7 +159,7 @@ class Google extends Object implements Verifiable, Helper {
      *
      * @see Google::negotiate()
      */
-    public function getData() {
+    public function getData() : Entity {
 
         $this -> negotiate();
 
@@ -175,7 +184,7 @@ class Google extends Object implements Verifiable, Helper {
      * @return string
      *  OAUth Provider Name
      */
-    public static function getProviderName() {
+    public static function getProviderName() : string {
         return 'Google';
     }
 
@@ -185,7 +194,7 @@ class Google extends Object implements Verifiable, Helper {
      * @return \Google_Client
      *  Google Client Object
      */
-    public function getClient() {
+    public function getClient() : \Google_Client {
         return $this -> client;
     }
 
@@ -199,7 +208,7 @@ class Google extends Object implements Verifiable, Helper {
      * Thrown if Access Token is not defined, which means this method
      * is being invoked prior to an Authentication (i.e. Google Consent Screen)
      */
-    private function negotiate() {
+    private function negotiate() : void {
 
         $token = $this -> getAccessToken();
 
@@ -233,7 +242,7 @@ class Google extends Object implements Verifiable, Helper {
      * @throws \Next\Exception\Exceptions\RuntimeException
      *  Throws if 'redirectURL' is an invalid URL (mostly likely not absolute)
      */
-    public function verify() {
+    public function verify() : void {
 
         if( ! stream_resolve_include_path( $this -> options -> credentialsFile ) ) {
             throw new RuntimeException( 'Credentials File not found' );

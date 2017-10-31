@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Request Header Field Validator Class: X-Requested-With | Validate\Headers\Request\XRequestedWith.php
+ * HTTP Request Header Field Validator Class: X-Requested-With | Validation\Headers\Request\XRequestedWith.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,16 @@ use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
 use Next\Components\Object;                 # Object Class
 
 /**
- * X-Requested-With Header Validation Class
+ * The 'X-Requested-With' Header Validator checks if input string is valid for
+ * a X-Requested-With string
  *
- * @author        Bruno Augusto
+ * Even though this is not an official as per the RFC, it's widely
+ * accepted and used as one
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Validation
+ *
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class XRequestedWith extends Object implements Header {
 
@@ -46,7 +50,7 @@ class XRequestedWith extends Object implements Header {
      * @link
      *  http://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Common_non-standard_request_headers
      */
-    public function validate() {
+    public function validate() : bool {
 
         /**
          * @internal

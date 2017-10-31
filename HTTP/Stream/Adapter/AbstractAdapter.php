@@ -14,12 +14,13 @@ use Next\HTTP\Stream\Context\Context;    # Stream Context Interface
 use Next\Components\Object;              # Object Class
 
 /**
- * HTTP Stream Adapter Abstract Class
+ * Base structure for all HTTP Stream Adapters
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\HTTP\Stream\Context\Context
+ *             Next\Components\Object
+ *             Next\HTTP\Stream\Adapter\Adapter
  */
 abstract class AbstractAdapter extends Object implements Adapter {
 
@@ -52,14 +53,14 @@ abstract class AbstractAdapter extends Object implements Adapter {
      * @return string
      *  Opened File or URL
      */
-    public function getFilename() {
+    public function getFilename() :? string {
         return $this -> filename;
     }
 
     /**
      * Get Stream Resource
      *
-     * @return mixed
+     * @return mixed|resource
      *  Stream Resource
      */
     public function getStream() {
@@ -75,7 +76,7 @@ abstract class AbstractAdapter extends Object implements Adapter {
      * @return \Next\HTTP\Stream\Adapter\Adapter
      *  Stream Adapter Object (Fluent Interface)
      */
-    public function setContext( Context $context ) {
+    public function setContext( Context $context ) :? Adapter {
 
         $this -> context = $context;
 
@@ -88,7 +89,7 @@ abstract class AbstractAdapter extends Object implements Adapter {
      * @return \Next\HTTP\Stream\Context\Context
      *  Stream Context Object (Fluent Interface)
      */
-    public function getContext() {
+    public function getContext() : Context {
         return $this -> context;
     }
 }

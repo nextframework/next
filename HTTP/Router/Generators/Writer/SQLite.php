@@ -15,25 +15,26 @@ namespace Next\HTTP\Router\Generators\Writer;
  */
 use Next\Exception\Exceptions\InvalidArgumentException;
 
-use Next\Components\Interfaces\Verifiable;           # Verifiable Interface
+use Next\Validation\Verifiable;                      # Verifiable Interface
 use Next\Components\Object;                          # Object Class
 use Next\DB\Driver\PDO\Adapter\SQLite as Adapter;    # PDO SQLite Adapter Class
 use Next\DB\Entity\Manager;                          # Entity Manager Class
 use Next\DB\Entity\Repository;                       # Repository Class
 
 /**
- * Routes Generator Tool: SQLite Output Writer
+ * The SQLite Routes Generator Writer records all Routes Informations found in
+ * an SQLite Database File
  *
- * @author        Bruno Augusto
+ * @package    Next\HTPP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
- *
- * @uses          Next\Components\Object,
- *                Next\DB\Driver\PDO\Adapter\SQLite,
- *                Next\DB\Entity\Manager
- *                Next\DB\Entity\Repository
- *                Next\Tools\Routes\Generators\Writer\SQLite\Entity,
+ * @uses       Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Validation\Verifiable
+ *             Next\Components\Object
+ *             Next\DB\Driver\PDO\Adapter\SQLite as Adapter
+ *             Next\DB\Entity\Manager
+ *             Next\DB\Entity\Repository
+ *             Next\HTTP\Router\Generators\Writer\Writer
+ *             Next\HTTP\Router\Generators\Writer\SQLite\Entity
  */
 class SQLite extends Object implements Verifiable, Writer {
 
@@ -58,7 +59,7 @@ class SQLite extends Object implements Verifiable, Writer {
      * Configures the Entity Manager with the Entity Repository
      * used to record found Routes
      */
-    protected function init() {
+    protected function init() : void {
 
         // Routes' Entity Manager
 
@@ -81,7 +82,7 @@ class SQLite extends Object implements Verifiable, Writer {
      * @return integer
      *  Number of records processed
      */
-    public function save( array $data ) {
+    public function save( array $data ) : int {
 
         set_time_limit( 0 );
 
@@ -133,7 +134,7 @@ class SQLite extends Object implements Verifiable, Writer {
     /**
      * Empties the SQLite Database before record found Routes
      */
-    public function reset() {
+    public function reset() : void {
         $this -> routes -> delete() -> rowCount();
     }
 
@@ -146,7 +147,7 @@ class SQLite extends Object implements Verifiable, Writer {
      *  Thrown if Parameter Option 'dbPath' has been overwritten with
      *  a not resolvable path
      */
-    public function verify() {
+    public function verify() : void {
 
         if( stream_resolve_include_path( $this -> options -> dbPath ) === FALSE ) {
 

@@ -11,7 +11,7 @@
 namespace Next\Exception;
 
 /**
- * Describes an Error/Exception Registrable Handler
+ * An Interface for all Registrable Error/Exception Handlers
  *
  * @package    Next\Exception
  */

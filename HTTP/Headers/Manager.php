@@ -20,12 +20,23 @@ use Next\HTTP\Headers\Generic;            # Generic Header Field Class
 use Next\HTTP\Headers\Raw;                # Raw Header Field Class
 
 /**
- * HTTP Headers Manager Class
+ * The HTTP Headers Manager manages a Lists Collection where all
+ * HTTP Header Fields Objects are stored offering a bridged access to it,
+ * so the Headers can be accessed directly
  *
- * @author        Bruno Augusto
+ * However, currently, only through Object syntax since the Extended Context
+ * feature doesn't provide access to the \ArrayAccess Interface implemented
+ * by the Lists Collection Class
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\HTTP
+ *
+ * @uses       Next\HTTP\Headers\Field
+ *             Next\Components\Object
+ *             Next\Components\Invoker
+ *             Next\Components\Collections\Lists
+ *             Next\HTTP\Headers\Generic
+ *             Next\HTTP\Headers\Raw
+ *             Iterator
  */
 class Manager extends Object {
 
@@ -128,7 +139,7 @@ class Manager extends Object {
     /**
      * Additional Initialization
      */
-    protected function init() {
+    protected function init() : void {
 
         // Setting Up Headers Lists
 
@@ -184,7 +195,7 @@ class Manager extends Object {
      * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Invalid or mal-formed Header Value
      */
-    public function addHeader( $header, $value = NULL ) {
+    public function addHeader( $header, $value = NULL ) : Manager {
 
         if( $header === NULL ) return $this;
 
@@ -218,54 +229,36 @@ class Manager extends Object {
                 }
             }
 
-        } else {
-
-            // Preparing Header Name for Classname Mapping
-
-            $header = strtolower( strtr( $header, [ 'HTTP_' => '' ] ) );
-
-            $header = ucfirst(
-
-                preg_replace_callback(
-
-                    '/(-|_)(\w)/',
-
-                    function( $matches ) {
-                        return strtoupper( $matches[ 2 ] );
-                    },
-
-                    $header
-                )
-            );
-
-            // Checking if its a known Header Field
-
-            if( array_key_exists( $header, $this -> known ) ) {
-
-                /**
-                 * @internal
-                 *
-                 * Building full Classname, instantiating and adding Header to Headers' Collection
-                 */
-                $class = sprintf( '%s\%s', self::FIELDS_NS, $this -> known[ $header ] );
-
-                if( ! class_exists( $class ) ) return $this;
-
-                $this -> headers -> add( new $class( [ 'value' => $value ] ) );
-
-            } else {
-
-                /**
-                 * @internal
-                 * If it is a unknown header, let's add it as Generic Header
-                 *
-                 * Generic Header don't need to be accepted
-                 */
-                $this -> headers -> add(
-                    new Generic( [ 'value' => sprintf( '%s: %s', $header, $value ) ] )
-                );
-            }
+            return $this;
         }
+
+        // Checking if its a known Header Field
+
+        if( array_key_exists( $header, $this -> known ) ) {
+
+            /**
+             * @internal
+             *
+             * Building full Classname, instantiating and adding Header to Headers' Collection
+             */
+            $class = sprintf( '%s\%s', self::FIELDS_NS, $this -> known[ $header ] );
+
+            if( ! class_exists( $class ) ) return $this;
+
+            $this -> headers -> add( new $class( [ 'value' => $value ] ) );
+
+            return $this;
+        }
+
+        /**
+         * @internal
+         * If it is a unknown header, let's add it as Generic Header
+         *
+         * Generic Header don't need to be accepted
+         */
+        $this -> headers -> add(
+            new Generic( [ 'value' => sprintf( '%s: %s', $header, $value ) ] )
+        );
 
         return $this;
     }
@@ -281,7 +274,7 @@ class Manager extends Object {
      * @return boolean
      *  TRUE if it exists and FALSE otherwise
      */
-    public function hasHeader( $header ) {
+    public function hasHeader( $header ) : bool {
         return ( $this -> headers -> item( $header ) instanceof Field );
     }
 
@@ -289,38 +282,20 @@ class Manager extends Object {
      * Get registered Headers
      *
      * @param boolean $asString
-     *  If TRUE, instead a Collection, a string of all the headers will be returned
+     *  If TRUE, instead of the Lists Collection where the Headers have been
+     *  stored,  a string representation of all Headers will be returned instead
      *
-     * @return \Next\Components\Collections\Lists|string|void
+     * @return \Next\Components\Collections\Lists|string
+     *  If `$asString` is set to FALSE, the Lists Collection with all added
+     *  Headers will be returned
      *
-     *   <p>
-     *       If <strong>$asString</strong> is set to FALSE, the Headers
-     *       Lists Collection will be returned
-     *   </p>
-     *
-     *   <p>
-     *       If <strong>$asString</strong> argument is set to FALSE, and
-     *       no Headers were defined, nothing is returned
-     *   </p>
-     *
-     *   <p>Otherwise, a string with all Headers will be returned</p>
+     *  Otherwise a string representation of all Headers will be returned
      */
     public function getHeaders( $asString = FALSE ) {
 
-        if( $asString === FALSE ) {
+        if( $asString === FALSE ) return $this -> headers -> getCollection();
 
-            return $this -> headers -> getCollection();
-        }
-
-        // Is there something to return?
-
-        if( $this -> headers -> count() == 0 ) {
-            return NULL;
-        }
-
-        // Let's return as string
-
-        $headerString = NULL;
+        $header = NULL;
 
         $iterator = $this -> headers -> getIterator();
 
@@ -328,7 +303,7 @@ class Manager extends Object {
 
             $iterator,
 
-            function( \Iterator $iterator ) use( &$headerString ) {
+            function( \Iterator $iterator ) use( &$header ) : bool {
 
                 $current = $iterator -> current();
 
@@ -336,11 +311,11 @@ class Manager extends Object {
 
                 if( $current instanceof Generic || $current instanceof Raw ) {
 
-                    $headerString .= sprintf( "%s\r\n", $current -> getValue() );
+                    $header .= sprintf( "%s\r\n", $current -> getValue() );
 
                 } else {
 
-                    $headerString .= sprintf( "%s: %s\r\n", $current -> getName(), $current -> getValue() );
+                    $header .= sprintf( "%s: %s\r\n", $current -> getName(), $current -> getValue() );
                 }
 
                 return TRUE;
@@ -349,6 +324,6 @@ class Manager extends Object {
             [ $iterator ]
         );
 
-        return rtrim( $headerString, "\r\n" );
+        return rtrim( $header, "\r\n" );
     }
 }

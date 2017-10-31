@@ -22,10 +22,18 @@ use Next\Components\Invoker;             # Invoker Class
 use Next\Components\Utils\ArrayUtils;    # Array Utils Class
 
 /**
- * Defines the Query Builder Object responsible to assemble a
- * Database Query through class' methods
+ * The Query Builder Object is responsible to assemble a Database Query
+ * through class' methods to be then rendered by the Query Renderer associated
+ * to the Connection Driver
  *
- * @package    Next\DB\Query
+ * @package    Next\DB
+ *
+ * @uses       Next\Exception\Exceptions\BadMethodCallException
+ *             Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Components\Object
+ *             Next\Components\Invoker
+ *             Next\Components\Utils\ArrayUtils
+ *             Next\DB\Query\Expression
  */
 class Builder extends Object {
 
@@ -130,7 +138,7 @@ class Builder extends Object {
      * @return \Next\DB\Query\Builder
      *  Query Builder Object (Fluent Interface)
      */
-    public function insert( $table, array $fields ) {
+    public function insert( $table, array $fields ) : Builder {
 
         $this -> query = $this -> options
                                -> renderer
@@ -155,7 +163,7 @@ class Builder extends Object {
      * @return \Next\DB\Query\Builder
      *  Query Builder Object (Fluent Interface)
      */
-    public function update( $table, array $fields ) {
+    public function update( $table, array $fields ) : Builder {
 
         $this -> query = $this -> options
                                -> renderer
@@ -177,7 +185,7 @@ class Builder extends Object {
      * @return \Next\DB\Query\Builder
      *  Query Builder Object (Fluent Interface)
      */
-    public function delete( $table ) {
+    public function delete( $table ) : Builder {
 
         $this -> query = $this -> options
                                -> renderer
@@ -197,7 +205,7 @@ class Builder extends Object {
      * @return \Next\DB\Query\Builder
      *  Query Builder Object (Fluent Interface)
      */
-    public function select( $columns = [] ) {
+    public function select( $columns = [] ) : Builder {
 
         // Is the SELECT Column an single Expression?
 
@@ -246,10 +254,8 @@ class Builder extends Object {
 
             array_map(
 
-                function( $column ) {
-
-                    return ( $column instanceof Expression ?
-                        $column : trim( $column ) );
+                function( $c ) : string {
+                    return ( $c instanceof Expression ? $c : trim( $c ) );
                 },
 
                 $columns
@@ -291,18 +297,18 @@ class Builder extends Object {
      * @return \Next\DB\Query\Builder
      *  Query Builder Object (Fluent Interface)
      */
-    public function from( $tables = [] ) {
+    public function from( $tables = [] ) : Builder {
 
         /**
          * @internal
          *
          * If only one table was informed, as string, it's not possible
          * to define an alias and because the PRIMARY KEY — if properly
-         * defined in \Next\DB\Entity\Entity — is automatically added,
+         * defined in Next\DB\Entity\Entity — is automatically added,
          * we need to enforce the alias used in here
          *
          * The same rules apply: The alias will be first character of
-         * the \Next\DB\Entity\Entity
+         * the Next\DB\Entity\Entity
          */
         if( (array) $tables !== $tables ) {
 
@@ -334,16 +340,16 @@ class Builder extends Object {
              * @internal
              *
              * If we have multiple tables listed we'll compare the
-             * Entity Name coming from \Next\DB\Entity\Entity::getEntityName(),
+             * Entity Name coming from Next\DB\Entity\Entity::getEntityName(),
              * against the tables included for the statement
              *
              * If found without a string alias, we'll enforce it to
              * match the automatically added PRIMARY KEY
              *
-             * The same rules apply: The alias will be first character
-             * of the \Next\DB\Entity\Entity
+             * The same rules apply: The alias will be the first character
+             * of the Next\DB\Entity\Entity
              */
-            if( $pos = strpos( $table, $this -> options -> table ) !== FALSE ) {
+            if( strpos( $table, $this -> options -> table ) !== FALSE ) {
 
                 if( ! is_string( $alias ) ) {
                     $alias = strtolower( substr( $this -> options -> table, 0, 1 ) );
@@ -373,7 +379,7 @@ class Builder extends Object {
      * @return \Next\DB\Query\Builder
      *  Query Builder Object (Fluent Interface)
      */
-    public function distinct() {
+    public function distinct() : Builder {
 
         $this -> distinct = TRUE;
 
@@ -429,7 +435,7 @@ class Builder extends Object {
      *  array -OR- if this key doesn't match any Clause defined
      *  on `$condition`
      */
-    public function where( $condition, $replacements = [], $type = Query::SQL_AND ) {
+    public function where( $condition, $replacements = [], $type = Query::SQL_AND ) : Builder {
 
         if( $condition === NULL ) {
 
@@ -553,7 +559,7 @@ class Builder extends Object {
      * @return \Next\DB\Query\Builder
      *  Query Builder Object (Fluent-Interface)
      */
-    public function join( $table, $on, $type = Query::INNER_JOIN ) {
+    public function join( $table, $on, $type = Query::INNER_JOIN ) : Builder {
 
         $table = ( (array) $table === $table ?
                     array_slice( $table, 0, 1 ) : $table );
@@ -585,7 +591,7 @@ class Builder extends Object {
      * @return \Next\DB\Query\Builder
      *  Query Builder Object (Fluent Interface)
      */
-    public function having( $condition, $values = [], $type = Query::SQL_AND ) {
+    public function having( $condition, $values = [], $type = Query::SQL_AND ) : Builder {
 
         $this -> having[ $type ][] = ( (array) $condition === $condition ? array_shift( $condition ) : $condition );
 
@@ -603,7 +609,7 @@ class Builder extends Object {
      * @return \Next\DB\Query\Builder
      *  Query Builder Object (Fluent Interface)
      */
-    public function group( $fields ) {
+    public function group( $fields ) : Builder {
 
         $this -> group = array_filter(
             array_map( 'trim', (array) $fields )
@@ -630,7 +636,7 @@ class Builder extends Object {
      * @return \Next\DB\Query\Builder
      *  Query Builder Object (Fluent Interface)
      */
-    public function order( $field, $orientation = Query::ORDER_ASCENDING ) {
+    public function order( $field, $orientation = Query::ORDER_ASCENDING ) : Builder {
 
         if( $field instanceof Expression ) {
 
@@ -658,7 +664,7 @@ class Builder extends Object {
      * @return \Next\DB\Query\Builder
      *  Query Builder Object (Fluent Interface)
      */
-    public function limit( $limit = 1, $offset = 0 ) {
+    public function limit( $limit = 1, $offset = 0 ) : Builder {
 
         $limit  = (int) $limit;
         $offset = (int) $offset;
@@ -679,7 +685,7 @@ class Builder extends Object {
      * @return string
      *  Built Query
      */
-    public function assemble() {
+    public function assemble() : string {
 
         if( count( $this -> joins ) > 0 ) {
             $this -> query .= implode( '', $this -> joins );
@@ -733,7 +739,7 @@ class Builder extends Object {
      *  It'll, obvious, be empty if called before using any of the
      *  Query Builder's methods
      */
-    public function getQuery() {
+    public function getQuery() :? string {
         return $this -> query;
     }
 
@@ -743,7 +749,7 @@ class Builder extends Object {
      * @return array
      *  Placeholders replacements
      */
-    public function getReplacements() {
+    public function getReplacements() : array {
         return $this -> replacements;
     }
 
@@ -758,7 +764,7 @@ class Builder extends Object {
      * @return \Next\DB\Query\Builder
      *  Query Builder Instance (Fluent Interface)
      */
-    public function addReplacements( $replacements ) {
+    public function addReplacements( $replacements ) : Builder {
 
         $this -> replacements = ArrayUtils::union(
             $this -> replacements, (array) $replacements
@@ -780,7 +786,7 @@ class Builder extends Object {
      *
      * @see \Next\DB\Entity\Manager::flush()
      */
-    public function reset() {
+    public function reset() : Builder {
 
         $this -> query        = NULL;
         $this -> replacements = [];

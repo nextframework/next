@@ -15,8 +15,8 @@ namespace Next\Filter;
  */
 use Next\Exception\Exceptions\InvalidArgumentException;
 
-use Next\Components\Object;                            # Object Class
-use Next\Components\Collections\AbstractCollection;    # Abstract Collection Class
+use Next\Components\Object;                    # Object Class
+use Next\Components\Collections\Collection;    # Abstract Collection Class
 
 /**
  * The Sanitizer is a Collection of Filters to be applied sequentially
@@ -24,11 +24,11 @@ use Next\Components\Collections\AbstractCollection;    # Abstract Collection Cla
  * @package    Next\Filter
  *
  * @uses       Next\Exception\Exceptions\InvalidArgumentException
- *             Next\Filter\Filterable
  *             Next\Components\Object
- *             Next\Components\Collections\AbstractCollection
+ *             Next\Components\Collections\Collection
+ *             Next\Filter\Filterable
  */
-class Sanitizer extends AbstractCollection implements Filterable {
+class Sanitizer extends Collection implements Filterable {
 
     /**
      * Parameter Options Definition
@@ -43,18 +43,26 @@ class Sanitizer extends AbstractCollection implements Filterable {
          * Data to filter
          */
         'data' => [ 'required' => TRUE ],
+
+        'silent' => [ 'required' => FALSE, 'default' => TRUE ]
     ];
 
     // Filterable Method Implementation
 
     /**
-     * Filters data
+     * Filters input data
      *
      * @return string
      *  Input string filtered accordingly to the Filters added
      *  to Sanitizer Collection
+     *
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if anythign wrong occurs with any of Next\Filter\Filterable`
+     *  Objects added to The Sanitizer's Collection — which *should* raise a
+     *  `InvalidArgumentException` — -AND- we're running in DEVELOPMENT MODE
+     *  -OR- The Sanitizer has been configured -NOT- silence Exceptions
      */
-    public function filter() {
+    public function filter() : string {
 
         $data = $this -> options -> data;
 
@@ -64,7 +72,38 @@ class Sanitizer extends AbstractCollection implements Filterable {
 
             $filter -> getOptions() -> merge( [ 'data' => $data ] );
 
-            $data = $filter -> filter();
+            try {
+
+                $data = $filter -> filter();
+
+            } catch( InvalidArgumentException $e ) {
+
+                /**
+                 * @internal
+                 *
+                 * If an Next\Exceptions\Exceptions\InvalidArgumentException
+                 * is caught The Sanitizer can't continue applying any other
+                 * filter in the chain 'cause will, probably, throw Exceptions
+                 * as well, so we abort
+                 *
+                 * But we'll only silence it if we have been told to do so -OR-
+                 * we're in DEVELOPMENT MODE
+                 */
+                if( ( defined( 'DEVELOPMENT_MODE' ) && DEVELOPMENT_MODE >= 1 ) ||
+                        ! $this -> options -> silent ) {
+
+                    throw $e;
+                }
+
+                /**
+                 * @internal
+                 *
+                 * Otherwise just interrupt the iteration.
+                 * To respect PHP 7 return Type Declarations we `return` instead
+                 * of the most appropriate `break`
+                 */
+                break;
+            }
         }
 
         return $data;
@@ -76,7 +115,7 @@ class Sanitizer extends AbstractCollection implements Filterable {
      * Check Object acceptance
      *
      * Check if given Filter is acceptable in Sanitizer Collection
-     * To be valid, the Filter must implement `\Next\Filter\Filterable`
+     * To be valid, the Filter must implement Next\Filter\Filterable`
      * Interface
      *
      * @param \Next\Components\Object $object
@@ -84,17 +123,18 @@ class Sanitizer extends AbstractCollection implements Filterable {
      *  The checking for required interface will be inside the method
      *
      * @return boolean
-     *  TRUE if given Object is acceptable by Sanitizer Collection
-     *  and FALSE otherwise
+     *  TRUE if given Object is acceptable in Sanitizer's Collection.
+     *  If not an Next\Exception\Exceptions\InvalidArgumentException
+     *  will be thrown instead
      *
      * @throws \Next\Exception\Exceptions\InvalidArgumentException
-     *  Given Filter is not acceptable in the Sanitizer Collection
+     *  Given Object is not acceptable in a Sanitizer's Collection
      */
-    public function accept( Object $object ) {
+    public function accept( Object $object ) : bool {
 
         if( ! $object instanceof Filterable ) {
 
-            return new InvalidArgumentException(
+            throw new InvalidArgumentException(
 
                 sprintf(
 

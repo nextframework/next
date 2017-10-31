@@ -14,10 +14,9 @@ use Next\Exception\Exception;    # Exception Class
 
 /**
  * The ControllerException Class outlines the Error Standardization Concept
- * through which all errors that must be sent to UI from a
- * `\Next\Controller\Controller` is automatically done by the
- * `\Next\Controller\Dispatcher` requiring the developer only to
- * echo a Template Variable
+ * through which all errors that must be sent to the UI by a Controller
+ * is automatically done by the Dispatcher requiring the developer only to
+ * pretty much only echo a Template Variable
  *
  * @package    Next\Controller
  *

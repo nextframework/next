@@ -10,6 +10,11 @@
  */
 namespace  Next\FileSystem\Prototypes;
 
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
 use Next\Components\Interfaces\Prototypable;    # Prototypable Interface
 
 /**
@@ -19,6 +24,12 @@ use Next\Components\Interfaces\Prototypable;    # Prototypable Interface
  * The main usefulness of this Prototype is create AutoLoading Map Files
  *
  * @package    Next\FileSystem
+ *
+ * @uses       Next\Components\Interfaces\Prototypable
+ *             Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\FileSystem\Prototypes\ClassMapper\XML
+ *             RecursiveIteratorIterator
+ *             RecursiveDirectoryIterator
  */
 class ClassMapper implements Prototypable {
 
@@ -32,6 +43,8 @@ class ClassMapper implements Prototypable {
      *  Returns what the Class Mapper Writer returns, which could be
      *  nothing (i.e. outputs to browser, writes a file...) or maybe
      *  a string to be copied
+     *
+     * @see ClassMapper::map()
      */
     public function prototype() {
 
@@ -51,10 +64,18 @@ class ClassMapper implements Prototypable {
      * @return array
      *  An array with a map of classes and their paths or an empty
      *  array if no path is provided or a non-resolvable is
+     *
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if informed directory is not resolvable (i.e. doesn't exist)
      */
-    private function map( $path ) {
+    private function map( string $path ) : array {
 
-        if( $path === NULL || ( $path = stream_resolve_include_path( $path ) ) === FALSE ) return [];
+        if( stream_resolve_include_path( $directory ) === FALSE ) {
+
+            throw new InvalidArgumentException(
+                sprintf( 'Directory <strong>%s</strong> cannot be traversed', $directory )
+            );
+        }
 
         $iterator = new ClassMapper\ClassMapper(
                         new \RecursiveIteratorIterator(
@@ -68,7 +89,7 @@ class ClassMapper implements Prototypable {
 
             $iterator,
 
-            function( $iterator, &$map ) {
+            function( $iterator, &$map ) : bool {
 
                 $file = $iterator -> current();
 

@@ -15,9 +15,9 @@ namespace Next\FileSystem\Prototypes\ClassMapper\Writer;
  */
 use Next\Exception\Exceptions\InvalidArgumentException;
 
-use Next\Components\Interfaces\Verifiable;    # Verifiable Interface
-use Next\Components\Object;                   # Object Class
-use Next\HTTP\Response;                       # Response Class
+use Next\Validation\Verifiable;    # Verifiable Interface
+use Next\Components\Object;        # Object Class
+use Next\HTTP\Response;            # Response Class
 
 /**
  * The Standard Output Format writes the generated classmap to a
@@ -27,9 +27,10 @@ use Next\HTTP\Response;                       # Response Class
  * @package    Next\FileSystem
  *
  * @uses       Next\Exception\Exceptions\InvalidArgumentException,
- *             Next\Components\Interfaces\Verifiable,
+ *             Next\Validation\Verifiable,
  *             Next\Components\Object,
  *             Next\HTTP\Response
+ *             Next\FileSystem\Prototypes\ClassMapper\Writer
  */
 class Standard extends Object implements Verifiable, Writer {
 
@@ -42,7 +43,6 @@ class Standard extends Object implements Verifiable, Writer {
 
         'filename'          => [ 'required' => FALSE, 'default' => 'map.php' ],
         'save'              => [ 'required' => FALSE, 'default' => FALSE     ],
-        'display'           => [ 'required' => FALSE, 'default' => FALSE     ],
         'outputDirectory'   => [ 'required' => FALSE, 'default' => ''        ]
     ];
 
@@ -54,45 +54,35 @@ class Standard extends Object implements Verifiable, Writer {
      * @param array $map
      *  Classmap array
      *
-     * @return string|void
-     *  If the Parameter Option 'save' is set to TRUE, the
-     *  PHP-array will will be written down to a file
-     *  named accordingly to the Parameter Option 'filename' and
-     *  nothing is returned
-     *  If the Parameter Option 'display' is set to TRUE instead, the
-     *  structure will be sent directly to the browser.
-     *  If both are set to FALSE, then the content will be returned
-     *  as string
+     * @return array|NULL
+     *  If the Parameter Option 'save' is set to FALSE, the PHP-array will be
+     *  returned "as is"
+     *  Otherwise the PHP-array will be prepared as string and written to a file
+     *  named accordingly to the Parameter Option 'filename' and `NULL` is
+     *  returned only in compliance to PHP 7 Return Type Declaration
      */
-    public function build( array $map ) {
+    public function build( array $map ) :? array {
 
-        if( $this -> options -> save !== FALSE ) {
+        if( ! $this -> options -> save ) return $map;
 
-            file_put_contents(
+        file_put_contents(
 
-                sprintf(
+            sprintf(
 
-                    '%s/%s',
+                '%s/%s',
 
-                    $this -> options -> outputDirectory, $this -> options -> filename
-                ),
+                $this -> options -> outputDirectory, $this -> options -> filename
+            ),
 
-                sprintf(
+            sprintf(
 
-                    "<?php\n\n\$map = %s;",
+                "<?php\n\n\$map = %s;",
 
-                    strtr( var_export( $map, TRUE ), [ '\\\\' => '\\' ] )
-                )
-            );
+                strtr( var_export( $map, TRUE ), [ '\\\\' => '\\' ] )
+            )
+        );
 
-            return;
-        }
-
-        if( $this -> options -> display !== FALSE ) {
-            print '<pre>'; var_export( $map ); return;
-        }
-
-        return $map;
+        return NULL;
     }
 
     // Verifiable Interface Method Implementation
@@ -109,7 +99,7 @@ class Standard extends Object implements Verifiable, Writer {
      *  Thrown if defined to output the PHP-array to a file but the
      *  filename is empty
      */
-    public function verify() {
+    public function verify() : void {
 
         if( $this -> options -> save ) {
 

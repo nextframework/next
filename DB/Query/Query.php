@@ -11,12 +11,11 @@
 namespace Next\DB\Query;
 
 /**
- * Query Interface
+ * The Query Interface provides some immutable SQL-related keywords to be used
+ * instead of have the developer to manually enter them resulting in
+ * possible comparison failures
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\DB
  */
 interface Query {
 

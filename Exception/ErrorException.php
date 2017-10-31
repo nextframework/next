@@ -47,7 +47,7 @@ class ErrorException extends Exception {
      * @return string
      *  Severity Code translated
      */
-    public function __toString() {
+    public function __toString() : string {
 
         switch( $this -> severity ) {
 

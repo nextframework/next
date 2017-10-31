@@ -11,12 +11,9 @@
 namespace Next\DB\Statement;
 
 /**
- * Statement Exception Class
+ * An Interface for all Statement Classes
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\DB
  */
 interface Statement {
 
@@ -28,7 +25,7 @@ interface Statement {
      * @param array|optional $params
      *  Values to bind to parameter placeholders.
      */
-    public function execute( array $params = [] );
+    public function execute( array $params = [] ) : bool;
 
     /**
      * Fetch the next row from a ResultSet
@@ -63,19 +60,19 @@ interface Statement {
     /**
      * Return the number of rows affected by the last SQL statement
      */
-    public function rowCount();
+    public function rowCount() : int;
 
     // Exception-related Methods
 
     /**
      * Retrieve the Error Code
      */
-    public function errorCode();
+    public function errorCode() : string;
 
     /**
      * Retrieve an array of error Information
      */
-    public function errorInfo();
+    public function errorInfo() : array;
 
     /**
      * Set the default Fetch Mode for Statement
@@ -86,7 +83,7 @@ interface Statement {
      * @param mixed|array|optional $params
      *  Additional Parameters
      */
-    public function setFetchMode( $mode, $params = NULL );
+    public function setFetchMode( $mode, $params = NULL ) : bool;
 
     // Miscellaneous Methods
 
@@ -95,5 +92,5 @@ interface Statement {
      *
      * This enables the statement to be executed again.
      */
-    public function closeCursor();
+    public function closeCursor() : bool;
 }

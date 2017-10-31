@@ -10,20 +10,22 @@
  */
 namespace Next\HTTP\Headers\Common;
 
-use Next\HTTP\Headers\Field;    # Header Field Abstract Class
+use Next\Validation\Validator as Validators;    # Validators Interface
+use Next\HTTP\Headers\Field;                    # Header Field Abstract Class
 
 /**
- * 'Warning' Header Field Validator Class
+ * Common Header Field Validation Class: 'Warning'
  */
 use Next\Validation\HTTP\Headers\Common\Warning as Validator;
 
 /**
- * 'Warning' Header Field Class
+ * Common Header Field: 'Warning'
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\Validator
+ *             Next\HTTP\Headers\Field
+ *             Next\Validation\HTTP\Headers\Warning
  */
 class Warning extends Field {
 
@@ -39,7 +41,7 @@ class Warning extends Field {
      *
      * @return string Data to Validate
      */
-    protected function preCheck( $data ) {
+    protected function preCheck( $data ) : string {
 
         /**
          * @internal
@@ -60,7 +62,7 @@ class Warning extends Field {
      *
      * @return string Validated Data
      */
-    protected function postCheck( $data ) {
+    protected function postCheck( $data ) : string {
         return preg_replace( '/#(\w{3}),/', ' \\1,', $data );
     }
 
@@ -75,7 +77,7 @@ class Warning extends Field {
      * @return \Next\Validation\Validator
      *  Associated Validator
      */
-    protected function getValidator( $value ) {
+    protected function getValidator( $value ) : Validators {
         return new Validator( [ 'value' => $value ] );
     }
 
@@ -85,7 +87,7 @@ class Warning extends Field {
      * @return array
      *  Header Field Validation Options
      */
-    public function setOptions() {
+    public function setOptions() : array {
         return [ 'name' => 'Warning', 'preserveWhitespace' => TRUE ];
     }
 }

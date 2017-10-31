@@ -11,16 +11,19 @@
 namespace Next\DB\Query\Renderer;
 
 use Next\Components\Object;          # Object Class
-use Next\Components\Types\String;    # Strings Data-type Class
+use Next\Components\Types\Strings;   # Strings Data-type Class
 use Next\DB\Query\Expression;        # Query Expression Class
 
 /**
- * MySQL Query Renderer Class
+ * The MySQL Query Renderer renders all SQL statements assembled by the
+ * Query Builder in valid SQL Statements
  *
- * @author        Bruno Augusto
+ * @package    Next\DB
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Components\Object
+ *             Next\Components\Types\Strings
+ *             Next\DB\Query\Expression
+ *             Next\DB\Query\Renderer
  */
 class MySQL extends Object implements Renderer {
 
@@ -47,7 +50,7 @@ class MySQL extends Object implements Renderer {
      * @return string
      *  INSERT Statement
      */
-    public function insert( $table, array $fields ) {
+    public function insert( $table, array $fields ) : string {
 
         return sprintf(
 
@@ -69,7 +72,7 @@ class MySQL extends Object implements Renderer {
 
                 array_map(
 
-                    function( $field ) {
+                    function( $field ) : string {
                         return sprintf( ':%s', $field );
                     },
 
@@ -91,7 +94,7 @@ class MySQL extends Object implements Renderer {
      * @return string
      *  UPDATE Statement
      */
-    public function update( $table, array $fields ) {
+    public function update( $table, array $fields ) : string {
 
         return sprintf(
 
@@ -111,7 +114,7 @@ class MySQL extends Object implements Renderer {
 
                         array_map(
 
-                            function( $field ) {
+                            function( $field ) : string {
                                 return sprintf( ':%s', $field );
                             },
 
@@ -134,7 +137,7 @@ class MySQL extends Object implements Renderer {
      * @return string
      *  DELETE Statement
      */
-    public function delete( $table ) {
+    public function delete( $table ) : string {
         return sprintf( 'DELETE FROM %s', $this -> quote( $table ) );
     }
 
@@ -156,7 +159,7 @@ class MySQL extends Object implements Renderer {
      * @return string
      *  SELECT Statement
      */
-    public function select( $columns, $tables, $isDistinct = FALSE ) {
+    public function select( $columns, $tables, $isDistinct = FALSE ) : string {
 
         return sprintf(
 
@@ -174,21 +177,14 @@ class MySQL extends Object implements Renderer {
      *
      * @param string|optional $alias
      *  Optional Column Alias
+     *
+     * @return string
+     *  Table Columns quote and, optionally, aliased, pseudo-statement
      */
-    public function columns( $column, $alias = NULL ) {
+    public function columns( $column, $alias = NULL ) : string {
 
-        // Do we have an Expression?
-
-        if( $column instanceof Expression ) {
-
-            $column = $column -> getExpression();
-
-        } else {
-
-            // No? Then let's quote the Columns
-
-            $column = $this -> quote( $column );
-        }
+        $column = ( $column instanceof Expression ?
+                        $column -> getExpression() : $this -> quote( $column ) );
 
         // Quoting aliases, if any
 
@@ -211,16 +207,13 @@ class MySQL extends Object implements Renderer {
      * @return string
      *  SELECT Statement FROM Clause
      */
-    public function from( $alias, $table ) {
+    public function from( $alias, $table ) : string {
 
         if( is_string( $alias ) && ! is_numeric( $alias ) ) {
-
             return sprintf( '%s %s', $this -> quote( $table ), $alias );
-
-        } else {
-
-            return $this -> quote( $table );
         }
+
+        return $this -> quote( $table );
     }
 
     /**
@@ -232,7 +225,7 @@ class MySQL extends Object implements Renderer {
      * @return string
      *  WHERE Clause
      */
-    public function where( $conditions ) {
+    public function where( $conditions ) : string {
 
         $clause = NULL;
 
@@ -280,7 +273,7 @@ class MySQL extends Object implements Renderer {
      * @return string
      *  JOIN Clause
      */
-    public function join( $table, $on, $type = Query::INNER_JOIN ) {
+    public function join( $table, $on, $type = Query::INNER_JOIN ) : string {
 
         // Do we have an alias?
 
@@ -300,7 +293,7 @@ class MySQL extends Object implements Renderer {
      * @return string
      *  HAVING Clause
      */
-    public function having( array $conditions ) {
+    public function having( array $conditions ) : string {
 
         $clause = NULL;
 
@@ -308,16 +301,11 @@ class MySQL extends Object implements Renderer {
 
             $conditions,
 
-            function( $condition, $type ) use( &$clause ) {
+            function( $condition, $type ) use( &$clause ) : void {
 
-                if( count( $condition ) == 1 && $clause !== NULL ) {
-
-                    $clause .= sprintf( ' %s %s', $type, implode( $type, $condition ) );
-
-                } else {
-
-                    $clause .= implode( sprintf( ' %s ', $type ), $condition );
-                }
+                $clause .= ( count( $condition ) == 1 && $clause !== NULL ?
+                                sprintf( ' %s %s', $type, implode( $type, $condition ) ) :
+                                    implode( sprintf( ' %s ', $type ), $condition ) );
             }
         );
 
@@ -333,7 +321,7 @@ class MySQL extends Object implements Renderer {
      * @return string
      *  GROUP BY Clause
      */
-    public function group( array $fields ) {
+    public function group( array $fields ) : string {
         return sprintf( ' %s %s', self::GROUP_BY, implode( ', ', $fields ) );
     }
 
@@ -350,7 +338,7 @@ class MySQL extends Object implements Renderer {
      * @return string
      *  ORDER BY Clause
      */
-    public function order( array $fields ) {
+    public function order( array $fields ) : string {
 
         $clause = [];
 
@@ -403,7 +391,7 @@ class MySQL extends Object implements Renderer {
      * @return string
      *  LIMIT Clause
      */
-    public function limit( array $data ) {
+    public function limit( array $data ) : string {
         return rtrim( sprintf( ' %s %s, %s ', self::LIMIT, $data[ 0 ], $data[ 1 ] ) );
     }
 
@@ -418,7 +406,7 @@ class MySQL extends Object implements Renderer {
      * @return string
      *  Input expression, quoted
      */
-    public function quote( $expression ) {
+    public function quote( $expression ) : string {
 
         // Do we have a full database definition (e.g. db.table)?
 
@@ -432,7 +420,7 @@ class MySQL extends Object implements Renderer {
             );
         }
 
-        $expression = new String( [ 'value' => $expression ] );
+        $expression = new Strings( [ 'value' => $expression ] );
 
         return $expression -> quote( $this -> options -> quoteIdentifier ) -> get();
     }
@@ -446,7 +434,7 @@ class MySQL extends Object implements Renderer {
      * @param array &$columns
      *  Statements in which to search the columns to quote
      */
-    private function quoteColumns( array &$columns ) {
+    private function quoteColumns( array &$columns ) : void {
 
         foreach( $columns as $type => $condition ) {
 

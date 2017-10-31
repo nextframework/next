@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Request Header Field Validator Class: TE | Validate\Headers\Request\TE.php
+ * HTTP Request Header Field Validator Class: TE | Validation\Headers\Request\TE.php
  *
  * @author       Bruno Augusto
  *
@@ -15,12 +15,14 @@ use Next\Components\Object;                          # Object Class
 use Next\Validation\IANA\ContentEncoding as IANA;    # IANA Content-Encoding Validation Class
 
 /**
- * TE Header Validation Class
+ * The 'TE' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.39
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
+ *             Next\Validation\IANA\ContentEncoding
  */
 class TE extends Object implements Header {
 
@@ -50,7 +52,7 @@ class TE extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.39
      *  RFC 2616 Section 14.39
      */
-    public function validate() {
+    public function validate() : bool {
 
         preg_match(
 

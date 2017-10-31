@@ -19,8 +19,9 @@ require_once __DIR__ . '/RuntimeException.php';
  * For example: As part of our Extended Context Concept, if an
  * undefined method is trying to be called — which will be handled by
  * Next\Components\Object::__call() — we needed a way to know that
- * none of methods of all Objects added to the Extended Context could
- * not be found so we could try to find as a Prototyped Resource instead.
+ * none of the methods of all Objects added to the Extended Context could
+ * be match against the method being called so we could try to call it as
+ * a Prototyped Resource instead.
  *
  * This "hint" was the NullException as it is caught and never re-thrown.
  * If whatever was called also can't be found as one of the

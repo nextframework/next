@@ -11,8 +11,10 @@
 namespace Next\HTTP\Stream\Adapter;
 
 /**
- * Defines an Adapter Class using cURL
+ * An HTTP Stream Adapter with cURL
  *
- * @package    Next\Stream
+ * @package    Next\HTTP
+ *
+ * @uses       Next\HTTP\Stream\Adapter\AbstractAdapter
  */
 class Curl extends AbstractAdapter {}

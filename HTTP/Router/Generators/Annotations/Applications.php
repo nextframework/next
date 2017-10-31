@@ -14,8 +14,8 @@ use Next\Application\Application as ApplicationInterface;    # Applications Inte
 use Next\Components\Object;                                  # Object Class
 
 /**
- * Defines the Applications Analyzer, filtering through data
- * reflected and preparing structure for the Routes Generator process
+ * The Application Controllers' Annotation Parser parses, filters reflected data
+ * and prepares a data-structure for the Routes Generator to process
  *
  * @package    Next\HTTP
  */
@@ -49,7 +49,6 @@ class Applications implements Annotations {
      *  Application to get Annotations from
      */
     public function __construct( ApplicationInterface $application ) {
-
         $this -> application = $application;
     }
 
@@ -58,10 +57,10 @@ class Applications implements Annotations {
     /**
      * Get Annotations Found
      *
-     * @return array
+     * @return \ArrayIterator
      *  Found Annotations
      */
-    public function getAnnotations() {
+    public function getAnnotations() : \ArrayIterator {
 
         $data = new \ArrayIterator;
 
@@ -85,7 +84,7 @@ class Applications implements Annotations {
 
             $actions,
 
-            function( \Iterator $iterator ) use( &$data ) {
+            function( \Iterator $iterator ) use( &$data ) : bool {
 
                 // Thankfully we can reuse the variable name because of different scope  ^_^
 
@@ -120,10 +119,10 @@ class Applications implements Annotations {
      * @param \Next\Components\Object $application
      *  Application Object
      *
-     * @return array
-     *  Found Annotations
+     * @return string
+     *  Found Annotation
      */
-    private function matchDomainAnnotations( Object $application ) {
+    private function matchDomainAnnotations( Object $application ) : string {
 
         $domains = preg_grep(
 
@@ -148,7 +147,7 @@ class Applications implements Annotations {
      * @return string
      *  Found Annotation
      */
-    private function matchPathAnnotation( Object $application ) {
+    private function matchPathAnnotation( Object $application ) : string {
 
         $path = preg_grep(
 

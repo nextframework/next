@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Header Fields Validator Interface | Validate\Headers\Header.php
+ * HTTP Header Fields Validator Interface | Validation\Headers\Header.php
  *
  * @author       Bruno Augusto
  *
@@ -13,12 +13,11 @@ namespace Next\Validation\HTTP\Headers;
 use Next\Validation\Validator;    # Validator Interface
 
 /**
- * HTTP Headers Validation Interface
+ * An Interface for for all HTTP Headers Validators
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\Validator
  */
 interface Header extends Validator {
 

@@ -12,7 +12,7 @@ namespace Next\Auth\Helpers;
 
 /**
  * Auth Helper describe the bare minimum methods to Request an external
- * OAuth Authentication, receive an Authorization Code to, perhaps,
+ * OAuth Authentication and receive an Authorization Code to, perhaps,
  * consume an API from which User Data is retrieved
  *
  * @package    Next\Auth

@@ -25,12 +25,24 @@ use Next\DB\Query\Builder;         # Query Builder Class
 use Next\DB\DataGateway\RowSet;    # RowSet Class
 
 /**
- * Entity Manager Class
+ * The Entity Manager Class is responsible for listing, updating and removing
+ * records based on informations provided by its associated Entity through
+ * a Repository
  *
- * @author        Bruno Augusto
+ * It also bridges its own Context to Query Builder's and the provided
+ * Repository's Contexts as well as the inverse, bridging the Repository
+ * to both its and Query Builder's Contexts
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\DB
+ *
+ * @uses       Next\Exception\Exceptions\LengthException
+ *             Next\DB\Query\Query
+ *             Next\DB\Driver\Driver
+ *             Next\Components\Object
+ *             Next\Components\Invoker
+ *             Next\DB\Entity\Entity
+ *             Next\DB\Query\Builder
+ *             Next\DB\DataGateway\RowSet
  */
 class Manager extends Object {
 
@@ -66,7 +78,7 @@ class Manager extends Object {
      * Prepares initial data-source, initializes Repositories Collection
      * and the Query Builder extending Manager's Context to it
      */
-    protected function init() {
+    protected function init() : void {
 
         /**
          * @internal Data-source
@@ -111,7 +123,7 @@ class Manager extends Object {
      * @return \Next\DB\Entity\Manager
      *  Entity Manager Object (Fluent Interface)
      */
-    public function setSource( array $source ) {
+    public function setSource( array $source ) : Manager {
 
         $this -> source = $source;
 
@@ -128,7 +140,7 @@ class Manager extends Object {
      *
      * @see \Next\DB\Driver\Driver::lastInsertId()
      */
-    public function rowCount() {
+    public function rowCount() : int {
 
         $rowCount = $this -> execute() -> rowCount();
 
@@ -151,7 +163,7 @@ class Manager extends Object {
      *
      * @see \Next\DB\Statement\Statement::fetch()
      */
-    public function fetch( $fetchStyle = NULL ) {
+    public function fetch( $fetchStyle = NULL ) : RowSet {
 
         $data = $this -> execute() -> fetch( $fetchStyle, array_slice( func_get_args(), 1 ) );
 
@@ -170,16 +182,12 @@ class Manager extends Object {
     /**
      * Return an array containing all of the result set rows
      *
-     * @param string|integer|optional $style
-     *  The Fetch Mode, accordingly to chosen Driver
-     *  Not directly used (documentation only)
-     *
      * @return \Next\DB\DataGateway\RowSet
      *  RowSet Object with fetched data, if any
      *
      * @see \Next\DB\Statement\Statement::fetchAll()
      */
-    public function fetchAll( $style = NULL ) {
+    public function fetchAll() : RowSet {
 
         $data = $this -> execute() -> fetchAll( func_get_args() );
 
@@ -206,7 +214,7 @@ class Manager extends Object {
      * @return \Next\DB\Query\Builder
      *  Query Builder Object (Fluent Interface)
      */
-    public function select( $columns = Query::WILDCARD ) {
+    public function select( $columns = Query::WILDCARD ) : Builder {
         return $this -> builder -> select( $columns );
     }
 
@@ -219,13 +227,13 @@ class Manager extends Object {
      *  According to PHP Manual it's used, for example, by PDO_PGSQL
      *  as sequence object identifier
      *
-     * @return integer|string
+     * @return string
      *  The ID of last record inserted
      *
      * @throws \Next\Exception\Exceptions\LengthException
      *  Trying to insert something without define any field
      */
-    public function insert( $name = NULL ) {
+    public function insert( $name = NULL ) : string {
 
         if( count( $this -> source ) == 0 ) {
             throw new LengthException( 'Nothing to insert' );
@@ -255,7 +263,7 @@ class Manager extends Object {
      * @throws \Next\Exception\Exceptions\LengthException
      *  Trying to execute an UPDATE Statement without define any field
      */
-    public function update() {
+    public function update() : Manager {
 
         if( count( $this -> source ) == 0 ) {
             throw new LengthException( 'Nothing to update' );
@@ -282,7 +290,7 @@ class Manager extends Object {
      * @return \Next\DB\Entity\Manager
      *  Manager instance, in order to allow method chaining to build the final query
      */
-    public function delete() {
+    public function delete() : Manager {
 
         $this -> builder -> delete(
             $this -> options -> repository -> getEntity() -> getEntityName()
@@ -297,7 +305,7 @@ class Manager extends Object {
      * @return \Next\DB\Entity\Manager
      *  Entity Manager Object (Fluent-Interface)
      */
-    public function reset() {
+    public function reset() : Manager {
 
         return new Manager(
             [
@@ -314,7 +322,7 @@ class Manager extends Object {
      * @return \Next\DB\Entity\Manager
      *  Entity Manager Object (Fluent-Interface)
      */
-    public function flush() {
+    public function flush() : Manager {
 
         // Reset Query Builder Parts
 
@@ -332,7 +340,7 @@ class Manager extends Object {
      * @return  \Next\DB\Entity\Manager
      *  Entity Manager Object (Fluent-Interface)
      */
-    public function setEntity( Entity $entity ) {
+    public function setEntity( Entity $entity ) : Manager {
 
         $this -> source = array_filter( $entity -> getFields() );
 
@@ -343,7 +351,7 @@ class Manager extends Object {
         return $this;
     }
 
-    // Accessors
+    // Accessory Methods
 
     /**
      * Get assembled query
@@ -351,7 +359,7 @@ class Manager extends Object {
      * @return string
      *  Assembled query
      */
-    public function getQuery() {
+    public function getQuery() : string {
         return $this -> assemble();
     }
 
@@ -361,7 +369,7 @@ class Manager extends Object {
      * @return \Next\DB\Entity\Entity
      *  Entity Object
      */
-    public function getEntity() {
+    public function getEntity() : Entity {
         return $this -> options -> repository -> getEntity();
     }
 
@@ -371,7 +379,7 @@ class Manager extends Object {
      * @return array
      *  Data-source
      */
-    public function getSource() {
+    public function getSource() : array {
         return $this -> source;
     }
 
@@ -381,7 +389,7 @@ class Manager extends Object {
      * @return \Next\DB\Driver\Driver
      *  Connection Driver
      */
-    public function getDriver() {
+    public function getDriver() : Driver {
         return $this -> options -> driver;
     }
 
@@ -391,15 +399,21 @@ class Manager extends Object {
      * @return \Next\DB\Query\Builder
      *  Query Builder
      */
-    public function getBuilder() {
+    public function getBuilder() : Builder {
         return $this -> builder;
     }
 
     // Auxiliary Methods
 
     /**
-     * Wrapper method for \Next\DB\Driver\Driver::prepare()
+     * Wrapper method for Next\DB\Driver\Driver::prepare()
      * and Next\DB\Statement\Statement:execute()
+     *
+     * @internal
+     * PHP 7 Return Type Declaration can't be used because in order
+     * to use PDO requires obligatorily a class extending PDOStatement
+     * but describing this method's return type as \PDOStatement
+     * prevents other Next\DB\Driver\Driver to be used in the future
      *
      * @return \Next\DB\Statement\Statement
      *  Statement Object

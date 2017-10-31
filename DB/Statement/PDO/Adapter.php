@@ -20,12 +20,18 @@ use Next\DB\Statement\Statement;    # DB Statement Interface
 use Next\Components\Object;         # Object Class
 
 /**
- * PDO Statement Adapter Class
+ * The PDO Statement Adapter adapts the native PDOStatement interface signature
  *
- * @author        Bruno Augusto
+ * @package    Next\DB
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Exception\Exceptions\RuntimeException
+ *             Next\Exception\Exceptions\BadMethodCallException
+ *             Next\DB\Statement\Statement
+ *             Next\Components\Object
+ *             PDOStatement
+ *             PDOException
+ *             ReflectionMethod
+ *             ReflectionException
  */
 class Adapter extends Object implements Statement {
 
@@ -48,17 +54,17 @@ class Adapter extends Object implements Statement {
     /**
      * Set a PDOStatement Object which will be adapted
      *
-     * @param PDOStatement $stmt
-     *
-     * @return \Next\DB\Statement\PDO\Adapter
-     *  Statement Adapter Object (Fluent Interface)
-     *
      * @internal
      * This method must always exist
      * The right way to ensure this would be through Interfaces o
      * Abstract Class, but none of these fits without tie the API
+     *
+     * @param PDOStatement $stmt
+     *
+     * @return \Next\DB\Statement\PDO\Adapter
+     *  Statement Adapter Object (Fluent Interface)
      */
-    public function setStatement( \PDOStatement $stmt ) {
+    public function setStatement( \PDOStatement $stmt ) : Adapter {
 
         $this -> stmt = $stmt;
 
@@ -75,9 +81,10 @@ class Adapter extends Object implements Statement {
      * @param array|optional $params
      *  Values to bind to parameter placeholders
      *
-     * @return boolean TRUE on success and FALSE on failure
+     * @return boolean
+     *  TRUE on success and FALSE on failure
      */
-    public function execute( array $params = [] ) {
+    public function execute( array $params = [] ) : bool {
         return $this -> invoke( 'execute', $params );
     }
 
@@ -138,7 +145,7 @@ class Adapter extends Object implements Statement {
      * @return integer
      *  The number of rows affected
      */
-    public function rowCount() {
+    public function rowCount() : int {
         return $this -> invoke( 'rowCount' );
     }
 
@@ -147,18 +154,20 @@ class Adapter extends Object implements Statement {
     /**
      * Retrieve the Error Code
      *
-     * @return string The SQLSTATE Error Code of performed PDOStatement operation
+     * @return string
+     *  The SQLSTATE Error Code of performed PDOStatement operation
      */
-    public function errorCode() {
+    public function errorCode() : string {
         return $this -> invoke( 'errorCode' );
     }
 
     /**
      * Retrieve an array of error information
      *
-     * @return array Extended error information
+     * @return array
+     *  Extended error information
      */
-    public function errorInfo() {
+    public function errorInfo() : array {
         return $this-> invoke( 'errorInfo' );
     }
 
@@ -174,7 +183,7 @@ class Adapter extends Object implements Statement {
      * @return boolean
      *  TRUE on success and FALSE otherwise
      */
-    public function setFetchMode( $mode, $params = NULL ) {
+    public function setFetchMode( $mode, $params = NULL ) : bool {
         return $this -> invoke( 'setFetchMode', [ $mode, $params ] );
     }
 
@@ -188,7 +197,7 @@ class Adapter extends Object implements Statement {
      * @return boolean
      *  TRUE on success and FALSE otherwise
      */
-    public function closeCursor() {
+    public function closeCursor() : bool {
         return $this -> invoke( 'closeCursor' );
     }
 

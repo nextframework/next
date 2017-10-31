@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Entity Header Field Validator Class: Content-MD5 | Validate\Headers\Entity\ContentMD5.php
+ * HTTP Entity Header Field Validator Class: Content-MD5 | Validation\Headers\Entity\ContentMD5.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,13 @@ use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
 use Next\Components\Object;                 # Object Class
 
 /**
- * Content-MD5 Header Validation Class
+ * The 'Content-MD5' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.15
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class ContentMD5 extends Object implements Header {
 
@@ -49,10 +50,10 @@ class ContentMD5 extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.15
      *  RFC 2616 Section 14.15
      */
-    public function validate() {
+    public function validate() : bool {
 
         preg_match( '/^(?<hash>[a-zA-Z0-9\+\=\/]+)$/', $this -> options -> value, $match );
 
-        return ( count( $match ) != 0 && strlen( base64_decode( $match['hash'] ) ) == 32 );
+        return ( count( $match ) != 0 && mb_strlen( base64_decode( $match['hash'] ) ) == 32 );
     }
 }

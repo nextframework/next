@@ -20,12 +20,17 @@ use Next\DB\Driver\PDO\AbstractPDO;              # PDO Abstract Class
 use Next\DB\Query\Renderer\MySQL as Renderer;    # MySQL Query Renderer Class
 
 /**
- * SQLite Connection Adapter Class
+ * The PDO SQLite Connector.
+ * Defines the DSN PDO will use and which Query Renderer to render
+ * the Query Clauses
  *
- * @author        Bruno Augusto
+ * @package    Next\DB
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Exception\Exceptions\RuntimeException
+ *             Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\DB\Driver\PDO\AbstractPDO
+ *             Next\DB\Query\Renderer\MySQL
+ *             PDO
  */
 class SQLite extends AbstractPDO {
 
@@ -46,7 +51,7 @@ class SQLite extends AbstractPDO {
      * @return string
      *  SQLite Adapter DSN used by PDO Connection
      */
-    protected function getDSN() {
+    protected function getDSN() : string {
         return sprintf( 'sqlite:%s', $this -> options -> dbPath );
     }
 
@@ -59,7 +64,7 @@ class SQLite extends AbstractPDO {
      * @throws \Next\Exception\Exceptions\RuntimeException
      *  Thrown if PDO SQLite Extension has not been loaded
      */
-    public function verify() {
+    public function verify() : void {
 
         parent::verify();
 
@@ -84,7 +89,7 @@ class SQLite extends AbstractPDO {
      * @return \Next\DB\Query\Renderer\Renderer
      *  MySQL Renderer Object
      */
-    public function getRenderer() {
+    public function getRenderer() : Renderer {
         return new Renderer( [ 'quoteIdentifier' => '"' ] );
     }
 }

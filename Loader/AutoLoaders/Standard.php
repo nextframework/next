@@ -24,10 +24,10 @@ use Next\Loader\AutoLoaders\AutoLoader;      # AutoLoader Interface
 /**
  * PHP-Array Class Map File AutoLoader
  *
- * @author        Bruno Augusto
+ * @package    Next\Loader
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Loader\AutoLoaders\AutoLoader
  */
 class Standard implements AutoLoader {
 
@@ -76,14 +76,14 @@ class Standard implements AutoLoader {
     /**
      * AutoLoading Function
      *
-     * @return Closure
+     * @return callable
      *  An anonymous function to be invoked as SPL Autoload callback
      */
-    public function call() {
+    public function call() : callable {
 
         $map = self::$map;
 
-        return function( $classname ) use( $map ) {
+        return function( $classname ) use( $map ) : bool {
 
             if( array_key_exists( $classname, $map ) ) {
 
@@ -91,6 +91,8 @@ class Standard implements AutoLoader {
 
                 return TRUE;
             }
+
+            return FALSE;
         };
     }
 }

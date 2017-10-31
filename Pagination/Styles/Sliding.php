@@ -11,15 +11,33 @@
 namespace Next\Pagination\Styles;
 
 use Next\Components\Interfaces\Configurable;    # Configurable Interface
-use Next\Pagination\Paginator;                    # Paginator Class
+use Next\Pagination\Paginator;                  # Paginator Class
 
 /**
- * Sliding Pagination Style Class
+ * The 'Sliding' Pagination Style (a.k.a. Yahoo! Search Style) builds an
+ * Interval long as the defined Number of Items per Page putting the cursor in
+ * the middle of it and remaining there until approaching the end of it
  *
- * @author        Bruno Augusto
+ * As the Current Page increases, previous pages slides out for the next
+ * pages to slide in. E.g:
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * > Considering the default option of 5 Items per Page:
+ *
+ * Page 1~3: `1 | 2 | 3 | 4 | 5`
+ *
+ * Page 4: ` 2 | 3 | 4 | 5 | 6`
+ *
+ * Page 5: `3 | 4 | 5 | 6 | 7`
+ *
+ * ...
+ *
+ * Page 24~26: `22 | 23 | 24 | 25 | 26`
+ *
+ * @package    Next\Pagination
+ *
+ * @uses       Next\Components\Interfaces\Configurable
+ *             Next\Pagination\Paginator
+ *             Next\Pagination\Styles\Style
  */
 class Sliding implements Configurable, Style {
 
@@ -53,14 +71,14 @@ class Sliding implements Configurable, Style {
 
     /**
      * Number of Items displayed per page as defined as Parameter Option
-     * in \Next\Pagination\Paginator Object
+     * in Next\Pagination\Paginator Object
      *
-     * @var integer $itemsPerPage
+     * @var integer $visiblePages
      */
-    protected $itemsPerPage;
+    protected $visiblePages;
 
     /**
-     * Current Page passed on as Paramter Option to the
+     * Current Page passed on as Parameter Option to the
      * \Next\Pagination\Paginator Object
      *
      * @var integer $currentPage
@@ -69,7 +87,7 @@ class Sliding implements Configurable, Style {
 
     /**
      * Total of Records in data-source provided as Parameter Option to
-     * the \Next\Pagination\Paginator Object.
+     * the Next\Pagination\Paginator Object.
      *
      * @var integer $total
      */
@@ -85,17 +103,17 @@ class Sliding implements Configurable, Style {
 
     /**
      * Post-initialization Configuration
-     * Sets up shortcuts to \Next\Pagination\Paginator Parameter Options
+     * Sets up shortcuts to Next\Pagination\Paginator Parameter Options
      */
     public function configure() {
 
         $options = $this -> paginator -> getOptions();
 
-        $this -> itemsPerPage = $options -> itemsPerPage;
+        $this -> visiblePages = $options -> visiblePages;
         $this -> currentPage  = $options -> currentPage;
 
         $this -> total        = count( $this -> paginator );
-        $this -> delta        = ceil( $this -> itemsPerPage / 2 );
+        $this -> delta        = ceil( $this -> visiblePages / 2 );
     }
 
     // Pagination Style Interface Method Implementation
@@ -109,14 +127,14 @@ class Sliding implements Configurable, Style {
      * @return Next\Pagination\Styles\Style
      *  Pagination Style Object (Fluent Interface)
      */
-    public function setPaginator( Paginator $paginator ) {
+    public function setPaginator( Paginator $paginator ) : Sliding {
 
         $this -> paginator = $paginator;
 
         return $this;
     }
 
-    // Boundable Interface Methods Implementation
+    // Boundable Interval Interface Methods Implementation
 
     /**
      * Get the Lower Bound of a Subset.
@@ -130,31 +148,31 @@ class Sliding implements Configurable, Style {
      * @return integer
      *  The Lowest Page Number visible
      */
-    public function getLowerBound() {
+    public function getLowerBound() : int {
 
         /**
          * @internal
          *
-         * Creating a local version of \Next\Pagination\Styles\Sliding::$delta
+         * Creating a local version of Next\Pagination\Styles\Sliding::$delta
          * to not overwrite the original value on the second if-statement
          * messing with the logics of Sliding::getUpperBound()
          */
         $delta = $this -> delta;
 
-        if( ( $this -> currentPage - $delta ) > ( $this -> total - $this -> itemsPerPage ) ) {
+        if( ( $this -> currentPage - $delta ) > ( $this -> total - $this -> visiblePages ) ) {
 
-            $this -> lowerBound = $this -> total - $this -> itemsPerPage + 1;
+            $this -> lowerBound = $this -> total - $this -> visiblePages + 1;
 
-        } else {
-
-            // We're getting close to end, let's change a little bit
-
-            if( ( $this -> currentPage - $delta ) < 0 ) {
-                $delta = $this -> currentPage;
-            }
-
-            $this -> lowerBound = ( ( $this -> currentPage - $delta ) + 1 );
+            return $this -> lowerBound;
         }
+
+        // We're getting close to end, let's change a little bit
+
+        if( ( $this -> currentPage - $delta ) < 0 ) {
+            $delta = $this -> currentPage;
+        }
+
+        $this -> lowerBound = ( ( $this -> currentPage - $delta ) + 1 );
 
         return $this -> lowerBound;
     }
@@ -171,31 +189,31 @@ class Sliding implements Configurable, Style {
      * @return integer
      *  The highest Page Number visible
      */
-    public function getUpperBound() {
+    public function getUpperBound() : int {
 
         /**
          * @internal
          *
-         * Creating a local version of \Next\Pagination\Styles\Sliding::$delta
+         * Creating a local version of Next\Pagination\Styles\Sliding::$delta
          * to not overwrite the original value on the second if-statement
          * messing with the logics of Sliding::getLowerBound()
          */
         $delta = $this -> delta;
 
-        if( ( $this -> currentPage - $delta ) > ( $this -> total - $this -> itemsPerPage ) ) {
+        if( ( $this -> currentPage - $delta ) > ( $this -> total - $this -> visiblePages ) ) {
 
             $this -> upperBound = $this -> total;
 
-        } else {
-
-            // We're getting close to end, let's change a little bit
-
-            if( ( $this -> currentPage - $delta ) < 0 ) {
-                $delta = $this -> currentPage;
-            }
-
-            $this -> upperBound = ( $this -> currentPage - $delta ) + $this -> itemsPerPage;
+            return $this -> upperBound;
         }
+
+        // We're getting close to end, let's change a little bit
+
+        if( ( $this -> currentPage - $delta ) < 0 ) {
+            $delta = $this -> currentPage;
+        }
+
+        $this -> upperBound = ( $this -> currentPage - $delta ) + $this -> visiblePages;
 
         return $this -> upperBound;
     }
@@ -209,11 +227,15 @@ class Sliding implements Configurable, Style {
      * numbers x satisfying 0 ≤ x ≤ 1 is an interval which contains 0 and 1,
      * as well as all numbers between them.
      *
-     * To put it simple, this means a range between the Lower Bound and the Upper Bound
+     * To put it simple, this means a range between the Lower Bound and
+     * the Upper Bound
+     *
+     * @return array
+     *  Pagination range
      *
      * @see https://en.wikipedia.org/wiki/Interval_(mathematics)
      */
-    public function getInterval() {
+    public function getInterval() : array {
 
         if( $this -> lowerBound === NULL || $this -> upperBound === NULL ) {
 
@@ -237,7 +259,9 @@ class Sliding implements Configurable, Style {
      * @return integer
      *  Number of elements within the Interval
      */
-    public function count() {
-        return ( $this -> count !== NULL ? $this -> count : count( $this -> getInterval() ) );
+    public function count() : int {
+
+        return ( $this -> count !== NULL ?
+                    $this -> count : count( $this -> getInterval() ) );
     }
 }

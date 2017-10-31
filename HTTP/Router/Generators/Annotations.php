@@ -10,17 +10,71 @@
  */
 namespace Next\HTTP\Router\Generators;
 
-use Next\Tools\Routes\Generators\GeneratorsException;    # Routes Generator Exception Class
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\LengthException;
+
+use Next\Components\Object;                    # Object Class
+use Next\Application\Chain as Applications;    # Application Chain Class
 
 /**
- * Routes Generator Tool: Annotations Generator
+ * The Annotations Generator puts together all Route informations found in
+ * Page Controllers' doc-blocks and offers, additionally, the time taken to
+ * parse all of them
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Exception\Exceptions\LengthException
+ *             Next\Components\Object
+ *             Next\Application\Chain
+ *             Next\HTTP\Router\Generators\Generator
  */
-class Annotations extends AbstractGenerator {
+class Annotations extends Object implements Generator {
+
+    /**
+     * Applications Chain
+     *
+     * @var \Next\Application\Chain $applications
+     */
+    protected $applications;
+
+    /**
+     * Routes Results
+     *
+     * @var array $results
+     */
+    protected $results = [];
+
+    /**
+     * Time Elapsed
+     *
+     * @var float $startTime
+     */
+    protected $startTime;
+
+    /**
+     * Routes Generator Constructor
+     *
+     * @param \Next\Application\Chain $applications
+     *  Applications Chain to iterate through
+     *
+     * @see \Next\Components\Parameter
+     */
+    public function __construct( Applications $applications ) {
+
+        // Start Time (for final message)
+
+        $this -> startTime = microtime( TRUE );
+
+        // Applications' Chain
+
+        $this -> applications = $applications;
+
+        parent::__construct();
+    }
+
+    // Generator Interface Methods Implementation
 
     /**
      * Find Routes from Controllers Methods DocBlocks
@@ -31,8 +85,12 @@ class Annotations extends AbstractGenerator {
      *
      * @return array
      *  Parsed data ready to be written
+     *
+     * @throws \Next\Exception\Exceptions\LengthException
+     *  Thrown if no Routing Data has been found in one of the
+     *  Action Methods
      */
-    public function find() {
+    public function find() : array {
 
         $results = [];
 
@@ -54,7 +112,16 @@ class Annotations extends AbstractGenerator {
                 foreach( $annotations as $method => $data ) {
 
                     if( count( $data['routes'] ) == 0 ) {
-                        throw GeneratorsException::noRoutes( [ $classname, $method ] );
+
+                        throw new LengthException(
+
+                            sprintf(
+
+                                'No Routes found for Action Method <em>%s</em> of Controller class <em>%s</em>',
+
+                                $method, $classname
+                            )
+                        );
                     }
 
                     // Parsing Routes...
@@ -72,6 +139,16 @@ class Annotations extends AbstractGenerator {
         }
 
         return $results;
+    }
+
+    /**
+     * Get elapsed time
+     *
+     * @return float
+     *  Elapsed time since the object of the chosen Generator was created
+     */
+    public function getElapsedTime() : float {
+        return ( microtime( TRUE ) - $this -> startTime );
     }
 
     // Auxiliary methods
@@ -113,14 +190,14 @@ class Annotations extends AbstractGenerator {
      * @return array
      *  Routes Data-source now sorted, from the longest to the shortest
      */
-    private function sort( array $routes ) {
+    private function sort( array $routes ) : array {
 
         uasort(
 
             $routes,
 
-            function( $a, $b ) {
-                return ( strlen( $a['route'] ) > strlen( $b['route'] ) ? -1 : 1 );
+            function( $a, $b ) : int {
+                return ( mb_strlen( $a['route'] ) <=> mb_strlen( $b['route'] ) );
             }
         );
 

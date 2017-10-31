@@ -10,20 +10,22 @@
  */
 namespace Next\HTTP\Headers\Entity;
 
-use Next\HTTP\Headers\Field;    # Header Field Abstract Class
+use Next\Validation\Validator as Validators;    # Validators Interface
+use Next\HTTP\Headers\Field;                    # Header Field Abstract Class
 
 /**
- * Entity 'Content-Language' Header Field Validator Class
+ * Entity Header Field Validation Class: 'Content-Language'
  */
 use Next\Validation\HTTP\Headers\Entity\ContentLanguage as Validator;
 
 /**
- * 'Content-Language' Header Field Class
+ * Entity Header Field: 'Content-Language'
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\Validator
+ *             Next\HTTP\Headers\Field
+ *             Next\Validation\HTTP\Headers\ContentLanguage
  */
 class ContentLanguage extends Field {
 
@@ -39,13 +41,13 @@ class ContentLanguage extends Field {
      *
      * @return string Validated Data
      */
-    protected function postCheck( $data ) {
+    protected function postCheck( $data ) : string {
 
         return preg_replace_callback(
 
-        '@^(.*?)(-.*?)?(;q=.*?)?$@',
+            '@^(.*?)(-.*?)?(;q=.*?)?$@',
 
-            function( array $matches ) {
+            function( array $matches ) : string {
 
                 // Language Abbreviations must be lowercase
 
@@ -75,7 +77,7 @@ class ContentLanguage extends Field {
      * @return \Next\Validation\Validator
      *  Associated Validator
      */
-    protected function getValidator( $value ) {
+    protected function getValidator( $value ) : Validators {
         return new Validator( [ 'value' => $value ] );
     }
 
@@ -85,7 +87,7 @@ class ContentLanguage extends Field {
      * @return array
      *  Header Field Validation Options
      */
-    public function setOptions() {
+    public function setOptions() : array {
         return [ 'name' => 'Accept-Language', 'acceptMultiples' => TRUE ];
     }
 }

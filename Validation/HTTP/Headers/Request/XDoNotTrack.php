@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Request Header Field Validator Class: X-Do-Not-Track | Validate\Headers\Request\XDoNotTrack.php
+ * HTTP Request Header Field Validator Class: X-Do-Not-Track | Validation\Headers\Request\XDoNotTrack.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,16 @@ use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
 use Next\Components\Object;                 # Object Class
 
 /**
- * X-Do-Not-Track Header Validation Class
+ * The 'X-Do-Not-Track' Header Validator checks if input string is valid for
+ * a X-Do-Not-Track string
  *
- * @author        Bruno Augusto
+ * Even though this is not an official as per the RFC, it's widely
+ * accepted and used as one
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Validation
+ *
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class XDoNotTrack extends Object implements Header {
 
@@ -58,7 +62,7 @@ class XDoNotTrack extends Object implements Header {
      * @link
      *  http://en.wikipedia.org/wiki/X-Do-Not-Track
      */
-    public function validate() {
+    public function validate() : bool {
         return ( (int) $this -> options -> value == 1 || (int) $this -> options -> value == 0 );
     }
 }

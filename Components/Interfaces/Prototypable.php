@@ -11,8 +11,9 @@
 namespace  Next\Components\Interfaces;
 
 /**
- * Prototypable Objects allows resources to be prototyped to their
- * future instances, Prototypes in JavaScript
+ * Prototypable Objects prototypes new functionalities to a Prototypical Object,
+ * effectively allowing them to be used later — considering the vertically
+ * crescent Request Flow, of course
  *
  * @package    Next\Components\Interfaces
  */

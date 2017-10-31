@@ -15,6 +15,10 @@ namespace Next\FileSystem\Prototypes\ClassMapper;
  * to find all classes and interfaces to build the classmap
  *
  * @package    Next\FileSystem
+ *
+ * @uses       FilterIterator
+ *             RecursiveIteratorIterator
+ *             SplFileInfo
  */
 class ClassMapper extends \FilterIterator {
 
@@ -51,7 +55,7 @@ class ClassMapper extends \FilterIterator {
      * @return boolean
      *  TRUE if the current element is acceptable, otherwise FALSE
      */
-    public function accept() {
+    public function accept() : bool {
 
         $file = $this -> getInnerIterator() -> current();
 

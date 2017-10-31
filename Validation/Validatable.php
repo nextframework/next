@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Validatable Interface | Validate\Validatable.php
+ * Validatable Interface | Validation\Validatable.php
  *
  * @author       Bruno Augusto
  *
@@ -11,12 +11,12 @@
 namespace Next\Validation;
 
 /**
- * Validatable Interface
+ * Validatable Objects can be validated against a set of rules
  *
- * @author        Bruno Augusto
+ * The Validatable Interface has the same purpose of the Validator Interface,
+ * they only differ in lexical purposes
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Validation
  */
 interface Validatable {
 

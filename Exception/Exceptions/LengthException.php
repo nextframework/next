@@ -13,8 +13,8 @@ namespace Next\Exception\Exceptions;
 require_once __DIR__ . '/LogicException.php';
 
 /**
- * The LengthException defines an Exception Type for when
- * when a data length is invalid
+ * The LengthException defines an Exception Type for when a data length
+ * is not invalid
  *
  * As for Next Framework, at least for now, we extend this definition
  * to a context instead of taking into account the literal meaning of
@@ -22,7 +22,7 @@ require_once __DIR__ . '/LogicException.php';
  *
  * For example: Our Entity Manager needs data to insert/delete
  * records, but if the provided data-source doesn't have any, it has
- * then an invalid length for the context of populated data-source
+ * then an invalid length for the context of a populated data-source
  *
  * @package    Next\Exception
  *

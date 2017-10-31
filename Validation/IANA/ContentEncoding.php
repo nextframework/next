@@ -1,7 +1,7 @@
 <?php
 
 /**
- * IANA Content-Encoding Validator Class | Validate\IANA\ContentEncoding.php
+ * IANA Content-Encoding Validator Class | Validation\IANA\ContentEncoding.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,13 @@ use Next\Validation\Validator;    # Validator Interface
 use Next\Components\Object;       # Object Class
 
 /**
- * IANA Content Encoding Validation Class
+ * The IANA Content-Encoding Validator checks if given Content-Encoding is valid
+ * towards IANA's list of Content-Encoding
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\Validator
+ *             Next\Components\Object
  */
 class ContentEncoding extends Object implements Validator {
 
@@ -50,7 +51,7 @@ class ContentEncoding extends Object implements Validator {
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      */
-    public function validate() {
+    public function validate() : bool {
 
         $test = preg_match(
             sprintf( '/^%s$/i', self::ENCODING ), $this -> options -> value

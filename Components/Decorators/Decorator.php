@@ -11,20 +11,19 @@
 namespace Next\Components\Decorators;
 
 /**
- * Defines the Decorator Type, with all methods that must
- * be present in an Decorator
+ * An Interface for all Resource Decorators
  *
  * @package    Next\Components\Decorators
  */
 interface Decorator {
 
     /**
-     *  Decorate Resource
+     * Decorate Resource
      */
     public function decorate();
 
     /**
-     *  Get decorated resource
+     * Get decorated resource
      */
     public function getResource();
 }

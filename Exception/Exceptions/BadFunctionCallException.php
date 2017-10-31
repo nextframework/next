@@ -22,8 +22,8 @@ require_once __DIR__ . '/LogicException.php';
  * Exception Classes but that's not too generic to be considered a
  * RuntimeException nor a LogicException
  *
- * For example, when a native Exception is thrown and we need to
- * re-thrown it as one of ours
+ * For example, when a native Exception is thrown in a function call context
+ * and we need to re-thrown it as one of ours
  *
  * @package    Next\Exception
  *

@@ -11,8 +11,8 @@
 namespace Next\Components;
 
 /**
- * Defines a Collection of resources perpetuated over the Request Flow
- * through one single instance provided by the Singleton Pattern
+ * A Collection of resources perpetuated over the Request Flow through one
+ * single instance provided by the Singleton Pattern
  *
  * @package    Next\Components
  */
@@ -48,7 +48,7 @@ class Registry {
      * @return \Next\Components\Registry
      *  Registry Instance
      */
-    public static function getInstance() {
+    public static function getInstance() : Registry {
 
         if( NULL === self::$_instance ) {
 
@@ -70,7 +70,7 @@ class Registry {
      * @return \Next\Components\Registry
      *  Registry Object (Fluent Interface)
      */
-    public function set( $key, $value ) {
+    public function set( $key, $value ) : Registry {
 
         $key = trim( $key );
 

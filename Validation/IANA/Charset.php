@@ -1,7 +1,7 @@
 <?php
 
 /**
- * IANA Charset Validator Class | Validate\IANA\Charset.php
+ * IANA Charset Validator Class | Validation\IANA\Charset.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,13 @@ use Next\Validation\Validator;    # Validator Interface
 use Next\Components\Object;       # Object Class
 
 /**
- * IANA Charset Validation Class
+ * The IANA Charset Validator checks if given Charset is valid towards the
+ * IANA's list of Character Sets
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\Validator
+ *             Next\Components\Object
  */
 class Charset extends Object implements Validator {
 
@@ -767,7 +768,7 @@ class Charset extends Object implements Validator {
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      */
-    public function validate() {
+    public function validate() : bool {
 
         return in_array(
 

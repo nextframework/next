@@ -14,7 +14,12 @@ namespace Next\Components\Utils;
  * Collection of Array utility routines not present in original
  * language or improved and/or expanded versions of them
  *
- * @package Next\Components\Utils
+ * @package    Next\Components\Utils
+ *
+ * @uses       RecursiveArrayIterator
+ *             RecursiveIteratorIterator
+ *             ReflectionObject
+ *             stdClass
  */
 class ArrayUtils {
 
@@ -35,14 +40,12 @@ class ArrayUtils {
      * @param array|optional $b
      *  Second Array
      */
-    public static function equalize( array &$a = [], array &$b = [] ) {
+    public static function equalize( array &$a = [], array &$b = [] ) : void {
 
         $l1 = count( $a );
         $l2 = count( $b );
 
-        if( $l1 == $l2 ) {
-            return;
-        }
+        if( $l1 == $l2 ) return;
 
         if( $l1 > $l2 ) {
 
@@ -187,7 +190,7 @@ class ArrayUtils {
      * @see http://www.phpbuilder.com/board/showpost.php?p=10886411&postcount=6
      *  Original source authored by "bpat1434"
      */
-    public static function union( array $a, array $b ) {
+    public static function union( array $a, array $b ) : array {
 
         foreach( $b as $index => $value ) {
 
@@ -221,7 +224,7 @@ class ArrayUtils {
      * @param array $b
      *  Array where new data will be inserted
      */
-    public static function insert( array $a, array &$b ) {
+    public static function insert( array $a, array &$b ) : void {
 
         foreach( $a as $offset => $value ) {
 
@@ -261,44 +264,31 @@ class ArrayUtils {
      *  Input array, now cleaned
      */
     public static function clean( array $array, $allowZeros = TRUE, $recursive = FALSE,
-                                  $destruct = FALSE, $reindex = FALSE ) {
+                                  $destruct = FALSE, $reindex = FALSE ) : array {
 
         foreach( $array as $index => $value ) {
 
             if( (array) $array[ $index ] === $array[ $index ] && $recursive ) {
+                $array[ $index ] = self::clean( $array[ $index ], $allowZeros, $recursive, $destruct, $reindex );
+            }
 
-                $array[ $index ] = self::clean( $array[ $index ], $recursive, $destruct, $reindex );
-
-            } else {
-
-                if( $allowZeros ) {
-
-                    if( empty( $value ) && $value != '0' ) {
-
-                        unset( $array[ $index ] );
-                    }
-
-                } else {
-
-                    if( empty( $value ) ) {
-
-                        unset( $array[ $index ] );
-                    }
-                }
+            if( empty( $value ) && ( ! $allowZeros || ( $allowZeros !== FALSE && $value != '0' ) ) ) {
+                unset( $array[ $index ] );
             }
         }
 
-        // Should we reindex?
-
-        if( $reindex ) {
-            $array = array_values( $array );
-        }
-
-        // Should we destroy empty dimensions?
+        // Destructing empty dimensions
 
         if( $destruct ) {
-            $array = array_filter( $array );
+
+            $array = array_filter( $array, function( $value ) use( $allowZeros ) : bool {
+               return ( ! ( empty( $value ) && ( ! $allowZeros || ( $allowZeros !== FALSE && $value != '0' ) ) ) );
+            });
         }
+
+        // Reindexing
+
+        if( $reindex ) $array = array_values( $array );
 
         return $array;
     }
@@ -328,7 +318,7 @@ class ArrayUtils {
      * @see http://stackoverflow.com/a/3423692/753531
      *  Original source authored by "Codler"
      */
-    public static function transpose( array $array ) {
+    public static function transpose( array $array ) : array {
 
         array_unshift( $array, NULL );
 
@@ -348,7 +338,7 @@ class ArrayUtils {
      * @param boolean|optional $allowZeros
      *  Define whether or not zeros will be allowed in filtered array. If FALSE,
      *  array_filter() with its default behavior will be used. Otherwise, we'll use
-     *  strlen() as callback.
+     *  mb_strlen() as callback.
      *
      * Defaults to TRUE, zeros are allowed.
      *
@@ -357,10 +347,9 @@ class ArrayUtils {
      *
      * @see http://php.net/manual/en/function.array-filter.php#111091
      */
-    public static function filter( array $array, $allowZeros = TRUE ) {
+    public static function filter( array $array, $allowZeros = TRUE ) : array {
 
-        if( $allowZeros === FALSE ) return array_filter( $array );
-
-        return array_filter( $array, 'strlen' );
+        return ( ( $allowZeros !== FALSE ) ?
+                      array_filter( $array, 'mb_strlen' ) : array_filter( $array ) );
     }
 }

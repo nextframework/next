@@ -11,17 +11,14 @@
 namespace Next\HTTP\Router\Generators;
 
 /**
- * Routes Generator Interface
+ * An Interface for all Routes Generators
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2016 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\HTTP
  */
 interface Generator {
 
     /**
-     * Find Routes from Controllers' Methods DocBlocks
+     * Find Routes from Page Controllers' Action Methods DocBlocks
      */
     public function find();
 

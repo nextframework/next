@@ -1,7 +1,7 @@
 <?php
 
 /**
- * IANA MIME-Type Validator Class | Validate\IANA\MIME.php
+ * IANA MIME-Type Validator Class | Validation\IANA\MIME.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,13 @@ use Next\Validation\Validator;    # Validator Interface
 use Next\Components\Object;       # Object Class
 
 /**
- * IANA MIME Type Validation Class
+ * The IANA MIME-Type Validator checks if given MIME-Type is valid towards the
+ * IANA's list of Media Types
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\Validator
+ *             Next\Components\Object
  */
 class MIME extends Object implements Validator {
 
@@ -659,7 +660,7 @@ class MIME extends Object implements Validator {
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      */
-    public function validate() {
+    public function validate() : bool {
 
         // Input string must have a slash
 

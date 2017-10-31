@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Validator Chain Class | Validate\Chain.php
+ * Validator Chain Class | Validation\Chain.php
  *
  * @author       Bruno Augusto
  *
@@ -15,20 +15,23 @@ namespace Next\Validation;
  */
 use Next\Exception\Exceptions\InvalidArgumentException;
 
-use Next\Components\Interfaces\Informational;          # Informational Interface
+use Next\Components\Interfaces\Informational;    # Informational Interface
 
-use Next\Components\Object;                            # Object Class
-use Next\Components\Collections\AbstractCollection;    # Abstract Collection Class
+use Next\Components\Object;                      # Object Class
+use Next\Components\Collections\Collection;      # Abstract Collection Class
 
 /**
- * Validator Chain
+ * A Collection for Validator Objects to be applied sequentially
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2014 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Components\Interfaces\Informational
+ *             Next\Components\Object
+ *             Next\Components\Collections\Collection
+ *             Next\Validation\Validator
  */
-class Chain extends AbstractCollection implements Validator {
+class Chain extends Collection implements Validator {
 
     /**
      * Executes all Validators added to the Chain
@@ -38,7 +41,7 @@ class Chain extends AbstractCollection implements Validator {
      *  value is valid by all Validators on it and
      *  \Next\Validation\Validator Object otherwise
      */
-    public function validate() {
+    public function validate() : bool {
 
         if( count( $this ) == 0 ) return TRUE;
 
@@ -62,8 +65,8 @@ class Chain extends AbstractCollection implements Validator {
      * Check Object acceptance
      *
      * Check if given Validator is acceptable in Validator Chain
-     * To be valid, the Validator must implement both \Next\Validation\Validator
-     * and \Next\Components\Interfaces\Informational interfaces
+     * To be valid, the Validator must implement both Next\Validation\Validator
+     * and Next\Components\Interfaces\Informational interfaces
      *
      * @param \Next\Components\Object $object
      *  An Object object
@@ -76,11 +79,11 @@ class Chain extends AbstractCollection implements Validator {
      * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Given Validator is not acceptable in the Validator Chain
      */
-    public function accept( Object $object ) {
+    public function accept( Object $object ) : bool {
 
         if( ! $object instanceof Validator || ! $object instanceof Informational ) {
 
-            return new InvalidArgumentException(
+            throw new InvalidArgumentException(
 
                 sprintf(
 

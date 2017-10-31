@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Request Header Field Validator Class: Cookie | Validate\Headers\Request\Cookie.php
+ * HTTP Request Header Field Validator Class: Cookie | Validation\Headers\Request\Cookie.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,16 @@ use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
 use Next\Components\Object;                 # Object Class
 
 /**
- * Cookie Header Validation Validation Class
+ * The 'Cookie' Header Validator checks if input string is valid for
+ * a Cookie string
  *
- * @author        Bruno Augusto
+ * Even though this is not an official as per the RFC, it's widely
+ * accepted and used as one
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Validation
+ *
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class Cookie extends Object implements Header {
 
@@ -52,7 +56,7 @@ class Cookie extends Object implements Header {
      *
      * @link http://en.wikipedia.org/wiki/HTTP_Cookie
      */
-    public function validate() {
+    public function validate() : bool {
 
         $match = preg_match(
 

@@ -15,7 +15,9 @@ namespace Next\Controller;
  */
 use Next\Exception\Exception;
 use Next\Exception\Exceptions\BadMethodCallException;
-use Next\View\ViewException;
+use Next\Exception\Exceptions\InvalidArgumentException;
+use Next\Exception\Exceptions\RuntimeException;
+use Next\Exception\Exceptions\AccessViolationException;
 
 use Next\Application\Application;       # Application Interface
 
@@ -26,19 +28,32 @@ use Next\HTTP\Response;                 # HTTP Response Class
 
 /**
  * The Controller Dispatcher reflects over Application Controllers,
- * configuring their associated `\Next\HTTP\Request` and returns their
- * associated `\Next\HTTP\Response`
+ * adding Route Arguments as GET Parameters to their associated Request Object
+ * and returning its Response Object with the the contents of the Action Method
+ * from the matching Page Controller
  *
- * Here is also where the Error Standardization Concept takes place,
- * virtually resending the Response by invoking the callback defined
- * within the `\Next\Controller\ControllerException` thrown
+ * Here is also where the Error Standardization Concept takes place, virtually
+ * resending the Response by invoking the callback defined within the
+ * ControllerException thrown
  *
- * This handles even nested Exceptions but it's not bullet proof
- * against infinity recursion created by the developer, redirecting
- * the Response Flow too many times to the point soon or later the
- * start point is reached again
+ * This handles even nested Exceptions, but it's not bullet proof against
+ * infinity recursion created by the developer, redirecting the Response Flow
+ * too many times to the point soon or later the start point is reached again
  *
  * @package    Next\Controller
+ *
+ * @uses       Next\Exception\Exception
+ *             Next\Exception\Exceptions\BadMethodCallException
+ *             Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Exception\Exceptions\RuntimeException
+ *             Next\Exception\Exceptions\AccessViolationException
+ *             Next\Application\Application
+ *             Next\Components\Object
+ *             Next\Exception\ExceptionHandler
+ *             Next\Components\Parameter
+ *             Next\HTTP\Response
+ *             ReflectionMethod
+ *             ReflectionException
  */
 class Dispatcher extends Object {
 
@@ -72,7 +87,7 @@ class Dispatcher extends Object {
      * @throws \Next\Exception\Exceptions\BadMethodCallException
      *  ReflectionException was caught
      */
-    public function dispatch( Application $application, Parameter $data ) {
+    public function dispatch( Application $application, Parameter $data ) :? Response {
 
         $response = $application -> getResponse();
 
@@ -105,7 +120,9 @@ class Dispatcher extends Object {
                     The following error has been returned: %s',
 
                     $data -> controller, $data -> method, $e -> getMessage()
-                )
+                ),
+
+                BadMethodCallException::PHP_ERROR
             );
 
         } catch( ControllerException $e ) {
@@ -154,22 +171,29 @@ class Dispatcher extends Object {
 
             try {
 
-                return $this -> handleExceptionCallback( $application, $e );
+                $this -> handleExceptionCallback( $application, $e );
 
-            } catch( ViewException $e ) {
+            } catch( InvalidArgumentException | RuntimeException | AccessViolationException | Exception $e ) {
 
+                /**
+                 * @internal
+                 *
+                 * These are all Exceptions thrown by Next\View\ViewException,
+                 * but if everything else fails, the base Exception is also
+                 * there as fallback
+                 */
                 ExceptionHandler::production( $e );
             }
 
-        } catch( ViewException $e ) {
+        } catch( InvalidArgumentException | RuntimeException | AccessViolationException | Exception $e ) {
 
             /**
              * @internal
              *
-             * Catching ViewException grants a nice view for any sort of
-             * errors triggered by \Next\View\View concrete classes, specially
-             * when they come from Magic Methods which is directly related
-             * to Template Variables usage.
+             * Catching any of the possible Exceptions thrown by ViewException
+             * grants a nice view for any sort of errors triggered by View Engine
+             * concrete classes, specially when they come from Magic Methods
+             * which is directly related to Template Variables usage.
              *
              * And by forcing a Development Handler we warn lazy programmers
              * they are doing the wrong thing, like trying to hide the error ^_^
@@ -196,7 +220,7 @@ class Dispatcher extends Object {
      * @return \Next\Controller\Dispatcher
      *  Dispatcher Instance (Fluent Interface)
      */
-    public function setDispatched( $flag ) {
+    public function setDispatched( $flag ) : Dispatcher {
 
         $this -> isDispatched = (bool) $flag;
 
@@ -209,7 +233,7 @@ class Dispatcher extends Object {
      * @return boolean
      *  TRUE if a Controller was already Dispatched and FALSE otherwise
      */
-    public function isDispatched() {
+    public function isDispatched() : bool {
         return $this -> isDispatched;
     }
 
@@ -222,7 +246,7 @@ class Dispatcher extends Object {
      * @return \Next\Controller\Dispatcher
      *  Dispatcher Instance (Fluent Interface)
      */
-    public function returnResponse( $flag ) {
+    public function returnResponse( $flag ) : Dispatcher {
 
         $this -> shouldReturn = (bool) $flag;
 
@@ -235,7 +259,7 @@ class Dispatcher extends Object {
      * @return boolean
      *  Dispatching returning flag value
      */
-    public function shouldReturn() {
+    public function shouldReturn() : bool {
         return $this -> shouldReturn;
     }
 
@@ -249,6 +273,9 @@ class Dispatcher extends Object {
      *
      * @param \Next\Exception\Exception $e
      *  Exception thrown
+     *
+     * @return mixed
+     *  Returns what the the associated callback returns
      */
     private function handleExceptionCallback( Application $application, Exception $e ) {
 
@@ -300,7 +327,7 @@ class Dispatcher extends Object {
                         );
                     }
 
-                    call_user_func_array( $callback[ 0 ], array_slice( $callback, 1 ) );
+                    return call_user_func_array( $callback[ 0 ], array_slice( $callback, 1 ) );
 
                 break;
             }
@@ -311,7 +338,7 @@ class Dispatcher extends Object {
              * @internal
              *
              * If a ControllerException is caught here we handle any
-             * nested `\Next\Controller\ControllerException` existing
+             * nested Next\Controller\ControllerException` existing
              * within the process
              *
              * This allows, for example, an Standardized Error that
@@ -327,14 +354,15 @@ class Dispatcher extends Object {
              */
             return $this -> handleExceptionCallback( $application, $e );
 
-        } catch( ViewException $e ) {
+        } catch( InvalidArgumentException | RuntimeException | AccessViolationException | Exception $e ) {
 
             /**
              * @internal
              *
-             * Same rules for when a ViewException is triggered during
-             * the dispatching process, except here a ViewException
-             * is thrown while handling any ControllerException thrown
+             * Same rules for when any of the Exceptions thrown by
+             * Next\View\ViewException is risen during the dispatching process,
+             * except here a ViewException is thrown while handling any
+             * ControllerException thrown
              */
             if( ob_get_length() ) {
 

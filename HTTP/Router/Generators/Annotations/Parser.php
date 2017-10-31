@@ -10,16 +10,24 @@
  */
 namespace Next\HTTP\Router\Generators\Annotations;
 
-use Next\Tools\Routes\Generators\GeneratorsException;    # Routes Generators Exception Class
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
 
-use Next\Components\Object;                              # Object Class
-use Next\Components\Utils\ArrayUtils;                    # Array Utils Class
+use Next\Components\Object;              # Object Class
+use Next\Components\Utils\ArrayUtils;    # Array Utils Class
 
 /**
- * Defines the Routes Parser, listing, checking and preparing
- * structure for the Routes Generator process
+ * The Routes Generator Parser lists, checks and prepares the final
+ * data-structure with all Application Controllers' and Page Controllers'
+ * Action Methods Annotations for the Routes Generator to process
  *
  * @package    Next\HTTP
+ *
+ * @uses       Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Components\Object
+ *             Next\Components\Utils\ArrayUtils
  */
 class Parser extends Object {
 
@@ -40,7 +48,7 @@ class Parser extends Object {
     /**
      * Parsed Data
      *
-     * @staticvar array $results
+     * @var array $results
      */
     private $results;
 
@@ -66,13 +74,10 @@ class Parser extends Object {
      *
      * @param string|optional $basepath
      *  Routes' Basepath, appended to every route
-     *
-     * @param mixed|\Next\Components\Object|\Next\Components\Parameter|stdClass|array|optional $options
-     *  Optional Configuration Options for Annotations Parser
      */
-    public function __construct( array $routes, array $args, $controller, $method, $domain = '', $basepath = '', $options = NULL ) {
+    public function __construct( array $routes, array $args, $controller, $method, $domain = '', $basepath = '' ) {
 
-        parent::__construct( $options );
+        parent::__construct();
 
         $this -> parseRoutes( $routes, $args, $controller, $method, $domain, $basepath );
     }
@@ -82,9 +87,10 @@ class Parser extends Object {
     /**
      * Get parsed results
      *
-     * @return array Routes Data
+     * @return array
+     *  Routes Data, after parsing
      */
-    public function getResults() {
+    public function getResults() :? array {
         return $this -> results;
     }
 
@@ -111,18 +117,27 @@ class Parser extends Object {
      * @param string $basepath
      *  Routes' Basepath, appended to every route
      *
-     * @throws \Next\HTTP\Router\Generators\GeneratorsException
-     *  Route has less than 2 Components (a Request Method and a Route)
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     * Thrown if an Action Method has an malformed Route Definition,
+     *  with has less than 2 Components — a Request Method and a URI
      *
-     * @throws \Next\HTTP\Router\Generators\GeneratorsException
-     *  Routes defined as single slash (usually for homepages) DO have
-     *  arguments (hierarchy concept)
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if an Action Method with a Route defined as a single
+     *  slash (i.e for a homepage) DO have Route Arguments which is
+     *  forbidden as for a hierarchy concept
      *
-     * @throws \Next\HTTP\Router\Generators\GeneratorsException
-     *  There is another Route with exactly the same definition, including
-     *  the Request Method
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if there's another Route with exactly the same
+     *  definition, including the Request Method
+     *
+     *  Note: that this checking is Controller-aware, which means that
+     *  Duplicated Routes across different Controller won't be warned.
+     *  In these cases, both Routes will be recorded but only the one
+     *  defined earlier will be used as it will be the first match
+     *  when the chosen `Next\HTTP\Router\Router` is finding a
+     *  matching Route
      */
-    private function parseRoutes( $routes, array $args, $controller, $method, $domain, $basepath ) {
+    private function parseRoutes( $routes, array $args, $controller, $method, $domain, $basepath ) : void {
 
         foreach( $routes as $route ) {
 
@@ -132,8 +147,20 @@ class Parser extends Object {
 
             if( count( $components ) < 2 ) {
 
-                throw GeneratorsException::invalidRouteStructure(
-                    [ $route, basename( $controller ), $method ]
+                throw new InvalidArgumentException(
+
+                    sprintf(
+
+                        'Route <em>%s</em> defined in Action Method
+                        <em>%s</em> of Controller class <em>%s</em>
+                        has a invalid Route Structure
+
+                        All Routes\' Definitions must be composed of at
+                        least two components: a <strong>Request Method</strong>
+                        and a <strong>URI</strong>',
+
+                        $route, $method, basename( $controller )
+                    )
                 );
             }
 
@@ -155,9 +182,17 @@ class Parser extends Object {
 
                 // Let's ensure single slash Routes have no params
 
-                throw GeneratorsException::malformedRoute(
+                throw new InvalidArgumentException(
 
-                    [ $URI, basename( $controller ), $method ]
+                    sprintf(
+
+                        'Action Method <em>%s</em> of Controller class
+                        <em>%s</em> has been defined as a single slash
+                        and, therefore, cannot have any Routing Arguments
+                        in order to follow a hierarchy logic',
+
+                        $method, basename( $controller )
+                    )
                 );
             }
 
@@ -222,9 +257,15 @@ class Parser extends Object {
 
                     // Yeah! We have a Duplicate
 
-                    throw GeneratorsException::duplicatedRoute(
+                    throw new InvalidArgumentException(
 
-                        [ $requestMethod, $URI, basename( $controller ), $method ]
+                        sprintf(
+
+                            'Route <em>%s</em> has already been defined
+                            for Request Method <em>%s</em>',
+
+                            $URI, $requestMethod
+                        )
                     );
                 }
             }
@@ -256,13 +297,13 @@ class Parser extends Object {
      * @return array
      *  Filtered list in according to given Token
      */
-    private function parseParams( $params, $token ) {
+    private function parseParams( $params, $token ) : array {
 
         return array_filter(
 
             $params,
 
-            function( $param ) use( $token ) {
+            function( $param ) use( $token ) : bool {
                 return ( $param['type'] == $token );
             }
         );

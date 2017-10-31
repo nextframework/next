@@ -20,12 +20,16 @@ use Next\HTTP\Response;            # HTTP Response
 use Next\Exception\Handlers\Controllers\ErrorHandlerController;
 
 /**
- * Registers Error and Exception handlers to deal with runtime errors
- * or uncaught Exceptions producing a nicer view
+ * Registers a Shutdown Function to deal with usually uncatchable runtime errors
+ * resending them as Exceptions for nicer — and a bit more complete — view
  *
  * @package    Next\Exception
  *
- * @uses       Next\Exception\Handler
+ * @uses       Next\Controller\Controller
+ *             Next\HTTP\Request
+ *             Next\HTTP\Response
+ *             Next\Exception\Handlers\Controllers\ErrorHandlerController
+ *             Next\Exception\Handler
  */
 class ErrorHandler implements Handler {
 
@@ -37,29 +41,9 @@ class ErrorHandler implements Handler {
     public static function register() {
 
         /**
-         * @internal
-         *
-         * Starting with PHP 7 all Errors and Exceptions are thrown
-         * through the new universal class \Error and because it's a
-         * class its capture is done directly through set_exception_handler()
-         * making this handler just a legacy for older versions
-         */
-        if( version_compare( PHP_VERSION, '7', '>=' ) ) return;
-
-        /**
-         * @internal
-         *
-         * Converting an intercepted error into an Exception,
-         * similarly to what PHP 7 Error Class
-         */
-        set_error_handler( function( $severity, $message, $file, $line ) {
-            throw new Exception( $message, Exception::PHP_ERROR, 500, NULL, $file, $line, $severity );
-        });
-
-        /**
          * Catching Fatal Errors and such
          */
-        register_shutdown_function( function() {
+        register_shutdown_function( function() : void {
 
             if( ( $error = error_get_last() ) ) {
 

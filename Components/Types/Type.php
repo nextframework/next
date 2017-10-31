@@ -13,10 +13,10 @@ namespace Next\Components\Types;
 use Next\Components\Interfaces\Prototypable;    # Prototypable Resource Class
 
 /**
- * Defines the Data-type Type, with all methods that must be present
- * in an Data-type, be it through \Next\Components\Types\AbstractTypes
- * or the concrete implementations of it
+ * An Interface for all custom Data-types
  *
  * @package    Next\Components\Types
+ *
+ * @uses       Next\Components\Interfaces\Prototypable
  */
 interface Type extends Prototypable {}

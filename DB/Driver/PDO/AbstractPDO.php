@@ -15,19 +15,25 @@ namespace Next\DB\Driver\PDO;
  */
 use Next\Exception\Exceptions\RuntimeException;
 
-use Next\Components\Interfaces\Verifiable;      # Verifiable Interface
+use Next\Validation\Verifiable;                 # Verifiable Interface
 use Next\Components\Interfaces\Configurable;    # Configurable Interface
 use Next\DB\Driver\Driver;                      # Driver Interface
-
+use Next\DB\Statement\PDO\Adapter;              # PDO Statement Adapter Class
 use Next\Components\Object;                     # Object Class
 
 /**
- * PDO Driver Abstract Adapter Class
+ * Base structure for all PDO Adapter Connectors
  *
- * @author        Bruno Augusto
+ * @package    Next\DB
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Exception\Exceptions\RuntimeException;
+ *             Next\Validation\Verifiable
+ *             Next\Components\Interfaces\Configurable
+ *             Next\DB\Driver\Driver
+ *             Next\DB\Statement\PDO\Adapter
+ *             Next\Components\Object
+ *             PDO
+ *             PDOException
  */
 abstract class AbstractPDO extends Object implements Verifiable, Driver {
 
@@ -59,7 +65,7 @@ abstract class AbstractPDO extends Object implements Verifiable, Driver {
      * @throws \Next\Exception\Exceptions\RuntimeException
      *  Thrown with \PDOException's message if one is caught
      */
-    public function connect() {
+    public function connect() : \PDO {
 
         try {
 
@@ -95,7 +101,7 @@ abstract class AbstractPDO extends Object implements Verifiable, Driver {
                 [
                   'Next\DB\Statement\PDO\Statement',
 
-                  [ new \Next\DB\Statement\PDO\Adapter( [ 'driver' => $this ] ) ]
+                  [ new Adapter( [ 'driver' => $this ] ) ]
                 ]
             );
 
@@ -114,7 +120,7 @@ abstract class AbstractPDO extends Object implements Verifiable, Driver {
     /**
      * Disestablishes a Database Connection
      */
-    public function disconnect() {
+    public function disconnect() : void {
 
         /**
          * @internal
@@ -131,7 +137,7 @@ abstract class AbstractPDO extends Object implements Verifiable, Driver {
      * @return boolean
      *  TRUE if we have a valid connection and FALSE otherwise
      */
-    public function isConnected() {
+    public function isConnected() : bool {
         return ( $this -> connection instanceof \PDO );
     }
 
@@ -141,7 +147,7 @@ abstract class AbstractPDO extends Object implements Verifiable, Driver {
      * @return mixed
      *  Database Connection Link
      */
-    public function getConnection() {
+    public function getConnection() : \PDO {
 
         // Connecting if needed
 
@@ -168,7 +174,7 @@ abstract class AbstractPDO extends Object implements Verifiable, Driver {
      *
      * @see \Next\DB\Statement\Statement
      */
-    public function query( $statement ) {
+    public function query( $statement ) :? \PDOStatement {
 
         try {
 
@@ -193,7 +199,7 @@ abstract class AbstractPDO extends Object implements Verifiable, Driver {
      *
      * @see \Next\DB\Statement\Statement
      */
-    public function prepare( $statement ) {
+    public function prepare( $statement ) :?\PDOStatement {
 
         try {
 
@@ -213,13 +219,13 @@ abstract class AbstractPDO extends Object implements Verifiable, Driver {
      *  According to PHP Manual it's used, for example, by PDO_PGSQL
      *  as sequence object identifier
      *
-     * @return integer|string
+     * @return string
      *  ID of last inserted record
      *
      * @throws \Next\Exception\Exceptions\RuntimeException
      *  Thrown with \PDOException's message if one is caught
      */
-    public function lastInsertId( $name = NULL ) {
+    public function lastInsertId( $name = NULL ) : string {
 
         try {
 
@@ -239,7 +245,7 @@ abstract class AbstractPDO extends Object implements Verifiable, Driver {
      * @throws \Next\Exception\Exceptions\RuntimeException
      *  Thrown if PDO Extension has not been loaded
      */
-    public function verify() {
+    public function verify() : void {
 
         if( ! extension_loaded( 'pdo' ) ) {
             throw new RuntimeException( 'PDO Extension not loaded' );
@@ -251,5 +257,5 @@ abstract class AbstractPDO extends Object implements Verifiable, Driver {
     /**
      * Get Connection Adapter DSN
      */
-    abstract protected function getDSN();
+    abstract protected function getDSN() : string;
 }

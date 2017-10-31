@@ -10,13 +10,14 @@
  */
 namespace Next\View;
 
+use Next\HTTP\Response;    # HTTP Response Class
+
 /**
- * View Interface
+ * An Interface for all View Engines
  *
- * @author        Bruno Augusto
+ * @package    Next\View
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\HTTP\Response
  */
 interface View {
 
@@ -87,36 +88,49 @@ interface View {
      *
      * If, for some reason, it's already empty, simply create them.
      */
-    public function resetDefaults();
+    public function resetDefaults() : View;
 
     // View Helper-related Methods
 
     /**
      * Register a new Template View Helper
      *
-     * @param \Next\View\Helper\Helper|string $helper
-     *  Template View Helper
+     * @param string $name
+     *  Template View Helper name, through which it'll be accessed
+     *  within Template Views
+     *
+     * @param Next\View\Helpers\Helper|string|callable $resource
+     *  Resource being registered as a View Helper.
+     *  It can be a Fully Qualified Classname of an Object implementing
+     *  *Next\View\Helper\Helper*
+     *  Or it can be any other callable resource as well, like arrays, anonymous
+     *  function, an internal function...
      */
-    public function registerHelper( $helper );
+    public function registerHelper( $name, $classname ) : View;
+
+    /**
+     * Get all registered View Helpers
+     */
+    public function getHelpers() : array;
 
     // Views File-related Methods
 
     /**
      * Get default File Extension
      */
-    public function getExtension();
+    public function getExtension() :? string;
 
     // Views Path-related Methods
 
     /**
      * Get current Basepath
      */
-    public function getBasepath();
+    public function getBasepath() :? string;
 
     /**
      * Get current Subpath
      */
-    public function getSubpath();
+    public function getSubpath() :? string;
 
     /**
      * Add more paths to Template Files Location
@@ -124,24 +138,24 @@ interface View {
      * @param string $path
      *  Another Path to locate Template Views
      */
-    public function addPath( $path );
+    public function addPath( $path ) : View;
 
     /**
      * Get current paths
      */
-    public function getPaths();
+    public function getPaths() : array;
 
     /**
      * Get FileSpec definition
      */
-    public function getFileSpec() ;
+    public function getFileSpec() :? string;
 
     // Template Variables-related Methods
 
     /**
-     * Get Variable Behavior
+     * Should Variables be returned or echoed
      */
-    public function getVariablesBehavior();
+    public function shouldReturnVariables() : bool;
 
     /**
      * Assign one or more Template Variables
@@ -156,12 +170,12 @@ interface View {
      *       is not an array
      *   </p>
      */
-    public function assign( $tplVar, $value = NULL );
+    public function assign( $tplVar, $value = NULL ) : View;
 
     /**
      * Get all assigned Template Variables
      */
-    public function getVars();
+    public function getVars() : array;
 
     /**
      * Get an specific Template Variable assigned
@@ -176,7 +190,7 @@ interface View {
     /**
      * Get Default Template
      */
-    public function getDefaultTemplate();
+    public function getDefaultTemplate() :? string;
 
 
     // Page Render
@@ -191,17 +205,17 @@ interface View {
      *  Flag to condition whether or not we should try to find the
      *  proper Template View File automatically
      */
-    public function render( $name = NULL, $search = TRUE );
+    public function render( $name = NULL, $search = TRUE ) : Response;
 
     // Accessors
 
     /**
      * Disable Rendering Process
      */
-    public function disableRender();
+    public function disableRender() : View;
 
     /**
      * (Re-)Enables Rendering process
      */
-    public function enableRender();
+    public function enableRender() : View;
 }

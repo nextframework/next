@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Filesize Validator Class | Validate\File\Size.php
+ * Filesize Validator Class | Validation\File\Size.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,13 @@ use Next\Validation\Validator;    # Validator Interface
 use Next\Components\Object;       # Object Class
 
 /**
- * File Size Validation Class
+ * The File Size Validator checks if given File Size is accepted
+ * towards maximum size for a File
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses      Next\Validation\Validator
+ *            Next\Components\Object
  */
 class Size extends Object implements Validator {
 
@@ -48,7 +49,7 @@ class Size extends Object implements Validator {
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      */
-    public function validate() {
+    public function validate() : bool {
         return ( (int) $this -> options -> value < $this -> options -> maxFileSize );
     }
 }

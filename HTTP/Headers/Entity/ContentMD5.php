@@ -10,20 +10,22 @@
  */
 namespace Next\HTTP\Headers\Entity;
 
-use Next\HTTP\Headers\Field;    # Header Field Abstract Class
+use Next\Validation\Validator as Validators;    # Validators Interface
+use Next\HTTP\Headers\Field;                    # Header Field Abstract Class
 
 /**
- * Entity 'Content-MD5' Header Field Validator Class
+ * Entity Header Field Validation Class: 'Content-MD5'
  */
 use Next\Validation\HTTP\Headers\Entity\ContentMD5 as Validator;
 
 /**
- * 'Content-MD5' Header Field Class
+ * Entity Header Field: 'Content-MD5'
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\Validator
+ *             Next\HTTP\Headers\Field
+ *             Next\Validation\HTTP\Headers\ContentMD5
  */
 class ContentMD5 extends Field {
 
@@ -38,7 +40,7 @@ class ContentMD5 extends Field {
      * @return \Next\Validation\Validator
      *  Associated Validator
      */
-    protected function getValidator( $value ) {
+    protected function getValidator( $value ) : Validators {
         return new Validator( [ 'value' => $value ] );
     }
 
@@ -48,7 +50,7 @@ class ContentMD5 extends Field {
      * @return array
      *  Header Field Validation Options
      */
-    public function setOptions() {
+    public function setOptions() : array {
         return [ 'name' => 'Content-MD5' ];
     }
 }

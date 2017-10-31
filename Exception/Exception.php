@@ -10,18 +10,20 @@
  */
 namespace Next\Exception;
 
-require_once __DIR__ . '/../Components/Interfaces/Verifiable.php';
+require_once __DIR__ . '/../Validation/Verifiable.php';
 
-use Next\Components\Interfaces\Verifiable;    # Verifiable Interface Class
-use Next\Validation\HTTP\Headers\Code;        # HTTP Status Code Validator Class
+use Next\Validation\Verifiable;           # Verifiable Interface Class
+use Next\Validation\HTTP\Headers\Code;    # HTTP Status Code Validator Class
 
 /**
  * Defines a variation of native Exception Class with native support
- * for messages with placeholders and, in the future, translation
+ * for HTTP Response Codes and, in the future, translation
  *
  * @package    Next\Exception
  *
- * @uses       \Exception
+ * @uses       Next\Components\InterfacesVerifiable
+ *             Next\Validation\HTTP\Headers\Code
+ *             \Exception
  */
 class Exception extends \Exception implements Verifiable {
 
@@ -32,14 +34,14 @@ class Exception extends \Exception implements Verifiable {
      *
      * @var integer
      */
-    const UNKNOWN                      = 0x00000000;
+    const UNKNOWN                      = 0;
 
     /**
      * PHP-Error
      *
      * @var integer
      */
-    const PHP_ERROR                    = 0x00000001;
+    const PHP_ERROR                    = 1;
 
     /**
      * Placeholders Replacements
@@ -117,10 +119,10 @@ class Exception extends \Exception implements Verifiable {
     /**
      * Gets the exception severity
      *
-     * @return integer
-     *  Returns the severity level of the Exception
+     * @return integer|void
+     *  Returns the severity level of the Exception, if any
      */
-    public function getSeverity() {
+    public function getSeverity() :? int {
         return $this -> severity;
     }
 
@@ -130,7 +132,7 @@ class Exception extends \Exception implements Verifiable {
      * @return integer
      *  HTTP Response Code, if any, associated to Exception thrown
      */
-    public function getResponseCode() {
+    public function getResponseCode() :? int {
         return $this -> responseCode;
     }
 
@@ -140,7 +142,7 @@ class Exception extends \Exception implements Verifiable {
      * @return callable|void
      *  Exception Callback, if provided
      */
-    public function getCallback() {
+    public function getCallback() :? callable {
         return $this -> callback;
     }
 
@@ -156,25 +158,42 @@ class Exception extends \Exception implements Verifiable {
      * - HTTP Response Code
      *
      * But the only component required is the Exception Message and
-     * Exception Code can be virtually anything we'll check if the
-     * HTTP Response Code provided is valid
+     * since the Exception Code can be virtually anything, we'll only
+     * check if the HTTP Response Code provided is valid
      *
      * We'll always provide a default code, of course, but when manually
-     * defined  let's make sure it's valid in order to not send an
+     * defined, let's make sure it's valid in order to not send an
      * invalid Response Header.
      *
-     * Even being possible to throw Exceptions inside the Exception Class, we avoid this
-     * practice in order to protect against a infinite loop.
+     * Also, even being possible to throw Exceptions inside the
+     * Exception Class, we avoid this practice in order to protect
+     * against a infinite loop.
      *
-     * We could trigger an error, but the most appropriate Error Level to be used
-     * (E_ERROR) cannot be used
+     * We could trigger an error, but the most appropriate Error Level
+     * to be used (E_ERROR) cannot be used
      *
      * And since E_USER_ERROR can be, accidentally or not, hidden with a
      * very low error_reporting() definition, we'll avoid it too.
      *
-     * So, using die(), it's not very elegant, but no one can complain ^^
+     * So, using die(), it's not elegant, but no one can complain ^^
      */
-    public function verify() {
+    public function verify() : void {
+
+        /**
+         * @internal
+         *
+         * We're ignoring the HTTP Status Code validation if the class doesn't
+         * exist in order to avoid errors when an Exception is thrown within
+         * the Loader module
+         *
+         * Technically, the right way to do this would be manually require,
+         * for example, the Object Class in Next/Validation/HTTP/Headers/Code.php
+         * but the Object Class has its own dependencies which have more
+         * dependencies so, no, thank you
+         *
+         * The HTTP Status Code isn't too important in that moment anyway...
+         */
+        if( ! class_exists( 'Next\Validation\HTTP\Headers\Code' ) ) return;
 
         $validator = new Code( [ 'value' => $this -> responseCode ] );
 
@@ -193,7 +212,7 @@ class Exception extends \Exception implements Verifiable {
      * @return string
      *  Exception Message
      */
-    public function __toString() {
+    public function __toString() : string {
         return $this -> getMessage();
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Validator Interface | Validate\Validator.php
+ * Validator Interface | Validation\Validator.php
  *
  * @author       Bruno Augusto
  *
@@ -11,12 +11,13 @@
 namespace Next\Validation;
 
 /**
- * Validator Interface
- * A type Interface for lexical purposes
+ * Validator Objects validate input data
  *
- * @author        Bruno Augusto
+ * The Validator Interface has the same purpose of the Validatable Interface,
+ * they only differ in lexical purposes
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Validation
+ *
+ * @uses       Next\Validation\Validatable
  */
 interface Validator extends Validatable {}

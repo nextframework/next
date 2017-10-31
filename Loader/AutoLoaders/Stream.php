@@ -17,10 +17,9 @@ use Next\Loader\AutoLoaders\AutoLoader;      # AutoLoader Interface
 /**
  * Stream AutoLoader
  *
- * @author        Bruno Augusto
+ * @package    Next\Loader
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Loader\AutoLoaders\AutoLoader
  */
 class Stream implements AutoLoader {
 
@@ -32,9 +31,9 @@ class Stream implements AutoLoader {
      * @return Closure
      *  An anonymous function to be invoked as SPL Autoloader callback
      */
-    public function call() {
+    public function call() : callable {
 
-        return function( $classname ) {
+        return function( $classname ) : bool {
 
             $resolvedClassname = stream_resolve_include_path(
                 strtr( $classname, [ '\\' => DIRECTORY_SEPARATOR ] ) . '.php'
@@ -46,6 +45,8 @@ class Stream implements AutoLoader {
 
                 return TRUE;
             }
+
+            return FALSE;
         };
     }
 }

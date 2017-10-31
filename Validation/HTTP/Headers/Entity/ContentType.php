@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Entity Header Field Validator Class: Content-Type | Validate\Headers\Entity\ContentType.php
+ * HTTP Entity Header Field Validator Class: Content-Type | Validation\Headers\Entity\ContentType.php
  *
  * @author       Bruno Augusto
  *
@@ -15,12 +15,14 @@ use Next\Components\Object;                 # Object Class
 use Next\Validation\IANA\MIME as IANA;      # IANA MIME-Type Validation Class
 
 /**
- * Content-Type Header Validation Class
+ * The 'Content-Type' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.17
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
+ *             Next\Validation\IANA\MIME
  */
 class ContentType extends Object implements Header {
 
@@ -49,7 +51,7 @@ class ContentType extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17
      *  RFC 2616 Section 14.17
      */
-    public function validate() {
+    public function validate() : bool {
 
         /**
          * @internal

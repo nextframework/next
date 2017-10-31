@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Request Header Field Validator Class: Referer | Validate\Headers\Request\Referer.php
+ * HTTP Request Header Field Validator Class: Referer | Validation\Headers\Request\Referer.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,13 @@ use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
 use Next\Components\Object;                 # Object Class
 
 /**
- * Referer Header Validation Class
+ * The 'Referer' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.36
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class Referer extends Object implements Header {
 
@@ -48,7 +49,7 @@ class Referer extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.36
      *  RFC 2616 Section 14.36
      */
-    public function validate() {
+    public function validate() : bool {
 
         preg_match(
 

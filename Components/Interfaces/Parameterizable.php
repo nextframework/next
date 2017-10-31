@@ -11,9 +11,9 @@
 namespace Next\Components\Interfaces;
 
 /**
- * Parameterizable Objects make use of \Next\Components\Parameter
- * to provide a way to customize classes functionality with
- * Default, Common and Use Options
+ * Parameterizable Objects make use of Next\Components\Parameter`
+ * to provide a way of customize classes' functionality with Default, Common
+ * and Instance Options
  *
  * @package    Next\Components\Interfaces
  */

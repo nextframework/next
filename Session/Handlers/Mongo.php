@@ -13,12 +13,15 @@ namespace Next\Session\Handlers;
 use Next\Components\Object;    # Object Class
 
 /**
- * Mongo Handler for Session Storage Class
+ * A Session Handler based on Mongo DB
  *
- * @author        Bruno Augusto
+ * @package    Next\Session
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Components\Object
+ *             Next\Session\Handlers\Handler
+ *             Mongo
+ *             MongoBinData
+ *             MongoDate
  */
 class Mongo extends Object implements Handler {
 
@@ -35,14 +38,14 @@ class Mongo extends Object implements Handler {
     /**
      * Mongo Object
      *
-     * @var Mongo$mongo
+     * @var \Mongo $mongo
      */
     private $mongo;
 
     /**
      * Session Data Storage
      *
-     * @var MongoCollection $collection
+     * @var \MongoCollection $collection
      */
     private $collection;
 
@@ -60,7 +63,7 @@ class Mongo extends Object implements Handler {
      * @return boolean
      *  Always TRUE, otherwise the Handler won't work properly
      */
-    public function open( $savePath, $name ) {
+    public function open( $savePath, $name ) : bool {
 
         $this -> mongo = new \Mongo( $savePath );
 
@@ -78,7 +81,7 @@ class Mongo extends Object implements Handler {
      * @return boolean
      *  TRUE on success and FALSE on failure
      */
-    public function close() {
+    public function close() : bool {
 
         $this -> collection = NULL;
 
@@ -98,7 +101,7 @@ class Mongo extends Object implements Handler {
      *
      * Otherwise, NULL will
      */
-    public function read( $id ) {
+    public function read( $id ) :? string {
 
         $data = $this -> collection -> findOne(
             [ '_id' => $id ], [ 'serialized' ]
@@ -126,35 +129,34 @@ class Mongo extends Object implements Handler {
      * @return boolean
      *  TRUE on success and FALSE on failure
      */
-    public function write( $id, $data, $expires ) {
+    public function write( $id, $data, $expires ) : bool {
 
-        if( ! empty( $_SESSION ) ) {
+        if( empty( $_SESSION ) ) return FALSE;
 
-            $this -> collection -> save(
+        $this -> collection -> save(
 
-                [
-                    '_id' => $id,
+            [
+                '_id' => $id,
 
-                    'data' => eval(
+                'data' => eval(
 
-                        sprintf(
+                    sprintf(
 
-                            'return %s;',
+                        'return %s;',
 
-                            preg_replace( [ '/\w+::__set_state\(/', '/\)\)/' ],
+                        preg_replace( [ '/\w+::__set_state\(/', '/\)\)/' ],
 
-                            [ NULL , ')' ], var_export( $_SESSION , TRUE ) )
-                        )
-                    ),
+                        [ NULL , ')' ], var_export( $_SESSION , TRUE ) )
+                    )
+                ),
 
-                    'serialized' => new \MongoBinData(
-                        gzcompress( $data )
-                    ),
+                'serialized' => new \MongoBinData(
+                    gzcompress( $data )
+                ),
 
-                    'expires' => new \MongoDate( time() + $expires )
-                ]
-            );
-        }
+                'expires' => new \MongoDate( time() + $expires )
+            ]
+        );
 
         return TRUE;
     }
@@ -168,7 +170,7 @@ class Mongo extends Object implements Handler {
      * @return boolean
      *  TRUE on success and FALSE on failure
      */
-    public function destroy( $id ) {
+    public function destroy( $id ) : bool {
         return $this -> collection -> remove( [ '_id' => $id ] );
     }
 
@@ -183,7 +185,7 @@ class Mongo extends Object implements Handler {
      * @return boolean
      *  TRUE on success and FALSE on failure
      */
-    public function renew( $maxlifetime ) {
+    public function renew( $maxlifetime ) : bool {
 
         $expireTime = time() - $maxlifetime;
 

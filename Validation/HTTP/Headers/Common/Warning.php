@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Common Header Field Validator Class: Warning | Validate\Headers\Common\Warning.php
+ * HTTP Common Header Field Validator Class: Warning | Validation\Headers\Common\Warning.php
  *
  * @author       Bruno Augusto
  *
@@ -10,16 +10,19 @@
  */
 namespace Next\Validation\HTTP\Headers\Common;
 
-use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
-use Next\Components\Object;                 # Object Class
+use Next\Validation\HTTP\Headers\Header;         # HTTP Headers Validator Interface
+use Next\Components\Object;                      # Object Class
+use Next\Validation\HTTP\Headers\Common\Date;    # HTTP Headers Date Validator Class
 
 /**
- * Warning Header Validation Class
+ * The 'Warning' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.46
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
+ *             Next\Validation\HTTP\Headers\Common\Date
  */
 class Warning extends Object implements Header {
 
@@ -79,7 +82,7 @@ class Warning extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.46
      *  RFC 2616 Section 14.46
      */
-    public function validate() {
+    public function validate() : bool {
 
         $data = $this -> options -> value;
 
@@ -108,16 +111,18 @@ class Warning extends Object implements Header {
 
             if( isset( $match['date'] ) ) {
 
-                if( gmdate( 'D, d M Y H:i:s T', strtotime( $data ) ) == $match[ 4 ] ) {
+                $validator = new Date( [ 'value' => $match[ 4 ] ] );
 
-                    // Valid, incuding the HTTP-date
-
-                    return TRUE;
-                }
-
-                // HTTP-date is invalid, but since it is optional, we can ignore it
-
-                return TRUE;
+                /**
+                 * @internal
+                 *
+                 * Even though the 'date' directive is optional, since we're
+                 * testing its presence in Header value means we do have one
+                 * and therefore we have to validate it
+                 *
+                 * And by validating there is indeed a chance of this to fail
+                 */
+                return ( $validator -> validate() );
             }
 
             // Valid, without the HTTP-date

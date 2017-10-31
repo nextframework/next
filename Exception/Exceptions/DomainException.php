@@ -14,11 +14,10 @@ require_once __DIR__ . '/LogicException.php';
 
 /**
  * The DomainException defines an Exception Type for when
- * a value is invalid within predefined set of data
+ * a value is invalid within predefined set of data. E.g:
  *
- * For example, when a values doesn't belong to a predefined dataset.
- * E.g: 'Foo' is not a valid abbreviation of a Month accordingly to
- * the International System of Units
+ * 'Foo' is not a valid abbreviation of a Month accordingly to the
+ * International System of Units
  *
  * @package    Next\Exception
  *

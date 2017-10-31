@@ -10,13 +10,17 @@
  */
 namespace Next\Components\Types;
 
-use Next\Components\Interfaces\Verifiable;      # Verifiable Interface
-use Next\Components\Object;                     # Object Class
+use Next\Validation\Verifiable;    # Verifiable Interface
+use Next\Components\Object;        # Object Class
 
 /**
- * Defines the base structure for a Data-type
+ * Base structure for a Data-type
  *
  * @package    Next\Components\Types
+ *
+ * @uses       Next\Validation\Verifiable
+ *             Next\Components\Object
+ *             Next\Components\Types\Type
  */
 abstract class AbstractTypes extends Object implements Verifiable, Type {
 
@@ -40,7 +44,7 @@ abstract class AbstractTypes extends Object implements Verifiable, Type {
      * Additional Initialization.
      * Sets the data-type value and prototypes resource to it
      */
-    public function init() {
+    protected function init() : void {
 
         $value = ( $this -> options -> value instanceof Type ?
                     $this -> options -> value -> get() : $this -> options -> value );
@@ -67,7 +71,7 @@ abstract class AbstractTypes extends Object implements Verifiable, Type {
     // Overloading
 
     /**
-     * Return the \Next\Components\Types\Type value, regardless
+     * Return the Next\Components\Types\Type value, regardless
      * the desired property name
      *
      * This allows the Object value to be read without invoking the

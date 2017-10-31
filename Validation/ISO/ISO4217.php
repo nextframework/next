@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ISO-4217 Validator Class | Validate\ISO\ISO4217.php
+ * ISO-4217 Validator Class | Validation\ISO\ISO4217.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,13 @@ use Next\Validation\Validator;    # Validator Interface
 use Next\Components\Object;       # Object Class
 
 /**
- * ISO-4217 Validation Class
+ * The ISO-4217 Validator checks if input string is a valid Country Currency
+ * in accordance to the standards of ISO-4217
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\Validator
+ *             Next\Components\Object
  */
 class ISO4217 extends Object implements Validator {
 
@@ -62,23 +63,11 @@ class ISO4217 extends Object implements Validator {
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      */
-    public function validate() {
+    public function validate() : bool {
 
         $value = $this -> options -> value;
 
-        if( ! is_string( $value ) ) {
-
-            $this -> _error = vsprintf(
-
-                'Validator <strong>%s</strong> expects a string, %s given',
-
-                [
-                  $this -> getClass() -> getNamespaceName(), gettype( $value )
-                ]
-            );
-
-            return FALSE;
-        }
+        if( ! is_string( $value ) ) return FALSE;
 
         /**
          * @internal
@@ -101,6 +90,6 @@ class ISO4217 extends Object implements Validator {
          */
         $this -> _info = $value;
 
-        return ( strlen( $value ) == 3 && in_array( $value, self::CURRENCIES ) );
+        return ( mb_strlen( $value ) == 3 && in_array( $value, self::CURRENCIES ) );
     }
 }

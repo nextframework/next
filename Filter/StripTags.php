@@ -10,17 +10,24 @@
  */
 namespace Next\Filter;
 
+/**
+ * Exception Class(es)
+ */
+use Next\Exception\Exceptions\InvalidArgumentException;
+
 use Next\Components\Object;      # Object Class
 use Next\Components\Invoker;     # Invoker Class
 use Next\Components\Mimicker;    # Mimicker Class
 
 /**
  * Strips out (X)HTML tags of input string.
+ *
  * Original implementation by "Sherif" (https://stackoverflow.com/a/39469240/5613506)
  *
  * @package    Next\Filter
  *
- * @uses       Next\Components\Object,
+ * @uses       Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Components\Object,
  *             Next\Filter\Filterable
  *             Next\Components\Invoker
  *             Next\Components\Mimicker
@@ -97,10 +104,19 @@ class StripTags extends Object implements Filterable {
      * extends this class' context to the DOMDocument instance created,
      * bridging them
      */
-    public function init() {
+    protected function init() : void {
 
-        $this -> DOM = new \DOMDocument( $this -> options -> version, $this -> options -> encoding );
-        $this -> DOM -> loadHTML( $this -> options -> data, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD );
+        $this -> DOM = new \DOMDocument(
+            $this -> options -> version,
+            $this -> options -> encoding
+        );
+
+        $this -> DOM -> loadHTML(
+
+            $this -> options -> data,
+
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+        );
 
         $this -> extend(
 
@@ -119,9 +135,19 @@ class StripTags extends Object implements Filterable {
      * Filters input data
      *
      * @return string
-     *  Input data sanitized
+     *  Input data with (X)HTML Tags and/or attributes stripped.
+     *
+     * @see \Next\Filter\Blacklist
+     *  Detailed explanation on why the Exception is thrown
+     *
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if Parameter Option 'data' has no value (see above)
      */
-    public function filter() {
+    public function filter() : string {
+
+        if( $this -> options -> data === NULL ) {
+            throw new InvalidArgumentException( 'Nothing to filter' );
+        }
 
         $this -> stripTags( $this -> DOM );
 
@@ -137,15 +163,13 @@ class StripTags extends Object implements Filterable {
      *  DOMNode node to strip out (X)HTML tags and attributes as well
      *  as enforce attributes
      */
-    protected function stripTags( \DOMNode $node ) {
+    protected function stripTags( \DOMNode $node ) : void {
 
         $change = $remove = [];
 
         foreach( $this -> walk( $node ) as $n ) {
 
-            if( $n instanceof \DOMText || $n instanceof \DOMDocument ) {
-                continue;
-            }
+            if( $n instanceof \DOMText || $n instanceof \DOMDocument ) continue;
 
             $this -> stripAttributes( $n );
 
@@ -180,7 +204,7 @@ class StripTags extends Object implements Filterable {
      * @param  \DOMNode $node
      *  DOMNode node to from which (X)HTML Attributes will be stripped
      */
-    protected function stripAttributes( \DOMNode $node ) {
+    protected function stripAttributes( \DOMNode $node ) : void {
 
         for( $i = $node -> attributes -> length - 1; $i >= 0; $i-- ) {
 
@@ -203,7 +227,7 @@ class StripTags extends Object implements Filterable {
      * @param  \DOMNode $node
      *  DOMNode node in which forced (X)HTML Attributes will be added
      */
-    protected function forceAttributes( \DOMNode $node ) {
+    protected function forceAttributes( \DOMNode $node ) : void {
 
         if( isset( $this -> options -> forcedAttributes -> {$node -> nodeName} ) ) {
 
@@ -219,7 +243,7 @@ class StripTags extends Object implements Filterable {
      * @param  \DOMNode $node
      *  DOMNode node to traverse
      */
-    protected function walk( \DOMNode $node ) {
+    protected function walk( \DOMNode $node ) : \Generator {
 
         if( $node -> hasChildNodes() ) {
 

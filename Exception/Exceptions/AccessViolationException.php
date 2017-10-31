@@ -14,7 +14,7 @@ require_once __DIR__ . '/RuntimeException.php';
 
 /**
  * The AccessViolationException defines an Exception Type for when
- * data of any sort is being accessed when the can't or shouldn't being
+ * data of any sort is being accessed when they can't or shouldn't be
  *
  * @package    Next\Exception
  *

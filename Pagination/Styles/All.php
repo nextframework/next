@@ -13,12 +13,13 @@ namespace Next\Pagination\Styles;
 use Next\Pagination\Paginator;    # Paginator Class
 
 /**
- * All Elements Pagination Style Class
+ * The 'All Elements' Pagination Style builds an Interval with all elements of
+ * Paginator's data-source
  *
- * @author        Bruno Augusto
+ * @package    Next\Pagination
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Pagination\Paginator;
+ *             Next\Pagination\Styles\Style
  */
 class All implements Style {
 
@@ -60,14 +61,14 @@ class All implements Style {
      * @return Next\Pagination\Styles\Style
      *  Pagination Style Object (Fluent Interface)
      */
-    public function setPaginator( Paginator $paginator ) {
+    public function setPaginator( Paginator $paginator ) : All {
 
         $this -> paginator = $paginator;
 
         return $this;
     }
 
-    // Boundable Interface Methods Implementation
+    // Boundable Interval Interface Methods Implementation
 
     /**
      * Get the Lower Bound of a Subset.
@@ -81,7 +82,7 @@ class All implements Style {
      * @return integer
      *  The Lowest Page Number visible
      */
-    public function getLowerBound() {
+    public function getLowerBound() : int {
         return $this -> lowerBound;
     }
 
@@ -97,7 +98,7 @@ class All implements Style {
      * @return integer
      *  The highest Page Number visible
      */
-    public function getUpperBound() {
+    public function getUpperBound() : int {
 
         $this -> upperBound = count( $this -> paginator );
 
@@ -115,9 +116,12 @@ class All implements Style {
      *
      * To put it simple, this means a range between the Lower Bound and the Upper Bound
      *
+     * @return array
+     *  Pagination range
+     *
      * @see https://en.wikipedia.org/wiki/Interval_(mathematics)
      */
-    public function getInterval() {
+    public function getInterval() : array {
 
         if( $this -> lowerBound === NULL || $this -> upperBound === NULL ) {
 
@@ -141,7 +145,7 @@ class All implements Style {
      * @return integer
      *  Number of elements within the Interval
      */
-    public function count() {
+    public function count() : int {
         return ( $this -> count !== NULL ? $this -> count : count( $this -> getInterval() ) );
     }
 }

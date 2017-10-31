@@ -16,36 +16,41 @@ namespace Next\Cache\Schemas;
 use Next\Exception\Exceptions\InvalidArgumentException;
 
 use Next\Components\Object;                            # Object Class
-use Next\Components\Collections\AbstractCollection;    # Abstract Collection Class
+use Next\Components\Collections\Collection;    # Abstract Collection Class
 
 /**
- * Defines a \Next\Components\Collections\AbstractCollection for Caching Schemas.
+ * A Collection for Caching Schemas
  *
  * @package    Next\Cache
+ *
+ * @uses       Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Components\Object
+ *             Next\Components\Collections\Collection
  */
-class Chain extends AbstractCollection {
+class Chain extends Collection {
 
     /**
      * Checks if given `Next\Components\Object` is acceptable in a
      * Caching Schemas' Chain
      *
-     * To be valid, the Object must implement `\Next\Cache\Schemas\Schema` Interface
+     * To be valid, the Object must implement Next\Cache\Schemas\Schema` Interface
      *
      * @param \Next\Components\Object $object
      *  An Object object
      *
      * @return boolean
-     *  TRUE if given Object is acceptable in Caching Schemas' Collection
-     *  and FALSE otherwise
+     *  TRUE if given Object is acceptable in Caching Schemas' Collection.
+     *  If not an Next\Exception\Exceptions\InvalidArgumentException
+     *  will be thrown instead
      *
      * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Given Object is not acceptable in a Caching Schemas' Chain
      */
-    public function accept( Object $object ) {
+    public function accept( Object $object ) : bool {
 
         if( ! $object instanceof Schema ) {
 
-            return new InvalidArgumentException(
+            throw new InvalidArgumentException(
 
                 sprintf(
 

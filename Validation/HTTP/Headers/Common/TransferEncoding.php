@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Common Header Field Validator Class: Transfer-Encoding | Validate\Headers\Common\TransferEncoding.php
+ * HTTP Common Header Field Validator Class: Transfer-Encoding | Validation\Headers\Common\TransferEncoding.php
  *
  * @author       Bruno Augusto
  *
@@ -15,12 +15,13 @@ use Next\Components\Object;                          # Object Class
 use Next\Validation\IANA\ContentEncoding as IANA;    # IANA Content-Encoding Validation Class
 
 /**
- * Tranfer-Encoding Header Validation Class
+ * The 'Transfer-Encoding' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.41
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class TransferEncoding extends Object implements Header {
 
@@ -49,7 +50,7 @@ class TransferEncoding extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.41
      *  RFC 2616 Section 14.41
      */
-    public function validate() {
+    public function validate() : bool {
 
         $test = preg_match(
 

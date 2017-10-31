@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Common Header Field Validator Class: Connection | Validate\Headers\Common\Connection.php
+ * HTTP Common Header Field Validator Class: Connection | Validation\Headers\Common\Connection.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,13 @@ use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
 use Next\Components\Object;                 # Object Class
 
 /**
- * Connection Header Validation Class
+ * The 'Connection' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.10
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class Connection extends Object implements Header {
 
@@ -51,7 +52,7 @@ class Connection extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.10
      *  RFC 2616 Section 14.10
      */
-    public function validate() {
+    public function validate() : bool {
         return in_array( $this -> options -> value, [ 'close', 'keep-alive' ] );
     }
 }

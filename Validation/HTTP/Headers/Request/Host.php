@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Request Header Field Validator Class: Host | Validate\Headers\Request\Host.php
+ * HTTP Request Header Field Validator Class: Host | Validation\Headers\Request\Host.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,13 @@ use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
 use Next\Components\Object;                 # Object Class
 
 /**
- * Host Header Validation Class
+ * The 'Host' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.23
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class Host extends Object implements Header {
 
@@ -48,7 +49,7 @@ class Host extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.23
      *  RFC 2616 Section 14.23
      */
-    public function validate() {
+    public function validate() : bool {
         return ( preg_match( sprintf( '/%s/', Header::ABSOLUTE_URI ), $this -> options -> value ) != 0 );
     }
 }

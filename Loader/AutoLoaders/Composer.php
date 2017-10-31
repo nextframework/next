@@ -24,12 +24,14 @@ require_once __DIR__ . '/AutoLoader.php';    # AutoLoader Interface
 use Next\Loader\AutoLoaders\AutoLoader;      # AutoLoader Interface
 
 /**
- * Stream AutoLoader
+ * The Composer AutoLoader maps the dynamically generated Composer AutoLoader
+ * to make it compatible to Next Framework
  *
- * @author        Bruno Augusto
+ * @package    Next\Loader
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Exception\Exceptions\RuntimeException
+ *             Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Loader\AutoLoaders\AutoLoader
  */
 class Composer implements AutoLoader {
 
@@ -94,8 +96,8 @@ class Composer implements AutoLoader {
 
             throw new RuntimeException(
 
-                'Unable to find an auto-generated
-                Composer AutoLoader Class in the file provided'
+                'Unable to find an auto-generated Composer AutoLoader Class
+                in the file provided'
             );
         }
 
@@ -111,12 +113,12 @@ class Composer implements AutoLoader {
     /**
      * AutoLoading Function
      *
-     * @return Closure
+     * @return callable
      *  An anonymous function to be invoked as SPL Autoloader callback
      */
-    public function call() {
+    public function call() : callable {
 
-        return function( $classname ) {
+        return function( $classname ) :? bool {
 
             $loader = call_user_func( [ $this -> autoLoaderClass, 'getLoader' ] );
 

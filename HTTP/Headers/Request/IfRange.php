@@ -10,20 +10,22 @@
  */
 namespace Next\HTTP\Headers\Request;
 
-use Next\HTTP\Headers\Field;    # Header Field Abstract Class
+use Next\Validation\Validator as Validators;    # Validators Interface
+use Next\HTTP\Headers\Field;                    # Header Field Abstract Class
 
 /**
- * Request 'If-Range' Header Field Validator Class
+ * Request Header Field Validation Class: 'If-Range'
  */
 use Next\Validation\HTTP\Headers\Request\IfRange as Validator;
 
 /**
- * Request 'If-Range' Header Field Class
+ * Request Header Field: 'If-Range'
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\Validator
+ *             Next\HTTP\Headers\Field
+ *             Next\Validation\HTTP\Headers\IfRange
  */
 class IfRange extends Field {
 
@@ -38,7 +40,7 @@ class IfRange extends Field {
      * @return \Next\Validation\Validator
      *  Associated Validator
      */
-    protected function getValidator( $value ) {
+    protected function getValidator( $value ) : Validators {
         return new Validator( [ 'value' => $value ] );
     }
 
@@ -48,7 +50,7 @@ class IfRange extends Field {
      * @return array
      *  Header Field Validation Options
      */
-    public function setOptions() {
+    public function setOptions() : array {
         return [ 'name' => 'If-Range', 'preserveWhitespace' => TRUE ];
     }
 }

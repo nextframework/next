@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Application Abstract Class | Application/AbstractApplication.php
+ * Application Chain Class | Application/Chain.php
  *
  * @author       Bruno Augusto
  *
@@ -16,36 +16,41 @@ namespace Next\Application;
 use Next\Exception\Exceptions\InvalidArgumentException;
 
 use Next\Components\Object;                            # Object Class
-use Next\Components\Collections\AbstractCollection;    # Abstract Collection Class
+use Next\Components\Collections\Collection;    # Abstract Collection Class
 
 /**
- * Defines a \Next\Components\Collections\AbstractCollection for Applications
+ * A Collection for Application Objects
  *
  * @package    Next\Application
+ *
+ * @uses       Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Components\Object
+ *             Next\Components\Collections\Collection
  */
-class Chain extends AbstractCollection {
+class Chain extends Collection {
 
     /**
      * Checks if given `Next\Components\Object` is acceptable in a
      * Applications' Chain
      *
-     * To be valid, the Object must implement `\Next\Application\Application` Interface
+     * To be valid, the Object must implement Next\Application\Application` Interface
      *
      * @param \Next\Components\Object $object
      *  An Object object
      *
      * @return boolean
-     *  TRUE if given Object is acceptable in Applications' Collection
-     *  and FALSE otherwise
+     *  TRUE if given Object is acceptable in Applications' Collection.
+     *  If not an Next\Exception\Exceptions\InvalidArgumentException
+     *  will be thrown instead
      *
      * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Given Object is not acceptable in a Applications' Chain
      */
-    protected function accept( Object $object ) {
+    protected function accept( Object $object ) : bool {
 
         if( ! $object instanceof Application ) {
 
-            return new InvalidArgumentException(
+            throw new InvalidArgumentException(
 
                 sprintf(
 

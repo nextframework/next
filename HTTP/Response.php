@@ -32,12 +32,23 @@ use Next\HTTP\Headers\Generic;              # Generic Data Header Class
 use Next\Validation\HTTP\Headers\Header;    # Generic Data Header Class
 
 /**
- * Response Class
+ * The Response Class
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Exception\Exceptions\Exception
+ *             Next\Exception\Exceptions\FatalException
+ *             Next\Exception\Exceptions\RuntimeException
+ *             Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\HTTP\Headers\Field
+ *             Next\Components\Object
+ *             Next\Components\Invoker
+ *             Next\Components\Utils\ArrayUtils
+ *             Next\HTTP\Headers\Response\Location
+ *             Next\HTTP\Headers\Raw
+ *             Next\HTTP\Headers\Generic
+ *             Next\HTTP\Headers\Manager
+ *             Next\Validation\HTTP\Headers\Header
  */
 class Response extends Object {
 
@@ -729,7 +740,7 @@ class Response extends Object {
      * Response's Context to it and sends all HTTP response Headers
      * already sent so far
      */
-    protected function init() {
+    protected function init() : void {
 
         // Headers Management Object
 
@@ -741,12 +752,11 @@ class Response extends Object {
 
         if( defined( 'TURBO_MODE' ) && TURBO_MODE === FALSE ) {
 
-            if( function_exists( 'apache_response_headers' ) ) {
+            if( ( $headers = apache_response_headers() ) ) {
 
                 try {
 
-                    $this -> headers
-                          -> addHeader( apache_response_headers() );
+                    $this -> headers -> addHeader( $headers );
 
                 } catch( InvalidArgumentException $e ) {
 
@@ -778,7 +788,7 @@ class Response extends Object {
      * @return \Next\HTTP\Response
      *  Response Object (Fluent Interface)
      */
-    public function appendBody( $content ) {
+    public function appendBody( $content ) : Response {
 
         $this -> body .= $content;
 
@@ -794,7 +804,7 @@ class Response extends Object {
      * @return \Next\HTTP\Response
      *  Response Object (Fluent Interface)
      */
-    public function prependBody( $content ) {
+    public function prependBody( $content ) : Response {
 
         $this -> body = $content . $this -> body;
 
@@ -806,7 +816,7 @@ class Response extends Object {
      *
      * @return \Next\HTTP\Response
      */
-    public function clearBody() {
+    public function clearBody() : Response {
 
         $this -> body = NULL;
 
@@ -818,7 +828,7 @@ class Response extends Object {
     /**
      * Send the Response
      */
-    public function send() {
+    public function send() :? Response {
 
         if( ! empty( $this -> body ) && $this -> shouldApplyMarkupAdjustments ) {
 
@@ -829,61 +839,29 @@ class Response extends Object {
             // Fixing XHTML end tag position
 
             $this -> body = preg_replace( '/\s*>/m', '>', $this -> body );
-
-            // Removing extra spaces after an element string and sending its closing tag to the next line
-
-            $this -> body = preg_replace_callback( '/^(\s+)(\w+)\s*<(.*?)>$/m',
-
-                function( $matches ) {
-
-                    $indentSize = ( strlen( $matches[1] ) - 4 );
-                    $indentSize = ( $indentSize < 0 ? 0 : $indentSize );
-
-                    /**
-                     * Inserting the reduced indentation level for the closing tag
-                     * in replacements array
-                     */
-                    ArrayUtils::insert(
-                        [ 3 => str_repeat( ' ', $indentSize ) ], $matches
-                    );
-
-                    return vsprintf( "%s%s\n%s<%s>", array_slice( $matches, 1, 4 ) );
-                },
-
-                $this -> body
-            );
         }
 
-        // Should we return the Response...
+        // Should we return the Response?
 
-        if( $this -> shouldReturn ) {
+        if( $this -> shouldReturn ) return $this;
 
-            return $this;
+        // Or flush it?
 
-        } else {
+        ob_start();
 
-            // ... or flush it?
-
-            ob_start();
-
-            // Sending Headers
-
-            if( ! $this -> disableSendingHeaders ) {
-                $this -> sendHeaders();
-            }
-
-            echo $this -> body;
-
-            // Should we end the Execution Flow?
-
-            if( $this -> shouldAbort ) {
-                exit;
-            }
-
-            // If we shouldn't, let's flush the buffer
-
-            if( ob_get_length() ) { ob_end_flush(); }
+        if( ! $this -> disableSendingHeaders ) {
+            $this -> sendHeaders();
         }
+
+        echo $this -> body;
+
+        // Should we abort the Execution Flow?
+
+        if( $this -> shouldAbort ) exit;
+
+        // Or flush the buffer?
+
+        if( ob_get_length() ) { ob_end_flush(); }
     }
 
     /**
@@ -894,7 +872,7 @@ class Response extends Object {
      *
      * @see Response::canSendHeaders()
      */
-    public function redirect( $destination ) {
+    public function redirect( $destination ) : void {
 
         self::canSendHeaders();
 
@@ -936,7 +914,7 @@ class Response extends Object {
      * @return boolean
      *  Response returning flag value
      */
-    public function shouldReturn() {
+    public function shouldReturn() : bool {
         return $this -> shouldReturn;
     }
 
@@ -949,7 +927,7 @@ class Response extends Object {
      * @return \Next\HTTP\Response
      *  Response Instance (Fluent Interface)
      */
-    public function returnResponse( $flag ) {
+    public function returnResponse( $flag ) : Response {
 
         $this -> shouldReturn = (bool) $flag;
 
@@ -962,7 +940,7 @@ class Response extends Object {
      * @return boolean
      *  Response Flow Abortion flag value
      */
-    public function shouldAbort() {
+    public function shouldAbort() : bool {
         return $this -> shouldAbort;
     }
 
@@ -975,7 +953,7 @@ class Response extends Object {
      * @return \Next\HTTP\Response
      *  Response Instance (Fluent Interface)
      */
-    public function abortFlow( $flag ) {
+    public function abortFlow( $flag ) : bool {
 
         $this -> shouldAbort = (bool) $flag;
 
@@ -988,7 +966,7 @@ class Response extends Object {
      * @return boolean
      *  Headers Sending flag value
      */
-    public function shouldSendHeaders() {
+    public function shouldSendHeaders() : bool {
         return $this -> disableSendingHeaders;
     }
 
@@ -1001,7 +979,7 @@ class Response extends Object {
      * @return \Next\HTTP\Response
      *  Response Instance (Fluent Interface)
      */
-    public function disableSendingHeaders( $flag ) {
+    public function disableSendingHeaders( $flag ) : Response {
 
         $this -> disableSendingHeaders = (bool) $flag;
 
@@ -1017,7 +995,7 @@ class Response extends Object {
      * @return \Next\HTTP\Response
      *  Response Instance (Fluent Interface)
      */
-    public function applyMarkupAdjustments( $flag ) {
+    public function applyMarkupAdjustments( $flag ) : Response {
 
         $this -> shouldApplyMarkupAdjustments = (bool) $flag;
 
@@ -1030,7 +1008,7 @@ class Response extends Object {
      * @throws \Next\Exception\Exceptions\RuntimeException
      *  Thrown if any Header has already been sent
      */
-    public static function canSendHeaders() {
+    public static function canSendHeaders() : bool {
 
         if( headers_sent( $file, $line ) ) {
 
@@ -1045,8 +1023,6 @@ class Response extends Object {
                     $file, $line
                 )
             );
-
-            return FALSE;
         }
 
         return TRUE;
@@ -1055,7 +1031,7 @@ class Response extends Object {
     /**
      * Add response Header to be sent
      *
-     * This method intermediates \Next\HTTP\Headers\AbstractHeaders::addHeader()
+     * This method intermediates Next\HTTP\Headers\AbstractHeaders::addHeader()
      * in order to use the proper field for HTTP Response Status Code Headers
      *
      * @param mixed $header
@@ -1120,7 +1096,7 @@ class Response extends Object {
      * @return \Next\HTTP\Response
      *  Response Object (Fluent Interface)
      */
-    public function addHeader( $header, $value = NULL, $schemaVersion = 1.1 ) {
+    public function addHeader( $header, $value = NULL, $schemaVersion = 1.1 ) : Response {
 
         // Is it an HTTP State Header?
 
@@ -1149,16 +1125,17 @@ class Response extends Object {
                  */
             }
 
-        } else {
+            return $this;
 
-            try {
+        }
 
-                $this -> headers -> addHeader( $header, $value );
+        try {
 
-            } catch( InvalidArgumentException $e  ) {
+            $this -> headers -> addHeader( $header, $value );
 
-                // Same as above
-            }
+        } catch( InvalidArgumentException $e  ) {
+
+            // Same as above
         }
 
         return $this;
@@ -1172,17 +1149,18 @@ class Response extends Object {
      * @return boolean
      *  TRUE if Response Body is not empty and FALSE otherwise
      */
-    public function hasBody() {
+    public function hasBody() : bool {
         return ( ! empty( $this -> body ) );
     }
 
     /**
      * Get Response Body
      *
-     * @return string
-     *  The Response Body
+     * @return string|NULL
+     *  The Response Body, if any content has been added to it.
+     *  Otherwise, nothing is returned
      */
-    public function getBody() {
+    public function getBody() :? string {
         return $this -> body;
     }
 
@@ -1194,7 +1172,7 @@ class Response extends Object {
      * @return bool
      *  TRUE if HTTP Response Code is in Client Error Range and FALSE otherwise
      */
-    public function isClientError() {
+    public function isClientError() : bool {
 
         return ( $this -> statusCode >= self::BAD_REQUEST &&
                     $this -> statusCode < self::INTERNAL_SERVER_ERROR );
@@ -1207,7 +1185,7 @@ class Response extends Object {
      *  TRUE if HTTP Response Code is equal to Forbidden Response Code
      *  and FALSE otherwise
      */
-    public function isForbidden() {
+    public function isForbidden() : bool {
         return ( $this -> statusCode == self::FORBIDDEN );
     }
 
@@ -1218,7 +1196,7 @@ class Response extends Object {
      *  TRUE if HTTP Response Code is in Informational Range
      *  and FALSE otherwise
      */
-    public function isInformational() {
+    public function isInformational() : bool {
 
         return ( $this -> statusCode >= self::HTTP_CONTINUE &&
                     $this -> statusCode < self::OK );
@@ -1231,7 +1209,7 @@ class Response extends Object {
      *  TRUE if HTTP Response Code is equal to Not Found Response Code
      *  and FALSE otherwise
      */
-    public function isNotFound() {
+    public function isNotFound() : bool {
         return ( $this -> statusCode == self::NOT_FOUND );
     }
 
@@ -1242,7 +1220,7 @@ class Response extends Object {
      *  TRUE if HTTP Response Code is equal to Success/OK Response Code
      *  and FALSE otherwise
      */
-    public function isOk() {
+    public function isOk() : bool {
         return ( $this -> statusCode == self::OK );
     }
 
@@ -1252,7 +1230,7 @@ class Response extends Object {
      * @return bool
      *  TRUE if HTTP Response Code is in Server Error Range and FALSE otherwise
      */
-    public function isServerError() {
+    public function isServerError() : bool {
 
         return ( $this -> statusCode >= self::INTERNAL_SERVER_ERROR &&
                     $this -> statusCode < 600 );
@@ -1264,7 +1242,7 @@ class Response extends Object {
      * @return bool
      *  TRUE if HTTP Response Code is in Redirection Range and FALSE otherwise
      */
-    public function isRedirect() {
+    public function isRedirect() : bool {
 
         return ( $this -> statusCode >= self::MULTIPLE_CHOICES &&
                     $this -> statusCode < self::BAD_REQUEST );
@@ -1276,7 +1254,7 @@ class Response extends Object {
      * @return bool
      *  TRUE if HTTP Response Code is in Success Range and FALSE otherwise
      */
-    public function isSuccess() {
+    public function isSuccess() : bool {
 
         return ( $this -> statusCode >= self::OK &&
                     $this -> statusCode < self::MULTIPLE_CHOICES );
@@ -1288,7 +1266,7 @@ class Response extends Object {
      * @return integer|NULL
      *  HTTP Response Code, if found and NULL otherwise
      */
-    public function getStatusCode() {
+    public function getStatusCode() :? int {
         return $this -> statusCode;
     }
 
@@ -1302,7 +1280,7 @@ class Response extends Object {
      *  The HTTP Response Code message associated if known by Response class.
      *  If not, return NULL
      */
-    public function getStatusMessage( $code ) {
+    public function getStatusMessage( $code ) :? string {
 
         if( ! array_key_exists( $code, $this -> messages ) ) return NULL;
 
@@ -1319,7 +1297,7 @@ class Response extends Object {
      *
      * @see Response::canSendHeaders()
      */
-    private function sendHeaders() {
+    private function sendHeaders() : void {
 
         /**
          * @internal
@@ -1381,7 +1359,7 @@ class Response extends Object {
      * @param array $meta
      *  Response MetaData
      */
-    private function addResponseData() {
+    private function addResponseData() : void {
 
         if( ! array_key_exists( 'wrapper_data', $this -> options -> meta ) ) {
             return;
@@ -1448,7 +1426,7 @@ class Response extends Object {
      * @return string
      *  The Response Body
      */
-    public function __toString() {
+    public function __toString() : string {
         return (string) $this -> body;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Request Header Field Validator Class: Expect | Validate\Headers\Request\Expect.php
+ * HTTP Request Header Field Validator Class: Expect | Validation\Headers\Request\Expect.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,13 @@ use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
 use Next\Components\Object;                 # Object Class
 
 /**
- * Expect Header Validation Class
+ * The 'Expect' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.20
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class Expect extends Object implements Header {
 
@@ -46,7 +47,7 @@ class Expect extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.20
      *  RFC 2616 Section 14.20
      */
-    public function validate() {
+    public function validate() : bool {
 
         // Insufficient informations
 

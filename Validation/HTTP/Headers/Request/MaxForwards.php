@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Request Header Field Validator Class: Max-Forwards | Validate\Headers\Request\MaxForwards.php
+ * HTTP Request Header Field Validator Class: Max-Forwards | Validation\Headers\Request\MaxForwards.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,13 @@ use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
 use Next\Components\Object;                 # Object Class
 
 /**
- * Max-Forwards Header Validation Class
+ * The 'Max-Forwards' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.31
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class MaxForwards extends Object implements Header {
 
@@ -48,7 +49,7 @@ class MaxForwards extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.31
      *  RFC 2616 Section 14.31
      */
-    public function validate() {
+    public function validate() : bool {
         return ( preg_match( '/^(?:[1-9][0-9]*)$/', $this -> options -> value ) != 0 );
     }
 }

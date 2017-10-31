@@ -14,7 +14,7 @@ require_once __DIR__ . '/RuntimeException.php';
 
 /**
  * The FatalException defines an Exception Type for when
- * something fatal, tha would interrupt the normal flow of the
+ * something fatal, that would interrupt the normal flow of the
  * Request occurs
  *
  * As for Next Framework, for example, a FatalException occurs when

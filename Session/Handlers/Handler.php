@@ -11,12 +11,9 @@
 namespace Next\Session\Handlers;
 
 /**
- * Session Handlers Interface
+ * An Interface for all custom/adapted/improved Session Handlers
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Session
  */
 interface Handler {
 
@@ -29,12 +26,12 @@ interface Handler {
      * @param string $name
      *  Session Name
      */
-    public function open( $savePath, $name );
+    public function open( $savePath, $name ) : bool;
 
     /**
      * Close Session
      */
-    public function close();
+    public function close() : bool;
 
     /**
      * Read Session Data
@@ -42,7 +39,7 @@ interface Handler {
      * @param string $id
      *  Session Data ID
      */
-    public function read( $id );
+    public function read( $id ) :? string;
 
     /**
      * Write Session Data
@@ -56,7 +53,7 @@ interface Handler {
      * @param integer $expires
      *  Expiration Timestamp
      */
-    public function write( $id, $data, $expires );
+    public function write( $id, $data, $expires ) : bool;
 
     /**
      * Destroy Session Data
@@ -64,7 +61,7 @@ interface Handler {
      * @param string $id
      *  Session Data ID
      */
-    public function destroy( $id );
+    public function destroy( $id ) : bool;
 
     /**
      * Renew Session Handler
@@ -74,5 +71,5 @@ interface Handler {
      * @param integer $maxlifetime
      *  Maximum Lifetime of a Session Data
      */
-    public function renew( $maxlifetime );
+    public function renew( $maxlifetime ) : bool;
 }

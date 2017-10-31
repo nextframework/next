@@ -27,6 +27,14 @@ use Next\HTTP\Headers\Raw;                     # Raw Header Field Class
  * resource is, respectively, already cached or not found
  *
  * @package    Next\Cache
+ *
+ * @uses       Next\Components\Object
+ *             Next\HTTP\Headers\Entity\ContentType
+ *             Next\HTTP\Headers\Entity\ContentLength
+ *             Next\HTTP\Headers\Entity\LastModified
+ *             Next\HTTP\Headers\Common\CacheControl
+ *             Next\HTTP\Headers\Response\ETag
+ *             Next\HTTP\Headers\Raw
  */
 class Response extends Object implements Schema {
 
@@ -90,9 +98,9 @@ class Response extends Object implements Schema {
     ];
 
     /**
-     * Caching Routine to be executed by \Next\Controller\Front
+     * Caching Routine to be executed by Next\Controller\Front
      */
-    public function run() {
+    public function run() : void {
 
         $URI = $this -> options -> application -> getRequest() -> getRequestURI();
 
@@ -204,7 +212,7 @@ class Response extends Object implements Schema {
                           -> addHeader(
                                 new ContentLength(
 
-                                    [ 'value' => strlen( $data ) ]
+                                    [ 'value' => mb_strlen( $data ) ]
                                 )
                              )
                           -> appendBody( $data );

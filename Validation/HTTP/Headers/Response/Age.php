@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Response Header Field Validator Class: Age | Validate\Headers\Response\Age.php
+ * HTTP Response Header Field Validator Class: Age | Validation\Headers\Response\Age.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,13 @@ use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
 use Next\Components\Object;                 # Object Class
 
 /**
- * RFC 2616 Age Header Validation Class
+ * The 'Age' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.6
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class Age extends Object implements Header {
 
@@ -50,7 +51,7 @@ class Age extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.6
      *  RFC 2616 Section 14.6
      */
-    public function validate() {
+    public function validate() : bool {
 
         // Age Header value must be a positive integer representing the seconds
 

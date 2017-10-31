@@ -13,8 +13,9 @@ namespace Next\Components\Interfaces;
 use Next\Components\Object;    # Object Class
 
 /**
- * Prototypical Objects are assumed to allow all of their instances
- * have callable features available
+ * Prototypical Objects allow new functionalities to be prototyped to them -AND-
+ * be available to future instances as well — considering the vertically crescent
+ * Request Flow, of course — similarly to JavaScript Prototypes
  *
  * @package    Next\Components\Interfaces
  */

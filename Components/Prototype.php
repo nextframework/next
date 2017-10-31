@@ -22,10 +22,19 @@ use Next\Components\Interfaces\Prototypable;    # Prototypable Interface
 use Next\Components\Utils\ArrayUtils;           # ArrayUtils Class
 
 /**
- * Defines the base of a Prototypical Object allowing all of its
- * instances have previously implemented callable features available
+ * Base structure of a Prototypical Object that allows new functionalities to be
+ * prototyped to them -AND- be available to future instances as well —
+ * considering the vertically crescent Request Flow, of course — similarly to
+ * JavaScript Prototypes
  *
  * @package    Next\Components
+ *
+ * @uses       Next\Exception\Exceptions\BadMethodCallException
+ *             Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Components\Types\Type
+ *             Next\Components\Interfaces\Prototypical
+ *             Next\Components\Interfaces\Prototypable
+ *             Next\Components\Utils\ArrayUtils
  */
 abstract class Prototype implements Prototypical {
 
@@ -54,7 +63,7 @@ abstract class Prototype implements Prototypical {
      * @return \Next\Components\Prototype
      *  Prototype Instance (Fluent Interface)
      */
-    public function implement( $prototype, $name, $callable, $args = [] ) {
+    public function implement( $prototype, $name, $callable, $args = [] ) : Prototype {
 
         $prototype = ( is_object( $prototype ) ? get_class( $prototype ) : (string) $prototype );
 
@@ -76,20 +85,24 @@ abstract class Prototype implements Prototypical {
      *  Calling Arguments
      *
      * @return mixed
-     *  If Caller Object is an instance of \Next\Components\Types\Type
+     *  If Caller Object is an instance of Next\Components\Types\Type
      *  -AND- the Prototype Call results in something the Caller Object
      *  accepts — i.e Caller Object is an instance of
-     *  \Next\Components\Types\String Type and the result is also a
+     *  \Next\Components\Types\Strings Type and the result is also a
      *  string — a new copy of the Caller Object is returned but with
      *  the resulting value.
      *
-     *  If an \Next\Exception\Exceptions\InvalidArgumentException
+     *  If an Next\Exception\Exceptions\InvalidArgumentException
      *  is caught — meaning the data-type class didn't accept the
      *  result of the Prototyped resource — the resulting value is
      *  returned "as is"
      *
-     *  If the the result is not an instance of \Next\Components\Types\Type
+     *  If the the result is not an instance of Next\Components\Types\Type
      *  it'll be returned "as is" as well
+     *
+     * @throws \Next\Exception\Exceptions\BadMethodCallException
+     *  Thrown if called Prototyped Resource is a string pointing to a not found
+     *  Class raising a ReflectionException
      *
      * @throws \Next\Exception\Exceptions\BadMethodCallException
      *  Called resource is not known as a Prototyped Resource nor as
@@ -101,28 +114,50 @@ abstract class Prototype implements Prototypical {
 
         if( isset( self::$prototypes[ $prototype ][ $method ] ) ) {
 
+            $prototype = self::$prototypes[ $prototype ][ $method ];
+
             // Merging always optional arguments with called arguments
 
             if( count( $args ) > 0 ) {
 
-                ArrayUtils::insert( self::$prototypes[ $prototype ][ $method ][ 1 ], $args );
+                ArrayUtils::insert( $prototype[ 1 ], $args );
 
             } else {
 
                 // Nothing to Merge? OK!
 
-                $args = self::$prototypes[ $prototype ][ $method ][ 1 ];
+                $args = $prototype[ 1 ];
             }
 
-            if( self::$prototypes[ $prototype ][ $method ][ 0 ] instanceof Prototypable ) {
+            // Classnames
 
-                $result = self::$prototypes[ $prototype ][ $method ][ 0 ] -> prototype( $args );
+            if( is_string( $prototype[ 0 ] ) && ! is_callable( $prototype[ 0 ] ) ) {
+
+                try {
+
+                    $reflector = new \ReflectionClass( $prototype[ 0 ] );
+
+                    $prototype[ 0 ] = $reflector -> newInstance();
+
+                } catch( \ReflectionException $e ) {
+
+                    throw new BadMethodCallException(
+                        $e -> getMessage(), BadMethodCallException::PHP_ERROR
+                    );
+                }
+            }
+
+            // Well-formed Prototypable Object
+
+            if( $prototype[ 0 ] instanceof Prototypable ) {
+
+                $result = $prototype[ 0 ] -> prototype( $args );
 
             } else {
 
-                $result = call_user_func_array(
-                    self::$prototypes[ $prototype ][ $method ][ 0 ], $args
-                );
+                // Closures, internal functions and general callables
+
+                $result = call_user_func_array( $prototype[ 0 ], $args );
             }
 
             try {
@@ -157,7 +192,7 @@ abstract class Prototype implements Prototypical {
      *  @return array
      *    All prototyped resources
      */
-    public function getPrototypes() {
+    public function getPrototypes() : array {
         return self::$prototypes;
     }
 }

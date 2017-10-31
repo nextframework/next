@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Common Header Field Validator Class: Upgrade | Validate\Headers\Common\Upgrade.php
+ * HTTP Common Header Field Validator Class: Upgrade | Validation\Headers\Common\Upgrade.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,13 @@ use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
 use Next\Components\Object;                 # Object Class
 
 /**
- * Upgrade Header Validation Class
+ * The 'Upgrade' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.42
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class Upgrade extends Object implements Header {
 
@@ -39,7 +40,7 @@ class Upgrade extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.42
      *  RFC 2616 Section 14.42
      */
-    public function validate() {
+    public function validate() : bool {
 
         /**
          * @internal

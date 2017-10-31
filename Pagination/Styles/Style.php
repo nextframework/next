@@ -10,16 +10,18 @@
  */
 namespace Next\Pagination\Styles;
 
-use Next\Components\Interfaces\Boundable;    # Boundable Interface
-use Next\Pagination\Paginator;
+use Next\Math\Equations\Interval\Boundable;    # Boundable Interval Interface
+
+use Next\Pagination\Paginator;                 # Paginator Class
 
 /**
- * Pagination Style Interface
+ * An Interface for all Pagination Styles
  *
- * @author        Bruno Augusto
+ * @package    Next\Pagination
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Math\Equations\Interval\Boundable
+ *             Next\Pagination\Paginator
+ *             Countable
  */
 interface Style extends Boundable, \Countable {
 

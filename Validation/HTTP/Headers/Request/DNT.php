@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Request Header Field Validator Class: DNT | Validate\Headers\Request\DNT.php
+ * HTTP Request Header Field Validator Class: DNT | Validation\Headers\Request\DNT.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,16 @@ use Next\Validation\HTTP\Headers\Header;    # HTTP Headers Validator Interface
 use Next\Components\Object;                 # Object Class
 
 /**
- * DNT Header Validation Class
+ * The 'DNT' Header Validator checks if input string is valid for
+ * a DNT string
  *
- * @author        Bruno Augusto
+ * Even though this is not an official as per the RFC, it's widely
+ * accepted and used as one
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Validation
+ *
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
  */
 class DNT extends Object implements Header {
 
@@ -60,7 +64,7 @@ class DNT extends Object implements Header {
      * @link
      *  http://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Common_non-standard_request_headers
      */
-    public function validate() {
+    public function validate() : bool {
         return ( (int) $this -> options -> value == 1 || (int) $this -> options -> value == 0 );
     }
 }

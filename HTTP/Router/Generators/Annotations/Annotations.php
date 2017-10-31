@@ -11,7 +11,7 @@
 namespace Next\HTTP\Router\Generators\Annotations;
 
 /**
- * Defines all methods that must present in a Routes Generator Analyzer
+ * An Interface for all Annotations Parser Generator
  *
  * @package    Next\HTTP
  */

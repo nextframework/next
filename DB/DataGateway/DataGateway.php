@@ -11,12 +11,11 @@
 namespace Next\DB\DataGateway;
 
 /**
- * DataGateway Interface
+ * An Interface for all DataGateway Classes
  *
- * @author        Bruno Augusto
+ * @package    Next\DB
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Countable
  */
 interface DataGateway extends \Countable {
 

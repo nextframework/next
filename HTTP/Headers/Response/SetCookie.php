@@ -10,20 +10,22 @@
  */
 namespace Next\HTTP\Headers\Response;
 
-use Next\HTTP\Headers\Field;    # Header Field Abstract Class
+use Next\Validation\Validator as Validators;    # Validators Interface
+use Next\HTTP\Headers\Field;                    # Header Field Abstract Class
 
 /**
- * Response 'Set-Cookie' Header Field Validator Class
+ * Response Header Field Validation Class: 'Set-Cookie'
  */
 use Next\Validation\HTTP\Headers\Response\SetCookie as Validator;
 
 /**
- * Response 'Set-Cookie' Header Field Class
+ * Response Header Field: 'Set-Cookie'
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\Validator
+ *             Next\HTTP\Headers\Field
+ *             Next\Validation\HTTP\Headers\SetCookie
  */
 class SetCookie extends Field {
 
@@ -40,9 +42,10 @@ class SetCookie extends Field {
      * @param string $data
      *  Data to manipulate before validation
      *
-     * @return string Data to Validate
+     * @return string
+     *  Data to Validate
      */
-    protected function preCheck( $data ) {
+    protected function preCheck( $data ) : string {
 
         // Repetitive, but fixes one of the most crazy Set-Cookie tested so far...
 
@@ -81,15 +84,7 @@ class SetCookie extends Field {
 
         // But, at least so far, we have correctable a side-effect
 
-        return strtr(
-
-            $data,
-
-            [
-                ';~' => '; ~',
-                ';'  => '~ '
-            ]
-        );
+        return strtr( $data, [ ';~' => '; ~', ';'  => '~ ' ] );
     }
 
     /**
@@ -100,9 +95,10 @@ class SetCookie extends Field {
      * @param string $data
      *  Data to manipulate after validation
      *
-     * @return string Validated Data
+     * @return string
+     *  Input data untouched
      */
-    protected function postCheck( $data ) {
+    protected function postCheck( $data ) : string {
 
         $this -> options -> multiplesSeparator = ',';
 
@@ -120,7 +116,7 @@ class SetCookie extends Field {
      * @return \Next\Validation\Validator
      *  Associated Validator
      */
-    protected function getValidator( $value ) {
+    protected function getValidator( $value ) : Validators {
         return new Validator( [ 'value' => $value ] );
     }
 
@@ -130,7 +126,7 @@ class SetCookie extends Field {
      * @return array
      *  Header Field Validation Options
      */
-    public function setOptions() {
+    public function setOptions() : array {
         return [ 'name' => 'Set-Cookie', 'acceptMultiples' => TRUE, 'multiplesSeparator'    => '~' ];
     }
 }

@@ -10,20 +10,22 @@
  */
 namespace Next\HTTP\Headers\Request;
 
-use Next\HTTP\Headers\Field;    # Header Field Abstract Class
+use Next\Validation\Validator as Validators;    # Validators Interface
+use Next\HTTP\Headers\Field;                    # Header Field Abstract Class
 
 /**
- * Request 'Accept-Language' Header field Validator Class
+ * Request Header Field Validation Class: 'Accept-Language'
  */
 use Next\Validation\HTTP\Headers\Request\AcceptLanguage as Validator;
 
 /**
- * Request 'Accept-Language' Header Field Class
+ * Request Header Field: 'Accept-Language'
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\Validator
+ *             Next\HTTP\Headers\Field
+ *             Next\Validation\HTTP\Headers\AcceptLanguage
  */
 class AcceptLanguage extends Field {
 
@@ -37,15 +39,16 @@ class AcceptLanguage extends Field {
      * @param string $data
      *  Data to manipulate after validation
      *
-     * @return string Validated Data
+     * @return string
+     *  Validated Data
      */
-    protected function postCheck( $data ) {
+    protected function postCheck( $data ) : string {
 
         return preg_replace_callback(
 
             '@^(.*?)(-.*?)?(;q=.*?)?$@',
 
-            function( array $matches ) {
+            function( array $matches ) : string {
 
                 // Language Abbreviations must be lowercase
 
@@ -83,7 +86,7 @@ class AcceptLanguage extends Field {
      * @return \Next\Validation\Validator
      *  Associated Validator
      */
-    protected function getValidator( $value ) {
+    protected function getValidator( $value ) : Validators {
         return new Validator( [ 'value' => $value ] );
     }
 
@@ -93,7 +96,7 @@ class AcceptLanguage extends Field {
      * @return array
      *  Header Field Validation Options
      */
-    public function setOptions() {
+    public function setOptions() : array {
         return [ 'name' => 'Accept-Language', 'acceptMultiples' => TRUE ];
     }
 }

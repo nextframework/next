@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Response Header Field Validator Class: Link | Validate\Headers\Response\Link.php
+ * HTTP Response Header Field Validator Class: Link | Validation\Headers\Response\Link.php
  *
  * @author       Bruno Augusto
  *
@@ -16,12 +16,15 @@ use Next\Validation\HTTP\Headers\Request\AcceptLanguage;    # Accept-Language Va
 use Next\Validation\IANA\MIME as IANA;                      # IANA MIME Validation Class
 
 /**
- * Link Header Validation Class
+ * The 'Link' Header Validator checks if input string is valid in
+ * accordance to RFC 5988 Section 5
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
+ *             Next\Validation\HTTP\Headers\Request\AcceptLanguage
+ *             Next\Validation\IANA\MIME
  */
 class Link extends Object implements Header {
 
@@ -90,7 +93,7 @@ class Link extends Object implements Header {
      *  http://tools.ietf.org/html/rfc2183#section-2
      *  RFC 2183 Section 2
      */
-    public function validate() {
+    public function validate() : bool {
 
         preg_match(
 

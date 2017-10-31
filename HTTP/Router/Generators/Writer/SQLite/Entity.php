@@ -10,17 +10,14 @@
  */
 namespace Next\HTTP\Router\Generators\Writer\SQLite;
 
-use Next\DB\Entity\AbstractEntity;    # Entity Abstract Class
+use Next\DB\Entity\Entity as AbstractEntity;    # Entity Abstract Class
 
 /**
- * Annotations Routes Generator: SQLite Annotations Entity Class
+ * The Entity for the SQLite Routes Generator Writer
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
- *
- * @uses          \Next\DB\Entity\AbstractEntity
+ * @uses       Next\DB\Entity\Entity
  */
 class Entity extends AbstractEntity {
 

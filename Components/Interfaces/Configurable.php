@@ -11,9 +11,8 @@
 namespace Next\Components\Interfaces;
 
 /**
- * Configurable Objects are assumed to provide a way to do a
- * post-initialization  — i.e. after \Next\Components\Object::init()
- * have called
+ * Configurable Objects are assumed to provide and/or require
+ * post-initialization  — i.e. after Next\Components\Object::init()`
  *
  * @package    Next\Components\Interfaces
  */

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Entity Header Field Validator Class: Content-Encoding | Validate\Headers\Entity\ContentEncoding.php
+ * HTTP Entity Header Field Validator Class: Content-Encoding | Validation\Headers\Entity\ContentEncoding.php
  *
  * @author       Bruno Augusto
  *
@@ -15,12 +15,14 @@ use Next\Components\Object;                          # Object Class
 use Next\Validation\IANA\ContentEncoding as IANA;    # IANA Charset Validation Class
 
 /**
- * Content-Encoding Header Validation Class
+ * The 'Content-Encoding' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.11
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
+ *             Next\Validation\IANA\ContentEncoding
  */
 class ContentEncoding extends Object implements Header {
 
@@ -49,7 +51,7 @@ class ContentEncoding extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.11
      *  RFC 2616 Section 14.11
      */
-    public function validate() {
+    public function validate() : bool {
 
         $test = preg_match(
 

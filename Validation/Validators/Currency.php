@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Currency Validator Class | Validate\Validators\Currency.php
+ * Currency Validator Class | Validation\Validators\Currency.php
  *
  * @author       Bruno Augusto
  *
@@ -14,12 +14,15 @@ use Next\Validation\Validator;    # Validator Interface
 use Next\Components\Object;       # Object Class
 
 /**
- * Currency Validator Validation Class
+ * The Currency Validator checks if input string has the bare minimum to be
+ * considered a valid Currency
  *
- * @author        Bruno Augusto
+ * It can be customized to allow or not negative Currencies as well as zeroes
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\Validation
+ *
+ * @uses       Next\Validation\Validator
+ *             Next\Components\Object
  */
 class Currency extends Object implements Validator {
 
@@ -55,7 +58,7 @@ class Currency extends Object implements Validator {
      * @return boolean
      *  TRUE if valid and FALSE otherwise
      */
-    public function validate() {
+    public function validate() : bool {
 
         // Shortening...
 

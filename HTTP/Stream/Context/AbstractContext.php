@@ -13,12 +13,15 @@ namespace Next\HTTP\Stream\Context;
 use Next\Components\Utils\ArrayUtils;    # Array Utils Class
 
 /**
- * Stream Context Class
+ * Base structure for an HTTP Stream Context
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Components\Utils\ArrayUtils
+ *             Next\HTTP\Stream\Context\Context
+ *
+ * @deprecated
+ * @FIXME
  */
 abstract class AbstractContext implements Context {
 

@@ -23,25 +23,31 @@ use Next\HTTP\Request;                  # Request Class
 use Next\HTTP\Response;                 # Response Class
 
 /**
- * The Front Controller Class, one of the most busy classes in the
- * Routing/Dispatching process:
+ * The Front Controller iterates through all Applications in a Chain trying
+ * to match, through their associated Router, if any, a Page Controller to
+ * dispatch
  *
- * - Iterates through all `\Next\Application\Application` added to
- *   `\Next\Application\Chain`;
- * - Executes all `\Next\Cache\Schemas\Schema` added to their
- *   `\Next\Cache\Schemas\Chain`;
- * - Checks with their `\Next\HTTP\Router\Router` if current
- *   Request should be routed or delivered "as is";
- * - Communes with their Routers until one of them becomes able to
- *   handle current Request;
- * - Deals with the `\Next\Controller\Dispatcher`, checking if its
- *   `\Next\HTTP\Response` should output a Response Body or return
- *   it for later;
- * - And if anything at fail in the process deal with
- *   `\Next\Exception\ExceptionHandler` to create an Error Response or
- *   then send 503 or 404 Headers to the browser;
+ * It's one of the most busy classes in the Routing/Dispatching process:
+ *
+ * - Iterates through all Application added to the Applications Chain
+ * - Executes all Caching Schemas added to their Caching Schemas' Chain
+ * - Communes with their associated Routers until one of them becomes able to
+ *   handle current Request, checking if the Request should be dispatched
+ *   or returned "as is"
+ * - Deals with the Dispatcher, checking if the associated Response Object
+ *   it should flush its Response Body or be returned it for later
+ * - And if anything at fails in the process it deals with  the ExceptionHandler
+ *   to create an Error Response or then send 503 or 404 Headers to the browser
  *
  * @package    Next\Controller
+ *
+ * @uses       Next\Exception\Exceptions\BadMethodCallException
+ *             Next\HTTP\Router\RouterException
+ *             Next\Components\Object
+ *             Next\Controller\Dispatcher
+ *             Next\Exception\ExceptionHandler
+ *             Next\HTTP\Request
+ *             Next\HTTP\Response
  */
 class Front extends Object {
 
@@ -65,15 +71,25 @@ class Front extends Object {
      * Additional Initialization.
      * Instantiates the Controllers' Dispatcher
      */
-    protected function init() {
+    protected function init() : void {
         $this -> dispatcher = new Dispatcher;
     }
 
     /**
      * Dispatches a Controller
      *
-     * @return mixed|void
-     *  Returns what the Dispatcher dispatched, if configured to do so
+     * @return \Next\HTTP\Response|boolean|mixed
+     *  Returns FALSE if current Next\Application\Application` in iteration
+     *  doesn't have an associated Next\HTTP\Router` -OR- if it does have one
+     *  but it has been defined to not route anything or at least not anymore
+     *
+     *  Otherwise return the `Next\HTTP\Response` Object returned by the
+     *  `Next\Controller\Dispatcher`
+     *
+     *  If a `Next\Controller\ControllerException` is caught during the
+     *  dispatching process, case in which the Standardization Error Concept
+     *  takes place, whatever the callback associated to the Exception thrown
+     *  is returned instead
      */
     public function dispatch() {
 
@@ -96,11 +112,7 @@ class Front extends Object {
 
             try {
 
-                // Trying to find a matching Route
-
-                $match = $router -> find();
-
-                if( $match !== FALSE ) {
+                if( ( $match = $router -> find() ) !== NULL ) {
 
                     /**
                      * @internal

@@ -16,11 +16,12 @@ namespace Next\Components\Types;
 use Next\Exception\Exceptions\InvalidArgumentException;
 
 /**
- * Defines the Boolean Data-type Type and prototypes some o PHP Boolean
- * functions (some in different argument order) and some external/custom
- * resources as well
+ * The Boolean Data-type with prototypes of external/custom resources
  *
  * @package    Next\Components\Types
+ *
+ * @uses       Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Components\Types\AbstractType
  */
 class Boolean extends AbstractTypes {
 
@@ -33,9 +34,10 @@ class Boolean extends AbstractTypes {
      * @throws Next\Exception\Exceptions\InvalidArgumentException
      *  Thrown if Parameter Option 'value' is not a boolean -OR- is NULL
      */
-    public function verify() {
+    public function verify() : void {
 
-        if( $this -> options -> value === NULL || ! is_bool( $this -> options -> value ) ) {
+        if( $this -> options -> value === NULL ||
+                ! is_bool( $this -> options -> value ) ) {
 
             throw new InvalidArgumentException(
                 'Argument is not a valid Boolean'
@@ -50,19 +52,30 @@ class Boolean extends AbstractTypes {
      * the available types by proxying, treating and handling
      * the mixed arguments received
      */
-    public function prototype() {
+    public function prototype() : void {
 
         // Prototypes that requires a value to work with
 
         $this -> implement(
-
-            $this, 'compare',
-
-            function( $a, $b ) {
-                return ( (bool) $a === (bool) $b );
-            },
-
-            $this -> _value
+            $this, 'compare', [ $this, 'compare' ], $this -> _value
         );
+    }
+
+    // Custom/Adapter Prototypes
+
+    /**
+     * Compare two values
+     *
+     * @param mixed $a
+     *  Left comparison value
+     *
+     * @param mixed $b
+     *  Right comparison value
+     *
+     * @return boolean
+     *  Return TRUE if the first value is equal to the second value boolean-wise
+     */
+    protected function compare( $a, $b ) : bool {
+        return ( (bool) $a === (bool) $b );
     }
 }

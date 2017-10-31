@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Request Header Field Validator Class: Accept-Language | Validate\Headers\Request\AcceptLanguage.php
+ * HTTP Request Header Field Validator Class: Accept-Language | Validation\Headers\Request\AcceptLanguage.php
  *
  * @author       Bruno Augusto
  *
@@ -16,12 +16,15 @@ use Next\Validation\ISO\ISO639;             # ISO 639 Validation Class
 use Next\Validation\ISO\ISO3166;            # ISO 3166 Validation Class
 
 /**
- * Accept-Language Header Validation Class
+ * The 'Accept-Language' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.4
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
+ *             Next\Validation\ISO\ISO639
+ *             Next\Validation\ISO\ISO3166
  */
 class AcceptLanguage extends Object implements Header {
 
@@ -35,7 +38,7 @@ class AcceptLanguage extends Object implements Header {
     ];
 
     /**
-     * Validates Accept-Language Header Field in according to RFC 2616 Section 14.3
+     * Validates Accept-Language Header Field in according to RFC 2616 Section 14.4
      *
      * <p><strong>RFC Specification</strong></p>
      *
@@ -53,7 +56,7 @@ class AcceptLanguage extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4
      *  RFC 2616 Section 14.4
      */
-    public function validate() {
+    public function validate() : bool {
 
         preg_match(
 

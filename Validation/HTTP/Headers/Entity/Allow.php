@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTTP Entity Header Field Validator Class: Allow | Validate\Headers\Entity\Allow.php
+ * HTTP Entity Header Field Validator Class: Allow | Validation\Headers\Entity\Allow.php
  *
  * @author       Bruno Augusto
  *
@@ -15,12 +15,14 @@ use Next\Components\Object;                 # Object Class
 use Next\Components\Utils\ArrayUtils;       # Array Utils Class
 
 /**
- * Allow Header Validation Class
+ * The 'Allow' Header Validator checks if input string is valid in
+ * accordance to RFC 2616 Section 14.7
  *
- * @author        Bruno Augusto
+ * @package    Next\Validation
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Validation\HTTP\Headers\Header
+ *             Next\Components\Object
+ *             Next\Components\Utils\ArrayUtils
  */
 class Allow extends Object implements Header {
 
@@ -56,7 +58,7 @@ class Allow extends Object implements Header {
      *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.7
      *  RFC 2616 Section 14.7
      */
-    public function validate() {
+    public function validate() : bool {
         return ( ArrayUtils::search( self::METHODS, $this -> options -> value, NULL, FALSE ) !== -1 );
     }
 }

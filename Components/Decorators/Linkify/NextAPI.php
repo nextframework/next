@@ -14,9 +14,13 @@ use Next\Components\Decorators\Decorator;    # Decorator Interface
 use Next\Components\Object;                  # Object Class
 
 /**
- * A linkify Decorator for Next Framework API
+ * A Linkify Decorator for Next Framework API
  *
  * @package    Next\Components\Decorators
+ *
+ * @uses       Next\Components\Decorators\Decorator
+ *             Next\Components\Object
+ *             Next\Components\Decorators\Linkify\Linkify
  */
 class NextAPI extends Object implements Decorator, Linkify {
 
@@ -36,13 +40,13 @@ class NextAPI extends Object implements Decorator, Linkify {
 
     /**
      * Linkify RuleSet
-     * An associative containing two entries:
+     * An associative array containing two entries:
      *
-     * - 'namespace', for fully qualified namespaces WITHOUT a
-     *   specific method (i.e. Next\Application\Application)
+     * - **namespace**, for fully qualified namespaces WITHOUT a
+     *   specific method (i.e. `Next\Application\APPLICATION`)
      *
-     * - 'full', for fully qualified namespaces PLUS a specific method
-     *   AFTER '::' (i.e. Next\Application\Application::getRouter())
+     * - **full**, for fully qualified namespaces PLUS a specific method
+     *   AFTER '::' (i.e. `Next\Application\Application::getRouter()`)
      *
      * @var array
      */
@@ -51,21 +55,19 @@ class NextAPI extends Object implements Decorator, Linkify {
         /**
          * @internal
          *
-         * Next Framework API Documentation generated with
-         * phpDocumentor 2 for Classname translates
-         * `Next\Application\Application` into `next.application.application.html`
+         * Next Framework API Documentation generated with SAMI and translates
+         * classnames like `Next\Application\Application` to `Next/Application/Application.html`
          */
-        'namespace' => '<a href="%1$s/%4$s.html">%2$s</a>',
+        'namespace' => '<a href="%1$s/%3$s.html">%2$s</a>',
 
         /**
          * @internal
          *
-         * Next Framework API Documentation generated with
-         * phpDocumentor 2 for Classname translates
-         * `Next\Application\Application::getRouter()` into
-         * `next.application.application.html`#method_getRouter
+         * Next Framework API Documentation generated with SAMI translates
+         * classnames like `Next\Application\Application::getRouter()` to
+         * `Next/Application/Application.html#method_getRouter`
          */
-        'full' => '<a href="%1$s/%4$s.html#method_%3$s">%2$s::%3$s()</a>'
+        'full' => '<a href="%1$s/%3$s.html#method_%5$s">%2$s::%5$s()</a>'
     ];
 
     /**
@@ -88,7 +90,7 @@ class NextAPI extends Object implements Decorator, Linkify {
      * @return mixed
      *  Decorated Resource
      */
-    public function getResource() {
+    public function getResource() : string {
 
         // Decorating...
 
@@ -104,13 +106,13 @@ class NextAPI extends Object implements Decorator, Linkify {
      * @return string
      *  Provided resource 'linkifyed'
      */
-    public function decorate() {
+    public function decorate() : string {
 
         return preg_replace_callback(
 
             sprintf( '#%s#x', Linkify::REGEXP ),
 
-            function( $matches ) {
+            function( $matches ) : string {
 
                 // No matches or missing namespace, return "as is"
 
@@ -137,22 +139,29 @@ class NextAPI extends Object implements Decorator, Linkify {
                      *
                      * The following arguments will be available, in the following order:
                      *
-                     *  - Match URL
+                     *  - Base URL
                      *  - Fully Qualified Namespace (backlashes preserved)
-                     *  - Method name
+                     *  - Fully Qualified Namespace (backlashes changes to normal slashes)
                      *  - Fully Qualified Namespace (backslashes changed to dots)
+                     *  - Method name
                      */
                     return sprintf(
 
                         $format,
 
-                        self::NEXT_API_URL, $matches['namespace'], $method,
+                        self::NEXT_API_URL,
 
-                        strtr( $matches['namespace'], [ '\\' => '.' ] ), $method
+                        $matches['namespace'],
+
+                        strtr( $matches['namespace'], [ '\\' => '/' ] ),
+
+                        strtr( $matches['namespace'], [ '\\' => '.' ] ),
+
+                        $method
                     );
                 }
 
-                // No a class recognized by part of Next Framework, return "as is"
+                // Not a class recognized by part of Next Framework, return "as is"
 
                 return $matches[ 0 ];
             },

@@ -11,11 +11,13 @@
 namespace Next\Components\Interfaces;
 
 /**
- * Subject Interface, part of Observer Design Pattern.
- * A Subjects notifies their Observers that something happened so
- * they can do something on their own
+ * Subject Interface is part of Observer Design Pattern.
+ * A Subject notifies their Observers that something happened so they can
+ * do something on their own
  *
  * @package    Next\Components\Interfaces
+ *
+ * @uses       Next\Components\Interfaces\Observer
  */
 interface Subject {
 

@@ -11,12 +11,9 @@
 namespace Next\HTTP\Router\Generators\Writer;
 
 /**
- * Routes Generator Output Writer Interface
+ * An Interface for all Routes Generator Output Writing Strategies
  *
- * @author        Bruno Augusto
- *
- * @copyright     Copyright (c) 2016 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @package    Next\HTPP
  */
 interface Writer {
 
@@ -26,10 +23,10 @@ interface Writer {
      * @param array $data
      *  Data to be written
      */
-    public function save( array $data );
+    public function save( array $data ) : int;
 
     /**
      * Resets the Writer to be used again
      */
-    public function reset();
+    public function reset() : void;
 }

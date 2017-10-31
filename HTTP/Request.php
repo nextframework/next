@@ -15,30 +15,42 @@ namespace Next\HTTP;
  */
 use Next\Exception\Exception;
 use Next\Exception\Exceptions\BadMethodCallException;
+use Next\Exception\Exceptions\LengthException;
+use Next\Exception\Exceptions\RuntimeException;
 
-use Next\HTTP\Stream\Adapter\AdapterException;      # Adapter Exception Class
+use Next\Validation\Verifiable;                # Verifiable Interface
+use Next\HTTP\Headers\Field;                   # Header Fields Interface
+use Next\HTTP\Stream\Adapter\Adapter;          # HTTP Stream Adapter Interface
 
-use Next\Components\Interfaces\Verifiable;          # Verifiable Interface
-use Next\HTTP\Headers\Field;                        # Header Fields Interface
-use Next\HTTP\Stream\Adapter\Adapter;               # HTTP Stream Adapter Interface
-
-use Next\Components\Object;                         # Object Class
-use Next\FileSystem\Path;                           # FileSystem Path Data-type Class
-use Next\Components\Parameter;                      # Parameter Object
-use Next\Components\Invoker;                        # Invoker Class
-use Next\HTTP\Stream\Adapter\Socket;                # HTTP Stream Socket Adapter Class
-use Next\HTTP\Stream\Context\SocketContext;         # HTTP Stream Socket Context Class
-use Next\HTTP\Headers\Entity\ContentType;           # Content-Type Header Class
-use Next\HTTP\Stream\Reader;                        # HTTP Stream Reader
-use Next\File\Tools;                                # File Tools Class
+use Next\Components\Object;                    # Object Class
+use Next\FileSystem\Path;                      # FileSystem Path Data-type Class
+use Next\Components\Parameter;                 # Parameter Object
+use Next\Components\Invoker;                   # Invoker Class
+use Next\HTTP\Stream\Adapter\Socket;           # HTTP Stream Socket Adapter Class
+use Next\HTTP\Stream\Context\SocketContext;    # HTTP Stream Socket Context Class
+use Next\HTTP\Headers\Entity\ContentType;      # Content-Type Header Class
+use Next\HTTP\Stream\Reader;                   # HTTP Stream Reader
 
 /**
- * Request Class
+ * The Request Class
  *
- * @author        Bruno Augusto
+ * @package    Next\HTTP
  *
- * @copyright     Copyright (c) 2010 Next Studios
- * @license       http://creativecommons.org/licenses/by/3.0/   Attribution 3.0 Unported
+ * @uses       Next\Exception\Exception
+ *             Next\Exception\Exceptions\BadMethodCallException
+ *             Next\Validation\Verifiable
+ *             Next\HTTP\Headers\Field
+ *             Next\HTTP\Stream\Adapter\Adapter
+ *             Next\Components\Object
+ *             Next\FileSystem\Path
+ *             Next\Components\Parameter
+ *             Next\Components\Invoker
+ *             Next\HTTP\Stream\Adapter\Socket
+ *             Next\HTTP\Stream\Context\SocketContext
+ *             Next\HTTP\Headers\Entity\ContentType
+ *             Next\HTTP\Stream\Reader
+ *             Next\HTTP\Request\Browser
+ *             stdcLass
  */
 class Request extends Object {
 
@@ -189,7 +201,7 @@ class Request extends Object {
     /**
      * Request Protocol
      *
-     * @var string $protocol
+     * @var stdClass $protocol
      */
     private $protocol;
 
@@ -238,7 +250,7 @@ class Request extends Object {
      * values will take place: REQUEST_URI from $_SERVER and GET as
      * Request Method
      */
-    public function init() {
+    protected function init() : void {
 
         // Cookies Management Object
 
@@ -316,8 +328,6 @@ class Request extends Object {
 
         } else {
 
-            // Protocol... "name"
-
             preg_match( self::PROTOCOL_REGEXP, $_SERVER['SERVER_PROTOCOL'], $match );
 
             if( array_key_exists( 'protocol', $match ) ) {
@@ -357,8 +367,26 @@ class Request extends Object {
 
             // Adding default Request Headers
 
-            if( defined( 'TURBO_MODE' ) && ! TURBO_MODE === TRUE ) {
-                $this -> addDefaultHeaders();
+            if( defined( 'TURBO_MODE' ) && TURBO_MODE === FALSE ) {
+
+                if( ( $headers = apache_response_headers() ) ) {
+
+                    try {
+
+                        $this -> headers -> addHeader( $headers );
+
+                    } catch( InvalidArgumentException $e ) {
+
+                        /**
+                         * @internal
+                         * We're silencing the InvalidArgumentException in
+                         * order to not break the Response Flow
+                         *
+                         * However, if this Exception is caught, no
+                         * Response Headers will be available
+                         */
+                    }
+                }
             }
         }
     }
@@ -369,7 +397,7 @@ class Request extends Object {
      * @return string
      *  Request Host
      */
-    public function getHost() {
+    public function getHost() : string {
         return $this -> host;
     }
 
@@ -382,7 +410,7 @@ class Request extends Object {
      * @return \Next\HTTP\Request
      *  Request Object (Fluent Interface)
      */
-    public function setBasepath( $basepath ) {
+    public function setBasepath( $basepath ) : Request {
 
         $basepath = new Path( [ 'value' => $basepath ] );
 
@@ -397,7 +425,7 @@ class Request extends Object {
      * @return string
      *  The BasePath
      */
-    public function getBasepath() {
+    public function getBasepath() : string {
         return $this -> basepath;
     }
 
@@ -410,7 +438,7 @@ class Request extends Object {
      * @return string
      *  The Request URI
      */
-    public function getRequestURI( $stripBasePath = TRUE ) {
+    public function getRequestURI( $stripBasePath = TRUE ) : string {
 
         $scheme = parse_url( $this -> uri, PHP_URL_SCHEME );
 
@@ -420,9 +448,7 @@ class Request extends Object {
             return trim( $this -> uri, '/' );
         }
 
-        //$uri = trim( str_ireplace( $this -> basepath, '', $this -> uri ), '/' );
         $uri = preg_replace(
-
             sprintf( '#%s#i', $this -> basepath ), '', $this -> uri, 1
         );
 
@@ -441,7 +467,7 @@ class Request extends Object {
      * @return string
      *  The full URL
      */
-    public function getURL( $includeSchema = TRUE ) {
+    public function getURL( $includeSchema = TRUE ) : string {
 
         $scheme = parse_url( $this -> uri, PHP_URL_SCHEME );
 
@@ -450,7 +476,7 @@ class Request extends Object {
             $rUri = $this -> getRequestURI();
 
             $url = sprintf(
-                '%s/%s', $this -> getBaseUrl(), ( $rUri != '/' ? $rUri : NULL )
+                '%s/%s', $this -> getBaseURL(), ( $rUri != '/' ? $rUri : NULL )
             );
 
             return ( $includeSchema !== FALSE ? $url : preg_replace( '#^https?:\/\/#', '', $url ) );
@@ -467,25 +493,25 @@ class Request extends Object {
      * @return string
      *  The Base URL
      */
-    public function getBaseUrl() {
+    public function getBaseURL() : string {
 
         $parts = parse_url( $this -> uri );
 
         if( isset( $parts['scheme'] ) ) {
-
             return sprintf( '%s://%s', $parts['scheme'], $parts['host'] );
+        }
 
-        } else {
+        return rtrim(
 
-            return sprintf(
+            sprintf(
 
                 '%s://%s/%s',
 
                 strtolower( self::SCHEME_HTTP ), $_SERVER['HTTP_HOST'],
 
                 $this -> basepath
-            );
-        }
+            ), '/'
+        );
     }
 
     /**
@@ -494,7 +520,7 @@ class Request extends Object {
      * @return string
      *  The Request Referrer coming from $_SERVER
      */
-    public function getReferrer() {
+    public function getReferrer() : string {
         return $_SERVER['HTTP_REFERER'];
     }
 
@@ -502,19 +528,18 @@ class Request extends Object {
      * Get Request Protocol
      *
      * @param boolean|optional $includeVersion
-     *  If TRUE \Next\HTTP\Request::getProtocolVersion() will be
-     *  invoked in order to *try to) provide Server Protocol version too
+     *  If set as TRUE and Protocol Version hasn't been detected
+     *  during Additional Initialization stage then
+     *  `\Next\HTTP\Request::getProtocolVersion()`
+     *  will be invoked in order to *try to* provide Server Protocol
+     *  version too
      *
-     *  This can be a little slow!
+     *  This may be a little slow! u.u'
      *
-     * @return string|stdClass
-     *  If <strong>$includeVersion</strong> is set to TRUE, all informations
-     *  about Server protocol will be returned as an
-     *   {@link http://php.net/manual/en/reserved.classes.php stdClass Object}
-     *
-     *  Otherwise, only Server Protocol... "name" will, as string
+     * @return stdClass
+     *  Server Protocol Informations
      */
-    public function getProtocol( $includeVersion = FALSE ) {
+    public function getProtocol( $includeVersion = FALSE ) : \stdClass {
 
         if( ! isset( $this -> protocol -> version ) && $includeVersion !== FALSE ) {
             $this -> getProtocolVersion();
@@ -531,97 +556,97 @@ class Request extends Object {
      * @return string
      *  The Request Method
      */
-    public function getRequestMethod() {
+    public function getRequestMethod() : string {
         return $this -> method;
     }
 
     /**
      * Is this a GET method request?
      *
-     * @return bool
+     * @return boolean
      *  TRUE if current Request is a GET Request and FALSE otherwise
      */
-    public function isGet() {
+    public function isGet() : bool {
         return ( $this -> method === self::GET );
     }
 
     /**
      * Is this a PATCH method request?
      *
-     * @return bool
+     * @return boolean
      *  TRUE if current Request is a PATCH Request and FALSE otherwise
      */
-    public function isPatch() {
+    public function isPatch() : bool {
         return ( $this -> method === self::PATCH );
     }
 
     /**
      * Is this a POST method request?
      *
-     * @return bool
+     * @return boolean
      *  TRUE if current Request is a POST Request and FALSE otherwise
      */
-    public function isPost() {
+    public function isPost() : bool {
         return ( $this -> method === self::POST );
     }
 
     /**
      * Is this a PUT method request?
      *
-     * @return bool
+     * @return boolean
      *  TRUE if current Request is a PUT Request and FALSE otherwise
      */
-    public function isPut() {
+    public function isPut() : bool {
         return ( $this -> method === self::PUT );
     }
 
     /**
      * Is this a DELETE method request?
      *
-     * @return bool
+     * @return boolean
      *  TRUE if current Request is a DELETE Request and FALSE otherwise
      */
-    public function isDelete() {
+    public function isDelete() : bool {
         return ( $this -> method === self::DELETE );
     }
 
     /**
      * Is this a HEAD method request?
      *
-     * @return bool
+     * @return boolean
      *  TRUE if current Request is a HEAD Request and FALSE otherwise
      */
-    public function isHead() {
+    public function isHead() : bool {
         return ( $this -> method === self::HEAD );
     }
 
     /**
      * Is this an OPTIONS method request?
      *
-     * @return bool
+     * @return boolean
      *  TRUE if current Request is an OPTIONS Request and FALSE otherwise
      */
-    public function isOptions() {
+    public function isOptions() : bool {
         return ( $this -> method === self::OPTIONS );
     }
 
     /**
      * Is this a CONNECT method request?
      *
-     * @return bool
+     * @return boolean
      *  TRUE if current Request is a CONNECT Request and FALSE otherwise
      */
-    public function isConnect() {
+    public function isConnect() : bool {
         return ( $this -> method === self::CONNECT );
     }
 
     /**
      * Is this a TRACE method request?
      *
-     * @return bool
+     * @return boolean
      *  TRUE if current Request is a TRACE Request and FALSE otherwise
      */
-    public function isTrace() {
+    public function isTrace() : bool {
         return ( $this -> method === self::TRACE );
     }
 
@@ -631,7 +656,7 @@ class Request extends Object {
      * @return boolean
      *  TRUE if is an AJAX Request and FALSE otherwise
      */
-    public function isAjax() {
+    public function isAjax() : bool {
 
         $header = $this -> headers -> item( 'X-Requested-With' );
 
@@ -647,7 +672,7 @@ class Request extends Object {
      * @return boolean
      *  TRUE if is a Flash Request and FALSE otherwise
      */
-    public function isFlash() {
+    public function isFlash() : bool {
 
         $header = $this -> headers -> item( 'User-Agent' );
 
@@ -663,7 +688,7 @@ class Request extends Object {
      * @return boolean
      *  TRUE if is under an SSL Request and FALSE otherwise
      */
-    public function isSsl() {
+    public function isSsl() : bool {
         return $this -> getData( $_SERVER, 'HTTPS' ) === 'on';
     }
 
@@ -673,7 +698,7 @@ class Request extends Object {
      * @return boolean
      *  TRUE if is under Command Line (CLI) and FALSE otherwise
      */
-    public function isCli() {
+    public function isCli() : bool {
         return ( PHP_SAPI == 'cli' || PHP_SAPI == 'cli-server' );
     }
 
@@ -686,7 +711,7 @@ class Request extends Object {
      * @return \Next\HTTP\Request
      *  Request Instance (Fluent Interface)
      */
-    public function setQuery( array $data ) {
+    public function setQuery( array $data ) : Request {
 
         $this -> queryData = array_merge( $this -> queryData, $data );
 
@@ -700,18 +725,11 @@ class Request extends Object {
      *  Desired Dynamic Param
      *
      * @return mixed
+     *  If **$key** isn't set or (i.e. `NULL`), all POST Data (i.e. $_POST)
+     *  will be returned as array
      *
-     *   <p>
-     *       If <strong>$key</strong> is equal to NULL, all the
-     *       Query Data will be returned
-     *   </p>
-     *
-     *   <p>
-     *       If <strong>$key</strong> is NOT NULL AND given key exists in Query Data array will
-     *       be returned
-     *   </p>
-     *
-     *   <p>Otherwise, returns NULL</p>
+     *  If defined key exists as Post Data it'll be returned, if not `NULL`
+     *  is returned instead
      */
     public function getQuery( $key = NULL ) {
         return $this -> getData( $this -> queryData, $key );
@@ -733,7 +751,7 @@ class Request extends Object {
      *   <strong>$value</strong> argument is NULL, case in which a
      *  possible RAW Data should be considered instead
      */
-    public function setPostData( $field, $value = NULL ) {
+    public function setPostData( $field, $value = NULL ) : Request {
 
         if( (array) $field === $field ) {
 
@@ -754,7 +772,7 @@ class Request extends Object {
                 );
             }
 
-               $this -> postData[ $field ] = $value;
+            $this -> postData[ $field ] = $value;
         }
 
         return $this;
@@ -775,7 +793,7 @@ class Request extends Object {
      * @return \Next\HTTP\Request
      *  Request Instance (Fluent Interface)
      */
-    public function setRawPostData( $field, $value = NULL ) {
+    public function setRawPostData( $field, $value = NULL ) : Request {
 
         if( (array) $field === $field ) {
 
@@ -806,20 +824,26 @@ class Request extends Object {
      *  Desired POST Param
      *
      * @return mixed
+     *  If **$key** isn't set or (i.e. `NULL`), all POST Data (i.e. $_POST)
+     *  will be returned as array
      *
-     *   <p>
-     *       If <strong>$key</strong> is equal to NULL, all the
-     *       POST Data will be returned
-     *   </p>
+     *  If defined key exists as Post Data it'll be returned, if not `NULL`
+     *  is returned instead
      *
-     *   <p>
-     *      If <strong>$key</strong> is NOT NULL AND given key exists
-     *      in POST Data array will be returned
-     *   </p>
+     * @throws \Next\Exception\Exceptions\BadMethodCallException
+     *  Throw if trying to retried Post Data while not being in a POST Request
      *
-     *   <p>Otherwise, returns FALSE</p>
+     * @see \Next\HTTP\Request::getData()
      */
     public function getPost( $key = NULL ) {
+
+        if( ! $this -> isPost() ) {
+
+            throw new BadMethodCallException(
+                'POST Data is only available on POST Requests'
+            );
+        }
+
         return $this -> getData( $this -> postData, $key );
     }
 
@@ -827,16 +851,14 @@ class Request extends Object {
      * Get Raw Data
      *
      * @return string|NULL
-     *
-     *   <p>If there is RAW Data to return, it will be.</p>
-     *
-     *   <p>Otherwise, or if RAW Data is made by blanks, NULL is returned</p>
+     *  If there is RAW Data to return, it will be
+     *  If not or if RAW Data is made of blanks, NULL is returned
      */
-    public function getRawData() {
+    public function getRawData() :? string {
 
         $data = file_get_contents( 'php://input' );
 
-        return ( strlen( trim( $data ) ) > 0 ? $data : NULL );
+        return ( mb_strlen( trim( $data ) ) > 0 ? $data : NULL );
     }
 
     /**
@@ -846,18 +868,11 @@ class Request extends Object {
      *  Desired SERVER Param
      *
      * @return mixed
+     *  If **$key** isn't set or (i.e. `NULL`), all POST Data (i.e. $_POST)
+     *  will be returned as array
      *
-     *   <p>
-     *       If <strong>$key</strong> is equal to NULL, all the
-     *       SERVER Data will be returned
-     *   </p>
-     *
-     *   <p>
-     *       If <strong>$key</strong> is NOT NULL AND given key exists
-     *       in SERVER Data array will be returned
-     *   </p>
-     *
-     *   <p>Otherwise, returns FALSE</p>
+     *  If defined key exists as Post Data it'll be returned, if not `NULL`
+     *  is returned instead
      */
     public function getServer( $key = NULL ) {
         return $this -> getData( $_SERVER, $key );
@@ -869,64 +884,45 @@ class Request extends Object {
      * @param string|optional $key
      *  Desired environment variable
      *
+     * @param boolean|option $strict
+     *  Conditions whether or not the search will be case-sensitive.
+     *  Defaults to FALSE because $_ENV may be empty if, for some reason, it
+     *  has been explicitly disabled in PHP.INI 'variables_order directive'
+     *
      * @return mixed
+     *  If **$key** isn't set or (i.e. `NULL`), all POST Data (i.e. $_POST)
+     *  will be returned as array
      *
-     *  <p>
-     *      If directive <a href="http://us.php.net/manual/en/ini.core.php#ini.variables-order">variables_order</a>
-     *      has the "E" indicator, the data will be retrieved from $_ENV superglobal.
-     *  </p>
-     *
-     *  <p>
-     *      In this case, if <strong>$key</strong> is not specified, all Environment
-     *      Variables available will be returned
-     *  </p>
-     *
-     *  <p>
-     *     If <strong>$key</strong> is defined and it exists among Environment Variables,
-     *     if any, it will be returned. Otherwise, NULL is returned.
-     *  </p>
-     *
-     *  <p>
-     *      But, if this directive doesn't have the "E" indicator -OR- if for some
-     *      reason, the ini_get() function doesn't exist (likely because it has
-     *      been disabled for pseudo-security reasons) the getenv() function will
-     *      be used instead, and thus, if the variable doesn't exist, FALSE is returned
-     *  </p>
+     *  If defined key exists as Post Data it'll be returned, if not `NULL`
+     *  is returned instead
      */
-    public function getEnv( $key = NULL ) {
+    public function getEnv( $key = NULL, $strict = FALSE ) {
 
-        if( function_exists( 'ini_get' ) ) {
+        if( function_exists( 'ini_get' ) &&
+                strpos( 'E', ini_get( 'variables_order' ) !== FALSE ) &&
+                    $strict !== FALSE ) {
 
-            if( strpos( 'E', ini_get( 'variables_order' ) !== FALSE ) ) {
-                return $this -> getData( $_ENV, $key );
-            }
+            return $this -> getData( $_ENV, $key );
         }
 
         return getenv( $key );
     }
 
     /**
-     * Wrapper Method for Data Retrieve
+     * Wrapper Method for Data Retrieving
      *
      * @param array $source
-     *  Data-source, super-global or class property
+     *  Data-source
      *
      * @param string|optional $key
      *  Desired Param
      *
      * @return mixed
+     *  If **$key** isn't set or (i.e. `NULL`), all POST Data (i.e. $_POST)
+     *  will be returned as array
      *
-     *   <p>
-     *       If <strong>$key</strong> is equal to NULL, all Data-source
-     *       will be returned
-     *   </p>
-     *
-     *   <p>
-     *       If </strong>$key is NOT NULL AND given key exists in
-     *       Source Data array it will be returned
-     *   </p>
-     *
-     *   <p>Otherwise, returns NULL</p>
+     *  If defined key exists as Post Data it'll be returned, if not `NULL`
+     *  is returned instead
      */
     public function getData( array $source, $key = NULL ) {
 
@@ -940,16 +936,10 @@ class Request extends Object {
     /**
      * Send the Request
      *
-     * @return \Next\HTTP\Response|NULL
-     *
-     *  If an AdapterException is caught
-     *  something is wrong with Response being send and thus NULL is returned
-     *
-     *  Otherwise, if everything is fine, a \Next\HTTP\Response instance will
-     *
-     * @see \Next\HTTP\Stream\Adapter\AdapterException
+     * @return \Next\HTTP\Response
+     *  HTTP Response Object
      */
-    public function send() {
+    public function send() : Response {
 
         // Setting Up a Fallback HTTP Stream Adapter
 
@@ -1030,7 +1020,7 @@ class Request extends Object {
                $this -> adapter -> getMetaData()
            );
 
-        } catch( AdapterException $e ) {
+        } catch( LengthException | RuntimeException $e ) {
 
             return new Response;
         }
@@ -1041,10 +1031,12 @@ class Request extends Object {
     /**
      * Get Connection Adapter, available only in External Requests
      *
-     * @return \Next\HTTP\Adapter\Adapter
-     *  Adapter Object
+     * @return \Next\HTTP\Stream\Adapter\Adapter|NULL
+     *  On external Requests, an Object instance of
+     *  `\Next\HTTP\Stream\Adapter\Adapter` will be returned.
+     *  On internal (i.e routed) Requests, nothing is returned
      */
-    public function getAdapter() {
+    public function getAdapter() :? Adapter {
         return $this -> adapter;
     }
 
@@ -1056,7 +1048,7 @@ class Request extends Object {
      * @return array
      *  HTTP Request Object Class Default Options
      */
-    public function setOptions() {
+    public function setOptions() : array {
 
         return [
             'adapter'  => [ 'type' => 'Next\HTTP\Stream\Adapter\Adapter', 'required' => FALSE ],
@@ -1087,7 +1079,7 @@ class Request extends Object {
      * @return integer|NULL
      *  Protocol version if able to match and NULL otherwise
      */
-    private function getProtocolVersion() {
+    private function getProtocolVersion() : void {
 
         $headers = get_headers( $this -> uri );
 
@@ -1098,92 +1090,7 @@ class Request extends Object {
             preg_match( self::PROTOCOL_REGEXP, $data, $match );
 
             if( array_key_exists( 'version', $match ) ) {
-
                 $this -> protocol -> version = $match['version'];
-            }
-        }
-    }
-
-    /**
-     * Add Default Headers
-     *
-     * Default Headers comes from apache_request_headers() function (if available)
-     * of by analyzing $_SERVER variable
-     *
-     * This is a wrapper method, in order to make Request Constructor shorter
-     */
-    private function addDefaultHeaders() {
-
-        /**
-         * @internal
-         * These Headers are added only here, mainly but not strictly, in order to not
-         * create any conflict with User-Defined Headers Choices.
-         *
-         * E.g:
-         *
-         * In order to use Google's URL Shortener API, we should define three required
-         * Stream Context Params:
-         *
-         * - Method          => Must be POST
-         * - Content-Type    => As part of headers, must be application/json
-         * - POSTDATA        => A JSON string in the format {"longUrl": "LONG_URL_HERE"}
-         *
-         * But, among all the default headers automatically provided
-         * through apache_request_headers() function -OR- by analyzing
-         * $_SERVER contents, a simple Request to the Service fails
-         *
-         * So, if we have an HTTP Stream to work with, these Headers are not added
-         */
-        if( function_exists( 'apache_request_headers' ) ) {
-
-            try {
-
-                $this -> headers -> addHeader( apache_request_headers() );
-
-            } catch( Exception $e ) {
-
-                /**
-                 * @internal
-                 * We're silencing any Next\Exception\Exception caught
-                 * in order to not break the Request Flow
-                 * However, if this happens, no Request Headers
-                 * will be available
-                 */
-            }
-
-        } else {
-
-            // This avoids non-HTTP-related indexes to be added as Generic Header
-
-            $fields = array_filter(
-
-                array_keys( $_SERVER ),
-
-                function( $item ) {
-                    return ( substr( $item, 0, 5 ) == 'HTTP_' );
-                }
-            );
-
-            $length = count( $fields );
-
-            if( $length != 0 ) {
-
-                try {
-
-                    $this -> headers -> addHeader(
-
-                        array_intersect_key(
-
-                            $_SERVER,
-
-                            array_combine( $fields, array_fill( 0, $length, NULL ) )
-                        )
-                    );
-
-                } catch( Exception $e ) {
-
-                    // Same explanation as above
-                }
             }
         }
     }
@@ -1193,7 +1100,7 @@ class Request extends Object {
     /**
      * Wrapper method for POST Request routines
      */
-    private function sendPost() {
+    private function sendPost() : void {
 
         /**
          * @internal

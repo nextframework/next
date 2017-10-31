@@ -15,19 +15,28 @@ namespace Next\HTTP\Router;
  */
 use Next\Exception\Exceptions\BadMethodCallException;
 
-use Next\Components\Interfaces\Verifiable;            # Verifiable Interface
+use Next\Validation\Verifiable;                       # Verifiable Interface
 use Next\Application\Application;                     # Application Interface
 
 use Next\Components\Object;                           # Object Class
+use Next\Components\Parameter;                        # Parameter Class
 use Next\HTTP\Request;                                # Request Class
 use Next\DB\Driver\PDO\Adapter\SQLite as Adapter;     # SQLite DB Adapter
 
 /**
- * HTTP Request Router based on SQLite Databases
- * It uses most of the logics of `\Next\HTTP\Router\Standard`
- * as it derives only the way of finding the Routes, having the same parser
+ * HTTP Request Router based on SQLite Databases.
+ * It uses most of the logics of the Standard Router as it derives only the
+ * way of finding the Routes, having the same parser
  *
  * @package    Next\HTTP
+ *
+ * @uses       Next\Exception\Exceptions\BadMethodCallException
+ *             Next\Validation\Verifiable
+ *             Next\Application\Application
+ *             Next\Components\Object
+ *             Next\Components\Parameter
+ *             Next\HTTP\Request
+ *             Next\DB\Driver\PDO\Adapter\SQLite
  */
 class SQLite extends Standard {
 
@@ -46,7 +55,7 @@ class SQLite extends Standard {
      * @see SQLite::connect()
      * @see SQLite::createFunction()
      */
-    protected function init() {
+    protected function init() : void {
 
         $this -> connect();
 
@@ -64,9 +73,9 @@ class SQLite extends Standard {
      *  array or an object will be returned (depending on Connection
      *  Driver configuration).
      *
-     *  If none could, FALSE will be returned
+     *  If none could, NULL is returned
      */
-    public function find() {
+    public function find() :? Parameter {
 
         // Shortening Declarations
 
@@ -115,7 +124,7 @@ class SQLite extends Standard {
 
         // Match found, let's prepare everything for a successful Dispatch
 
-        if( $data === FALSE ) return FALSE;
+        if( $data === FALSE ) return NULL;
 
         /**
          * @internal
@@ -169,9 +178,10 @@ class SQLite extends Standard {
 
                 $requiredParams,
 
-                function( $current ) {
+                function( $current ) : bool {
 
-                    return ( ! empty( $current['acceptable'] ) || ! empty( $current['regex'] ) );
+                    return ( ! empty( $current['acceptable'] ) ||
+                                ! empty( $current['regex'] ) );
                 }
             ),
 
@@ -202,7 +212,7 @@ class SQLite extends Standard {
      * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Filepath to the SQLite Database File was not informed or it's empty
      */
-    public function verify() {
+    public function verify() : void {
 
         // Checking if Database File Exists
 
@@ -226,7 +236,7 @@ class SQLite extends Standard {
      * Set Class Options.
      * Defines a default dbpath for the SQLite Database with Generated Routes
      */
-    public function setOptions() {
+    public function setOptions() : array {
         return [ 'dbPath' => __DIR__ . '/routes.sqlite' ];
     }
 
@@ -235,7 +245,7 @@ class SQLite extends Standard {
     /**
      * Establishes a Connection with the SQLITE Database File
      */
-    private function connect() {
+    private function connect() : void {
 
         $adapter = new Adapter(
            [ 'dbPath' => $this -> options -> dbPath ]
@@ -252,7 +262,7 @@ class SQLite extends Standard {
      *  Current Database Connection Adapter doesn't have the
      *  sqliteCreateFunction() method
      */
-    private function createFunction() {
+    private function createFunction() : void {
 
         if( ! method_exists( $this -> dbh, 'sqliteCreateFunction' ) ) {
 
@@ -268,8 +278,7 @@ class SQLite extends Standard {
 
                   'REGEXP',
 
-                  function( $r, $s ) {
-
+                  function( $r, $s ) : bool {
                       return ( preg_match( sprintf( '@^%s$@i', $r ), $s ) != 0 );
                   },
 

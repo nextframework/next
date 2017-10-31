@@ -13,19 +13,27 @@ namespace Next\Components;
 /**
  * Exception Class(es)
  */
-use Next\Components\Interfaces\Contextualizable;
 use Next\Exception\Exceptions\BadMethodCallException;
 use Next\Exception\Exceptions\NullException;
 
-use Next\Components\Invoker;             # Invoker Class
-use Next\Components\Utils\ArrayUtils;    # Array Utils Class
+use Next\Components\Interfaces\Contextualizable;    # Contextualizable Interface
+use Next\Components\Invoker;                        # Invoker Class
+use Next\Components\Utils\ArrayUtils;               # Array Utils Class
 
 /**
- * Bridges two \Next\Components\Object instances wrapped by a
- * \Next\Components\Invoker Object and handles methods calling
- * within the Extended Context
+ * Bridges two Object instances wrapped in an Invoker Object and handles
+ * methods calling within the Extended Context
  *
  * @package    Next\Components
+ *
+ * @uses       Next\Exception\Exceptions\BadMethodCallException
+ *             Next\Exception\Exceptions\NullException
+ *             Next\Components\Interfaces\Contextualizable
+ *             Next\Components\Invoker
+ *             Next\Components\Utils\ArrayUtils
+ *             ReflectionObject
+ *             ReflectionMethod
+ *             ReflectionException
  */
 class Context implements Contextualizable {
 
@@ -49,7 +57,7 @@ class Context implements Contextualizable {
      * @return \Next\Components\Context
      *  Context Instance (Fluent Interface)
      */
-    function extend( Invoker $invoker, $methods = NULL ) {
+    function extend( Invoker $invoker, $methods = NULL ) : Context {
 
         $caller = $invoker -> getCaller();
         $callee = $invoker -> getCallee();
@@ -104,7 +112,7 @@ class Context implements Contextualizable {
      *  method under Extended Context
      *
      * @throws \Next\Exception\Exceptions\NullException
-     *  Thrown as a way for `\Next\Components\Object` to know the
+     *  Thrown as a way for Next\Components\Object` to know the
      *  method hasn't been found as part of the Extended Context and
      *  should try to search as Prototyped Resource
      */
@@ -143,7 +151,9 @@ class Context implements Contextualizable {
                             under Extended Context',
 
                             $method
-                        )
+                        ),
+
+                        BadMethodCallException::PHP_ERROR
                     );
                 }
             }
@@ -175,7 +185,7 @@ class Context implements Contextualizable {
      * @return array
      *  Registered Context Callables
      */
-    public function getCallables() {
+    public function getCallables() : array {
         return $this -> callables;
     }
 
@@ -198,7 +208,7 @@ class Context implements Contextualizable {
      *  property of current element is not a method of one of the
      *  classes mentioned above and FALSE otherwise
      */
-    private function filter( $element ) {
+    private function filter( $element ) : bool {
 
         if( ! $element instanceof \ReflectionMethod ) {
             return TRUE;
@@ -228,7 +238,7 @@ class Context implements Contextualizable {
      *
      *  Otherwise it will be returned "as is"
      */
-    private function simplify( $element ) {
+    private function simplify( $element ) : string {
 
         return ( ! $element instanceof \ReflectionMethod  ) ?
                     $element : $element -> name;

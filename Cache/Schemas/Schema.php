@@ -11,16 +11,14 @@
 namespace Next\Cache\Schemas;
 
 /**
- * Defines the Caching Schema Type, with all methods that must be present
- * in an Caching Schema, be it through \Next\Cache\Schemas\AbstractSchema
- * or the concrete implementations of it
+ * An Interface for all Caching Schema Strategies
  *
  * @package    Next\Cache
  */
 interface Schema {
 
     /**
-     * Caching Routine to be executed by \Next\Controller\Front
+     * Caching Routine to be executed by Next\Controller\Front`
      */
-    public function run();
+    public function run() : void;
 }
