@@ -15,9 +15,8 @@ namespace Next\Filter;
  */
 use Next\Exception\Exceptions\InvalidArgumentException;
 
-use Next\Components\Object;      # Object Class
-use Next\Components\Invoker;     # Invoker Class
-use Next\Components\Mimicker;    # Mimicker Class
+use Next\Components\Interfaces\Configurable;    # Configurable Interface
+use Next\Components\Object;                     # Object Class
 
 /**
  * Strips out (X)HTML tags of input string.
@@ -27,14 +26,13 @@ use Next\Components\Mimicker;    # Mimicker Class
  * @package    Next\Filter
  *
  * @uses       Next\Exception\Exceptions\InvalidArgumentException
+ *             Next\Components\Interfaces\Configurable
  *             Next\Components\Object,
  *             Next\Filter\Filterable
- *             Next\Components\Invoker
- *             Next\Components\Mimicker
  *             DOMDocument
  *             DOMNode
  */
-class StripTags extends Object implements Filterable {
+class StripTags extends Object implements Filterable, Configurable {
 
     /**
      * Parameter Options Definition
@@ -99,12 +97,10 @@ class StripTags extends Object implements Filterable {
     protected $DOM;
 
     /**
-     * Additional Initialization.
-     * Creates a DOMDocument Object, loading input data as HTML and
-     * extends this class' context to the DOMDocument instance created,
-     * bridging them
+     * Post-Initialization Configuration.
+     * Creates a DOMDocument Object, loading input data as HTML
      */
-    protected function init() : void {
+    public function configure() : void {
 
         $this -> DOM = new \DOMDocument(
             $this -> options -> version,
@@ -116,16 +112,6 @@ class StripTags extends Object implements Filterable {
             $this -> options -> data,
 
             LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
-        );
-
-        $this -> extend(
-
-            new Invoker(
-
-                $this,
-
-                new Mimicker( [ 'resource' => $this -> DOM ] )
-            )
         );
     }
 
@@ -149,9 +135,11 @@ class StripTags extends Object implements Filterable {
             throw new InvalidArgumentException( 'Nothing to filter' );
         }
 
+        $this -> configure();
+
         $this -> stripTags( $this -> DOM );
 
-        return $this -> saveHTML( $this -> DOM );
+        return $this -> DOM -> saveHTML( $this -> DOM );
     }
 
     // Auxiliary Methods
@@ -243,7 +231,9 @@ class StripTags extends Object implements Filterable {
      * @param  \DOMNode $node
      *  DOMNode node to traverse
      */
-    protected function walk( \DOMNode $node ) : \Generator {
+    protected function walk( \DOMNode $node, $skipParent = false ) : \Generator {
+
+        if( ! $skipParent ) yield $node;
 
         if( $node -> hasChildNodes() ) {
 

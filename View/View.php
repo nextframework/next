@@ -185,15 +185,17 @@ interface View {
      */
     public function getVar( $tplVar );
 
-    // Page renderer
+    // Template Rendering-related Methods
 
     /**
-     * Get Default Template
+     * Disable Rendering Process
      */
-    public function getDefaultTemplate() :? string;
+    public function disableRender() : View;
 
-
-    // Page Render
+    /**
+     * (Re-)Enables Rendering process
+     */
+    public function enableRender() : View;
 
     /**
      * Render the page, outputs the buffer
@@ -207,15 +209,8 @@ interface View {
      */
     public function render( $name = NULL, $search = TRUE ) : Response;
 
-    // Accessors
-
     /**
-     * Disable Rendering Process
+     * Get Default Template
      */
-    public function disableRender() : View;
-
-    /**
-     * (Re-)Enables Rendering process
-     */
-    public function enableRender() : View;
+    public function getDefaultTemplate() :? string;
 }

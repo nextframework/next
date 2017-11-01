@@ -129,7 +129,24 @@ class Standard extends Object implements Verifiable, View {
          * allows View::render() to be called without arguments or even letting
          * Controller::__destruct() to do everything for you ;)
          */
-        'defaultTemplate' => [ 'required' => FALSE, 'default' => NULL ]
+        'defaultTemplate' => [ 'required' => FALSE, 'default' => NULL ],
+
+        /**
+         * Controls whether or not Templates will be rendered by default.
+         * Useful when an Application needs an Interface compliant implementation
+         * of Next\Application\Application::setupView() but doesn't need any
+         * Template Rendering — like Applications that communicates with the
+         * Client only through JSON responses (i.e. AJAX calls).
+         * Defaults to TRUE
+         */
+        'render' => [ 'required' => FALSE, 'default' => TRUE ],
+
+        /**
+         * Defines the default escape callback for Template Variables.
+         * Defauls to stripslashes() function to undo the effects of
+         * addslashes()/addcslashes() or Next\Filter\Slashify()
+         */
+        'escapeCallback' => [ 'required' => FALSE, 'default' => 'stripslashes' ]
     ];
 
     /**
@@ -159,7 +176,6 @@ class Standard extends Object implements Verifiable, View {
         '_tplVars',
         '_forbiddenTplVars',
         '_paths',
-        '_shouldRender',
 
         /**
          * @internal
@@ -180,13 +196,6 @@ class Standard extends Object implements Verifiable, View {
      * @var array $_paths
      */
     private $_paths = [];
-
-    /**
-     * Flag to define whether or not Template File should be rendered
-     *
-     * @var boolean $_shouldRender
-     */
-    private $_shouldRender = TRUE;
 
     /**
      * Additional Initialization.
@@ -497,16 +506,32 @@ class Standard extends Object implements Verifiable, View {
                     $this -> _tplVars[ $tplVar ] : NULL );
     }
 
-    // Page renderer
+    // Template Renderer-related Methods
 
     /**
-     * Get Default Template
+     * Disable Rendering process
      *
-     * @return string
-     *  Default Template View File
+     * @return \Next\View\View
+     *  View Object (Fluent Interface)
      */
-    public function getDefaultTemplate() :? string {
-        return $this -> options -> defaultTemplate;
+    public function disableRender() : View {
+
+        $this -> options -> render = FALSE;
+
+        return $this;
+    }
+
+    /**
+     * (Re-)Enables Rendering process
+     *
+     * @return \Next\View\View
+     *  View Object (Fluent Interface)
+     */
+    public function enableRender() : View {
+
+        $this -> options -> render = TRUE;
+
+        return $this;
     }
 
     /**
@@ -539,7 +564,7 @@ class Standard extends Object implements Verifiable, View {
          * - Any kind of output has already been sent,
          *   like a debugging purposes var_dump()
          */
-        if( ! $this -> _shouldRender || ob_get_length() != 0 ) {
+        if( ! $this -> options -> render || ob_get_length() != 0 ) {
             return $response;
         }
 
@@ -568,45 +593,29 @@ class Standard extends Object implements Verifiable, View {
             include $this -> findFile( $name );
         }
 
-        // Adding Main View Content to Response Body
+        // Adding escaped Main View Content to Response Body
 
-        $response -> appendBody( ob_get_clean() );
+        $response -> appendBody(
+            call_user_func( $this -> options -> escapeCallback, ob_get_clean() )
+        );
 
         /**
          * Something was rendered, so let's disallow another
          * rendering for this Request
          */
-        $this -> _shouldRender = FALSE;
+        $this -> options -> render = FALSE;
 
         return $response;
     }
 
-    // Accessory Methods
-
     /**
-     * Disable Rendering process
+     * Get Default Template
      *
-     * @return \Next\View\View
-     *  View Object (Fluent Interface)
+     * @return string
+     *  Default Template View File
      */
-    public function disableRender() : View {
-
-        $this -> _shouldRender = FALSE;
-
-        return $this;
-    }
-
-    /**
-     * (Re-)Enables Rendering process
-     *
-     * @return \Next\View\View
-     *  View Object (Fluent Interface)
-     */
-    public function enableRender() : View {
-
-        $this -> _shouldRender = TRUE;
-
-        return $this;
+    public function getDefaultTemplate() :? string {
+        return $this -> options -> defaultTemplate;
     }
 
     // Verifiable Interface Method Implementation
@@ -617,6 +626,9 @@ class Standard extends Object implements Verifiable, View {
      * @throws \Next\Exception\Exceptions\InvalidArgumentException
      *  Thrown if provided Template View FileSpec is not minimally
      *  valid (i.e at least one string led by a colon)
+     *
+     * @throws \Next\Exception\Exceptions\InvalidArgumentException
+     *  Thrown if provided un-escape callback is not really a callable resource
      */
     public function verify() : void {
 
@@ -631,6 +643,16 @@ class Standard extends Object implements Verifiable, View {
 
                     $this -> options -> application -> getClass() -> getName()
                 )
+            );
+        }
+
+        // Un-escape Callback
+
+        if( $this -> options -> escapeCallback !== NULL &&
+            ! is_callable( $this -> options -> escapeCallback ) ) {
+
+            throw new InvalidArgumentException(
+                'The Un-escape callback defined is not a valid callable resource'
             );
         }
     }

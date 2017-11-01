@@ -19,11 +19,11 @@ use Next\Exception\Exceptions\BadMethodCallException;
 use Next\Exception\Exceptions\InvalidArgumentException;
 
 use Next\Validation\Verifiable;                   # Verifiable Interface
-use Next\HTTP\Router\Router;                      # Router Interface
+use Next\View\View as Views;                      # View Engine Interface
 use Next\Components\Object;                       # Object Class
 use Next\Cache\Schemas\Chain as CachingChain;     # Caching Schemas Chain Class
 use Next\Controller\Chain as ControllersChain;    # Controllers Chain Class
-use Next\View\View;                               # View Engine Interface
+use Next\HTTP\Router\Router as Routers;           # Router Abstract Class
 use Next\HTTP\Request;                            # Request Class
 use Next\HTTP\Response;                           # Response Class
 use Next\Session\Manager as Session;              # Session Manager
@@ -219,7 +219,7 @@ abstract class Application extends Object implements Verifiable {
      *  `\Next\Validation\Verifiable::verify()` will ensure that.
      * Otherwise this returns `NULL` to satisfy the PHP 7 Return Type Declaration
      */
-    protected function setupView() :? View {
+    protected function setupView() :? Views {
         return NULL;
     }
 
@@ -238,7 +238,7 @@ abstract class Application extends Object implements Verifiable {
      *  `\Next\Validation\Verifiable::verify()` will ensure that.
      * Otherwise this returns `NULL` to satisfy the PHP 7 Return Type Declaration
      */
-    protected function setupRouter() :? Router {
+    protected function setupRouter() :? Routers {
         return NULL;
     }
 
@@ -352,7 +352,7 @@ abstract class Application extends Object implements Verifiable {
      * @return \Next\HTTP\Router\Router
      *  Router Object
      */
-    public function getRouter() : Router {
+    public function getRouter() : Routers {
         return $this -> router;
     }
 
@@ -362,7 +362,7 @@ abstract class Application extends Object implements Verifiable {
      * @return \Next\View\View
      *  View Engine Object
      */
-    public function getView() : View {
+    public function getView() : Views {
         return $this -> view;
     }
 
@@ -429,14 +429,14 @@ abstract class Application extends Object implements Verifiable {
      */
     public function verify() : void {
 
-        if( $this -> router !== NULL && ! $this -> router instanceof Router ) {
+        if( $this -> router !== NULL && ! $this -> router instanceof Routers ) {
 
             throw new InvalidArgumentException(
                 'Routers must implement <em>Next\HTTP\Router\Router</em> Interface'
             );
         }
 
-        if( $this -> view !== NULL && ! $this -> view instanceof View ) {
+        if( $this -> view !== NULL && ! $this -> view instanceof Views ) {
 
             throw new InvalidArgumentException(
                 'View Engines must implement View <em>Next\View\View</em> Interface'
