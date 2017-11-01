@@ -155,7 +155,7 @@ class Object extends Prototype implements Hashable, Contextualizable, Informatio
 
         foreach( $param as $k => $v ) {
 
-            if( mb_strlen( $k ) == 0 ) {
+            if( strlen( $k ) == 0 ) {
 
                 throw new RuntimeException(
                     'Although accepted as valid by PHP, all dimensions must have a key'
@@ -289,10 +289,11 @@ class Object extends Prototype implements Hashable, Contextualizable, Informatio
     /**
      * Get informational message
      *
-     * @return string
-     *  Informational Message
+     * @return mixed
+     *  Informational Message.
+     *  Because it's flexible it can be a simple string or an array of informations
      */
-    public function getInformationalMessage() :? string {
+    public function getInformationalMessage() {
         return $this -> _info;
     }
 

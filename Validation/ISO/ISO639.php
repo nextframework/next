@@ -95,6 +95,6 @@ class ISO639 extends Object implements Validator {
          */
         $this -> _info = $value;
 
-        return ( mb_strlen( $value ) == 2 && in_array( $value, self::CODES ) );
+        return ( strlen( $value ) == 2 && in_array( $value, self::CODES ) );
     }
 }

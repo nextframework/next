@@ -87,7 +87,7 @@ class AlphaID implements Prototypable {
      */
     private function encode( int $input, string $index ) : string {
 
-        $base    = mb_strlen( $index );
+        $base    = strlen( $index );
         $input  += pow( $base, 4 );
         $output  = '';
 

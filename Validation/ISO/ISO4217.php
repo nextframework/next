@@ -90,6 +90,6 @@ class ISO4217 extends Object implements Validator {
          */
         $this -> _info = $value;
 
-        return ( mb_strlen( $value ) == 3 && in_array( $value, self::CURRENCIES ) );
+        return ( strlen( $value ) == 3 && in_array( $value, self::CURRENCIES ) );
     }
 }

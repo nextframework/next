@@ -54,6 +54,6 @@ class ContentMD5 extends Object implements Header {
 
         preg_match( '/^(?<hash>[a-zA-Z0-9\+\=\/]+)$/', $this -> options -> value, $match );
 
-        return ( count( $match ) != 0 && mb_strlen( base64_decode( $match['hash'] ) ) == 32 );
+        return ( count( $match ) != 0 && strlen( base64_decode( $match['hash'] ) ) == 32 );
     }
 }

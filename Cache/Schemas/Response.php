@@ -211,8 +211,7 @@ class Response extends Object implements Schema {
                 $response -> applyMarkupAdjustments( FALSE )
                           -> addHeader(
                                 new ContentLength(
-
-                                    [ 'value' => mb_strlen( $data ) ]
+                                    [ 'value' => strlen( $data ) ]
                                 )
                              )
                           -> appendBody( $data );

@@ -41,7 +41,7 @@ class Chain extends Collection implements Validator {
      *  value is valid by all Validators on it and
      *  \Next\Validation\Validator Object otherwise
      */
-    public function validate() : bool {
+    public function validate() {
 
         if( count( $this ) == 0 ) return TRUE;
 

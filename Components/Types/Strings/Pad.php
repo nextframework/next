@@ -76,7 +76,7 @@ class Pad implements Prototypable {
      */
     private function pad( string $string, int $length, string $pad = ' ', int $direction = self::PAD_RIGHT, string $encoding ) : Strings {
 
-        if( $length === NULL || $length <= mb_strlen( $string ) ) {
+        if( $length <= mb_strlen( $string ) ) {
             return new Strings( [ 'value' => $string ] );
         }
 

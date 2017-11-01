@@ -197,7 +197,7 @@ class Annotations extends Object implements Generator {
             $routes,
 
             function( $a, $b ) : int {
-                return ( mb_strlen( $a['route'] ) <=> mb_strlen( $b['route'] ) );
+                return ( strlen( $a['route'] ) <=> strlen( $b['route'] ) );
             }
         );
 

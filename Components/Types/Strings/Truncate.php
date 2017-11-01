@@ -109,7 +109,7 @@ class Truncate implements Prototypable {
      */
     private function truncate( string $string, int $length, int $breakpoint, string $replacement ) : Strings {
 
-        if( mb_strlen( $string ) <= $length ) {
+        if( strlen( $string ) <= $length ) {
             return new Strings( [ 'value' => $string ] );
         }
 
@@ -133,7 +133,7 @@ class Truncate implements Prototypable {
 
             case self::TRUNCATE_CENTER:
 
-                $len = (int) ( ( $length - mb_strlen( $replacement ) ) / 2 );
+                $len = (int) ( ( $length - strlen( $replacement ) ) / 2 );
 
                 // Separate the output from wordwrap() into an array of lines
 
@@ -153,11 +153,11 @@ class Truncate implements Prototypable {
                  * Add words from the second-last line until the end is at least
                  * half as long as $length
                  */
-                if( mb_strlen( $end ) <= ( $length / 2 ) && count( $segments ) > 2 ) {
+                if( strlen( $end ) <= ( $length / 2 ) && count( $segments ) > 2 ) {
 
                     $prev = explode( ' ', prev( $segments ) );
 
-                    while( mb_strlen( $end ) <= ( $length / 2 ) ) {
+                    while( strlen( $end ) <= ( $length / 2 ) ) {
                         $end = sprintf( '%s %s', array_pop( $prev ), $end );
                     }
                 }

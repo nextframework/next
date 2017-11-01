@@ -94,9 +94,9 @@ class AlphaID implements Prototypable {
      */
     private function decode( string $input, string $index ) : int {
 
-        $base   = mb_strlen( $index );
+        $base   = strlen( $index );
         $output = 0;
-        $length = mb_strlen( $input ) - 1;
+        $length = strlen( $input ) - 1;
 
         for( $i = 0; $i <= $length; $i++ ) {
 

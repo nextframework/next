@@ -858,7 +858,7 @@ class Request extends Object {
 
         $data = file_get_contents( 'php://input' );
 
-        return ( mb_strlen( trim( $data ) ) > 0 ? $data : NULL );
+        return ( strlen( trim( $data ) ) > 0 ? $data : NULL );
     }
 
     /**

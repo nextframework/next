@@ -338,7 +338,7 @@ class ArrayUtils {
      * @param boolean|optional $allowZeros
      *  Define whether or not zeros will be allowed in filtered array. If FALSE,
      *  array_filter() with its default behavior will be used. Otherwise, we'll use
-     *  mb_strlen() as callback.
+     *  strlen() as callback.
      *
      * Defaults to TRUE, zeros are allowed.
      *
@@ -350,6 +350,6 @@ class ArrayUtils {
     public static function filter( array $array, $allowZeros = TRUE ) : array {
 
         return ( ( $allowZeros !== FALSE ) ?
-                      array_filter( $array, 'mb_strlen' ) : array_filter( $array ) );
+                      array_filter( $array, 'strlen' ) : array_filter( $array ) );
     }
 }

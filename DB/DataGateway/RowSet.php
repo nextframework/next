@@ -154,7 +154,7 @@ class RowSet extends Object implements DataGateway, \Iterator, \ArrayAccess {
      *  Otherwise, the only Entity Object will be returned directly
      */
     public function getSource() {
-        return ( $this -> total == 1 ? $this -> source[ 0 ] : $this -> source );
+        return ( $this -> total == 1 ? [ $this -> source[ 0 ] ] : $this -> source );
     }
 
     /**

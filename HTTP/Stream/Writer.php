@@ -99,7 +99,7 @@ class Writer extends Object {
 
             $this -> adapter -> getStream(), $string,
 
-            ( $length !== NULL ? $length : mb_strlen( $string ) )
+            ( $length !== NULL ? $length : strlen( $string ) )
         );
 
         if( $written === FALSE ) {

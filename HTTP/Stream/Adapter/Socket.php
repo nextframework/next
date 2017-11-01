@@ -355,7 +355,7 @@ class Socket extends AbstractAdapter implements Verifiable {
             throw new RuntimeException( 'Unable to retrieve Stream size' );
         }
 
-        return mb_strlen( stream_get_contents( $this -> stream ) );
+        return strlen( stream_get_contents( $this -> stream ) );
     }
 
     /**

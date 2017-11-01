@@ -87,7 +87,7 @@ class Dispatcher extends Object {
      * @throws \Next\Exception\Exceptions\BadMethodCallException
      *  ReflectionException was caught
      */
-    public function dispatch( Application $application, Parameter $data ) :? Response {
+    public function dispatch( Application $application, Parameter $data ) {
 
         $response = $application -> getResponse();
 
