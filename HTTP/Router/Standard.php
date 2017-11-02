@@ -100,8 +100,8 @@ class Standard extends Router implements Verifiable {
                      *   of current Request
                      */
                     return ( $route['application']   == $this -> options -> application -> getClass() -> getName() &&
-                           ( $route['requestMethod'] ==          $request -> getRequestMethod() &&
-                             preg_match( sprintf( '@^%s$@i', $route['URI'] ), $URI ) != 0 ) );
+                                ( $route['requestMethod'] == $request -> getRequestMethod() &&
+                                    preg_match( sprintf( '@^%s@i', $route['URI'] ), $URI ) != 0 ) );
                 }
             );
 

@@ -18,18 +18,19 @@ use Next\Exception\Exceptions\BadMethodCallException;
 use Next\Exception\Exceptions\LengthException;
 use Next\Exception\Exceptions\RuntimeException;
 
-use Next\Validation\Verifiable;                # Verifiable Interface
-use Next\HTTP\Headers\Field;                   # Header Fields Interface
-use Next\HTTP\Stream\Adapter\Adapter;          # HTTP Stream Adapter Interface
+use Next\Validation\Verifiable;                 # Verifiable Interface
+use Next\Components\Interfaces\Configurable;    # Configurable Interface
+use Next\HTTP\Headers\Field;                    # Header Fields Interface
+use Next\HTTP\Stream\Adapter\Adapter;           # HTTP Stream Adapter Interface
 
-use Next\Components\Object;                    # Object Class
-use Next\FileSystem\Path;                      # FileSystem Path Data-type Class
-use Next\Components\Parameter;                 # Parameter Object
-use Next\Components\Invoker;                   # Invoker Class
-use Next\HTTP\Stream\Adapter\Socket;           # HTTP Stream Socket Adapter Class
-use Next\HTTP\Stream\Context\SocketContext;    # HTTP Stream Socket Context Class
-use Next\HTTP\Headers\Entity\ContentType;      # Content-Type Header Class
-use Next\HTTP\Stream\Reader;                   # HTTP Stream Reader
+use Next\Components\Object;                     # Object Class
+use Next\FileSystem\Path;                       # FileSystem Path Data-type Class
+use Next\Components\Parameter;                  # Parameter Object
+use Next\Components\Invoker;                    # Invoker Class
+use Next\HTTP\Stream\Adapter\Socket;            # HTTP Stream Socket Adapter Class
+use Next\HTTP\Stream\Context\SocketContext;     # HTTP Stream Socket Context Class
+use Next\HTTP\Headers\Entity\ContentType;       # Content-Type Header Class
+use Next\HTTP\Stream\Reader;                    # HTTP Stream Reader
 
 /**
  * The Request Class
@@ -42,6 +43,7 @@ use Next\HTTP\Stream\Reader;                   # HTTP Stream Reader
  *             Next\HTTP\Headers\Field
  *             Next\HTTP\Stream\Adapter\Adapter
  *             Next\Components\Object
+ *             Next\Components\Interfaces\Configurable
  *             Next\FileSystem\Path
  *             Next\Components\Parameter
  *             Next\Components\Invoker
@@ -52,7 +54,7 @@ use Next\HTTP\Stream\Reader;                   # HTTP Stream Reader
  *             Next\HTTP\Request\Browser
  *             stdcLass
  */
-class Request extends Object {
+class Request extends Object implements Configurable {
 
     // Request Method Constants
 
@@ -389,6 +391,10 @@ class Request extends Object {
                 }
             }
         }
+
+        // Post-initialization Configuration
+
+        $this -> configure();
     }
 
     /**
@@ -548,6 +554,8 @@ class Request extends Object {
         return $this -> protocol;
     }
 
+    // Accessory Methods
+
     /**
      * Get Request Method
      *
@@ -703,6 +711,20 @@ class Request extends Object {
     }
 
     /**
+     * Get Connection Adapter, available only in External Requests
+     *
+     * @return \Next\HTTP\Stream\Adapter\Adapter|NULL
+     *  On external Requests, an Object instance of
+     *  `\Next\HTTP\Stream\Adapter\Adapter` will be returned.
+     *  On internal (i.e routed) Requests, nothing is returned
+     */
+    public function getAdapter() :? Adapter {
+        return $this -> adapter;
+    }
+
+    // Data Manipulation-related Methods
+
+    /**
      * Set Query Data a.k.a. GET Data
      *
      * @param array $data
@@ -725,14 +747,23 @@ class Request extends Object {
      *  Desired Dynamic Param
      *
      * @return mixed
-     *  If **$key** isn't set or (i.e. `NULL`), all POST Data (i.e. $_POST)
+     *  If **$key** isn't set or it's `NULL`, all GET Data (i.e. $_GET)
      *  will be returned as array
      *
-     *  If defined key exists as Post Data it'll be returned, if not `NULL`
-     *  is returned instead
+     *  If defined key exists as GET Data it'll be returned
+     *  Otherwise, it'll return `NULL` instead
+     *
+     *  If Request Object has been configured to automatically filter data -AND-
+     *  the indicator 'G' is present in 'filterable' Parameter Option it'll
+     *  be done
+     *
+     * @see Request::getData()
+     * @see Request::sanitize()
      */
     public function getQuery( $key = NULL ) {
-        return $this -> getData( $this -> queryData, $key );
+
+        return $this -> getData( $this -> queryData, $key,
+                    ( strpos( $this -> options -> filterable, 'G' ) !== FALSE ) );
     }
 
     /**
@@ -824,16 +855,21 @@ class Request extends Object {
      *  Desired POST Param
      *
      * @return mixed
-     *  If **$key** isn't set or (i.e. `NULL`), all POST Data (i.e. $_POST)
+     *  If **$key** isn't set or it's `NULL`, all POST Data (i.e. $_POST)
      *  will be returned as array
      *
-     *  If defined key exists as Post Data it'll be returned, if not `NULL`
-     *  is returned instead
+     *  If defined key exists as POST Data it'll be returned
+     *  Otherwise, it'll return `NULL` instead
+     *
+     *  If Request Object has been configured to automatically filter data -AND-
+     *  the indicator 'P' is present in 'filterable' Parameter Option it'll
+     *  be done
      *
      * @throws \Next\Exception\Exceptions\BadMethodCallException
      *  Throw if trying to retried Post Data while not being in a POST Request
      *
-     * @see \Next\HTTP\Request::getData()
+     * @see Request::getData()
+     * @see Request::sanitize()
      */
     public function getPost( $key = NULL ) {
 
@@ -844,7 +880,8 @@ class Request extends Object {
             );
         }
 
-        return $this -> getData( $this -> postData, $key );
+        return $this -> getData( $this -> postData, $key,
+                    ( strpos( $this -> options -> filterable, 'P' ) !== FALSE ) );
     }
 
     /**
@@ -868,14 +905,23 @@ class Request extends Object {
      *  Desired SERVER Param
      *
      * @return mixed
-     *  If **$key** isn't set or (i.e. `NULL`), all POST Data (i.e. $_POST)
+     *  If **$key** isn't set or it's `NULL`, all Server Data (i.e. $_SERVER)
      *  will be returned as array
      *
-     *  If defined key exists as Post Data it'll be returned, if not `NULL`
-     *  is returned instead
+     *  If defined key exists as Server Data it'll be returned
+     *  Otherwise, it'll return `NULL` instead
+     *
+     *  If Request Object has been configured to automatically filter data -AND-
+     *  the indicator 'S' is present in 'filterable' Parameter Option it'll
+     *  be done
+     *
+     * @see Request::getData()
+     * @see Request::sanitize()
      */
     public function getServer( $key = NULL ) {
-        return $this -> getData( $_SERVER, $key );
+
+        return $this -> getData( $_SERVER, $key,
+                    ( strpos( $this -> options -> filterable, 'S' ) !== FALSE ) );
     }
 
     /**
@@ -885,16 +931,23 @@ class Request extends Object {
      *  Desired environment variable
      *
      * @param boolean|option $strict
-     *  Conditions whether or not the search will be case-sensitive.
+     *  Condition whether or not the search will be case-sensitive.
      *  Defaults to FALSE because $_ENV may be empty if, for some reason, it
      *  has been explicitly disabled in PHP.INI 'variables_order directive'
      *
      * @return mixed
-     *  If **$key** isn't set or (i.e. `NULL`), all POST Data (i.e. $_POST)
+     *  If **$key** isn't set or it's `NULL`, all Environment Data (i.e. $_ENV)
      *  will be returned as array
      *
-     *  If defined key exists as Post Data it'll be returned, if not `NULL`
-     *  is returned instead
+     *  If defined key exists as Environment Data it'll be returned
+     *  Otherwise, it'll return `NULL` instead
+     *
+     *  If Request Object has been configured to automatically filter data -AND-
+     *  the indicator 'G' is present in 'filterable' Parameter Option it'll
+     *  be done
+     *
+     * @see Request::getData()
+     * @see Request::sanitize()
      */
     public function getEnv( $key = NULL, $strict = FALSE ) {
 
@@ -902,10 +955,14 @@ class Request extends Object {
                 strpos( 'E', ini_get( 'variables_order' ) !== FALSE ) &&
                     $strict !== FALSE ) {
 
-            return $this -> getData( $_ENV, $key );
+            $source = $_ENV;
+
+        } else {
+            $source = getenv( $key );
         }
 
-        return getenv( $key );
+        return $this -> getData( $source, $key,
+                    ( strpos( $this -> options -> filterable, 'E' ) !== FALSE ) );
     }
 
     /**
@@ -917,18 +974,30 @@ class Request extends Object {
      * @param string|optional $key
      *  Desired Param
      *
-     * @return mixed
-     *  If **$key** isn't set or (i.e. `NULL`), all POST Data (i.e. $_POST)
-     *  will be returned as array
+     * @param boolean|optional $sanitize
+     *  Flag to condition whether or not found data, if any, should be sanitized
      *
-     *  If defined key exists as Post Data it'll be returned, if not `NULL`
-     *  is returned instead
+     * @return mixed
+     *  If **$key** isn't set or it's `NULL`, all the source data will be
+     *  returned as an array
+     *
+     *  If defined key exists ins source data it'll be returned.
+     *  Otherwise, it'll return `NULL` instead
+     *
+     *  If Request Object has been configured to automatically filter data
+     *  it'll be done
+     *
+     * @see Request::sanitize()
      */
-    public function getData( array $source, $key = NULL ) {
+    public function getData( array $source, $key = NULL, $sanitize = TRUE ) {
 
-        if( $key === NULL ) return $source;
+        if( $key === NULL ) {
+            $data = $source;
+        } else {
+            $data = array_key_exists( $key, $source ) ? $source[ $key ] : NULL;
+        }
 
-        return array_key_exists( $key, $source ) ? $source[ $key ] : NULL;
+        return ( $sanitize !== FALSE && $data !== NULL ? $this -> sanitize( $data ) : $data );
     }
 
     // Execution Flow-related Methods
@@ -1026,20 +1095,6 @@ class Request extends Object {
         }
     }
 
-    // Accessory Methods
-
-    /**
-     * Get Connection Adapter, available only in External Requests
-     *
-     * @return \Next\HTTP\Stream\Adapter\Adapter|NULL
-     *  On external Requests, an Object instance of
-     *  `\Next\HTTP\Stream\Adapter\Adapter` will be returned.
-     *  On internal (i.e routed) Requests, nothing is returned
-     */
-    public function getAdapter() :? Adapter {
-        return $this -> adapter;
-    }
-
     // Parameterizable Interface Method Overwriting
 
     /**
@@ -1051,12 +1106,128 @@ class Request extends Object {
     public function setOptions() : array {
 
         return [
+
+            // Request-related Parameter Options
+
+            /**
+             * An HTTP Stream Adapter that'll be used for external Requests
+             */
             'adapter'  => [ 'type' => 'Next\HTTP\Stream\Adapter\Adapter', 'required' => FALSE ],
+
+            /**
+             * The Request URI.
+             * Defaults to the REQUEST_URI entry on $_SERVER but on
+             * External Requests the Filename/URL will be used instead
+             */
             'uri'      => [ 'required' => FALSE, 'default' => $_SERVER['REQUEST_URI'] ],
+
+            /**
+             * The Host being requested.
+             * Defaults to the HTTP_HOST entry on $_SERVER
+             */
             'host'     => [ 'required' => FALSE, 'default' => $_SERVER['HTTP_HOST'] ],
+
+            /**
+             * The Request Method.
+             * Defaults to the REQUEST_METHOD entry on $_SERVER
+             */
             'method'   => [ 'required' => FALSE, 'default' => $_SERVER['REQUEST_METHOD'] ],
-            'basepath' => ''
+
+            /**
+             * Basepath is a substring present between HTTP Schema, domain and,
+             * sometimes, connection port and the Request URI
+             * Defaults to an empty string, meaning there's no default basepath
+             */
+            'basepath' => '',
+
+            // Configuration-related Parameter Options
+
+            /**
+             * Defines whether or not Request Data will be automatically filtered
+             * or not.
+             * Defaults to TRUE, enforcing security
+             */
+            'autoFilter' => [ 'required' => FALSE, 'default' => TRUE ],
+
+            /**
+             * Defines which data are filterable.
+             * Defaults to "GP", like PHP.INI 'variables_order' directive,
+             * meaning that all (G)ET and (P)OST Data will receive default
+             * Filters (see below)
+             */
+            'filterable' => [ 'required' => FALSE, 'default' => 'GP' ],
+
+            /**
+             * A Next\Filter\Sanitizer Object with some default filters to be
+             * applied to Requested Data.
+             *
+             * By default the following Filters will be applying, in this order:
+             *
+             * - Next\Filter\StripTags
+             * - Next\Filter\Slashify
+             * - Next\Filter\HTMLEntities
+             * - Next\Filter\Whitespace
+             *
+             * All of them with their Default Parameter Options, except
+             * for Next\Filter\StripTags which has been configure to not allow
+             * any tag
+             *
+             * But if comes the need to reconfigure them it's also possible. E.g:
+             *
+             * From a Page Controller context, one just need to access its
+             * Request Object (`$this -> request`), find the Filter that'll
+             * be modified among the Filters defined and merge the
+             * new Parameter Options:
+             *
+             * ````
+             * if( ( $filter = $this -> request -> options -> filters -> item( 'StripTags' ) ) !== -1 ) {
+             *     $filter -> getOptions() -> merge( [ 'allowedTags' => [ 'strong' ] ] );
+             * }
+             * ````
+             *
+             * Although we do know the StripTags Filter is the first one we
+             * could access it manually by passing '0' (zero) to
+             * `Next\Components\Collections\Lists::item()` from which
+             * The Sanitizer derives BUT this is not 100% reliable as,
+             * in the future, the Filters *may* exchange positions or be removed.
+             *
+             * That's we search by name and, of course, we test if the Filter
+             * has been found to not receive errors because we could be
+             * calling `getOptions()` on `NULL`
+             */
+            'filters' => [
+
+                'required' => FALSE,
+
+                'default' => [
+                    [ 'filter' => 'Next\Filter\StripTags', 'args' => [ 'allowedTags' => [] ] ],
+                    [ 'filter' => 'Next\Filter\Slashify', 'args' => [] ],
+                    [ 'filter' => 'Next\Filter\HTMLEntities', 'args' => [] ],
+                    [ 'filter' => 'Next\Filter\Whitespace', 'args' => [] ],
+                ]
+            ]
         ];
+    }
+
+    // Configurable Interface Method Implementation
+
+    /**
+     * Post-Initialization Configuration.
+     * Builds a Next\Filter\Sanitizer Object with all Filters defined
+     */
+    public function configure() {
+
+        if( ! $this -> options -> autoFilter ) return;
+
+        // Building Sanitizer Collection
+
+        $sanitizer = new \Next\Filter\Sanitizer;
+
+        foreach( $this -> options -> filters as $filters ) {
+            $sanitizer -> add( new $filters['filter']( $filters['args'] ) );
+        }
+
+        $this -> options -> filters = $sanitizer;
     }
 
     // Auxiliary Methods
@@ -1143,5 +1314,39 @@ class Request extends Object {
                 }
             }
         }
+    }
+
+    /**
+     * Wrapper method to apply default Filters to input data
+     *
+     * @param  mixed| $data
+     *  Data to filter.
+     *  If an array is provided, all entries will fields will be
+     *  filtered recursively
+     *
+     * @return mixed
+     *  Input data filtered
+     */
+    private function sanitize( $data ) {
+
+        if( count( $this -> options -> filters ) == 0 ) return $data;
+
+        if( is_array( $data ) ) {
+
+            foreach( $data as $field => $value ) {
+                $data[ $field ] = $this -> sanitize( $value );
+            }
+        }
+
+        if( is_scalar( $data ) ) {
+
+            // Injecting data to be filtered
+
+            $this -> options -> filters -> setData( $data );
+
+            $data = $this -> options -> filters -> filter();
+        }
+
+        return $data;
     }
 }

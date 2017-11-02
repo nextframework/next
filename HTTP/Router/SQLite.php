@@ -279,7 +279,7 @@ class SQLite extends Standard {
                   'REGEXP',
 
                   function( $r, $s ) : bool {
-                      return ( preg_match( sprintf( '@^%s$@i', $r ), $s ) != 0 );
+                      return ( preg_match( sprintf( '@^%s@i', $r ), $s ) != 0 );
                   },
 
                   2

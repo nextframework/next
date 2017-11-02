@@ -15,8 +15,8 @@ namespace Next\Filter;
  */
 use Next\Exception\Exceptions\InvalidArgumentException;
 
-use Next\Components\Object;                    # Object Class
-use Next\Components\Collections\Collection;    # Abstract Collection Class
+use Next\Components\Object;               # Object Class
+use Next\Components\Collections\Lists;    # Abstract Collection Class
 
 /**
  * The Sanitizer is a Collection of Filters to be applied sequentially
@@ -28,7 +28,7 @@ use Next\Components\Collections\Collection;    # Abstract Collection Class
  *             Next\Components\Collections\Collection
  *             Next\Filter\Filterable
  */
-class Sanitizer extends Collection implements Filterable {
+class Sanitizer extends Lists implements Filterable {
 
     /**
      * Parameter Options Definition
@@ -42,7 +42,7 @@ class Sanitizer extends Collection implements Filterable {
          *
          * Data to filter
          */
-        'data' => [ 'required' => TRUE ],
+        'data'   => [ 'required' => FALSE ],
 
         'silent' => [ 'required' => FALSE, 'default' => TRUE ]
     ];
@@ -64,13 +64,17 @@ class Sanitizer extends Collection implements Filterable {
      */
     public function filter() : string {
 
+        if( $this -> options -> data === NULL ) {
+            throw new InvalidArgumentException( 'Nothing to filter' );
+        }
+
         $data = $this -> options -> data;
 
         foreach( $this -> getIterator() as $filter ) {
 
-            // Passing data to be validated to the Filter
+            // Injecting data to be filtered
 
-            $filter -> getOptions() -> merge( [ 'data' => $data ] );
+            $filter -> options -> data = $data;
 
             try {
 
@@ -107,6 +111,27 @@ class Sanitizer extends Collection implements Filterable {
         }
 
         return $data;
+    }
+
+    /**
+     * Wrapper method to allow injection of data to be filtered from outside
+     * Sanitizer Context
+     *
+     * It's purely lexical, since the Parameter Object has both Overloading
+     * \ArrayAccess Interface implementations the routine below could
+     * be manually done
+     *
+     * @param mixed $data
+     *  Data to be filtered
+     *
+     * @return \Next\Filter\Sanitizer
+     *  Sanitizer Object (Fluent Interface)
+     */
+    public function setData( $data ) : Sanitizer {
+
+        $this -> options -> data = $data;
+
+        return $this;
     }
 
     // Abstract Method Implementation

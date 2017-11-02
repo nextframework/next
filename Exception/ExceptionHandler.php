@@ -56,7 +56,7 @@ class ExceptionHandler implements Handler {
      */
     public static function development( $e, $code = 500 ) {
 
-        if( ! $e instanceof \Exception && ! $e instanceof \Error ) $e = new Exception( (string) $e );
+        if( ! $e instanceof \Throwable ) $e = new Exception( (string) $e );
 
         if( method_exists( $e, 'getResponseCode' ) && (int) ( $c = $e -> getResponseCode() ) !== 0 ) {
             $code = $c;
@@ -81,7 +81,7 @@ class ExceptionHandler implements Handler {
      */
     public static function production( $e, $code = 500 ) {
 
-        if( ! $e instanceof \Exception && ! $e instanceof \Error ) $e = new Exception( (string) $e );
+        if( ! $e instanceof \Throwable ) $e = new Exception( (string) $e );
 
         if( method_exists( $e, 'getResponseCode' ) && (int) ( $c = $e -> getResponseCode() ) !== 0 ) {
             $code = $c;

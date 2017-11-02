@@ -596,7 +596,10 @@ class Standard extends Object implements Verifiable, View {
         // Adding escaped Main View Content to Response Body
 
         $response -> appendBody(
-            call_user_func( $this -> options -> escapeCallback, ob_get_clean() )
+
+            ( $this -> options -> escapeCallback !== NULL ?
+                call_user_func( $this -> options -> escapeCallback, ob_get_clean() ) :
+                    ob_get_clean() )
         );
 
         /**

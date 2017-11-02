@@ -38,7 +38,24 @@ class HandlersApplication extends Application {
         return new Standard(
             [
                 'application' => $this,
-                'basepath'    => sprintf( '%s/Views', __DIR__ )
+                'basepath'    => sprintf( '%s/Views', __DIR__ ),
+
+                /**
+                 * @internal
+                 *
+                 * Within the Framework Exception Messages sometimes indicate
+                 * a FQCN of a class or interface that something should be
+                 * compatible with.
+                 * The default un-escape callback of Next\View\Standard removes
+                 * all slashes as expected but this also removes the namespaces
+                 * separators we use in the FQCNs
+                 * So we provide a custom Escape Callback that'll return the
+                 * content "as is"
+                 * Set this value to `NULL` would also work
+                 */
+                'escapeCallback' => function( $content ) {
+                    return $content;
+                }
             ]
         );
     }

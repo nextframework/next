@@ -223,6 +223,14 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
 
         foreach( $this-> parameters as $name => $parameter ) {
 
+            /**
+             * @internal
+             *
+             * Closure objects cannot have properties so the very test below
+             * results in a Fatal Error so Closures won't be discarded
+             */
+            if( $parameter instanceof \Closure ) continue;
+
             if( isset( $parameter -> required ) && $parameter -> required !== FALSE ) {
 
                 throw new LogicException(
@@ -472,6 +480,14 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
     private function discard() : void {
 
         foreach( $this -> parameters as $name => $parameter ) {
+
+            /**
+             * @internal
+             *
+             * Closure objects cannot have properties so the very test below
+             * results in a Fatal Error so Closures won't be discarded
+             */
+            if( $parameter instanceof \Closure ) continue;
 
             if( isset( $parameter -> type ) ) {
 
