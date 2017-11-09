@@ -10,15 +10,21 @@
  */
 namespace Next\DB\Query;
 
+/**
+ * Exception Classes
+ */
+use Next\Exception\Exceptions\InvalidArgumentExpression;
+
 use Next\Components\Object;     # Object Class
 
 /**
- * A Query Expression is an SQL statement not supported by the Query Builder
+ * Query Expressions are SQL statement not supported by the Query Builder
  * or that needs to be rendered untouched
  *
  * @package    Next\DB
  *
- * @uses       Next\Components\Object
+ * @uses       Next\Exception\Exceptions\InvalidArgumentExpression
+ *             Next\Components\Object
  */
 class Expression extends Object {
 
@@ -29,7 +35,12 @@ class Expression extends Object {
      */
     protected $parameters = [
 
-        'expression' => [ 'required' => TRUE ],
+        /**
+         * The SQL Expression
+         * Required within Next\DB\Query\Expression context, optional for
+         * specific Expressions
+         */
+        'expression' => [ 'required' => TRUE, 'default' => NULL ],
 
         /**
          * @internal
@@ -40,18 +51,17 @@ class Expression extends Object {
          *
          * "An Application's Entity Repository predefines an ordering
          * Column but one very specific access method needs a different
-         * one. Previously to this flag both ordering Clauses would
-         * be rendered together, probably resulting in wrong results"
+         * one. Rendered together, this would probably return wrong results"
          *
-         * With this flag Query Expression can tell the Query Renderer
-         * that it is more important than anything else defined and
+         * With this flag the Query Expression can tell the Query Renderer
+         * that it is more important than anything else already defined and
          * thus be the only thing ruling the Clause
          *
          * Defaults to FALSE because Query Expressions are specifically
          * different to each circumstance and must be taken care by
          * the developer
          */
-        'overwrite' => FALSE
+        'overwrite' => [ 'required' => FALSE, 'default' => FALSE ]
     ];
 
     /**
@@ -59,8 +69,16 @@ class Expression extends Object {
      *
      * @return string
      *  SQL Expression
+     *
+     * @throws Next\Exception\Exceptions\InvalidArgumentExpression
+     *  Thrown if no Expression has been provided
      */
     public function getExpression() : string {
+
+        if( $this -> options -> expression === NULL ) {
+            throw new InvalidArgumentExpression( 'No Expression provided' );
+        }
+
         return sprintf( '( %s )', $this -> options -> expression );
     }
 }

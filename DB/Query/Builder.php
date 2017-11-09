@@ -254,7 +254,7 @@ class Builder extends Object {
 
             array_map(
 
-                function( $c ) : string {
+                function( $c ) {
                     return ( $c instanceof Expression ? $c : trim( $c ) );
                 },
 
@@ -685,7 +685,7 @@ class Builder extends Object {
      * @return string
      *  Built Query
      */
-    public function assemble() : string {
+    public function assemble() : ?string {
 
         if( count( $this -> joins ) > 0 ) {
             $this -> query .= implode( '', $this -> joins );

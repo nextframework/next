@@ -24,6 +24,22 @@ namespace Next\Components\Utils;
 class ArrayUtils {
 
     /**
+     * Flattens a multidimensional array, making it unidimensional
+     *
+     * @param array $array
+     *  Array to flatten
+     *
+     * @return array
+     *  The multidimensional array provided flattened in one single dimension
+     *
+     * @see https://stackoverflow.com/a/8611365/5613506
+     *  Original author
+     */
+    public static function flatten( array $array ) : array {
+        return array_reduce( $array, 'array_merge', array() );
+    }
+
+    /**
      * Equalize array lengths
      *
      * The shorter array will receive as many NULL elements as needed to have the same length

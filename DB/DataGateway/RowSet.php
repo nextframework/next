@@ -154,7 +154,7 @@ class RowSet extends Object implements DataGateway, \Iterator, \ArrayAccess {
      *  Otherwise, the only Entity Object will be returned directly
      */
     public function getSource() {
-        return ( $this -> total == 1 ? $this -> source[ 0 ] : $this -> source );
+        return $this -> source;
     }
 
     /**
@@ -164,7 +164,7 @@ class RowSet extends Object implements DataGateway, \Iterator, \ArrayAccess {
      *  Data-source as array
      */
     public function getArrayCopy() : array {
-        return ArrayUtils::map( $this -> source );
+        return ArrayUtils::map( $this -> getSource() );
     }
 
     // Countable Interface Method Implementation

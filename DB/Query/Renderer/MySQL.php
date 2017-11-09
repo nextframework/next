@@ -251,7 +251,14 @@ class MySQL extends Object implements Renderer {
 
             $this -> quoteColumns( $conditions[ self::SQL_OR ] );
 
-            $clause .= implode( sprintf( ' %s ', self::SQL_OR ), $conditions[ self::SQL_OR ] );
+            $clause .= sprintf(
+
+                '( %s )',
+
+                implode(
+                    sprintf( ' %s ', self::SQL_OR ), $conditions[ self::SQL_OR ]
+                )
+            );
         }
 
         return sprintf( ' %s %s', self::WHERE, $clause );

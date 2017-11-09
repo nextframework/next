@@ -120,6 +120,24 @@ class Object extends Prototype implements Hashable, Contextualizable, Informatio
 
         $this -> options = new Parameter( $this -> parameters, $this -> setOptions(), $options );
 
+        /**
+         * @internal
+         *
+         * While in DEVELOPMENT MODE, the Parameter Options Definitions of
+         * children classes aren't needed anymore they're still present in
+         * the Object.
+         *
+         * This increases substantially the length of debugging purposes
+         * functions — i.e. var_dump() — so in order to make it a little bit
+         * easier we'll discard them
+         */
+        if( defined( 'DEVELOPMENT_MODE' ) && DEVELOPMENT_MODE == 1 ) {
+
+            unset( $this -> parameters );
+
+            if( count( $this -> options ) == 0 ) unset( $this -> options );
+        }
+
         if( $this instanceof Verifiable ) $this -> verify();
 
         $this -> init();

@@ -479,6 +479,14 @@ class Parameter implements Verifiable, \Countable, \ArrayAccess {
      */
     private function discard() : void {
 
+        /**
+         * @isee Next\Components\Objects::__construct() for further explanations
+         */
+        if( defined( 'DEVELOPMENT_MODE' ) && DEVELOPMENT_MODE == 1 ) {
+
+            unset( $this -> defaultOptions, $this -> customOptions, $this -> instanceOptions );
+        }
+
         foreach( $this -> parameters as $name => $parameter ) {
 
             /**

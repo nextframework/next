@@ -20,14 +20,18 @@
     <p>
         <?php
 
-        $class = $class = basename( get_class( $this -> e ) );
+            $class = $class = basename( get_class( $this -> e ) );
 
-        if( $class !== 'Error' && $class !== 'Exception' ) :
+            if( $class !== 'Error' && $class !== 'Exception' ) :
 
         ?>
+
         <strong><?php echo $class; ?></strong> threw an Exception
-        <?php else: ?>
+
+        <?php else : ?>
+
         An Exception has been thrown
+
         <?php endif; ?>
     </p>
 

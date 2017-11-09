@@ -847,7 +847,7 @@ class Response extends Object {
 
         // Or flush it?
 
-        ob_start();
+        //ob_start();
 
         if( ! $this -> disableSendingHeaders ) {
             $this -> sendHeaders();
@@ -953,7 +953,7 @@ class Response extends Object {
      * @return \Next\HTTP\Response
      *  Response Instance (Fluent Interface)
      */
-    public function abortFlow( $flag ) : bool {
+    public function abortFlow( $flag ) : Response {
 
         $this -> shouldAbort = (bool) $flag;
 

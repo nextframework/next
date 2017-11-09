@@ -142,7 +142,7 @@ class Exception extends \Exception implements Verifiable {
      * @return callable|void
      *  Exception Callback, if provided
      */
-    public function getCallback() :? callable {
+    public function getCallback() {
         return $this -> callback;
     }
 

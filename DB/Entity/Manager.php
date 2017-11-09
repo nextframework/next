@@ -359,7 +359,7 @@ class Manager extends Object {
      * @return string
      *  Assembled query
      */
-    public function getQuery() : string {
+    public function getQuery() : ?string {
         return $this -> assemble();
     }
 

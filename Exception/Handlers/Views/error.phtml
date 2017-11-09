@@ -17,27 +17,44 @@
 
 <div id="exception">
 
+    <?php if( $this -> e instanceof \Next\Exception\ErrorException ) : ?>
+
+    <h2>
+        <p><?php echo $this -> e; ?></p>
+    </h2
+
+    <?php else : ?>
+
     <p>
         <?php
 
-        $class = $class = basename( get_class( $this -> e ) );
+            $class = $class = basename( get_class( $this -> e ) );
 
-        if( $class !== 'Error' && $class !== 'Exception' ) :
+            if( $class !== 'Error' && $class !== 'Exception' ) :
 
         ?>
+
         <strong><?php echo $class; ?></strong> threw an Exception
-        <?php else: ?>
+
+        <?php else : ?>
+
         An Exception has been thrown
+
         <?php endif; ?>
+
+    <?php endif; ?>
+
     </p>
 
     <p>
         <strong>Message:</strong> <?php echo nl2br( utf8_encode( $this -> e -> getMessage() ) ); ?>
+
     </p>
 
     <p>
         <strong>File:</strong> <?php echo $this -> e -> getFile(); ?> at
         <strong>Line:</strong> <?php echo $this -> e -> getLine(); ?>
+
     </p>
 
 </div>
