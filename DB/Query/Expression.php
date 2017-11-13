@@ -79,6 +79,6 @@ class Expression extends Object {
             throw new InvalidArgumentExpression( 'No Expression provided' );
         }
 
-        return sprintf( '( %s )', $this -> options -> expression );
+        return $this -> options -> expression;
     }
 }

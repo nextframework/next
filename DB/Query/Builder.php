@@ -124,6 +124,20 @@ class Builder extends Object {
      */
     private $limit = [];
 
+    /**
+     * UNION Clause
+     *
+     * @var array $union
+     */
+    protected $union = [];
+
+    /**
+     * Resets all SQL Statement Parts when cloning the Object.
+     */
+    public function __clone() {
+        $this -> reset();
+    }
+
     // CRUD-related methods
 
     /**
@@ -680,6 +694,23 @@ class Builder extends Object {
     }
 
     /**
+     * Adds a UNION Clause
+     *
+     * @param Next\DB\Query\Builder $build
+     *  A full-formed Query Builder Object to be assembled and appended to
+     *  already assembled of this Object
+     *
+     * @return \Next\DB\Query\Builder
+     *  Query Builder Object (Fluent Interface)
+     */
+    public function union( Builder $builder ) {
+
+        $this -> union[] = $builder;
+
+        return $this;
+    }
+
+    /**
      * Assembles the Query
      *
      * @return string
@@ -724,6 +755,21 @@ class Builder extends Object {
             $this -> query .= $this -> options
                                     -> renderer
                                     -> limit( $this -> limit );
+        }
+
+        if( count( $this -> union ) > 0 ) {
+
+            /**
+             * @internal
+             *
+             * Wrapping current SELECT Statement in parenthesis to isolate
+             * it from UNION Clause(s)
+             */
+            $this -> query = sprintf( '( %s )', $this -> query );
+
+            $this -> query .= $this -> options
+                                    -> renderer
+                                    -> union( $this -> union );
         }
 
         return $this -> query;
@@ -803,6 +849,8 @@ class Builder extends Object {
         $this -> group        = NULL;
         $this -> order        = [];
         $this -> limit        = [];
+
+        $this -> union        = [];
 
         return $this;
     }

@@ -132,6 +132,14 @@ interface Renderer extends Query {
     public function limit( array $data );
 
     /**
+     * Render the UNION Clause
+     *
+     * @param array $data
+     *  UNION Clause data
+     */
+    public function union( array $data ) : string;
+
+    /**
      * Render the JOIN Clause
      *
      * @param string|array $table

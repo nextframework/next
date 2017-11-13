@@ -402,6 +402,32 @@ class MySQL extends Object implements Renderer {
         return rtrim( sprintf( ' %s %s, %s ', self::LIMIT, $data[ 0 ], $data[ 1 ] ) );
     }
 
+    /**
+     * Render the UNION Clause
+     *
+     * @param array $data
+     *  UNION Clause data
+     *
+     * @return string
+     *  UNION Clause
+     */
+    public function union( array $data ) : string {
+
+        $statement = NULL;
+
+        foreach( $data as $clause ) {
+
+            $statement .= sprintf(
+
+                ' %s ( %s ) ',
+
+                self::UNION, $clause -> assemble()
+            );
+        }
+
+        return $statement;
+    }
+
     // Query Building-related methods
 
     /**
