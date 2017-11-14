@@ -33,11 +33,23 @@ class Field extends Expression {
 
         return sprintf(
 
-            'FIELD( %s, \'%s\' )',
+            'FIELD( %1$s, %3$s%2$s%3$s )',
 
             $this -> options -> column,
 
-            implode( '\', \'', (array) $this -> options -> list )
+            implode(
+
+                sprintf(
+
+                    '%1$s, %1$s',
+
+                    ( $this -> options -> quote !== FALSE ? "'" : NULL )
+                ),
+
+                (array) $this -> options -> list
+            ),
+
+            ( $this -> options -> quote !== FALSE ? "'" : NULL )
         );
     }
 
@@ -65,6 +77,17 @@ class Field extends Expression {
              * with a list of strings
              */
             'list' => [ 'required' => TRUE ],
+
+            /**
+             * Tells the Expression Builder to surround each value passed to
+             * Parameter Options 'list' with single quotes.
+             * Defaults to TRUE, because quotes must not be added only when the
+             * FIELD() Function is used over Table Columns rather then raw data,
+             * case in which, for example, backticks, must be preserved,
+             * otherwise MySQL will respond with an invalid usage of the
+             * function — i.e. '`table`.`column`', with surrounding quotes
+             */
+            'quote' => [ 'required' => FALSE, 'default' => TRUE ]
         ];
     }
 }
