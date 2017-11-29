@@ -1138,7 +1138,7 @@ class Request extends Object implements Configurable {
              * sometimes, connection port and the Request URI
              * Defaults to an empty string, meaning there's no default basepath
              */
-            'basepath' => '',
+            'basepath' => [ 'required' => FALSE, 'default' => '' ],
 
             // Configuration-related Parameter Options
 

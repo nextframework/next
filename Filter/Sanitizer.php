@@ -30,23 +30,6 @@ use Next\Components\Collections\Lists;    # Abstract Collection Class
  */
 class Sanitizer extends Lists implements Filterable {
 
-    /**
-     * Parameter Options Definition
-     *
-     * @var array $parameters
-     */
-    protected $parameters = [
-
-        /**
-         * @internal
-         *
-         * Data to filter
-         */
-        'data'   => [ 'required' => FALSE ],
-
-        'silent' => [ 'required' => FALSE, 'default' => TRUE ]
-    ];
-
     // Filterable Method Implementation
 
     /**
@@ -112,6 +95,38 @@ class Sanitizer extends Lists implements Filterable {
 
         return $data;
     }
+
+    // Parameterizable Interface Method Overwriting
+
+    /**
+     * Set class options
+     *
+     * @return array
+     *  Sanitizer Class Default Options
+     */
+    public function setOptions() : array {
+
+        return [
+
+            /**
+             * @internal
+             *
+             * Data to filter
+             */
+            'data'   => [ 'required' => FALSE ],
+
+            /**
+             * Condition whether or not any possible error raised within a
+             * Next\Filter\Filterable Object will be silenced.
+             * Defaults to TRUE since most of the times a silenced error results
+             * in the Filterable::filter() not being applied to input data, not
+             * affecting it
+             */
+            'silent' => [ 'required' => FALSE, 'default' => TRUE ]
+        ];
+    }
+
+    // Accessory Methods
 
     /**
      * Wrapper method to allow injection of data to be filtered from outside

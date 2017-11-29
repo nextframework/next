@@ -38,7 +38,6 @@ abstract class Collection extends Object
      * @var array $parameters
      */
     protected $parameters = [
-
         'collection' => [ 'required' => FALSE, 'default' => [] ]
     ];
 
@@ -72,11 +71,18 @@ abstract class Collection extends Object
 
         $this -> clear();
 
-        if( count( $this -> options -> collection ) > 0 ) {
+        foreach( $this -> options -> collection as $object ) {
+            $this -> add( $object );
+        }
 
-            foreach( $this -> options -> collection as $object ) {
-                $this -> add( $object );
-            }
+        /**
+         * @internal
+         *
+         * If Next\Components\Parameter didn't our couldn't destroy this unused
+         * Parameter Option and it's still present we'll remove it manually
+         */
+        if( isset( $this -> options -> collection ) ) {
+            unset( $this -> options -> collection );
         }
     }
 
